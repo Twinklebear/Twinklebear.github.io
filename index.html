@@ -1,19 +1,11 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>
-			Twinklebear@github
-		</title>
-		Hello!
-	</head>
-	<body>
-		<p>Nothing here for now
-			{% highlight lua %}
-				function hello()
-					print "hello"
-				end
-			{% endhighlight %}
-		</p>
-	</body>
-</html>
+---
+layout: default
+title: Twinklebear@github
+---
+<h2>Hello!</h2>
+<p>There's not much here.</p>
+
+{% for post in site.posts %}
+<a href="{{ post.url }}">{{ post.title }}</a>
+{% endfor %}
 
