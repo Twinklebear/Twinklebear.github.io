@@ -1,4 +1,3 @@
-Twinklebear.github.io
-=====================
+# Twinklebear Github Page
+Messing around using Jekyll Bootstrap now
 
-Checking out Github pages
