@@ -48,7 +48,7 @@ if (win == NULL){
 ### Creating a Rendering Context
 We then want to create a hardware-accelerated rendering context associated with the window so that we can use the system's 
 GPU to draw things. This is done with calling [`SDL_CreateRenderer`](http://wiki.libsdl.org/moin.fcg/SDL_CreateRenderer)
-with the flag `SDL_RENDERER_ACCELERATED`. Other available renderer flags are listed in the [wiki](http://wiki.libsdl.org/moin.fcg/SDL_RendererFlags)
+with the flag `SDL_RENDERER_ACCELERATED`. Other available renderer flags are listed in the [wiki](http://wiki.libsdl.org/moin.fcg/SDL_RendererFlags).
 This returns a `SDL_Renderer*` that we can then use to draw things. Similar to `SDL_CreateWindow` this function will return NULL upon failure.
 {% highlight c++ %}
 SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
