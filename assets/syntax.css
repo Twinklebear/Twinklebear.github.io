@@ -4,9 +4,9 @@
 	display: block;
 	padding: 8.5px;
 	font-family: Monaco,Andale Mono,Courier New,monospace;
-	margin: 5px 5px 5px 5px;
+	margin: 0px 2px 2px 0px;
 	font-size: 12px;
-	line-height: 14px;
+	line-height: 16px;
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	border-radius: 3px 3px 3px 3px;
 	white-space: pre-wrap;
@@ -20,10 +20,10 @@
 .highlight .lineno { color: #f8f8f2 } /* Line numbers */
 .highlight .o { color: #f92672 } /* Operator */
 .highlight .p { color: #f8f8f2 } /* Punctuation */
-.highlight .cm { color: #75715e } /* Comment.Multiline */
-.highlight .cp { color: #75715e } /* Comment.Preproc */
-.highlight .c1 { color: #75715e } /* Comment.Single */
-.highlight .cs { color: #75715e } /* Comment.Special */
+.highlight .cm { color: #a6a6a6 } /* Comment.Multiline */
+.highlight .cp { color: #a6a6a6 } /* Comment.Preproc */
+.highlight .c1 { color: #a6a6a6 } /* Comment.Single */
+.highlight .cs { color: #a6a6a6 } /* Comment.Special */
 .highlight .ge { font-style: italic } /* Generic.Emph */
 .highlight .gs { font-weight: bold } /* Generic.Strong */
 .highlight .kc { color: #66d9ef } /* Keyword.Constant */
