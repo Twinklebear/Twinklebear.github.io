@@ -1,6 +1,7 @@
 /* Monokai highlighting theme from https://github.com/richleland/pygments-css/blob/master/monokai.css */
 .highlight { 
 	background-color: #49483e;
+	color: #f8f8f2;
 	display: block;
 	padding: 8.5px;
 	font-family: Monaco,Andale Mono,Courier New,monospace;
@@ -12,7 +13,7 @@
 	white-space: pre-wrap;
 	word-wrap: break-word;
 }
-.highlight .c { color: #75715e } /* Comment */
+.highlight .c { color: #a6a6a6 } /* Comment */
 .highlight .err { color: #960050; background-color: #1e0010 } /* Error */
 .highlight .k { color: #66d9ef } /* Keyword */
 .highlight .l { color: #ae81ff } /* Literal */
