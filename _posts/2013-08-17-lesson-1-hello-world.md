@@ -1,0 +1,140 @@
+---
+layout: sdl_lesson
+title: "Lesson 1: Hello World"
+description: "Drawing Our First Image"
+category: "SDL2 Tutorials" 
+tags: ["SDL2"]
+---
+{% include JB/setup %}
+
+In this lesson we'll learn how to open a window, create a rendering context and draw
+an image we've loaded to the screen. Grab the BMP we'll be drawing below and save it somewhere in your
+project and let's get started!
+
+<a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson1/hello.bmp">
+	<img class="centered" width="400" height="auto" 
+		src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson1/hello.bmp">
+	</img>
+</a>
+
+Starting SDL
+-
+To use SDL we first need to initialize the various SDL subsystems we want to use. This is done through
+[`SDL_Init`](http://wiki.libsdl.org/moin.fcg/SDL_Init) which takes a set of 
+[flags](http://wiki.libsdl.org/moin.fcg/SDL_Init#Remarks) or'd together specifying the subsystems we'd like to initialize.
+For now we'll just say we want everything but you can change this if you like. The bare minimum needed for
+this lesson is `SDL_INIT_VIDEO`. If everything goes alright
+`SDL_Init` will return 0, if not we'll want to print out the error and quit.
+
+{% highlight c++ %}
+if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+	std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+	return 1;
+}
+{% endhighlight %}
+<br />
+
+Opening a Window
+-
+We'll need a window to display our render in, we can create one with 
+[`SDL_CreateWindow`](http://wiki.libsdl.org/moin.fcg/SDL_CreateWindow) which takes a title for the window,
+the x and y position to create it at, the window width and height and some [flags](http://wiki.libsdl.org/moin.fcg/SDL_WindowFlags) to set properties of the window and returns an `SDL_Window*`. This pointer will be `NULL` if anything went
+wrong when creating the window.
+
+{% highlight c++ %}
+SDL_Window *win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
+if (win == nullptr){
+	std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+	return 1;
+}
+{% endhighlight %}
+<br />
+
+Creating a Renderer
+-
+Now we can create a renderer to draw to the window using [`SDL_CreateRenderer`](http://wiki.libsdl.org/moin.fcg/SDL_CreateRenderer). This function takes the window to associate the renderer with, the index of the rendering driver
+to be used (or -1 to select the first that meets our requirements) and various 
+[flags](http://wiki.libsdl.org/moin.fcg/SDL_RendererFlags) used to specify what sort of renderer we want.
+Here we're requesting a hardware accelerated renderer with vsync enabled. We'll get back an `SDL_Renderer*` which will be
+`NULL` if something went wrong.
+
+{% highlight c++ %}
+SDL_Renderer *ren = SDL_CreateRenderer(win, -1, 
+	SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+if (ren == nullptr){
+	std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+	return 1;
+}
+{% endhighlight %}
+<br />
+
+Loading a Bitmap Image
+-
+To render a BMP image we'll need to load it into memory and then onto the rendering platform we're 
+using (in this case the GPU). We can load the image with [`SDL_LoadBMP`](http://wiki.libsdl.org/moin.fcg/SDL_LoadBMP)
+which gives us back a [`SDL_Surface*`](http://wiki.libsdl.org/moin.fcg/SDL_Surface) that we can then take and upload to a [`SDL_Texture`](http://wiki.libsdl.org/moin.fcg/SDL_Texture) that the renderer is able to use.
+
+SDL_LoadBMP takes the filepath of our image, which you should change to match your project structure, and gives us back
+an `SDL_Surface*` or `NULL` if something went wrong.
+
+{% highlight c++ %}
+SDL_Surface *bmp = SDL_LoadBMP("../res/Lesson1/hello.bmp");
+if (bmp == nullptr){
+	std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
+	return 1;
+}
+{% endhighlight %}
+<br />
+
+With the image loaded we can now upload it to the renderer using [`SDL_CreateTextureFromSurface`](http://wiki.libsdl.org/moin.fcg/SDL_CreateTextureFromSurface). We pass in the rendering context to upload to and the image in memory (the `SDL_Surface`)
+and get back the loaded texture, if something went wrong we'll get back `NULL`. We're also done with the original
+surface at this point so we'll free it now.
+
+{% highlight c++ %}
+SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, bmp);
+SDL_FreeSurface(bmp);
+if (tex == nullptr){
+	std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+	return 1;
+}
+{% endhighlight %}
+<br />
+
+Drawing the Texture
+-
+All that's left to do is get our texture on the screen! First we'll [clear](http://wiki.libsdl.org/moin.fcg/SDL_RenderClear)
+the renderer, then [render our texture](http://wiki.libsdl.org/moin.fcg/SDL_RenderCopy) and then 
+[present](http://wiki.libsdl.org/moin.fcg/SDL_RenderPresent) the updated screen to show the result. Since
+we want to render the whole image and have it stretch to fill the screen we'll pass `NULL` as the source
+and destination rectangles for `SDL_RenderCopy`. We'll also
+want to keep the window open for a bit so we can see the result before the program exits, so we'll add in a call
+to [`SDL_Delay`](http://wiki.libsdl.org/moin.fcg/SDL_Delay).
+
+{% highlight c++ %}
+SDL_RenderClear(ren);
+SDL_RenderCopy(ren, tex, NULL, NULL);
+SDL_RenderPresent(ren);
+
+SDL_Delay(2000);
+{% endhighlight %}
+<br />
+
+Cleaning Up
+-
+Before we exit we've got to destroy all the objects we created through the various `SDL_DestroyX` functions and 
+quit SDL.
+{% highlight c++ %}
+SDL_DestroyTexture(tex);
+SDL_DestroyRenderer(ren);
+SDL_DestroyWindow(win);
+SDL_Quit();
+{% endhighlight %}
+<br />
+
+End of Lesson
+-
+If everything went well you should see the image you loaded render over the entire window, wait for 2s and then exit.
+If you have any problems, make sure you've got SDL installed and your project configured properly as discussed in 
+[Lesson 0: Setting up SDL]({% post_url 2013-08-15-lesson-0-setting-up-sdl %}), or post a question below.
+
+I'll see you again soon in Lesson 2: Don't Put Everything in Main.
