@@ -56,7 +56,7 @@ If you installed SDL through cmake you may need to copy `libSDL2-2.0.so.0` from 
 #include <SDL2/SDL.h>
 
 int main(int argc, char **argv){
-	if (SDL_Init(SDL_INIT_EVERYTHING) == -1){
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
 		return 1;
 	}

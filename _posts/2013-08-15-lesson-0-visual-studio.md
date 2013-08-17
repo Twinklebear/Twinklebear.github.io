@@ -109,7 +109,7 @@ of your SDL folder under lib/(x86/x64), use the one for the architecture you lin
 #include <SDL.h>
 
 int main(int argc, char **argv){
-	if (SDL_Init(SDL_INIT_EVERYTHING) == -1){
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
 		return 1;
 	}
