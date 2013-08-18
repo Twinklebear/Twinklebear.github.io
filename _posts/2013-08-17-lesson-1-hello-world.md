@@ -137,4 +137,4 @@ If everything went well you should see the image you loaded render over the enti
 If you have any problems, make sure you've got SDL installed and your project configured properly as discussed in 
 [Lesson 0: Setting up SDL]({% post_url 2013-08-15-lesson-0-setting-up-sdl %}), or post a question below.
 
-I'll see you again soon in Lesson 2: Don't Put Everything in Main.
+I'll see you again soon in [Lesson 2: Don't Put Everything in Main]({% post_url 2013-08-17-lesson-2-dont-put-everything-in-main %}).

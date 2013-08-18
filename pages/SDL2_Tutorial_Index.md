@@ -21,6 +21,7 @@ Tutorial Index
 -
 - [Lesson 0: Setting Up SDL]({% post_url 2013-08-15-lesson-0-setting-up-sdl %})
 - [Lesson 1: Hello World]({% post_url 2013-08-17-lesson-1-hello-world %})
+- [Lesson 2: Don't Put Everything in Main]({% post_url 2013-08-17-lesson-2-dont-put-everything-in-main %})
 
 <hr>
 {% include JB/comments %}
