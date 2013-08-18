@@ -100,7 +100,7 @@ rectangle since we still want to draw the entire texture. You can also set your 
 values to shrink or stretch the texture as desired.
 
 {% highlight c++ %}
-/*
+/**
 * Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
 * the texture's width and height
 * @param tex The source texture we want to draw
