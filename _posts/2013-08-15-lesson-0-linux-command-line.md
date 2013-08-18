@@ -20,7 +20,9 @@ The Makefile
 {% highlight makefile %}
 CXX = g++
 # Update these paths to match your installation
-SDLLIB = -L/usr/local/lib -lSDL2
+# You may also need to update the linker option rpath, which sets where to look for
+# the SDL2 libraries at runtime to match your install
+SDLLIB = -L/usr/local/lib -lSDL2 -Wl,-rpath=/usr/local/lib
 SDLINCLUDE = -I/usr/local/include
 # You may need to change -std=c++11 to -std=c++0x if your compiler is a bit older
 CFLAGS = -Wall -c -std=c++11 $(SDLINCLUDE)
@@ -30,7 +32,7 @@ EXE = SDL_Lesson0
 all: $(EXE)
 
 $(EXE): main.o
-	$(CXX) $(LDFLAGS) $< -o $@
+	$(CXX) $< $(LDFLAGS) -o $@
 
 main.o: main.cpp
 	$(CXX) $(CFLAGS) $< -o $@
@@ -46,10 +48,6 @@ To make sure everything has installed properly we’ll try compiling and running
 initializes the various SDL systems and then quits. If anything goes wrong, an error message will be
 printed out. The source file should be titled `main.cpp`, or you can change the main.o build dependency
 in the makefile to match your source file.
-
-If you installed SDL through cmake you may need to copy `libSDL2-2.0.so.0` from the install directory
-`/usr/local/lib` into `/usr/lib` so that it can be found at run time. Alternatively you can add 
-`/usr/local/lib` to your library path or if it's already in your path you can skip this step entirely.
 
 {% highlight c++ %}
 #include <iostream>

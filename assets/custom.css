@@ -1,0 +1,11 @@
+//Some custom css for various tweaks I want on the site
+figure .image {
+	width: 100%;
+}
+figure {
+	text-align: center;
+	display: table;
+	max-width: 100%;
+	margin: 10px auto;
+}
+
