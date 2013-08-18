@@ -144,5 +144,5 @@ End of Lesson 0
 -
 If you're having any trouble setting up SDL please leave a comment below.
 
-I'll see you again soon in Lesson 1: Hello World! (Coming soon!). The old version is accessible 
-[here](http://twinklebeardev.blogspot.com/2012/07/lesson-1-hello-world.html).
+I'll see you again soon in [Lesson 1: Hello World!]({% post_url 2013-08-17-lesson-1-hello-world %})
+
