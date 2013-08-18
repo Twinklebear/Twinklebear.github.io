@@ -103,12 +103,12 @@ values to shrink or stretch the texture as desired.
 /*
 * Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
 * the texture's width and height
-* @param x The x coordinate to draw too
-* @param y The y coordinate to draw too
 * @param tex The source texture we want to draw
 * @param rend The renderer we want to draw too
+* @param x The x coordinate to draw too
+* @param y The y coordinate to draw too
 */
-void renderTexture(int x, int y, SDL_Texture *tex, SDL_Renderer *rend){
+void renderTexture(SDL_Texture *tex, SDL_Renderer *rend, int x, int y){
 	//Setup the destination rectangle to be at the position we want
 	SDL_Rect dst;
 	dst.x = x;
@@ -199,10 +199,10 @@ SDL_RenderClear(renderer);
 
 int bW, bH;
 SDL_QueryTexture(background, NULL, NULL, &bW, &bH);
-renderTexture(0, 0, background, renderer);
-renderTexture(bW, 0, background, renderer);
-renderTexture(0, bH, background, renderer);
-renderTexture(bW, bH, background, renderer);
+renderTexture(background, renderer, 0, 0);
+renderTexture(background, renderer, bW, 0);
+renderTexture(background, renderer, 0, bH);
+renderTexture(background, renderer, bW, bH);
 {% endhighlight %}
 <br />
 
@@ -221,7 +221,7 @@ int iW, iH;
 SDL_QueryTexture(image, NULL, NULL, &iW, &iH);
 int x = SCREEN_WIDTH / 2 - iW / 2;
 int y = SCREEN_HEIGHT / 2 - iH / 2;
-renderTexture(x, y, image, renderer);
+renderTexture(image, renderer, x, y);
 
 SDL_RenderPresent(renderer);
 SDL_Delay(2000);
