@@ -104,11 +104,11 @@ values to shrink or stretch the texture as desired.
 * Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
 * the texture's width and height
 * @param tex The source texture we want to draw
-* @param rend The renderer we want to draw too
+* @param ren The renderer we want to draw too
 * @param x The x coordinate to draw too
 * @param y The y coordinate to draw too
 */
-void renderTexture(SDL_Texture *tex, SDL_Renderer *rend, int x, int y){
+void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
 	//Setup the destination rectangle to be at the position we want
 	SDL_Rect dst;
 	dst.x = x;
