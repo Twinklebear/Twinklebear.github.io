@@ -2,8 +2,8 @@
 layout: sdl_lesson
 title: "Lesson 3: SDL Extension Libraries"
 description: "Doing More with More"
-category: 
-tags: []
+category: "SDL2 Tutorials"
+tags: ["SDL2", "SDL2_image"]
 ---
 {% include JB/setup %}
 
