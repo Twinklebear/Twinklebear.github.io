@@ -115,7 +115,7 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
 	dst.y = y;
 	//Query the texture to get its width and height to use
 	SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
-	SDL_RenderCopy(rend, tex, NULL, &dst);
+	SDL_RenderCopy(ren, tex, NULL, &dst);
 }
 {% endhighlight %}
 <br />
