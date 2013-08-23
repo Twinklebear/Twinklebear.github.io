@@ -21,11 +21,11 @@ The Makefile
 {% highlight makefile %}
 CXX = g++
 # Update these paths as necessary to match your installation
-SDLLIB = -LC:/SDL2-2.0.0-mingw/i686-w64-mingw32/lib -lSDL2main -lSDL2
-SDLINCLUDE = -IC:/SDL2-2.0.0-mingw/i686-w64-mingw32/include
+SDL_LIB = -LC:/SDL2-2.0.0-mingw/i686-w64-mingw32/lib -lSDL2main -lSDL2
+SDL_INCLUDE = -IC:/SDL2-2.0.0-mingw/i686-w64-mingw32/include
 # If your compiler is a bit older you may need to change -std=c++11 to -std=c++0x
-CFLAGS = -Wall -c -std=c++11 $(SDLINCLUDE)
-LDFLAGS = -lmingw32 -mwindows -mconsole $(SDLLIB)
+CXXFLAGS = -Wall -c -std=c++11 $(SDL_INCLUDE)
+LDFLAGS = -lmingw32 -mwindows -mconsole $(SDL_LIB)
 EXE = SDL_Lesson0.exe
 
 all: $(EXE)
@@ -34,7 +34,7 @@ $(EXE): main.o
 	$(CXX) $< $(LDFLAGS) -o $@
 
 main.o: main.cpp
-	$(CXX) $(CFLAGS) $< -o $@
+	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
 	del *.o && del $(EXE)
