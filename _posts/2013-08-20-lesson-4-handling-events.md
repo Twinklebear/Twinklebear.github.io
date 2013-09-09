@@ -108,4 +108,5 @@ If you have any issues double check your code and/or post your question below.
 
 **Extra Fun:** How could we move the image around? What about moving based on key input?
 
-I'll see you again soon in Lesson 5: Clipping Sprite Sheets! (Coming soon!)
+I'll see you again soon in [Lesson 5: Clipping Sprite Sheets!]({% post_url 2013-08-27-lesson-5-clipping-sprite-sheets %})
+
