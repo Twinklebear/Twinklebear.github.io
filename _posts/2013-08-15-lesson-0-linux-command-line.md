@@ -10,8 +10,10 @@ tags: ["SDL2", "Linux"]
 To build the projects on Linux we'll be using a simple makefile that will setup the include and library
 dependencies for us. The makefile assumes that your SDL libraries are installed under `/usr/local/lib`
 and the headers are under `/usr/local/include`. These are the install locations if you built the
-project through cmake. If you've installed it through your package manager or placed the libraries
-and headers elsewhere you may need to change these paths to match your installation.
+project through cmake, some more detail on building from source can be found [here](http://twinklebear.github.io/sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line/#comment-1053605032). 
+If you've installed it through your package manager or placed the libraries 
+and headers elsewhere you may need to change these paths to match your installation. You can also check the output
+of `sdl2-config` with the `--cflags` and `--libs` switches to locate your install, assuming you haven't moved it.
 
 If you're unfamiliar with Makefiles a basic introduction can be found [here](http://mrbook.org/tutorials/make/)
 
