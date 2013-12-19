@@ -150,16 +150,17 @@ Loading Our Textures
 -
 In this lesson we'll be drawing a tiled background and a centered foreground image, grab both of them below, or
 use your own BMP images.
+
 <figure>
 	<figcaption><b>Background Tile</b></figcaption>
 	<a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson2/background.bmp">
-		<img src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson2/background.bmp">
+		<img src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson2/background.bmp" />
 	</a>
 </figure>
 <figure>
 	<figcaption><b>Foreground</b></figcaption>
 	<a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson2/image.bmp">
-		<img src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson2/image.bmp">
+		<img src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson2/image.bmp" />
 	</a>
 </figure>
 
