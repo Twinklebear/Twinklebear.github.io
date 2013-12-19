@@ -195,6 +195,6 @@ When you run the program you should see clip 0 (green circle) draw in the center
 different clips to be drawn with the number keys. If you run into any issues double check your code 
 and/or post a question below.
 
-I'll see you again soon in Lesson 6: True Type Fonts with SDL_ttf! (Coming soon!)
+I'll see you again soon in [Lesson 6: True Type Fonts with SDL_ttf!]({% post_url 2013-12-18-lesson-6-true-type-fonts-with-sdl_ttf %})
 
 
