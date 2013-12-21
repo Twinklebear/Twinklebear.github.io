@@ -42,7 +42,8 @@ the x and y position to create it at, the window width and height and some [flag
 wrong when creating the window.
 
 {% highlight c++ %}
-SDL_Window *win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
+SDL_Window *win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480,
+	SDL_WINDOW_SHOWN);
 if (win == nullptr){
 	std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 	return 1;
@@ -94,7 +95,8 @@ surface at this point so we'll free it now.
 SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, bmp);
 SDL_FreeSurface(bmp);
 if (tex == nullptr){
-	std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+	std::cout << "SDL_CreateTextureFromSurface Error: "
+		<< SDL_GetError() << std::endl;
 	return 1;
 }
 {% endhighlight %}

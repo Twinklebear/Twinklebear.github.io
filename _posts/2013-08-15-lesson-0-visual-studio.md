@@ -13,7 +13,7 @@ load our template and get to work. First we need a new empty C++ project.
 
 <br />
 <a href="/assets/img/lesson_0_vs/new_empty_project.png">
-<img class="centered" width="700" height="auto"
+<img class="centered" width="600" height="auto"
 	src="/assets/img/lesson_0_vs/new_empty_project.png">
 </a>
 <br />
@@ -29,7 +29,7 @@ edit panel through the down arrow at the right side of the box.
 
 <br />
 <a href="/assets/img/lesson_0_vs/setting_include_dir.png">
-<img class="centered" width="700" height="auto"
+<img class="centered" width="600" height="auto"
 	src="/assets/img/lesson_0_vs/setting_include_dir.png">
 </a>
 <br />
@@ -55,7 +55,7 @@ path your entry should look like this if SDL is under `C:\` and you chose the 32
 
 <br />
 <a href="/assets/img/lesson_0_vs/library_path_set.png">
-<img class="centered" width="700" height="auto"
+<img class="centered" width="600" height="auto"
 	src="/assets/img/lesson_0_vs/library_path_set.png">
 </a>
 <br />
@@ -68,7 +68,7 @@ Once you've done this your Input page should look like so:
 
 <br />
 <a href="/assets/img/lesson_0_vs/library_dependencies_set.png">
-<img class="centered" width="700" height="auto"
+<img class="centered" width="600" height="auto"
 	src="/assets/img/lesson_0_vs/library_dependencies_set.png">
 </a>
 <br />
@@ -85,7 +85,7 @@ applications be sure to select Windows so your users don't have a console window
 
 <br />
 <a href="/assets/img/lesson_0_vs/subsystem_set.png">
-<img class="centered" width="700" height="auto"
+<img class="centered" width="600" height="auto"
 	src="/assets/img/lesson_0_vs/subsystem_set.png">
 </a>
 <br />
@@ -128,7 +128,7 @@ project selection page.
 
 <br />
 <a href="/assets/img/lesson_0_vs/selecting_a_template.png">
-<img class="centered" width="700" height="auto"
+<img class="centered" width="600" height="auto"
 	src="/assets/img/lesson_0_vs/selecting_a_template.png">
 </img>
 </a>

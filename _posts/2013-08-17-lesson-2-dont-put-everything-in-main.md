@@ -131,8 +131,8 @@ if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
 	return 1;
 }
 
-SDL_Window *window = SDL_CreateWindow("Lesson 2", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT,
-	SDL_WINDOW_SHOWN);
+SDL_Window *window = SDL_CreateWindow("Lesson 2", 100, 100, SCREEN_WIDTH,
+	SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 if (window == nullptr){
 	logSDLError(std::cout, "CreateWindow");
 	return 2;
@@ -170,7 +170,6 @@ the filepaths to match your project structure.
 {% highlight c++ %}
 SDL_Texture *background = loadTexture("../res/Lesson2/background.bmp", renderer);
 SDL_Texture *image = loadTexture("../res/Lesson2/image.bmp", renderer);
-
 if (background == nullptr || image == nullptr)
 	return 4;
 {% endhighlight %}
