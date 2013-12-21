@@ -212,7 +212,8 @@ int yTiles = SCREEN_HEIGHT / TILE_SIZE;
 for (int i = 0; i < xTiles * yTiles; ++i){
 	int x = i % xTiles;
 	int y = i / xTiles;
-	renderTexture(background, renderer, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	renderTexture(background, renderer, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE,
+		TILE_SIZE);
 }
 {% endhighlight %}
 <br />
