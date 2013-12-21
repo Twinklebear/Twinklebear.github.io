@@ -1,4 +1,30 @@
-//Some custom css for various tweaks I want on the site
+body {
+	background-color: rgb(238, 238, 238);
+}
+body .content {
+	background-color: white;
+	border-radius: 0px 0px 6px 6px;
+}
+/* Chuck out bootstrap's syntax highlighting stuff */
+pre {
+	display: block;
+	padding: 9.5px;
+	margin: 0px 0px 0px;
+	font-size: 1em;
+	line-height: 1.42857;
+	color: rgb(51, 51, 51);
+	word-break: break-all;
+	word-wrap: break-word;
+	background-color: transparent;
+	border: none;
+	border-radius: 0px;
+}
+code {
+	padding: 0px 0px;
+	color: black;
+	background-color: transparent;
+	border: none;
+}
 figure .image {
 	width: 100%;
 }
@@ -7,5 +33,31 @@ figure {
 	display: table;
 	max-width: 100%;
 	margin: 10px auto;
+}
+div .comments {
+	margin: 50px 0px 16px 0px;
+	padding: 10px;
+	border-top-style: solid;
+	border-top-color: rgb(238, 238, 238);
+	border-top-width: 1px;
+}
+/* Make the tag list a list of comma-separated tags */
+.tag_list {
+	display: inline;
+	list-style: none;
+}
+.tag_list li {
+	display: inline;
+}
+.tag_list li:after {
+	content: ", ";
+}
+.tag_list li:last-child:after {
+	content: ""
+}
+/* Apply some special styling to the tags */
+.tag_list a span {
+	vertical-align: super;
+	font-size: 0.8em;
 }
 
