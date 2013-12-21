@@ -6,13 +6,14 @@ body .content {
 	border-radius: 0px 0px 6px 6px;
 }
 /* Chuck out bootstrap's syntax highlighting stuff */
-pre {
+pre, pre code {
 	display: block;
 	padding: 9.5px;
 	margin: 0px 0px 0px;
 	font-size: 1em;
+	color: white;
 	line-height: 1.42857;
-	color: rgb(51, 51, 51);
+	color: white;
 	word-break: break-all;
 	word-wrap: break-word;
 	background-color: transparent;
@@ -21,9 +22,13 @@ pre {
 }
 code {
 	padding: 0px 0px;
-	color: black;
+	color: rgb(51, 51, 51);
 	background-color: transparent;
 	border: none;
+}
+img {
+	display: block;
+	margin: 0 auto;
 }
 figure .image {
 	width: 100%;

@@ -1,35 +1,27 @@
 <div class="page-header">
-	<h1>{{ page.title }} <small>{{ page.description }}</small></h1>
+	<h1>{{page.title}} <small>{{page.description}}</small></h1>
 </div>
 
-<div class="row">
-  <div class="span12">
-    {{ content }}
-	<hr>
-    {% include JB/comments %}
-  </div>
-  
-  <div class="span4">
-	<h4><a href="/pages/sdl2/">Tutorial Index</a></h4>
-	<h4>Helpful Links</h4>
-	<a href="http://wiki.libsdl.org/moin.fcg/FrontPage">SDL Documentation</a>
-	<br />
-	<a href="http://forums.libsdl.org/">SDL Forums</a>
-	<br />
-	<a href="irc://irc.freenode.net/SDL">IRC: #SDL on freenode</a>
-	<br />
-	<a href="http://en.cppreference.com/w/">C++ Reference</a>
-	<br />
-	<a href="https://github.com/Twinklebear/TwinklebearDev-Lessons">Code on Github</a>
-    <h4>Published</h4>
-    <div class="date"><span>{{ page.date | date_to_long_string }}</span></div>
-
-  {% unless page.tags == empty %}
-    <h4>Tags</h4>
-    <ul class="tag_box">
-    {% assign tags_list = page.tags %}
-    {% include JB/tags_list %}
-    </ul>
-  {% endunless %}  
-  </div>
+<div class="col-md-12">
+	<div class="col-md-9">
+		{{content}}
+	</div>
+	<div class="col-md-3">
+		<h4><a href="/pages/sdl2/">Tutorial Index</a></h4>
+		<h4>Helpful Links</h4>
+		<a href="http://wiki.libsdl.org/moin.fcg/FrontPage">SDL Documentation</a>
+		<br />
+		<a href="http://forums.libsdl.org/">SDL Forums</a>
+		<br />
+		<a href="irc://irc.freenode.net/SDL">IRC: #SDL on freenode</a>
+		<br />
+		<a href="http://en.cppreference.com/w/">C++ Reference</a>
+		<br />
+		<a href="https://github.com/Twinklebear/TwinklebearDev-Lessons">Code on Github</a>
+		<p>Published: {{page.date | date_to_long_string}}
+	</div>
 </div>
+<div class="col-md-12 comments">
+	{% include JB/comments %}
+</div>
+
