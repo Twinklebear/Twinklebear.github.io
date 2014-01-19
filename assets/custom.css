@@ -20,6 +20,10 @@ pre, pre code {
 	border: none;
 	border-radius: 0px;
 }
+/* Don't set code formatted links to black */
+a code {
+	color: rgb(42, 100, 150);
+}
 code {
 	padding: 0px 0px;
 	color: rgb(51, 51, 51);
