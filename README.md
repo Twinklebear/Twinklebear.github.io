@@ -1,3 +1,4 @@
-# Twinklebear Github Page
-Messing around using Jekyll Bootstrap now
+Personal Github Page
+=
+Using Jekyll Bootstrap + Bootstrap 3
 
