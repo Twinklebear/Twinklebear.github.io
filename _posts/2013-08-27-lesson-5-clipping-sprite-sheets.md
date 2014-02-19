@@ -184,7 +184,7 @@ while (SDL_PollEvent(&e)){
 Drawing our Clipped Image
 -
 The final thing to do is get the clip we want on the screen! We'll do this by calling our more convenient
-verion of renderTexture to draw the clip without any extra scaling and passing in the clip we want to use
+version of renderTexture to draw the clip without any extra scaling and passing in the clip we want to use
 (the one at useClip).
 
 {% highlight c++ %}
