@@ -10,7 +10,7 @@ tags: ["SDL2"]
 In this lesson we'll see how to perform basic True Type font rendering with the SDL_ttf extension library.
 Setting up the library is identical to what we did in
 [Lesson 3]({% post_url 2013-08-18-lesson-3-sdl-extension-libraries %}) for SDL_image, but just replace
-"image" with "ttf". So [download SDL_ttf](http://www.libsdl.org/projects/SDL_ttf/),
+"image" with "ttf" (Windows users should also copy the included freetype dll over). So [download SDL_ttf](http://www.libsdl.org/projects/SDL_ttf/),
 take a peek at the [documentation](http://www.libsdl.org/projects/SDL_ttf/docs/index.html), and let's get started!
 
 The first thing we'll need after the library is a font to render our text with. I made a pretty awful font using
