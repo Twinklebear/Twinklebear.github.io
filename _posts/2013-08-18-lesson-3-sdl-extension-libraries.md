@@ -27,7 +27,10 @@ following the standard `./configure && make && make install` process. Building t
 - **Mac**: Copy the SDL2_image framework folder in your download to your frameworks directory.
 
 To use the libraries you'll need to update your includes and build system to link against the new extension library.
-- **Visual Studio**: Include `<SDL_image.h>` and add `SDL2_image.lib` to your linker dependencies.
+
+- **Visual Studio**: Include `<SDL_image.h>` and add `SDL2_image.lib` to your linker dependencies. You'll also need to
+copy the SDL2_image, zlib and any image dlls over to your executable directory so that they're available at runtime
+(thanks for the catch @wolfman2000!).
 - **MinGW and Linux**: Include `<SDL2/SDL_image.h>` and add `-lSDL2_image` to the `SDLLIB` variable in your makefile.
 - **Mac clang**: Include `<SDL2_image/SDL_image.h>` and add `-framework SDL2_image` to the `SDL` variable in your makefile.
 
