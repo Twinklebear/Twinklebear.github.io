@@ -11,6 +11,8 @@ In this lesson we'll learn how to open a window, create a rendering context and 
 an image we've loaded to the screen. Grab the BMP we'll be drawing below and save it somewhere in your
 project and let's get started!
 
+<!--more-->
+
 <a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson1/hello.bmp">
 	<img class="centered" width="400" height="auto" 
 		src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson1/hello.bmp">

@@ -11,6 +11,8 @@ Now that we've got the libraries installed we'll want to create a new project to
 link against SDL. At the end we'll save this as a template project so in the future we can just
 load our template and get to work. First we need a new empty C++ project.
 
+<!--more-->
+
 <br />
 <a href="/assets/img/lesson_0_vs/new_empty_project.png">
 <img class="centered" width="600" height="auto"

@@ -13,6 +13,8 @@ downloads page and now have it available as a framework.
 
 If you're unfamiliar with Makefiles a basic introduction can be found [here](http://mrbook.org/tutorials/make/).
 
+<!--more-->
+
 The Makefile
 -
 {% highlight makefile %}

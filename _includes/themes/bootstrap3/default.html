@@ -20,6 +20,7 @@
 	<link href="/assets/syntax.css" rel="stylesheet">
 	<link href="/assets/custom.css" rel="stylesheet">
 	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-static-top" role="navigation">
@@ -31,10 +32,10 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="{{HOME_PATH}}">{{site.title}}</a>
+				<a class="navbar-brand" href="{{HOME_PATH}}">{{ site.title }}</a>
 			</div>
 			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
+				<ul class="nav navbar-nav navbar-right">
 					{% assign pages_list = site.pages %}
 					{% assign group = 'navigation' %}
 					{% include JB/pages_list %}

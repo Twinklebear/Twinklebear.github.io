@@ -17,6 +17,8 @@ of `sdl2-config` with the `--cflags` and `--libs` switches to locate your instal
 
 If you're unfamiliar with Makefiles a basic introduction can be found [here](http://mrbook.org/tutorials/make/)
 
+<!--more-->
+
 The Makefile
 -
 {% highlight makefile %}

@@ -15,6 +15,8 @@ that add useful features to SDL, such as support for a wide variety of image typ
 [SDL_net](http://www.libsdl.org/projects/SDL_net/) which provides low level networking
 and [SDL_mixer](http://www.libsdl.org/projects/SDL_mixer/) which provides multi-channel audio playback.
 
+<!--more-->
+
 Installing an Extension Library
 -
 In this lesson we'll just need SDL_image but the installation process for all the extension libraries is the same. 

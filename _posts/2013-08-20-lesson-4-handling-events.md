@@ -13,6 +13,8 @@ To read events SDL provides the [`SDL_Event`](http://wiki.libsdl.org/SDL_Event) 
 and functions to get events from the queue such as [`SDL_PollEvent`](http://wiki.libsdl.org/SDL_PollEvent).
 The code for this lesson is built off of the lesson 3 code, if you need that code to start from grab it on [Github](https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/Lesson3) and let's get started!
 
+<!--more-->
+
 The first change we need to make is to load our new image to display a prompt for input. Grab it below and use our `loadTexture` function to load it up as we did previously.
 
 <a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson4/image.png">

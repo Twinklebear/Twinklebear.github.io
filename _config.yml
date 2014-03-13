@@ -5,11 +5,12 @@ permalink: /:categories/:year/:month/:day/:title
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 pygments: true
 encoding: "utf-8"
+excerpt_separator: <!--more-->
 
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #
-title : Twinklebear@github
+title : Will Usher
 author :
   name : Will Usher
   email : will@willusher.io

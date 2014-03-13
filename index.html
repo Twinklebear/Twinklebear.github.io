@@ -1,0 +1,16 @@
+---
+layout: home_page
+title: Programs on the Internet
+---
+{% include JB/setup %}
+
+{% for post in site.posts %}
+<div class="post_excerpt">
+	<a href="{{ post.url }}"><h3>{{ post.title }}</h3></a>
+	<b>{{ post.date | date_to_string }}</b>
+	{{ post.excerpt }}
+
+	<a href="{{ post.url }}"><b>Continue...</b></a>
+</div>
+{% endfor %}
+

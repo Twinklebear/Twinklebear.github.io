@@ -13,6 +13,8 @@ Setting up the library is identical to what we did in
 "image" with "ttf" (Windows users should also copy the included freetype dll over). So [download SDL_ttf](http://www.libsdl.org/projects/SDL_ttf/),
 take a peek at the [documentation](http://www.libsdl.org/projects/SDL_ttf/docs/index.html), and let's get started!
 
+<!--more-->
+
 The first thing we'll need after the library is a font to render our text with. I made a pretty awful font using
 [BitFontMaker](http://www.pentacom.jp/pentacom/bitfontmaker2/) which you can
 [download from the repository](https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson6/sample.ttf), or if you have some other font you'd like to use that's fine too. My font only provides the basic ASCII characters, so if you try to render non-ASCII characters they probably won't show up.

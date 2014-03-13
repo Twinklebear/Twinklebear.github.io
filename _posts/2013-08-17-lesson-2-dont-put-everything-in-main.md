@@ -11,6 +11,8 @@ In this lesson we'll begin organizing our texture loading and rendering code fro
 moving them out of main and placing them into some useful functions. We'll also write a simple generic
 SDL error logger and learn how images are positioned and scaled when rendering with SDL.
 
+<!--more-->
+
 Let's start by declaring some constants for our window width and height. We'll need these later on when
 deciding how to position our images.
 

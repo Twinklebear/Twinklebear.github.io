@@ -7,14 +7,14 @@ tags: ["SDL2"]
 ---
 {% include JB/setup %}
 
-Getting the SDL2 Development Libraries
--
 The first step is to get the SDL2 development libraries setup on your system, you can download
 them from the [SDL2 Downloads page](http://www.libsdl.org/download-2.0.php). 
 
 If you're a Linux user who
 doesn't have the libraries available in your distribution's package manager you can download the source
 and compile with cmake using the standard `make && make install` method. 
+
+<!--more-->
 
 C++11 Note
 -

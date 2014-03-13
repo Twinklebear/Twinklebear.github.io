@@ -12,6 +12,8 @@ tiles for a tileset, instead of having a separate image file for each tile. This
 as a sprite sheet and is very handy to work with since we don't need to change which texture we're drawing
 each time but rather just which subsection of the texture.
 
+<!--more-->
+
 In this lesson we'll see how to select subsections of textures using [`SDL_RenderCopy`](http://wiki.libsdl.org/SDL_RenderCopy) and also see a bit on detecting specific key press events, which we'll use to pick which section of 
 the texture to draw. The sprite sheet will contain four different colored circles:
 

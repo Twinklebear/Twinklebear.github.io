@@ -16,6 +16,8 @@ match your compiler (32/64bit) and the location of your SDL folder. To use makef
 
 If you're unfamiliar with Makefiles a basic introduction can be found [here](http://mrbook.org/tutorials/make/).
 
+<!--more-->
+
 The Makefile
 -
 {% highlight makefile %}
