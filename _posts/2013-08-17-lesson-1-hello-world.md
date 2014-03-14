@@ -126,7 +126,11 @@ SDL_Delay(2000);
 Cleaning Up
 -
 Before we exit we've got to destroy all the objects we created through the various `SDL_DestroyX` functions and 
-quit SDL.
+quit SDL. **Error handling note:** previously in the program we may have encountered an error and exited early,
+in which case we'd have to destroy any SDL objects we had created and quit SDL to properly clean up before exiting.
+This part of the error handling is omitted from the lessons since they're such small examples
+and it helps keep the code a bit shorter, but in a real world program
+proper error handling and clean up is absolutely required.
 {% highlight c++ %}
 SDL_DestroyTexture(tex);
 SDL_DestroyRenderer(ren);
