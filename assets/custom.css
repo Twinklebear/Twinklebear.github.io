@@ -78,10 +78,11 @@ div.post_excerpt {
 }
 /* Don't apply link coloring to icons */
 a.icon {
-	color: black;
+	color: #9a9a9a;
 	letter-spacing: 0.3em;
+	text-decoration: none;
 }
 a.icon:hover {
-	text-decoration: none;
+	color: black;
 }
 
