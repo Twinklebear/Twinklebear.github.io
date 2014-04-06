@@ -10,9 +10,8 @@ tags: ["SDL2"]
 The first step is to get the SDL2 development libraries setup on your system, you can download
 them from the [SDL2 Downloads page](http://www.libsdl.org/download-2.0.php). 
 
-If you're a Linux user who
-doesn't have the libraries available in your distribution's package manager you can download the source
-and compile with cmake using the standard `make && make install` method. 
+If you're a Linux user who doesn't have the libraries available in your distribution's package
+manager you can download the source and compile with cmake using the standard `make && make install` method. 
 
 <!--more-->
 
@@ -28,8 +27,11 @@ Visual Studio 2012/2013.
 Making Sure Everything is Working
 -
 Now that you've got the libraries setup on your computer we'll test everything out with a very simple
-project.
+project. I recommend using CMake to build your executables as it can generate make files or
+project files for almost any platform and IDE and is the build system I'll be using for the lessons so
+it'll be easier to follow along.
 
+- [CMake]({% post_url 2014-03-06-lesson-0-cmake %}) (recommended!)
 - [Windows Visual Studio]({% post_url 2013-08-15-lesson-0-visual-studio %})
 - [Windows MinGW]({% post_url 2013-08-15-lesson-0-mingw %})
 - [Linux Command Line]({% post_url 2013-08-15-lesson-0-linux-command-line %})
