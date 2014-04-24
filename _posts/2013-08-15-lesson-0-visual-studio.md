@@ -65,7 +65,7 @@ path your entry should look like this if SDL is under `C:\` and you chose the 32
 Adding the Library Dependencies
 -
 Now we'll add the libraries themselves as dependencies. Switch to the **Input** page and open
-the **Additonal Dependencies** entry's edit panel and add `SDL2.lib; SDL2main.lib`.
+the **Additional Dependencies** entry's edit panel and add `SDL2.lib; SDL2main.lib`.
 Once you've done this your Input page should look like so:
 
 <br />

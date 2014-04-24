@@ -26,13 +26,13 @@ The SDL Error Logger
 -
 Throughout lesson 1 we had a lot of repeated code used to print out error messages that was almost the same
 for each error, except for some different information about which function went wrong. We can improve on this
-with a more generic error logging function that can take any `std::ostream` to write too, a message to print
+with a more generic error logging function that can take any `std::ostream` to write to, a message to print
 and will write out the message along with the error message from `SDL_GetError` to the stream.
 
 {% highlight c++ %}
 /**
 * Log an SDL error with some error message to the output stream of our choice
-* @param os The output stream to write the message too
+* @param os The output stream to write the message to
 * @param msg The error message to write, format will be msg error: SDL_GetError()
 */
 void logSDLError(std::ostream &os, const std::string &msg){
@@ -51,7 +51,7 @@ to do this for us.
 
 First we initialize an `SDL_Texture*` to `nullptr` so that in case of an error a valid 
 `nullptr` is returned instead of a dangling pointer. Next we'll load up the BMP as before and check for errors,
-using our new `logSDLError` function to print out any errors that occured. If the surface loads ok we then
+using our new `logSDLError` function to print out any errors that occurred. If the surface loads ok we then
 create the texture from the surface and perform an error check on that. If everything goes ok we get back
 a valid pointer, if not we'll get back a `nullptr` and the error messages will show up in our log.
 
@@ -90,7 +90,7 @@ width and height. To do this we'll need to create a destination rectangle to pas
 [`SDL_RenderCopy`](http://wiki.libsdl.org/moin.fcg/SDL_RenderCopy) and get the texture's width and height with 
 [`SDL_QueryTexture`](http://wiki.libsdl.org/moin.fcg/SDL_QueryTexture) so that its size will be 
 preserved when rendering. This is a lot to do each time we want to draw, so we'll create a 
-function, `renderTexture`, that will take the x and y coordinates to draw too, the texture
+function, `renderTexture`, that will take the x and y coordinates to draw to, the texture
 and the renderer and will setup the destination rectangle correctly and draw the texture.
 
 The destination rectangle is a [`SDL_Rect`](http://wiki.libsdl.org/moin.fcg/SDL_Rect) with the x and y
@@ -106,9 +106,9 @@ values to shrink or stretch the texture as desired.
 * Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
 * the texture's width and height
 * @param tex The source texture we want to draw
-* @param ren The renderer we want to draw too
-* @param x The x coordinate to draw too
-* @param y The y coordinate to draw too
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
 */
 void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
 	//Setup the destination rectangle to be at the position we want
@@ -125,7 +125,7 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
 Creating the Window and Renderer
 -
 We initialize SDL and create our window and renderer the same as in lesson 1 but now we use our `logSDLError`
-function to print out any errors that occured and use the constants we defined earlier as the screen width
+function to print out any errors that occurred and use the constants we defined earlier as the screen width
 and height.
 {% highlight c++ %}
 if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
@@ -192,7 +192,7 @@ the texture width, height or both depending on the location we want it at so tha
 We can retrieve the texture's width through `SDL_QueryTexture` like we did in `renderTexture` 
 and then draw each tile, adjusting each draw over and down as needed.
 
-**Excercise Problem:** While it's not so bad to type out the draw positions for just four tiles
+**Exercise Problem:** While it's not so bad to type out the draw positions for just four tiles
 it would be ridiculous to do so if we wanted to put down a large number of tiles. How could we compute
 the tile positions to fill the screen completely?
 
@@ -251,7 +251,7 @@ If everything went well and you used the images provided you should see this dra
 <img class="centered" width="500" height="auto" src="/assets/img/lesson_2/result.png">
 <br />
 
-If you have any issues check your error log to see where problems may have occured and/or post a comment below.
+If you have any issues check your error log to see where problems may have occurred and/or post a comment below.
 
 I'll see you again soon in [Lesson 3: SDL Extension Libraries!]({% post_url 2013-08-18-lesson-3-sdl-extension-libraries %})
 

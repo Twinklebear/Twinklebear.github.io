@@ -24,7 +24,7 @@ The first change we need to make is to load our new image to display a prompt fo
 
 A Basic Main Loop
 -
-We'll be adding a main loop to keep the program running until the user quits so that they can use it as long as they want too, instead of for some fixed delay period. The structure of this loop will be very basic.
+We'll be adding a main loop to keep the program running until the user quits so that they can use it as long as they want to, instead of for some fixed delay period. The structure of this loop will be very basic.
 
 {% highlight c++ %}
 while (!quit){
@@ -37,7 +37,7 @@ while (!quit){
 The SDL Event Queue
 -
 To properly use SDL's event system we'll need at least some understanding of how SDL handles events. When SDL
-recieves an event it's pushed onto the back of a queue of all the other events that have been recieved but haven't been
+receives an event it's pushed onto the back of a queue of all the other events that have been received but haven't been
 polled yet. If we were to start our program and then resize the window, click the 
 mouse and press a key the event queue would look like this.
 
@@ -51,7 +51,7 @@ it out later!
 
 Processing the Events
 -
-In our main loop we'll want to read in every event that's occured since the previous frame and handle them, 
+In our main loop we'll want to read in every event that's occurred since the previous frame and handle them, 
 we can do this by putting [`SDL_PollEvent`](http://wiki.libsdl.org/SDL_PollEvent) in a while loop, since the function will return 1 if an event was read in
 and 0 if not. Since all we'll do is quit the program when we get an event we'll set a quit bool to track
 whether the main loop should exit or not. So our event processing loop could look like this.
@@ -74,7 +74,7 @@ while (SDL_PollEvent(&e)){
 
 The `SDL_QUIT` event occurs when the user closes our window, `SDL_KEYDOWN` occurs when a key is pressed and
 `SDL_MOUSEBUTTONDOWN` occurs if a mouse button is pressed. These are just a few of the wide variety of events
-that we can recieve and I strongly recommend reading up about the other types in the
+that we can receive and I strongly recommend reading up about the other types in the
 [`SDL_Event` documentation](http://wiki.libsdl.org/SDL_Event).
 
 Completing the Main Loop

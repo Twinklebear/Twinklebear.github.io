@@ -57,7 +57,7 @@ const int TILE_SIZE = 40;
 
 Loading Textures with SDL_image
 -
-SDL_image lets us load mulitple types of images along with allowing us to load them directly to an SDL_Texture
+SDL_image lets us load multiple types of images along with allowing us to load them directly to an SDL_Texture
 with `IMG_LoadTexture`. With this function almost all of our `loadTexture` code can be replaced and now
 we call `IMG_LoadTexture` to load the texture, check for errors and return. 
 We can still use `logSDLError` to log errors from the SDL_image library as the [`IMG_GetError`](http://www.libsdl.org/projects/SDL_image/docs/SDL_image.html#SEC45) function is just a [define](http://hg.libsdl.org/SDL_image/file/fa3faec630de/SDL_image.h#l137) of `SDL_GetError`.
@@ -94,9 +94,9 @@ To set the texture's width and height for drawing we simply write the width and 
 * Draw an SDL_Texture to an SDL_Renderer at position x, y, with some desired
 * width and height
 * @param tex The source texture we want to draw
-* @param rend The renderer we want to draw too
-* @param x The x coordinate to draw too
-* @param y The y coordinate to draw too
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
 * @param w The width of the texture to draw
 * @param h The height of the texture to draw
 */
@@ -119,9 +119,9 @@ function will just get the width and height from the texture then call our new `
 * Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
 * the texture's width and height
 * @param tex The source texture we want to draw
-* @param rend The renderer we want to draw too
-* @param x The x coordinate to draw too
-* @param y The y coordinate to draw too
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
 */
 void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
 	int w, h;
@@ -133,7 +133,7 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
 
 Initialize SDL_image (Optional)
 -
-When loading an image for the first time SDL_image will automatically initliaze the necessary image loading
+When loading an image for the first time SDL_image will automatically initialize the necessary image loading
 subsystem, however this will cause some delay in loading the image since SDL_image will have to perform
 its initialization setup first. If you'd like to initialize SDL_image earlier
 to avoid the delay when loading an image type for the first time you can do so with 
@@ -184,7 +184,7 @@ if (background == nullptr || image == nullptr)
 Tiling the Background
 -
 Since our tiles are much smaller now we'll need a lot more than 4 to cover the entire screen and typing their
-positions out by hand would be a real pain. Instead lets generate the tile draw positions to fill the screen
+positions out by hand would be a real pain. Instead let's generate the tile draw positions to fill the screen
 by using some math!
 
 We can determine how many tiles each row will need by dividing the `SCREEN_WIDTH` by the `TILE_SIZE`. To determine
