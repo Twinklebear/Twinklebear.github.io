@@ -15,7 +15,7 @@ If you've installed it through your package manager or placed the libraries
 and headers elsewhere you may need to change these paths to match your installation. You can also check the output
 of `sdl2-config` with the `--cflags` and `--libs` switches to locate your install, assuming you haven't moved it.
 
-If you're unfamiliar with Makefiles a basic introduction can be found [here](http://mrbook.org/tutorials/make/)
+If you're unfamiliar with Makefiles a basic introduction can be found [here](http://mrbook.org/tutorials/make/).
 
 <!--more-->
 
