@@ -40,7 +40,7 @@ To make this easy for ourselves we'll create a function `renderText` that will t
 the TTF font we want to use, the color and size we want and the renderer to load the final texture into. The
 function will then open the font, render the text, convert it to a texture and return the texture. Since there
 could be some problems along the way we'll also need to check each of our library calls for errors and handle
-them appropriately, ie. clean up any resources, log the error and return `nullptr` so we know something bad happened.
+them appropriately, i.e. clean up any resources, log the error and return `nullptr` so we know something bad happened.
 SDL_ttf will report any of its errors through `SDL_GetError` so we can continue to use `logSDLError`
 for error logging.
 
@@ -96,7 +96,7 @@ Initializing SDL_ttf
 -
 As with SDL we need to initialize the library before we can use it. This is done via
 [`TTF_Init`](http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_8.html#SEC8) which will return 0 on success. To
-initialize SDL_ttf we just call this function after intializing SDL and check the return value to make sure it went ok.
+initialize SDL_ttf we just call this function after initializing SDL and check the return value to make sure it went ok.
 
 {% highlight c++ %}
 if (TTF_Init() != 0){

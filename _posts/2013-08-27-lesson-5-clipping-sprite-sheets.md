@@ -41,7 +41,7 @@ keep some of the shorter syntax and conveniences from before.
 
 Modifying renderTexture
 -
-To keep from tacking on more and more parameters to our renderTexture function and still mantain the convenience
+To keep from tacking on more and more parameters to our renderTexture function and still maintain the convenience
 the defaults provided we'll split it up into two functions. One is practically an identical call
 to `SDL_RenderCopy` but provides the clip parameter with a default `nullptr` value. This version of renderTexture will take 
 the destination as rect instead, which we can setup ourselves or have constructed by one of our other specialized 
@@ -52,8 +52,8 @@ renderTexture functions. The new base rendering function becomes very simple.
 * Draw an SDL_Texture to an SDL_Renderer at some destination rect
 * taking a clip of the texture if desired
 * @param tex The source texture we want to draw
-* @param rend The renderer we want to draw too
-* @param dst The destination rectangle to render the texture too
+* @param ren The renderer we want to draw to
+* @param dst The destination rectangle to render the texture to
 * @param clip The sub-section of the texture to draw (clipping rect)
 *		default of nullptr draws the entire texture
 */
@@ -80,9 +80,9 @@ our original renderTexture function, and should look pretty similar.
 * If a clip is passed, the clip's width and height will be used instead of
 *	the texture's
 * @param tex The source texture we want to draw
-* @param rend The renderer we want to draw too
-* @param x The x coordinate to draw too
-* @param y The y coordinate to draw too
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
 * @param clip The sub-section of the texture to draw (clipping rect)
 *		default of nullptr draws the entire texture
 */
@@ -150,7 +150,7 @@ in by checking the keycode information in the event, `e.key.keysym.sym`.
 A full list of [event types](http://wiki.libsdl.org/SDL_EventType), [key codes](http://wiki.libsdl.org/SDL_Keycode)
 and other [`SDL_Event`](http://wiki.libsdl.org/SDL_Event) information is available in the wiki.
 
-When we recieve the key input we're interested in we'll need to update the value of useClip to match the clip
+When we receive the key input we're interested in we'll need to update the value of useClip to match the clip
 we want to draw. With these additions our event loop will become:
 
 {% highlight c++ %}
