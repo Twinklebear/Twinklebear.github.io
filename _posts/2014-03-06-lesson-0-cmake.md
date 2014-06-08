@@ -76,7 +76,7 @@ The Test Program
 The program we're building for this lesson is a simple sanity check for SDL. It will 
 [initialize](https://wiki.libsdl.org/SDL_Init) all the SDL subsystems, check for any
 [errors](https://wiki.libsdl.org/SDL_GetError) and then [quit](https://wiki.libsdl.org/SDL_Quit).
-Our build system will look for this folder under Lesson0/src/main.cpp.
+Our build system will look for this file under Lesson0/src/main.cpp.
 If you place it elsewhere you'll need to update the file names and subdirectories in the CMakeLists files.
 {% highlight c++ %}
 #include <iostream>
