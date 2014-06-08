@@ -10,10 +10,10 @@ tags: ["SDL2", "SDL2_image"]
 Up until now we've only been using BMP images as they're the only type supported by the base SDL library,
 but being restricted to using BMP images isn't that great. Fortunately there are a set of SDL extension libraries
 that add useful features to SDL, such as support for a wide variety of image types through 
-[SDL_image](http://www.libsdl.org/projects/SDL_image/). The other available libraries are
-[SDL_ttf](http://www.libsdl.org/projects/SDL_ttf/) which provides TTF rendering support, 
-[SDL_net](http://www.libsdl.org/projects/SDL_net/) which provides low level networking
-and [SDL_mixer](http://www.libsdl.org/projects/SDL_mixer/) which provides multi-channel audio playback.
+[SDL\_image](http://www.libsdl.org/projects/SDL_image/). The other available libraries are
+[SDL\_ttf](http://www.libsdl.org/projects/SDL_ttf/) which provides TTF rendering support, 
+[SDL\_net](http://www.libsdl.org/projects/SDL_net/) which provides low level networking
+and [SDL\_mixer](http://www.libsdl.org/projects/SDL_mixer/) which provides multi-channel audio playback.
 
 <!--more-->
 
@@ -21,25 +21,40 @@ Installing an Extension Library
 -
 In this lesson we'll just need SDL_image but the installation process for all the extension libraries is the same. 
 Download the development library for your system from the [project page](http://www.libsdl.org/projects/SDL_image/)
-and follow the instructions below to get SDL_image set up on your system.
+and follow the instructions below to get SDL\_image set up on your system.
 
-- **Visual Studio and MinGW**: Merge the extension library's files into your existing SDL2 directory. 
-- **Linux**: Install from your package manager or by downloading the source and
-following the standard `./configure && make && make install` process. Building the library will install it alongside the SDL2 libraries in your `/usr/local/lib` directory and the headers with the SDL2 headers in `/usr/local/include/SDL2`. 
-- **Mac**: Copy the SDL2_image framework folder in your download to your frameworks directory.
+- **Windows** (MinGW or Visual Studio): Merge the extension library's files into your existing SDL2 directory.
+You'll also need to copy the SDL2\_image, zlib and any image format dlls (such as libpng) over to your executable directory so that they're available at runtime
+
+- **Linux**: Install from your package manager or by downloading the source and building with CMake.
+
+- **Mac**: Download the .dmg from the site and follow the Readme.
 
 To use the libraries you'll need to update your includes and build system to link against the new extension library.
 
-- **Visual Studio**: Include `<SDL_image.h>` and add `SDL2_image.lib` to your linker dependencies. You'll also need to
-copy the SDL2_image, zlib and any image dlls over to your executable directory so that they're available at runtime
-(thanks for the catch @wolfman2000!).
-- **MinGW and Linux**: Include `<SDL2/SDL_image.h>` and add `-lSDL2_image` to the `SDLLIB` variable in your makefile.
-- **Mac clang**: Include `<SDL2_image/SDL_image.h>` and add `-framework SDL2_image` to the `SDL` variable in your makefile.
+#### Cmake
+Grab the appropriate module from [the repo](https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/cmake)
+and add it do your CMake modules directory (`cmake/`). You can then look up the new extension library using the same
+`find_package` method used to find SDL2 and include `SDL_image.h` in your source file.
 
-For reference you can view my makefiles for all platforms with SDL_image added
-[here](https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/Lesson3/Makefiles) and
-the Visual Studio project that uses SDL_image [here](https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/Lesson3).
+{% highlight cmake %}
+find_package(SDL2_image REQUIRED)
+include_directories(${SDL2_IMAGE_INCLUDE_DIR})
+# Link this lesson against SDL2 and SDL2_image
+add_executable(Lesson3 src/main.cpp)
+target_link_libraries(Lesson3 ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})
+# Install target is the same as before
+{% endhighlight %}
+<br />
 
+#### Visual Studio
+Include `SDL_image.h` and add `SDL2_image.lib` to your linker dependencies.
+
+#### GCC or Clang on Linux and MinGW on Windows
+Include `SDL2/SDL_image.h` and add `-lSDL2_image` to the `SDLLIB` variable in your makefile.
+
+#### Clang on Mac
+Include `SDL2_image/SDL_image.h` and add `-framework SDL2_image` to the `SDL` variable in your makefile.
 
 Setting up Tile Properties
 -

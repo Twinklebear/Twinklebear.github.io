@@ -16,7 +16,6 @@ project and let's get started!
 <a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson1/hello.bmp">
 	<img class="centered" width="400" height="auto" 
 		src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson1/hello.bmp">
-	</img>
 </a>
 
 Starting SDL

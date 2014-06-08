@@ -18,7 +18,7 @@ take a peek at the [documentation](http://www.libsdl.org/projects/SDL_ttf/docs/i
 The first thing we'll need after the library is a font to render our text with. I made a pretty awful font using
 [BitFontMaker](http://www.pentacom.jp/pentacom/bitfontmaker2/) which you can
 [download from the repository](https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson6/sample.ttf), or if you have some other font you'd like to use that's fine too. My font only provides the basic ASCII characters, so if you try to render non-ASCII characters they probably won't show up.
-The code for this lesson will build off of what we wrote for Lesson 5, so if you don't have that to start from grab it at [Github](https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/Lesson5), the image being
+The code for this lesson will build off of what we wrote for Lesson 5, so if you don't have that to start from grab it off [Github](https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/Lesson5), the image being
 loaded and the clips calculation and drawing will be replaced with what we learn here.
 
 Rendering Text
