@@ -152,5 +152,5 @@ and link targets but it's pretty straightforward to setup.
 
 If you're having any problems with the lesson please leave a comment below.
 
-I'll see you again soon in [Lesson 1: Hello World!]({% post_url 2013-08-17-lesson-1-hello-world %})
+I'll see you again soon in [Postscript 0: Properly Finding Resource Paths!]({% post_url 2014-06-16-postscript-0-properly-finding-resource-paths %})
 

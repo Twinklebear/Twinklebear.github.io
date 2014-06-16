@@ -34,3 +34,5 @@ it'll be easier to follow along.
 - [Mac Command Line]({% post_url 2013-08-15-lesson-0-mac-command-line %})
 - [Mac XCode](http://twinklebear.github.io/sdl2%20tutorials/2013/08/15/lesson-0-setting-up-sdl/#comment-1035683057)
 
+Don't forget to read [Postscript 0: Properly Finding Resource Paths]({% post_url 2014-06-16-postscript-0-properly-finding-resource-paths %}) before continuing on to lesson 1 to see how to find the location of assets needed by your program.
+

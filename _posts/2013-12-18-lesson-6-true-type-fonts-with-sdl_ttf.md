@@ -114,10 +114,11 @@ then query the width and height the same as for any other texture and compute th
 message centered in the window.
 
 {% highlight c++ %}
+const std::string resPath = getResourcePath("Lesson6");
 //We'll render the string "TTF fonts are cool!" in white
-//Color is in RGB format
-SDL_Color color = { 255, 255, 255 };
-SDL_Texture *image = renderText("TTF fonts are cool!", "../res/Lesson6/sample.ttf",
+//Color is in RGBA format
+SDL_Color color = { 255, 255, 255, 255 };
+SDL_Texture *image = renderText("TTF fonts are cool!", resPath + "sample.ttf",
 	color, 64, renderer);
 if (image == nullptr){
 	return 1;

@@ -188,8 +188,9 @@ The images are loaded exactly the same with our `loadTexture` function. Be sure 
 your project structure.
 
 {% highlight c++ %}
-SDL_Texture *background = loadTexture("../res/Lesson3/background.png", renderer);
-SDL_Texture *image = loadTexture("../res/Lesson3/image.png", renderer);
+const std::string resPath = getResourcePath("Lesson3");
+SDL_Texture *background = loadTexture(resPath + "background.png", renderer);
+SDL_Texture *image = loadTexture(resPath + "image.png", renderer);
 //Make sure they both loaded ok
 if (background == nullptr || image == nullptr)
 	return 4;

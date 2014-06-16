@@ -170,8 +170,9 @@ We'll load the textures using our `loadTexture` function and exit if either fail
 the filepaths to match your project structure.
 
 {% highlight c++ %}
-SDL_Texture *background = loadTexture("../res/Lesson2/background.bmp", renderer);
-SDL_Texture *image = loadTexture("../res/Lesson2/image.bmp", renderer);
+const std::string resPath = getResourcePath("Lesson2");
+SDL_Texture *background = loadTexture(resPath + "background.bmp", renderer);
+SDL_Texture *image = loadTexture(resPath + "image.bmp", renderer);
 if (background == nullptr || image == nullptr)
 	return 4;
 {% endhighlight %}

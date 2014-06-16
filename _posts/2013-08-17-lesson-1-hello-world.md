@@ -82,7 +82,8 @@ SDL_LoadBMP takes the filepath of our image, which you should change to match yo
 an `SDL_Surface*` or `NULL` if something went wrong.
 
 {% highlight c++ %}
-SDL_Surface *bmp = SDL_LoadBMP("../res/Lesson1/hello.bmp");
+std::string imagePath = getResourcePath("Lesson1") + "hello.bmp";
+SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
 if (bmp == nullptr){
 	SDL_DestroyRenderer(ren);
 	SDL_DestroyWindow(win);
