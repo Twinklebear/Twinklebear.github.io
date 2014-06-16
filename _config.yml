@@ -25,7 +25,12 @@ author :
 # Else if you are pushing to username.github.io, replace with your username.
 # Finally if you are pushing to a GitHub project page, include the project name at the end.
 #
-production_url : Twinklebear.github.io
+production_url : www.willusher.io
+
+nav_pages:
+    - {title: SDL2 Tutorials, group: navigation, url: /pages/sdl2}
+    - {title: Archive, group: navigation, url: /archive.html}
+    - {title: Categories, group: navigation, url: /categories.html}
 
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
