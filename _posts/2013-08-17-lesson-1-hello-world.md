@@ -40,13 +40,13 @@ Opening a Window
 We'll need a window to display our render in, we can create one with 
 [`SDL_CreateWindow`](http://wiki.libsdl.org/moin.fcg/SDL_CreateWindow) which takes a title for the window,
 the x and y position to create it at, the window width and height and some [flags](http://wiki.libsdl.org/moin.fcg/SDL_WindowFlags) to set properties of the window and returns an `SDL_Window*`. This pointer will be `NULL` if anything went
-wrong when creating the window.
+wrong when creating the window. If an error does occur we need to clean up SDL before exiting the program.
 
 {% highlight c++ %}
-SDL_Window *win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480,
-	SDL_WINDOW_SHOWN);
+SDL_Window *win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
 if (win == nullptr){
 	std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+	SDL_Quit();
 	return 1;
 }
 {% endhighlight %}
@@ -58,13 +58,15 @@ Now we can create a renderer to draw to the window using [`SDL_CreateRenderer`](
 to be used (or -1 to select the first that meets our requirements) and various 
 [flags](http://wiki.libsdl.org/moin.fcg/SDL_RendererFlags) used to specify what sort of renderer we want.
 Here we're requesting a hardware accelerated renderer with vsync enabled. We'll get back an `SDL_Renderer*` which will be
-`NULL` if something went wrong.
+`NULL` if something went wrong. If an error does occur we need to clean up anything we've previously created and quit
+SDL before exiting the program.
 
 {% highlight c++ %}
-SDL_Renderer *ren = SDL_CreateRenderer(win, -1, 
-	SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 if (ren == nullptr){
+	SDL_DestroyWindow(win);
 	std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+	SDL_Quit();
 	return 1;
 }
 {% endhighlight %}
@@ -82,7 +84,10 @@ an `SDL_Surface*` or `NULL` if something went wrong.
 {% highlight c++ %}
 SDL_Surface *bmp = SDL_LoadBMP("../res/Lesson1/hello.bmp");
 if (bmp == nullptr){
+	SDL_DestroyRenderer(ren);
+	SDL_DestroyWindow(win);
 	std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
+	SDL_Quit();
 	return 1;
 }
 {% endhighlight %}
@@ -96,8 +101,10 @@ surface at this point so we'll free it now.
 SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, bmp);
 SDL_FreeSurface(bmp);
 if (tex == nullptr){
-	std::cout << "SDL_CreateTextureFromSurface Error: "
-		<< SDL_GetError() << std::endl;
+	SDL_DestroyRenderer(ren);
+	SDL_DestroyWindow(win);
+	std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+	SDL_Quit();
 	return 1;
 }
 {% endhighlight %}
