@@ -60,14 +60,17 @@ whether the main loop should exit or not. So our event processing loop could loo
 //e is an SDL_Event variable we've declared before entering the main loop
 while (SDL_PollEvent(&e)){
 	//If user closes the window
-	if (e.type == SDL_QUIT)
+	if (e.type == SDL_QUIT){
 		quit = true;
+	}
 	//If user presses any key
-	if (e.type == SDL_KEYDOWN)
+	if (e.type == SDL_KEYDOWN){
 		quit = true;
+	}
 	//If user clicks the mouse
-	if (e.type == SDL_MOUSEBUTTONDOWN)
+	if (e.type == SDL_MOUSEBUTTONDOWN){
 		quit = true;
+	}
 }
 {% endhighlight %}
 <br />
@@ -87,12 +90,15 @@ SDL_Event e;
 bool quit = false;
 while (!quit){
 	while (SDL_PollEvent(&e)){
-		if (e.type == SDL_QUIT)
+		if (e.type == SDL_QUIT){
 			quit = true;
-		if (e.type == SDL_KEYDOWN)
+		}
+		if (e.type == SDL_KEYDOWN){
 			quit = true;
-		if (e.type == SDL_MOUSEBUTTONDOWN)
+		}
+		if (e.type == SDL_MOUSEBUTTONDOWN){
 			quit = true;
+		}
 	}
 	//Render the scene
 	SDL_RenderClear(renderer);

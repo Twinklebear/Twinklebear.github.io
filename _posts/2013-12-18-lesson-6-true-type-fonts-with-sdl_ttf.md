@@ -101,6 +101,7 @@ initialize SDL_ttf we just call this function after initializing SDL and check t
 {% highlight c++ %}
 if (TTF_Init() != 0){
 	logSDLError(std::cout, "TTF_Init");
+	SDL_Quit();
 	return 1;
 }
 {% endhighlight %}
@@ -121,6 +122,9 @@ SDL_Color color = { 255, 255, 255, 255 };
 SDL_Texture *image = renderText("TTF fonts are cool!", resPath + "sample.ttf",
 	color, 64, renderer);
 if (image == nullptr){
+	cleanup(renderer, window);
+	TTF_Quit();
+	SDL_Quit();
 	return 1;
 }
 //Get the texture w/h so we can center it in the screen

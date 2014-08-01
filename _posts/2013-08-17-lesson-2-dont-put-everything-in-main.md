@@ -72,12 +72,13 @@ SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren){
 		texture = SDL_CreateTextureFromSurface(ren, loadedImage);
 		SDL_FreeSurface(loadedImage);
 		//Make sure converting went ok too
-		if (texture == nullptr)
+		if (texture == nullptr){
 			logSDLError(std::cout, "CreateTextureFromSurface");
+		}
 	}
-	else
+	else {
 		logSDLError(std::cout, "LoadBMP");
-
+	}
 	return texture;
 }
 {% endhighlight %}
@@ -137,13 +138,16 @@ SDL_Window *window = SDL_CreateWindow("Lesson 2", 100, 100, SCREEN_WIDTH,
 	SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 if (window == nullptr){
 	logSDLError(std::cout, "CreateWindow");
-	return 2;
+	SDL_Quit();
+	return 1;
 }
 SDL_Renderer *renderer = SDL_CreateRenderer(window, -1,
 	SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 if (renderer == nullptr){
 	logSDLError(std::cout, "CreateRenderer");
-	return 3;
+	cleanup(window);
+	SDL_Quit();
+	return 1;
 }
 {% endhighlight %}
 <br />
@@ -165,6 +169,7 @@ use your own BMP images.
 		<img src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson2/image.bmp" />
 	</a>
 </figure>
+<br />
 
 We'll load the textures using our `loadTexture` function and exit if either fails to load. You should update
 the filepaths to match your project structure.
@@ -173,8 +178,11 @@ the filepaths to match your project structure.
 const std::string resPath = getResourcePath("Lesson2");
 SDL_Texture *background = loadTexture(resPath + "background.bmp", renderer);
 SDL_Texture *image = loadTexture(resPath + "image.bmp", renderer);
-if (background == nullptr || image == nullptr)
-	return 4;
+if (background == nullptr || image == nullptr){
+	cleanup(background, image, render, window);
+	SDL_Quit();
+	return 1;
+}
 {% endhighlight %}
 <br />
 
@@ -237,10 +245,7 @@ Cleaning Up
 Before we exit we've got to free our textures, renderer and window and quit SDL.
 
 {% highlight c++ %}
-SDL_DestroyTexture(background);
-SDL_DestroyTexture(image);
-SDL_DestroyRenderer(renderer);
-SDL_DestroyWindow(window);
+cleanup(background, image, render, window);
 SDL_Quit();
 {% endhighlight %}
 <br />

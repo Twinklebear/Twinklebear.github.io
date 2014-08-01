@@ -86,8 +86,9 @@ We can still use `logSDLError` to log errors from the SDL_image library as the [
 */
 SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren){
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
-	if (texture == nullptr)		
+	if (texture == nullptr){
 		logSDLError(std::cout, "LoadTexture");
+	}
 	return texture;
 }
 {% endhighlight %}
@@ -159,6 +160,7 @@ to see if initialization was successful. Here we only initialize the PNG loader 
 {% highlight c++ %}
 if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG){
 	logSDLError(std::cout, "IMG_Init");
+	SDL_Quit();
 	return 1;
 }
 {% endhighlight %}
@@ -192,8 +194,12 @@ const std::string resPath = getResourcePath("Lesson3");
 SDL_Texture *background = loadTexture(resPath + "background.png", renderer);
 SDL_Texture *image = loadTexture(resPath + "image.png", renderer);
 //Make sure they both loaded ok
-if (background == nullptr || image == nullptr)
-	return 4;
+if (background == nullptr || image == nullptr){
+	cleanup(background, image, renderer, window);
+	IMG_Quit();
+	SDL_Quit();
+	return 1;
+}
 {% endhighlight %}
 <br />
 
@@ -264,11 +270,7 @@ Cleaning Up
 Clean up is the same as in lesson 2 with one added line to quit SDL_image by calling 
 [`IMG_Quit`](http://www.libsdl.org/projects/SDL_image/docs/SDL_image.html#SEC9).
 {% highlight c++ %}
-SDL_DestroyTexture(background);
-SDL_DestroyTexture(image);
-SDL_DestroyRenderer(renderer);
-SDL_DestroyWindow(window);
-
+cleanup(background, image, renderer, window);
 IMG_Quit();
 SDL_Quit();
 {% endhighlight %}

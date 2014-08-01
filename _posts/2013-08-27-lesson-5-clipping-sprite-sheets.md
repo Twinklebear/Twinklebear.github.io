@@ -96,9 +96,9 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 		dst.w = clip->w;
 		dst.h = clip->h;
 	}
-	else
+	else {
 		SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
-
+	}
 	renderTexture(tex, ren, dst, clip);
 }
 {% endhighlight %}

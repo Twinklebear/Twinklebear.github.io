@@ -131,7 +131,7 @@ int main(int argc, char **argv){
 }
 {% endhighlight %}
 
-End of Postscript 0
+End of Postscript
 -
 You'll want to double check that the path output by the test program is correct as we'll be using `getResourcePath` extensively
 throughout the lessons to reliably find the various images and other assets we need for our programs. A related function
