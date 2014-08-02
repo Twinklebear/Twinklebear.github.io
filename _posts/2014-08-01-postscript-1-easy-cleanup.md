@@ -32,6 +32,7 @@ read through them.
 #ifndef CLEANUP_H
 #define CLEANUP_H
 
+#include <utility>
 #include <SDL.h>
 
 /*
