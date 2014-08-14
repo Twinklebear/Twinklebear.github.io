@@ -34,7 +34,7 @@ To use the libraries you'll need to update your includes and build system to lin
 
 #### Cmake
 Grab the appropriate module from [the repo](https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/cmake)
-and add it do your CMake modules directory (`cmake/`). You can then look up the new extension library using the same
+and add it to your CMake modules directory (`cmake/`). You can then look up the new extension library using the same
 `find_package` method used to find SDL2 and include `SDL_image.h` in your source file.
 
 {% highlight cmake %}
