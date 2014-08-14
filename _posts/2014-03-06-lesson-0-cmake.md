@@ -22,7 +22,7 @@ create this environment variable and have it point to the root level of the fold
 and libraries you downloaded previously.
 </blockquote>
 
-To lookup CMake we'll need a module to find the dependency we want. Typically these are included in the CMake distribution
+To lookup SDL2 we'll need a module to find the dependency we want. Typically these are included in the CMake distribution
 but for some newer libraries they may not be integrated yet. In the case of SDL2 we'll need to provide our own module
 to lookup the dependency. This module is available around online and in the lesson [repository](https://github.com/Twinklebear/TwinklebearDev-Lessons/blob/master/cmake/FindSDL2.cmake). For Windows users I recommend using the modified version from the
 repository since it will also check for your `SDL2` environment variable. The existing FindSDL2.cmake that's floating
