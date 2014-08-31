@@ -17,7 +17,7 @@ description: ""
 
 <h3>Hardware Used and Render Times</h3>
 <p>
-I ran my ray tracer on my desktop and laptop with various numbers of threads and one sample per pixel.
+I ran my ray tracer on my desktop and laptop with various numbers of threads and took one sample per pixel.
 The plot below shows the run times for each number of threads averaged over 10 runs, measured from a build compiled with
 <code>-O2 -march=native</code>. Measurements were taken using <code>std::chrono::high_resolution_clock</code>
 and only include time to render, ie. time to load the scene and write the images to disk is ignored.
