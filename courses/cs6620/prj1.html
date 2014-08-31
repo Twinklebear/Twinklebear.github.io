@@ -42,6 +42,27 @@ Compiler: gcc 4.8.2 <br />
 <p style="text-align:center">Chart made using <a href="http://c3js.org/">C3.js</a></p>
 <br />
 
+<h3>Just For Fun</h3>
+Swapping to GIMP or some other image viewer every time to see the render is pretty tedious, so to see the output
+immediately as it renders I put together a little live previewer that displays your color buffer as the
+scene is rendered. This should be really cool to watch when we start implementing techniques like path tracing and
+photon mapping. Since the current scene is too simple to be rendered slowly enough for us to see the
+rendering in action I added short pauses to the worker threads to slow them down enough to be drawn nicely.
+Below are some animations of the slowed down render running on 4 and 12 threads. In these animations you're
+able to see how the work area of the image is split into sub-sections for each thread to work on which is neat.
+I'm not much of an editor so forgive me for the video including the window opening.
+
+<br />
+<div style="text-align:center">
+<h4>4 Threads</h4>
+<iframe src="http://gfycat.com/ifr/ObeseHeftyAntarcticgiantpetrel" frameborder="0" scrolling="no" width="580" height="460" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe>
+
+<h4>12 Threads</h4>
+<iframe src="http://gfycat.com/ifr/FavoriteSmoothGreyhounddog" frameborder="0" scrolling="no" width="580" height="460" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe>
+</div>
+
+<br />
+
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="/courses/cs6620/c3.min.js"></script>
 <script src="/courses/cs6620/prj1_time.js"></script>
