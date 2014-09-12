@@ -1,0 +1,49 @@
+---
+layout: page
+title: "CS 6620 Fall 2014 - Project 3"
+description: ""
+---
+{% include JB/setup %}
+
+<link href="/courses/cs6620/c3.css" rel="stylesheet" type="text/css">
+
+<div style="text-align:center">
+<h3>Simple Test Scene: 57ms</h3>
+<img src="/courses/cs6620/prj3_simple.png">
+
+<h3>Box Scene: 83ms</h3>
+<img src="/courses/cs6620/prj3_box.png">
+</div>
+
+<br />
+
+<h3>Hardware Used</h3>
+<p>
+Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
+ie. time to load the scene and write the images to disk is ignored. Both images were rendered with 8 threads and
+8x8 blocks with one sample taken per pixel.
+</p>
+
+CPU: Intel i5-2500K @ 4.0GHz, 4 hardware threads <br />
+RAM: 8GB 1600MHz DDR3 <br />
+Compiler: gcc 4.9.1 (MinGW on Windows)<br />
+Compilation Flags: -O3 -mfpmath=sse -march=native -flto
+</p>
+
+<a href="http://www.youtube.com/watch?v=Qh2sWSVRrmo"><h3>Won't somebody please think of the caches?</h3></a>
+The random block ordering I implemented in <a href="/courses/cs6620/prj2.html">project 2</a> is neat but not so great
+if you want to have coherent memory access, so I migrated to the
+<a href="https://en.wikipedia.org/wiki/Z-order_curve">Z-order</a> mentioned by Ian on the discussion board.
+Below is a slowed down video of the box scene for this project rendering with this new ordering. I
+did also implement the spiral from center ordering but as you get to the edges of the image it starts to lose locality,
+so I think the Z-order is a bit better.
+
+<br />
+<div style="text-align:center">
+<h4>2 Threads with 8x8 Blocks</h4>
+<video src="/courses/cs6620/z_order.webm" controls muted loop>
+</video>
+</div>
+
+<br />
+
