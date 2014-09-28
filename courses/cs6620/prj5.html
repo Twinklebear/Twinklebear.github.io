@@ -1,0 +1,33 @@
+---
+layout: page
+title: "CS 6620 Fall 2014 - Project 5"
+description: ""
+---
+{% include JB/setup %}
+
+<link href="/courses/cs6620/c3.css" rel="stylesheet" type="text/css">
+
+<div style="text-align:center">
+<h3>Cornell Box Scene</h3>
+<p>With bounding box tests (and no BVH): 13.066s<br/>
+Without bounding box tests (and no BVH): 79.474s</p>
+<img src="/courses/cs6620/prj5.png">
+</div>
+
+<br />
+
+<h3>Hardware Used and Other Details</h3>
+<p>
+Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
+ie. time to load the scene and write the images to disk is ignored. The image was rendered with one sample per
+pixel since it's incredibly slow without the BVH and I didn't want to wait too long.
+</p>
+
+CPU: Intel i5-2500K @ 4.0GHz, 4 hardware threads <br />
+RAM: 8GB 1600MHz DDR3 <br />
+Compiler: gcc 4.9.1 x86_64 (MinGW on Windows)<br />
+Compilation Flags: -m64 -O3 -march=native -flto
+</p>
+
+<br />
+
