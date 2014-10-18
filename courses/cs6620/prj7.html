@@ -1,0 +1,38 @@
+---
+layout: page
+title: "CS 6620 Fall 2014 - Project 7"
+description: ""
+---
+{% include JB/setup %}
+
+<div class="col-lg-12 col-md-12" style="text-align:center">
+	<h3>Test Scene w/ filtering: 500ms</h3>
+	<img src="/courses/cs6620/prj7_filtered.png">
+	<br />
+	<p style="text-align:left">
+	The checkerboard is pretty blurry at distant sharp angles since my filter method is different than what Cem's code uses
+	for the procedural textures, I'm still playing with this a bit. For the image textures I've implemented mipmaps
+	(only for power of 2 textures) and anisotropic filtering. The filtering computes information about the texture
+	sampling rates by tracing ray differentials to determine how many texels need to be sampled along
+	each axis in texture space.
+	</p>
+
+	<h3>Unfiltered Test Scene</h3>
+	<img src="/courses/cs6620/prj7_unfiltered.png">
+</div>
+
+<div class="col-lg-12 col-md-12">
+	<h3>Hardware Used and Other Details</h3>
+	<p>
+	Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
+	ie. time to load the scene and write the images to disk is ignored. The images were rendered with one sample per
+	pixel.
+	</p>
+
+	CPU: Intel i5-2500K @ 4.0GHz, 4 hardware threads <br />
+	RAM: 8GB 1600MHz DDR3 <br />
+	Compiler: gcc 4.9.1 x86_64 (on Windows, built by MinGW-W64 project)<br />
+	Compilation Flags: -m64 -O3 -march=native -flto
+	</p>
+</div>
+
