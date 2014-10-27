@@ -137,7 +137,7 @@ description: ""
 		<p>
 		Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
 		ie. time to load the scene and write the images to disk is ignored. The images were rendered with adaptive
-		anti-aliasing performed by taking 8 samples and using the variance in their luminance to decide whether we need
+		anti-aliasing performed by taking 8 samples and using the contrast of their luminance to decide whether we need
 		additional sampling, taking at most 64 samples per pixel for those that need super sampling.
 		</p>
 
