@@ -34,7 +34,8 @@ description: ""
 		while in the scene with filtering we need to supersample in far fewer locations and have nicely filtered textures.
 		Although the difference in render time for these scenes is pretty negligable a lack of texture filtering
 		would probably be a bigger performance hit for more complicated scenes and we'd need to take more samples
-		to have comparable filtering with the scene that does have texture filtering.
+		to have comparable filtering with the scene that does have texture filtering. Both images were rendered
+		using a minimum of 8 samples per pixel and a max of 64 samples per pixel when supersampling.
 		</p><p>
 		I did also get my checkerboard anti-aliasing working by scaling my ray differentials to behave
 		properly when taking multiple samples per pixel.
