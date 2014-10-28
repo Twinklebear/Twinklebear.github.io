@@ -49,8 +49,8 @@ description: ""
 		that supersampling is needed. These artifacts don't appear when using the same
 		sampling pattern non-adaptively (eg. just take max spp always) so I think there's something
 		related to the varying sampling rate that causes this, but at the moment I don't know what/why/how. Each filter
-		covers a 3x3 pixel area on the image and when writing a sample we center the filter at the sample position and
-		write the sample color multiplied by the filter weight at the pixel location to each pixel covered by the filter.
+		covers a 3x3 pixel area on the image and when writing a sample we center the filter at each pixel and
+		write the sample color multiplied by the filter weight to each pixel covered by the filter.
 		I also track the sum of the weights of all samples added to each pixel and when finding the final color divide
 		the color by the total weight.
 		Below are some comparisons of the different filters so you can check out the issue and jaggies,
