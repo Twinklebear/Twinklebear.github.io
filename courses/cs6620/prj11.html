@@ -17,9 +17,9 @@ description: ""
 	and max of 1024 samples per pixel.
 	<br />
 	The scene uses the ordered polymesh version of
-	<a href="http://www.headus.com.au/samples/killeroo/">Killeroo</a> (46,000 tris) and the high res
-	Utah teapot. The Killeroo model has measured brass material from the
-	<a href="http://www.merl.com/brdf/">MERL BRDF Database</a>
+	<a href="http://www.headus.com.au/samples/killeroo/">Killeroo</a> and the high res
+	Utah teapot. The Killeroo model is using a measured brass material from the
+	<a href="http://www.merl.com/brdf/">MERL BRDF Database</a>.
 	</p>
 	<div class="col-lg-6 col-md-6" style="text-align:center">
 		<a href="/courses/cs6620/prj11_killeroo_correct.png">
@@ -42,7 +42,7 @@ description: ""
 		</a>
 		<br />
 		<p>
-		The MERL scene makes use of the Stanford Dragon (1,132,830 tris) and Happy Buddha (1,087,716 tris) from the
+		The MERL scene makes use of the Stanford Dragon and Happy Buddha from the
 		<a href="https://graphics.stanford.edu/data/3Dscanrep/">Stanford 3D Scanning Repository</a>. The material
 		BRDFS are from the <a href="http://www.merl.com/brdf/">MERL BRDF Database</a> introduced in the paper
 		"A Data-Driven Reflectance Model" by Wojciech Matusik, Hanspeter Pfister, Matt Brand and Leonard McMillan.
@@ -60,10 +60,10 @@ description: ""
 		</a>
 		<br />
 		<p>
-		The MERL scene makes use of the Stanford Bunny from the 
+		The fabric box scene makes use of the Stanford Bunny from the 
 		<a href="https://graphics.stanford.edu/data/3Dscanrep/">Stanford 3D Scanning Repository</a> and the
 		high res Utah teapot. The material BRDFS are from the <a href="http://www.merl.com/brdf/">MERL BRDF Database</a>.
-		The walls are using the red/white/blue fabric BRDFS, the teapot is using the red metallic paint and the bunny is
+		The walls are using the red/white/blue fabric BRDFS, the teapot is using red metallic paint and the bunny is
 		using color changing paint2.
 		</p>
 	</div>
@@ -73,7 +73,7 @@ description: ""
 	<p>
 	Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
 	ie. time to load the scene and write the images to disk is ignored. Images were rendered with path tracing
-	using 32 threads with work divided up in 8x8 blocks. A different desktop was used to render the images
+	using 32 threads with work divided up in 8x8 blocks. A different machine was used to render the images
 	since my computer at home was out of commission when rendering the scenes.
 	</p>
 
