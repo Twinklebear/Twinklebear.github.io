@@ -29,8 +29,8 @@ Lessons/
     res/
         Lesson1/
             Lesson 1's assets are stored here
-    src/
-        Lesson1/
+    Lesson1/
+        src/
             Lesson 1's source code
     include/
         Headers shared between lessons
