@@ -55,7 +55,9 @@ description: ""
 	<p>
 	The scenes below compare the results of shooting a huge number of photons vs. those achieved
 	with final gathering for significantly fewer (above). Both scenes below shot 15M caustic and 40M
-	indirect photons.
+	indirect photons. I did also use a smaller search radius for photons when rendering these images
+	which is contributing to the noise, it'd probably look a lot better if I used more photons when
+	computing the indirect lighting.
 	</p>
 	<div class="col-lg-6 col-md-6" style="text-align:center">
 		<b>Cornell Box Gallery with tons of photons, no gathering</b>
@@ -133,6 +135,18 @@ description: ""
 			<img src="/courses/cs6620/prj13/caustic_teapot.png" class="img-responsive">
 		</a>
 	</div>
+</div>
+
+<div class="col-lg-12 col-md-12">
+	<h4>An Interesting Bug</h4>
+	<p>
+	This bug was a result of using a sequence to compute the ray directions for photons leaving the light,
+	producing an interesting (but undesirable) pattern in the lighting. The image below was rendered with
+    just the direct photons to easily showcase the issue.
+	</p>
+	<a href="/courses/cs6620/prj13/bad_direct_lighting.png">
+		<img src="/courses/cs6620/prj13/bad_direct_lighting.png" class="img-responsive">
+	</a>
 </div>
 
 <div class="col-lg-12 col-md-12">
