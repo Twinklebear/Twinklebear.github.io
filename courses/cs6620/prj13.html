@@ -10,7 +10,10 @@ description: ""
 	<p>
 	Both scenes were rendered with 16/32 adaptive sampling, shooting 1M caustic
 	and 2M indirect photons. The scenes using final gathering were rendered with approximately
-	1M radiance photons and used 40 final gather samples.
+	1M radiance photons and used 40 final gather samples. The photon map lookups were done
+	for a search radius of 0.1 to query 50 photons. For all renders unless otherwise mentioned
+	the photon map is only used for indirect and caustic lighting effects, direct lighting is
+	sampled explicitly as usual.
 	</p>
 	<div class="col-lg-6 col-md-6" style="text-align:center">
 		<b>Cornell Box Gallery with gathering</b>
@@ -55,14 +58,12 @@ description: ""
 	<p>
 	The scenes below compare the results of shooting a huge number of photons vs. those achieved
 	with final gathering for significantly fewer (above). Both scenes below shot 15M caustic and 40M
-	indirect photons. I did also use a smaller search radius for photons when rendering these images
-	which is contributing to the noise, it'd probably look a lot better if I used more photons when
-	computing the indirect lighting.
+	indirect photons. The photon map lookups were done for a search radius of 1 to query 300 photons.
 	</p>
 	<div class="col-lg-6 col-md-6" style="text-align:center">
 		<b>Cornell Box Gallery with tons of photons, no gathering</b>
 		<p>
-		Pre-process: 00:03:23. Rendering: 00:05:18
+		Pre-process: 00:03:07. Rendering: 00:05:11
 		</p>
 		<a href="/courses/cs6620/prj13/cornell_spotlights_no_gather_big.png">
 			<img src="/courses/cs6620/prj13/cornell_spotlights_no_gather_big.png" class="img-responsive">
@@ -71,7 +72,7 @@ description: ""
 	<div class="col-lg-6 col-md-6" style="text-align:center">
 		<b>SmallPT Cornell Box with tons of photons, no gathering</b>
 		<p>
-		Pre-process: 00:04:55. Rendering: 00:07:26
+		Pre-process: 00:04:50. Rendering: 00:07:10
 		</p>
 		<a href="/courses/cs6620/prj13/smallpt_cornell_no_gather_big.png">
 			<img src="/courses/cs6620/prj13/smallpt_cornell_no_gather_big.png" class="img-responsive">
@@ -89,6 +90,7 @@ description: ""
 	the monkey head is a higher poly version of <a href="http://en.wikipedia.org/wiki/Blender_%28software%29#Suzanne">Blender's Suzanne</a>
 	created by taking the original Suzanne model and running it through a few rounds of subdivision and smoothing in Blender.
 	The teapot is the high res version of the Utah teapot.
+	The photon map lookups were done for a search radius of 0.65 to query 300 photons.
 	</p>
 	<div class="col-lg-6 col-md-6" style="text-align:center">
 		<b>Stanford Dragon</b>
@@ -138,9 +140,9 @@ description: ""
 </div>
 
 <div class="col-lg-12 col-md-12">
-	<h4>An Interesting Bug</h4>
+	<h4>A Neat Bug</h4>
 	<p>
-	This bug was a result of using a sequence to compute the ray directions for photons leaving the light,
+	This bug was the result of using a sequence to compute the ray directions for photons leaving the light
 	producing an interesting (but undesirable) pattern in the lighting. The image below was rendered with
     just the direct photons to easily showcase the issue.
 	</p>
