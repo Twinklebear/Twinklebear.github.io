@@ -8,7 +8,10 @@ body .content {
 /* Chuck out bootstrap's syntax highlighting stuff */
 pre, pre code {
 	display: block;
-	padding: 9.5px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
 	margin: 0px 0px 0px;
 	font-size: 1em;
 	color: white;
