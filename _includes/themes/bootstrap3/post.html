@@ -2,20 +2,20 @@
 	<h1>{{page.title}} <small>{{page.description}}</small></h1>
 </div>
 
-<div>
+<div class="col-md-10 col-md-offset-1">
 	{{content}}
 	<hr>
-	<div class="col-md-4 col-s-4">
+	<div class="col-md-4">
 		<p>Published: {{page.date | date_to_long_string}}</p>
 	</div>
 	{% if page.previous %}
-	<div class="col-md-2 col-s-2 col-xs-6">
+	<div class="col-md-2 ol-xs-6">
 		<a href="{{BASE_PATH}}{{page.previous.url}}" title="{{page.previous.title}}">
 			<span class="glyphicon glyphicon-chevron-left"></span>&nbsp Previous</a>
 	</div>
 	{% endif %}
 	{% if page.next %}
-	<div class="col-md-2 col-s-2 col-xs-6">
+	<div class="col-md-2 col-xs-6">
 		<a href="{{BASE_PATH}}{{page.next.url}}" title="{{page.next.title}}">
 			Next: &nbsp<span class="glyphicon glyphicon-chevron-right"></span></a>
 	</div>
