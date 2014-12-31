@@ -309,6 +309,10 @@ I'd like to find some more information on what exactly this means, such as
 what a lifetime bound tells the compiler and how it's used. Unfortunately I didn't have much luck finding
 information on this, if anyone has some links please do let me know.
 
+**Edit (12/31/14)**: [@JakeGoulding](https://twitter.com/JakeGoulding) pointed me to one of his answers
+on [stack overflow](http://stackoverflow.com/questions/27675554/type-definition-with-a-trait-differences-of-specifying-an-explicit-lifetime-bou/27678350#27678350) which I found to be helpful.
+Another [answer](http://stackoverflow.com/questions/26212397/rust-lang-references-to-traits-in-structs/26213294#26213294) linked in the thread also has a really nice explanation.
+
 #### A Poor Design Choice
 The DifferentialGeometry struct also contains a design decision that I'm not very happy with.
 The differential geometry is initially created within the geometry that was hit, since it doesn't know
