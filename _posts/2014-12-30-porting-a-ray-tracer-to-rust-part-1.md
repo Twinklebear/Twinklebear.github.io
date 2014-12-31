@@ -73,6 +73,10 @@ topic of operator overloading, I do really like Rust's decision to make them tra
 because they can then be set as requirements for generic functions.
 Below is my vector \* scalar overload, it's two extra lines than in C++ but is very clear to read.
 
+**Edit (12/31/14)**: [ben0x539](https://www.reddit.com/r/rust/comments/2qvs4z/porting_a_ray_tracer_to_rust_part_1/cnaaep)
+mentioned that unsupported left-multiply overloading is a [bug](https://github.com/rust-lang/rust/issues/19035)
+which may be getting fixed in [19434](https://github.com/rust-lang/rust/pull/19434).
+
 {% highlight rust %}
 impl Mul<f32, Vector> for Vector {
     fn mul(self, rhs: f32) -> Vector {
@@ -93,7 +97,6 @@ T lerp(float t, const T &a, const T &b){
     return a * (1.f - t) + b * t;
 }
 {% endhighlight %}
-
 
 If we misuse the lerp implementation in C++ we get a decent amount of errors. gcc-4.9
 is quite clear about what went wrong, but these errors are shown as occuring inside the
