@@ -2,7 +2,7 @@
 layout: post
 title: "Porting a Ray Tracer to Rust, part 1"
 description: "The first taste of Rust"
-category: "tray_rust"
+category:
 tags: ["Rust", "ray tracing", "graphics"]
 ---
 {% include JB/setup %}
