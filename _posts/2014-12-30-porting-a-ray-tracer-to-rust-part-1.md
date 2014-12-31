@@ -311,7 +311,10 @@ information on this, if anyone has some links please do let me know.
 
 **Edit (12/31/14)**: [@JakeGoulding](https://twitter.com/JakeGoulding) pointed me to one of his answers
 on [stack overflow](http://stackoverflow.com/questions/27675554/type-definition-with-a-trait-differences-of-specifying-an-explicit-lifetime-bou/27678350#27678350) which I found to be helpful.
-Another [answer](http://stackoverflow.com/questions/26212397/rust-lang-references-to-traits-in-structs/26213294#26213294) linked in the thread also has a really nice explanation.
+Another [answer](http://stackoverflow.com/questions/26212397/rust-lang-references-to-traits-in-structs/26213294#26213294) linked in the thread also has a really nice explanation. As a result of reading the
+answers I've changed the geom member's type to `&'a (Geometry + 'static)` to require the object
+implementing the trait that we're referring to be a struct, since we won't be implementing Geometry
+for reference types.
 
 #### A Poor Design Choice
 The DifferentialGeometry struct also contains a design decision that I'm not very happy with.
