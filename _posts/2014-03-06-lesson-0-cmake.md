@@ -52,8 +52,8 @@ set(BIN_DIR ${TwinklebearDevLessons_SOURCE_DIR}/bin)
 # selecting the build mode in their IDE
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11")
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O2")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} -g")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE} -O2")
 elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
 	if (CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
 		string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -74,7 +74,7 @@ add_subdirectory(Lesson0)
 The Test Program
 -
 The program we're building for this lesson is a simple sanity check for SDL. It will 
-[initialize](https://wiki.libsdl.org/SDL_Init) all the SDL subsystems, check for any
+[initialize](https://wiki.libsdl.org/SDL_Init) the SDL video subsystem, check for any
 [errors](https://wiki.libsdl.org/SDL_GetError) and then [quit](https://wiki.libsdl.org/SDL_Quit).
 Our build system will look for this file under Lesson0/src/main.cpp.
 If you place it elsewhere you'll need to update the file names and subdirectories in the CMakeLists files.
@@ -85,8 +85,8 @@ If you place it elsewhere you'll need to update the file names and subdirectorie
 /*
  * Lesson 0: Test to make sure SDL is setup properly
  */
-int main(int argc, char** argv){
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+int main(int, char**){
+	if (SDL_Init(SDL_INIT_VIDEO) != 0){
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
 		return 1;
 	}

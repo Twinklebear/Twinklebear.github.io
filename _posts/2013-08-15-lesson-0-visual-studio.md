@@ -92,11 +92,12 @@ applications be sure to select Windows so your users don't have a console window
 </a>
 <br />
 
-Testing it out!
+The Test Program
 -
-To make sure everything is setup properly we'll try compiling and running a very simple
-program that initializes the various SDL systems and then quits. If anything goes wrong, an
-error message will be printed out. Before we can run this program we'll need to copy the
+The program we're building for this lesson is a simple sanity check for SDL. It will 
+[initialize](https://wiki.libsdl.org/SDL_Init) the SDL video subsystem, check for any
+[errors](https://wiki.libsdl.org/SDL_GetError) and then [quit](https://wiki.libsdl.org/SDL_Quit).
+Before we can run this program we'll need to copy the
 SDL binary into our executable's directory. `SDL2.dll` can be found in the lib directory
 of your SDL folder under lib/(x86/x64), use the one for the architecture you linked against.
 
@@ -104,13 +105,12 @@ of your SDL folder under lib/(x86/x64), use the one for the architecture you lin
 #include <iostream>
 #include <SDL.h>
 
-int main(int argc, char **argv){
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+int main(int, char**){
+	if (SDL_Init(SDL_INIT_VIDEO) != 0){
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
 		return 1;
 	}
 	SDL_Quit();
-
 	return 0;
 }
 {% endhighlight %}

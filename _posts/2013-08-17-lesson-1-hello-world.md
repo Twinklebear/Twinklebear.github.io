@@ -23,12 +23,13 @@ Starting SDL
 To use SDL we first need to initialize the various SDL subsystems we want to use. This is done through
 [`SDL_Init`](http://wiki.libsdl.org/moin.fcg/SDL_Init) which takes a set of 
 [flags](http://wiki.libsdl.org/moin.fcg/SDL_Init#Remarks) or'd together specifying the subsystems we'd like to initialize.
-For now we'll just say we want everything but you can change this if you like. The bare minimum needed for
-this lesson is `SDL_INIT_VIDEO`. If everything goes alright
-`SDL_Init` will return 0, if not we'll want to print out the error and quit.
+For now we just need the video subsystem but we'll add more flags as we require more features. Note that the event
+handling system is initialized automatically when the video system is if not explicitly requested by itself while
+the file I/O and threading systems are initialized by default.
+If everything goes ok `SDL_Init` will return 0, if not we'll want to print out the error and quit.
 
 {% highlight c++ %}
-if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+if (SDL_Init(SDL_INIT_VIDEO) != 0){
 	std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
 	return 1;
 }

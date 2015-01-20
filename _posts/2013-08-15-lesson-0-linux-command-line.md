@@ -48,22 +48,25 @@ clean:
 
 The Test Program
 -
-To make sure everything has installed properly we’ll try compiling and running a very simple program that
-initializes the various SDL systems and then quits. If anything goes wrong, an error message will be
-printed out. The source file should be titled `main.cpp`, or you can change the main.o build dependency
+The program we're building for this lesson is a simple sanity check for SDL. It will 
+[initialize](https://wiki.libsdl.org/SDL_Init) the SDL video subsystem, check for any
+[errors](https://wiki.libsdl.org/SDL_GetError) and then [quit](https://wiki.libsdl.org/SDL_Quit).
+The source file should be titled `main.cpp`, or you can change the main.o build dependency
 in the makefile to match your source file.
 
 {% highlight c++ %}
 #include <iostream>
 #include <SDL2/SDL.h>
 
-int main(int argc, char **argv){
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+/*
+ * Lesson 0: Test to make sure SDL is setup properly
+ */
+int main(int, char**){
+	if (SDL_Init(SDL_INIT_VIDEO) != 0){
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
 		return 1;
 	}
 	SDL_Quit();
-
 	return 0;
 }
 {% endhighlight %}
