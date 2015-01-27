@@ -1,0 +1,433 @@
+--no-scene
+--load-assembly ../samples/src/gradient/rt-llvm.s
+--num-thread-procs 16
+--num-TMs 4
+--num-l2s 4
+No configuration specified, using default: ../samples/configs/default.config
+Loading assembly file ../samples/src/gradient/rt-llvm.s
+No USIMM configuration specified, using default: ../samples/configs/usimm_configs/gddr5_8ch.cfg
+Initializing usimm memory module.
+---------------------------------------------
+-- USIMM: the Utah SImulated Memory Module --
+--              Version: 1.3               --
+---------------------------------------------
+Reading vi file: 1Gb_x16_amd2GHz.vi	
+16 Chips per Rank
+	 <== Setup time:          0.1 s ==>
+Creating thread 0...
+Thread 0 running cores	0 to	15 ...
+	 <== Frame time:          0.7 s ==>
+System-wide instruction stats (sum/average of all cores):
+profile data:
+kernel	total calls	total cycles
+Data dependence stalls (caused by):
+   LOAD        	392	(0.085 %)
+   div         	238302	(51.930 %)
+   div_s       	220200	(47.985 %)
+Number of thread-cycles resource conflicts found when issuing:
+   LOAD        	506	(0.461 %)
+   ATOMIC_INC  	5237	(4.769 %)
+   INC_RESET   	8	(0.007 %)
+   BARRIER     	22871	(20.826 %)
+   STORE       	5882	(5.356 %)
+   addi        	672	(0.612 %)
+   addiu       	954	(0.869 %)
+   addu        	23169	(21.097 %)
+   bal         	976	(0.889 %)
+   beqz        	327	(0.298 %)
+   bnez        	3896	(3.548 %)
+   cvt_s_w     	3664	(3.336 %)
+   div         	8825	(8.036 %)
+   div_s       	2730	(2.486 %)
+   mul         	118	(0.107 %)
+   j           	504	(0.459 %)
+   jal         	328	(0.299 %)
+   jr          	14	(0.013 %)
+   sll         	6009	(5.472 %)
+   slt         	9263	(8.435 %)
+   teq         	10602	(9.654 %)
+   xor_m       	3264	(2.972 %)
+Dynamic Instruction Mix: (371712 total)
+   LOAD        	768	(0.207 %)
+   ATOMIC_INC  	16640	(4.477 %)
+   INC_RESET   	256	(0.069 %)
+   BARRIER     	256	(0.069 %)
+   STORE       	49152	(13.223 %)
+   move        	1024	(0.275 %)
+   addi        	256	(0.069 %)
+   addiu       	1536	(0.413 %)
+   addu        	32768	(8.815 %)
+   bal         	512	(0.138 %)
+   beqz        	256	(0.069 %)
+   bnez        	16384	(4.408 %)
+   cvt_s_w     	33280	(8.953 %)
+   div         	32768	(8.815 %)
+   div_s       	32768	(8.815 %)
+   lw          	768	(0.207 %)
+   mfhi        	16384	(4.408 %)
+   mflo        	16384	(4.408 %)
+   mtc1        	33536	(9.022 %)
+   mul         	256	(0.069 %)
+   j           	256	(0.069 %)
+   jal         	256	(0.069 %)
+   jr          	512	(0.138 %)
+   nop         	17664	(4.752 %)
+   sll         	16384	(4.408 %)
+   slt         	16640	(4.477 %)
+   sw          	768	(0.207 %)
+   teq         	32768	(8.815 %)
+   xor_m       	512	(0.138 %)
+Issue statistics:
+ --Average #threads Issuing each cycle: 30.3446
+ --Issue Rate: 11.85%
+ --iCache conflicts: 2036732 (68.194766%)
+ --thread*cycles of resource conflicts: 109819 (3.677005%)
+ --thread*cycles of data dependence: 458894 (15.364890%)
+ --thread*cycles halted: 9739 (0.326085%)
+ --thread*cycles of issue NOP/other: 1104 (0.591434%)
+Module Utilization
+
+	          Int AddSub:   44.98
+	             Int Mul:    0.14
+	              FP Div:   35.10
+	     Conversion Unit:   17.83
+
+System-wide L1 stats (sum of all TMs):
+L1 accesses: 	49920
+L1 hits: 	648
+L1 misses: 	49272
+L1 bank conflicts: 	3472
+L1 stores: 	49152
+L1 hit rate: 	0.012981
+Hit under miss: 104
+
+ -= L2 #0 =-
+L2 accesses: 	12301
+L2 hits: 	0
+L2 misses: 	12301
+L2 stores: 	12297
+L2 bank conflicts: 	816
+L2 hit rate: 	0.000000
+L2 memory faults: 0
+
+ -= L2 #1 =-
+L2 accesses: 	12289
+L2 hits: 	0
+L2 misses: 	12289
+L2 stores: 	12285
+L2 bank conflicts: 	689
+L2 hit rate: 	0.000000
+L2 memory faults: 0
+
+ -= L2 #2 =-
+L2 accesses: 	12286
+L2 hits: 	0
+L2 misses: 	12286
+L2 stores: 	12282
+L2 bank conflicts: 	751
+L2 hit rate: 	0.000000
+L2 memory faults: 0
+
+ -= L2 #3 =-
+L2 accesses: 	12292
+L2 hits: 	0
+L2 misses: 	12292
+L2 stores: 	12288
+L2 bank conflicts: 	660
+L2 hit rate: 	0.000000
+L2 memory faults: 0
+
+Bandwidth numbers for 1000MHz clock (GB/s):
+   L1 to register bandwidth: 	 17.113472
+   L2 to L1 bandwidth: 		 0.087761
+   memory to L2 bandwidth: 	 0.005485
+
+Chip area (mm2):
+   Functional units: 	 2.423008
+   L1 data caches: 	 6.264128
+   L2 data caches: 	 18.303513
+   Instruction caches: 	 1.444736
+   Localstore units: 	 3.574602
+   Register files: 	 3.780224
+   ------------------------------
+   Total: 		 35.790211
+
+Energy consumption (Joules):
+   Functional units: 	 0.000010
+   L1 data caches: 	 0.000000
+   L2 data caches: 	 0.000000
+   Instruction caches: 	 0.000005
+   Localstore units: 	 0.000000
+   Register files: 	 0.000009
+   DRAM: 		 0.000375
+   ------------------------------
+   Total: 		 0.000399
+   Power draw (watts): 	 34.211412
+
+FPS Statistics:
+   Total clock cycles: 		 11668
+   FPS assuming 1000MHz clock: 	 85704.4909
+
+
+-------------DRAM stats-------------
+Cycles 23336
+-------- Channel 0 Stats-----------
+Total Reads Serviced :          1      
+Total Writes Serviced :         549    
+Average Read Latency :          60.00000
+Average Read Queue Latency :    28.00000
+Average Write Latency :         105.27505
+Average Write Queue Latency :   71.27505
+Read Page Hit Rate :            0.00000
+Write Page Hit Rate :           0.99818
+Max write queue length:         34
+Max read queue length:          1
+Average read queue length:      0.001243
+Average column reads per ACT:   1.000000
+Single column reads:            0
+Single columng reads(%):        0.000000
+------------------------------------
+-------- Channel 1 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         539    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         101.48423
+Average Write Queue Latency :   67.48423
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99629
+Max write queue length:         29
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 2 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         531    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         106.52731
+Average Write Queue Latency :   72.52731
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99623
+Max write queue length:         31
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 3 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         520    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         105.99231
+Average Write Queue Latency :   71.99231
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99615
+Max write queue length:         32
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 4 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         541    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         104.14787
+Average Write Queue Latency :   70.14787
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99630
+Max write queue length:         30
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 5 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         524    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         103.04198
+Average Write Queue Latency :   69.04198
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99618
+Max write queue length:         28
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 6 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         521    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         106.54511
+Average Write Queue Latency :   72.54511
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99616
+Max write queue length:         34
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 7 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         530    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         101.61887
+Average Write Queue Latency :   67.61887
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99623
+Max write queue length:         28
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 8 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         280    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         99.12143
+Average Write Queue Latency :   65.12143
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99286
+Max write queue length:         27
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 9 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         278    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         97.81295
+Average Write Queue Latency :   63.81295
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99640
+Max write queue length:         31
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 10 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         262    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         105.64885
+Average Write Queue Latency :   71.64885
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99618
+Max write queue length:         29
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 11 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         265    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         101.56981
+Average Write Queue Latency :   67.56981
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99623
+Max write queue length:         25
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 12 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         264    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         105.73485
+Average Write Queue Latency :   71.73485
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99621
+Max write queue length:         30
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 13 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         260    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         104.10769
+Average Write Queue Latency :   70.10769
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99615
+Max write queue length:         27
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 14 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         258    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         96.58915
+Average Write Queue Latency :   62.58915
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99612
+Max write queue length:         23
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+-------- Channel 15 Stats-----------
+Total Reads Serviced :          0      
+Total Writes Serviced :         257    
+Average Read Latency :          0.00000
+Average Read Queue Latency :    0.00000
+Average Write Latency :         108.10117
+Average Write Queue Latency :   74.10117
+Read Page Hit Rate :               -nan
+Write Page Hit Rate :           0.99611
+Max write queue length:         29
+Max read queue length:          0
+Average read queue length:      0.000000
+Average column reads per ACT:   -nan
+Single column reads:            0
+Single columng reads(%):        -nan
+------------------------------------
+
+#-------------------------------------------------------------------------------------------------
+Total memory system power = 32.138039 W
+	 <== Total time:          0.8 s ==>
