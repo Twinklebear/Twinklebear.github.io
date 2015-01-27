@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "CS 6690 Spring 2015 - Assignment 1"
+title: "CS 6960 Spring 2015 - Assignment 1"
 description: ""
 ---
 {% include JB/setup %}
@@ -39,8 +39,8 @@ description: ""
 	The mandelbrot program took 380345 cycles and executed 12126192 instructions. The
 	number of cycles is far less than the total number of instructions for the
 	same reasons mentioned in the gradient program analysis. On average for the
-	Mandelbrot program 30.0643 issued each cycle. Without adding more cores
-	to the configuration we could again improve performance by adding multiple
+	Mandelbrot program 30.0643 threads issued an instruction each cycle. Without adding
+	more cores to the configuration we could again improve performance by adding multiple
 	banks to the iCache (the conflict rate was massive, 84.65%!) and by adding another
 	FPMUL unit, as 78.49% of resource conflicts were due to fighting over this unit.
 	The full output of the program can be found in
@@ -83,16 +83,10 @@ description: ""
 	If we add a second FPMUL unit to each thread multiprocessor we can
 	complete the program in a mere 119145 cycles with the average number of
 	threads issuing each cycling getting bumped way up to 96.0958. The output
-	from this run can be found at 
+	from this run can be found in
 	<a href="/courses/cs6960/asn1/mandelbrot_out3.txt">mandelbrot_out3.txt</a>.
 	Looking at the module utilization there we may even want another FPMUL unit
 	or two along with an extra FPADD unit.
-	</p>
-
-	<h4>Hardware Used to Run Simulator</h4>
-	<p>
-	CPU: Intel i5-3317U @ 1.7GHz, 4 hardware threads <br />
-	RAM: 6GB 1333MHz DDR3 <br />
 	</p>
 </div>
 
