@@ -11,18 +11,18 @@ tags: ["Rust", "ray tracing", "graphics"]
 As mentioned in my [previous post]({% post_url 2014-12-30-porting-a-ray-tracer-to-rust-part-1 %}) I spent the past month-ish
 working on improving both the rendering capabilities and performance of [tray\_rust](https://github.com/Twinklebear/tray_rust).
 While it's not yet capable of path tracing we can at least have light and shadow and shade our objects with diffuse or specularly
-reflective/transmissive materials. Along with this I've looked into improving performance by parallelizing
+reflective and/or transmissive materials. Along with this I've improved performance by parallelizing
 the rendering process using Rust's multithreading capabilities. Although ray tracing is a trivially parallel task there are
 two pieces of state that must be shared and modified between threads: the pixel/block counter and the framebuffer.
 With Rust's strong focus on safety I was worried that I would have to resort to unsafe blocks to share these
-small pieces of mutable state but I found that Rust's [std::sync module](http://doc.rust-lang.org/std/sync/index.html)
-provided safe methods for everything I needed and performs quite well. While it's difficult to compare against the C++ version
-since the design of tray\_rust has diverged quite a bit I'll put some performance numbers in the multithreading section.
+small pieces of mutable state but I found that the [std::sync module](http://doc.rust-lang.org/std/sync/index.html)
+provided safe methods for everything I needed and performs quite well. While it's difficult to compare against
+[tray](https://github.com/Twinklebear/tray) (my initial C++ version) as the design of tray\_rust has diverged quite 
+a bit I'll put some performance numbers in the multithreading section.
 
 During the past month [Rust](http://www.rust-lang.org/) has also seen some pretty large changes and is currently
-in it's 1.0 alpha release with the [first beta](http://blog.rust-lang.org/2014/12/12/1.0-Timeline.html)
-fast approaching. If you've been holding off on trying out the language due to how quickly it was changing the
-beta is probably a good point to jump in as the language will be much more [stable](http://blog.rust-lang.org/2014/10/30/Stability.html).
+in its 1.0 alpha release with the [first beta](http://blog.rust-lang.org/2014/12/12/1.0-Timeline.html)
+fast approaching.
 
 <!--more-->
 
@@ -37,7 +37,7 @@ primary rays. From some discussion in the [Hacker News](https://news.ycombinator
 currently possible to implement a memory pool in Rust although it is being worked on. There is the
 [std::arena](http://doc.rust-lang.org/arena/index.html) module although I'm not sure if those implementations meet my
 needs. It may be possible now though to write something similar to the memory pool I used in
-[tray](https://github.com/Twinklebear/tray/blob/master/include/memory_pool.h) in Rust based on the implementations of the generic
+[tray](https://github.com/Twinklebear/tray/blob/master/include/memory_pool.h) based off the implementation of the generic
 Arena allocator, I'll have to investigate further. Do let me know if you have any thoughts in this area!
 
 To get around this for now without introducing a lot of allocations during rendering I chose to have the materials allocate a Vec of
@@ -49,23 +49,21 @@ expensive.
 
 Since a surface's properties can be defined through a combination of BxDFs we need to consider contributions from all of them
 to determine the color of the surface when shading some intersection. Additionally we need to filter them
-by only those that are relevant to the current lighting calculation, eg. if we're computing reflected light we wouldn't want
-to evaluate transmissive BxDFs. Using Rust's [std::iter](http://doc.rust-lang.org/std/iter/index.html) module we can perform these
+to only consider those that are relevant to the current lighting calculation, eg. if we're computing reflected light we wouldn't want to
+waste time evaluating transmissive BxDFs. Using the [std::iter](http://doc.rust-lang.org/std/iter/index.html) module we can perform these
 operations cleanly and safely without running into any bounds checking overhead that we would have when accessing a Vec
-by index. As a simple example the following snippet returns the number of BxDFs in the BSDF that match some set of BxDF type flags.
+by index. As a simple example the following snippet returns the number of BxDFs that match some set of BxDF type flags.
 
 {% highlight rust %}
-/// Return the number of BxDFs matching the flags
 pub fn num_matching(&self, flags: EnumSet<BxDFType>) -> usize {
     self.bxdfs.iter().filter(|ref x| x.matches(flags)).count()
 }
 {% endhighlight %}
 
-A more interesting example is taken from the `BSDF::eval` method. This method computes the contribution of all BxDFs in
-the BSDF for some pair of incident and outgoing light directions and returns the total color.
+A more interesting example is taken from the `BSDF::eval` method. This method computes the contribution of all BxDFs
+for some pair of incident and outgoing light directions and returns the total color.
 
 {% highlight rust %}
-// Find all matching BxDFs and add their contribution to the material's color
 self.bxdfs.iter().filter_map(|ref x| if x.matches(flags) { Some(x.eval(&w_o, &w_i)) } else { None })
     .fold(Colorf::broadcast(0.0), |x, y| x + y)
 {% endhighlight %}
@@ -74,10 +72,10 @@ It's worth mentioning that the current BSDF implementation is incredible naive, 
 either diffuse, specularly reflective or specularly reflective and transmissive and thus only have a single component
 per light interaction (reflection or transmission) we don't do any random sampling of
 the BSDF components like we should be doing. When path tracing is implemented this will have to be fixed, however
-it won't effect the code listing above.
+it won't change the code listing above by much.
 
 Iterators combined with lambdas and closures make for some very powerful functionality. Similar expressions
-can of course be written in C++11 using lambdas and the corresponding methods from the [algorithms library](http://en.cppreference.com/w/cpp/algorithm)
+can of course be written in C++11/14 using lambdas and the corresponding methods from the [algorithms library](http://en.cppreference.com/w/cpp/algorithm)
 although I'm not sure if there's similar functionality to `filter` and `filter_map` provided in the C++ standard library.
 
 If we take a slight tangent away from materials for a moment, we find that we can even express the operation of checking
@@ -105,7 +103,7 @@ Using this method I've also chosen a fix for the poor design decision I made las
 on part 1, Reddit, Hacker News and IRC I've made the Geometry trait and Instance struct return different types from their intersect methods
 and will instead implement the BVH to take types that implement a Boundable trait. Traversal will then be done by
 returning an iterator that performs the bounding volume intersection tests and iterates over all potentially intersected
-geometry. The caller can then perform whatever operations it likes over the potentially intersected geometry or instances.
+objects. The caller can then perform whatever operations it likes over the potentially intersected geometry or instances.
 
 Parallelism
 ---
@@ -151,7 +149,7 @@ integrator but is probably worth pursuing once path tracing is implemented. The 
 <img src="http://i.imgur.com/o7VKbBq.png" class="img-responsive">
 
 There are a few stray black/white pixels in the image but I think these are just sampling artifacts and should be cleaned up once we
-start taking more than one sample per pixel. Here we're just hitting some unfortunate spot where we get an incorrect black or white
+start taking more than one sample per pixel. Here we're just hitting some unfortunate path where we get an incorrect black or white
 result, at least that's what I hope is the case.
 
 This version is also run without any platform specific optimizations (to my knowledge) such as taking advantage of any available
@@ -171,42 +169,44 @@ trait Geometry and we wanted to share some instance between threads we can't cur
 {% highlight rust %}
 // This doesn't work!
 let geom = Arc::new(Sphere::new()) as Arc<Geometry>;
-// Instead we must box the sphere first and cast the box
+// Instead we must box the sphere first
 let geom_correct = Arc::new(Box::new(Sphere::new()) as Box<Geometry>);
 {% endhighlight %}
 
-Additionally it's not possible to share immutable references to objects between threads even if it can be proven that the object
-being referenced outlives all the threads. From what I've been told both of these issues are being worked on, the Arc\<Trait\>
-type might actually be possible with unsized types but I've had some difficulty finding some reading material on how to use these.
-If anyone has a link to a good write-up on unsized types it'd be appreciated, or I'll bug folks in IRC for some info at some point.
-As far as sharing Arcs vs. immutable references I think I prefer using Arcs even though both methods should be valid to write in the
-language eventually.
+Additionally it's not possible to immutably borrow an object across multiple threads even if it can be proven that the object
+being borrowed outlives all the threads. From what I've been told both of these issues are being worked on, the Arc\<Trait\>
+type might actually be possible with unsized types but I've had some difficulty finding reading material on how to use these.
+If anyone has a link to a good write-up on unsized types it'd be appreciated, or I'll bug folks in IRC for info about it.
+As far as sharing Arcs vs. immutable borrows (what I did in the C++ version) I think I prefer using Arcs even though both
+methods should be valid to write in the language eventually. Note that we don't have any overhead from updating the reference
+count during rendering since we can immutably borrow within the thread to refer to hit geometry and instances.
 
 Managing Dependencies with Cargo
 ---
 In addition to helping build your project, its docs and run tests [Cargo](https://crates.io/) is also a powerful dependency
-management tool. During some of the updates to Rust some of the more experimental library features such as `EnumSet` got moved
+management tool. During some of the updates to Rust the more experimental library features such as `EnumSet` got moved
 out into [collect-rs](https://github.com/Gankro/collect-rs), getting this crate and linking my project was pretty simple to do
 with Cargo by adding the [package](https://crates.io/crates/collect) as a dependency. It's also possible to depend on git repositories
 as I've done with [image](https://github.com/PistonDevelopers/image) by specifying a git dependency, so now tray\_rust can output
 PNG and JPEG images!
 
 For executables Cargo also locks the versions you depend on so others trying to build your project will build with the same versions
-of the libraries you're building with making it smoother to build other people's packages and programs. It even works smoothly on
+of the libraries you're building with making it smoother to build other people's packages and programs. It even works well on
 Windows which is always a bit of a hassle when trying to manage C or C++ dependencies. Rust is still quite young and the
 ecosystem is very small compared to C and C++ so the comparison isn't really fair but I'm hopeful that Cargo will
-keep Rust package management painless even as the ecosystem grows.
+keep dependency management painless even as the ecosystem grows.
 
 Final Thoughts for Part 2
 ---
-After working with Rust for longer I'm pretty happy with how the language is shaping up, to name a few fun features I
-enjoyed over the past month match expressions and the powerful iterator module are really nice to work with.
-The community is also very friendly and helpful and the Rust IRC channel and subreddit have been great resources over the past month and the
-[This Week in Rust](http://this-week-in-rust.org/) series is invaluable when keeping up with changes in the alphas.
+After working with Rust for longer I'm pretty happy with how the language is shaping up. To name a few features I
+had fun with over the past month, match expressions and the powerful iterator module are really nice to work with.
+The community is also very friendly and helpful, the Rust IRC channel and subreddit have been great resources over
+the past month and the [This Week in Rust](http://this-week-in-rust.org/) series is invaluable when keeping up with
+changes in the nightlies or just finding cool Rust write-ups.
 
-For part 3 I'll work on getting a proper path tracing implementation running and fix some left over bugs in the current
-code that I've kind of worked around so far to render the scene for this part. I'll also take a look at the possibilities
-of rendering across multiple machines since with path tracing we'll need much more compute power to render the scene quickly
+For part 3 I'll work on getting a proper path tracing implementation running and fix some lingering bugs in the current
+code that I've worked around so far to render the scene for this post. I'll also take a look at the possibilities
+of rendering across multiple machines since path tracing will need much more compute power to render the scene quickly
 and this should be a fun idea to play with.
 
 If you have comments, suggestions for improvements or just want to say "hi" feel free to comment below, [tweet at me](https://twitter.com/_wusher)
