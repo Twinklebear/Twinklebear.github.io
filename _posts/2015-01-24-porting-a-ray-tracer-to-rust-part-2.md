@@ -144,16 +144,72 @@ a framebuffer thread would send them to a network thread which would batch up sa
 samples would then be recieved either by the master machine's framebuffer thread directly or picked up on a network thread and sent
 through the same mpsc channel that the master machine's worker threads use to communicate samples to the framebuffer thread. The overhead of
 setting up the network and communicating samples would probably take much more time than rendering our scene with a simple Whitted
-integrator but is probably worth pursuing once path tracing is implemented.
+integrator but is probably worth pursuing once path tracing is implemented. The code for the worker and framebuffer threads is located in
+[main.rs](https://github.com/Twinklebear/tray_rust/blob/master/src/main.rs).
+
 
 <img src="http://i.imgur.com/o7VKbBq.png" class="img-responsive">
+
+There are a few stray black/white pixels in the image but I think these are just sampling artifacts and should be cleaned up once we
+start taking more than one sample per pixel. Here we're just hitting some unfortunate spot where we get an incorrect black or white
+result, at least that's what I hope is the case.
+
+This version is also run without any platform specific optimizations (to my knowledge) such as taking advantage of any available
+SIMD instruction set like you would get when compiling C or C++ with `-march=native`. There is a flag to pass to rustc to
+enable these optimizations however I'm not sure how to pass this flag to rustc through Cargo.
+It looks to currently be an open issue, [#544](https://github.com/rust-lang/cargo/issues/544) and
+[#1137](https://github.com/rust-lang/cargo/issues/1137), if it is possible now please do let me know!
+I'd expect at least some performance gain with the use of auto-vectorization and SSE/AVX instructions.
+
+#### Sharing Data Between Threads
+In a ray tracer we also need to share some immutable data between threads so that they all know what scene they're rendering.
+In Rust this is done with atomic reference counted pointers using the [Arc](http://doc.rust-lang.org/std/sync/struct.Arc.html)
+struct. This works pretty nicely although I ran into some minor annoyances. Currently if you want to put a trait in an Arc
+it must be in a Box as well, even though the Arc has it's own box (correct me if this is wrong!). That is to say if we had a
+trait Geometry and we wanted to share some instance between threads we can't currently write:
+
+{% highlight rust %}
+// This doesn't work!
+let geom = Arc::new(Sphere::new()) as Arc<Geometry>;
+// Instead we must box the sphere first and cast the box
+let geom_correct = Arc::new(Box::new(Sphere::new()) as Box<Geometry>);
+{% endhighlight %}
+
+Additionally it's not possible to share immutable references to objects between threads even if it can be proven that the object
+being referenced outlives all the threads. From what I've been told both of these issues are being worked on, the Arc\<Trait\>
+type might actually be possible with unsized types but I've had some difficulty finding some reading material on how to use these.
+If anyone has a link to a good write-up on unsized types it'd be appreciated, or I'll bug folks in IRC for some info at some point.
+As far as sharing Arcs vs. immutable references I think I prefer using Arcs even though both methods should be valid to write in the
+language eventually.
 
 Managing Dependencies with Cargo
 ---
 In addition to helping build your project, its docs and run tests [Cargo](https://crates.io/) is also a powerful dependency
-management tool.
+management tool. During some of the updates to Rust some of the more experimental library features such as `EnumSet` got moved
+out into [collect-rs](https://github.com/Gankro/collect-rs), getting this crate and linking my project was pretty simple to do
+with Cargo by adding the [package](https://crates.io/crates/collect) as a dependency. It's also possible to depend on git repositories
+as I've done with [image](https://github.com/PistonDevelopers/image) by specifying a git dependency, so now tray\_rust can output
+PNG and JPEG images!
 
-Final Thoughts
+For executables Cargo also locks the versions you depend on so others trying to build your project will build with the same versions
+of the libraries you're building with making it smoother to build other people's packages and programs. It even works smoothly on
+Windows which is always a bit of a hassle when trying to manage C or C++ dependencies. Rust is still quite young and the
+ecosystem is very small compared to C and C++ so the comparison isn't really fair but I'm hopeful that Cargo will
+keep Rust package management painless even as the ecosystem grows.
+
+Final Thoughts for Part 2
 ---
-Mention not finding how to overload operator += for types.
+After working with Rust for longer I'm pretty happy with how the language is shaping up, to name a few fun features I
+enjoyed over the past month match expressions and the powerful iterator module are really nice to work with.
+The community is also very friendly and helpful and the Rust IRC channel and subreddit have been great resources over the past month and the
+[This Week in Rust](http://this-week-in-rust.org/) series is invaluable when keeping up with changes in the alphas.
+
+For part 3 I'll work on getting a proper path tracing implementation running and fix some left over bugs in the current
+code that I've kind of worked around so far to render the scene for this part. I'll also take a look at the possibilities
+of rendering across multiple machines since with path tracing we'll need much more compute power to render the scene quickly
+and this should be a fun idea to play with.
+
+If you have comments, suggestions for improvements or just want to say "hi" feel free to comment below, [tweet at me](https://twitter.com/_wusher)
+or ping me on IRC (I'm Twinklebear on freenode and moznet).
+The code for the Rust ray tracer is MIT licensed and available on [Github](https://github.com/Twinklebear/tray_rust).
 
