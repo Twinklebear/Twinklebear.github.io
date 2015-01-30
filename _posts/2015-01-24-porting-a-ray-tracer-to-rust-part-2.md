@@ -108,62 +108,66 @@ objects. The caller can then perform whatever operations it likes over the poten
 Parallelism
 ---
 While ray tracing is an extremely easy problem to parallelize there's still room for some interesting implementations, and I think
-the implementation I've gone with in Rust is pretty fun and leaves the door open for even more fun. It is of course possible to
-write a ray tracer that doesn't do any synchronization. If threads are assigned there work up front and only write to disjoin regions
-of the framebuffer there will never be conflicts as they never see or interact with each other's work. While brain-dead simple this
-design doesn't do a very good job of load balancing (what if one thread gets all the hard pixels?) and makes it impossible to implement
-[reconstruction filtering](http://www.luxrender.net/wiki/LuxRender_Render_settings#Filter) (now samples affect adjacent pixels as well,
-introducing conflicts).
+the one I've gone with in Rust is pretty neat and leaves the door open for even more fun. It is possible to
+write a ray tracer that doesn't do any synchronization by assigning threads their work up front and having them only write to disjoint regions
+of the framebuffer but this design doesn't do a very good job of load balancing (what if one thread gets all the hard pixels?)
+and makes it impossible to implement [reconstruction filtering](http://www.luxrender.net/wiki/LuxRender_Render_settings#Filter)
+(now samples affect adjacent pixels as well, and the regions are no longer disjoint). To have a robust and high quality
+renderer it's worth it to support this minimal level of synchronization between threads but to have good performance it should be
+kept as lightweight as possible, ideally using only atomics to synchronize the threads.
 
 In tray I followed PBRT and implemented the framebuffer using atomic floats with C++'s `std::atomic<float>` type, updating pixel values
-using compare exchange. While this method is also possible to implement in Rust by either directly calling the LLVM intrinsics
+using compare exchange loops. This same method is also possible to implement in Rust by either directly using the LLVM intrinsics
 or working through the [`AtomicUsize`](http://doc.rust-lang.org/std/sync/atomic/struct.AtomicUsize.html) type to create an atomic float
+identical to `std::atomic<float>` however,
 Rust also provides lock-free multi-producer single-consumer communication primitives in [std::sync::mpsc](http://doc.rust-lang.org/std/sync/mpsc/).
-To implement the AtomicUsize method I would need to write some minor bits of unsafe code to transmute the bits of the float to a usize,
-so I decided to try the channels method and see how performance was first, as this wouldn't require any unsafe code. I still chose to
-divide up work in the same way I did previously using an array of block start positions which are indexed by an atomic int, each
-thread just does a fetch add to find the next spot to work on and returns when there are no more blocks to be rendered.
+To implement the AtomicUsize method I would still need to write some minor bits of unsafe code to transmute the bits of the float to a usize,
+so I decided to try the channels method first and see how it performed, as this wouldn't require any unsafe code on my end. I still chose to
+divide up work in the same way I did previously using an array of block start positions which are indexed by an atomic uint
+(AtomicUsize in Rust), each thread just does a fetch add to find the next block to work on and returns when there are no more blocks to be rendered.
 
-To render the scene I spawn some number of worker threads and hand each of them a send end of my mpsc channel where they will write
+To render the scene I spawn a number of worker threads and hand each of them a send end of the mpsc channel where they will write
 their sample results to, sending the x, y position and color of the sample. The receive end of the channel is held onto by the
-main thread which just gets samples from the channel and writes them to the framebuffer until all sending ends have closed. This implementation
+main thread which reads samples from the channel and writes them to the framebuffer until all sending ends have closed. This implementation
 provides some interesting trade-offs with the atomic float framebuffer method, instead of conflicting on every channel of the
 pixel (RGB and weight) threads will only conflict on the single atomic in the channel when trying to write their sample to the queue.
-However if we aren't doing reconstruction filtering then the threads in the atomic float buffer never conflict and just pay the cost
+However if we aren't doing reconstruction filtering then the threads in the atomic float method never conflict and just pay the cost
 of a few atomic operations while in the channel implementation threads are far more likely to conflict since they're all still writing
 to the same channel. Another option I didn't look into yet is to give each thread their own channel to write to and use select to
-read samples as they come in from each channel, I'd be interested to hear other people's thoughts on this possibility.
+read samples as they come in from each channel. If this would also be lock-free from the sender side then it's possible this is
+an even better implementation since the worker threads don't really need to care about other thread's samples since they
+aren't writing the samples to the framebuffer. I'd be interested to hear other people's thoughts on this possibility.
 
-As far as performance goes I'm really happy with how the mpsc channel method performs, using 8 threads on my desktop with an i7-4790K @ 4GHz tray\_rust
-can render the [smallpt scene](http://www.kevinbeason.com/smallpt/) below in 144ms! What's more exciting about the channel
-implementation is that it leaves the door open to easily
-extend the renderer to support rendering across multiple machines on a network. Each worker machine instead of sending its samples to
+I think the mpsc channel implementation performs quite nicely, using 8 threads on my desktop with an i7-4790K @ 4GHz we
+can render the [smallpt scene](http://www.kevinbeason.com/smallpt/) with one sample per pixel in 144ms! What's even more exciting about the channel
+implementation is that it leaves the door open to easily extend the renderer to support rendering across multiple machines on a network.
+Each worker machine instead of sending its samples to
 a framebuffer thread would send them to a network thread which would batch up samples and send them to the master machine. These
-samples would then be recieved either by the master machine's framebuffer thread directly or picked up on a network thread and sent
-through the same mpsc channel that the master machine's worker threads use to communicate samples to the framebuffer thread. The overhead of
-setting up the network and communicating samples would probably take much more time than rendering our scene with a simple Whitted
-integrator but is probably worth pursuing once path tracing is implemented. The code for the worker and framebuffer threads is located in
+samples would then be received either by the master's framebuffer thread directly or picked up on a network thread and sent
+through the same mpsc channel used by the worker threads. The overhead of setting up the network and communicating samples would
+probably take much more time than rendering our scene with a simple Whitted
+integrator but will be worth pursuing once path tracing is implemented. The code for the worker and framebuffer threads is located in
 [main.rs](https://github.com/Twinklebear/tray_rust/blob/master/src/main.rs).
 
 
 <img src="http://i.imgur.com/o7VKbBq.png" class="img-responsive">
 
 There are a few stray black/white pixels in the image but I think these are just sampling artifacts and should be cleaned up once we
-start taking more than one sample per pixel. Here we're just hitting some unfortunate path where we get an incorrect black or white
+start taking more than one sample per pixel. Here we're just hitting an uncommon path where we get a black or white
 result, at least that's what I hope is the case.
 
-This version is also run without any platform specific optimizations (to my knowledge) such as taking advantage of any available
-SIMD instruction set like you would get when compiling C or C++ with `-march=native`. There is a flag to pass to rustc to
-enable these optimizations however I'm not sure how to pass this flag to rustc through Cargo.
+This version is also run without any architecture specific optimizations (to my knowledge) such as taking advantage of any available
+SIMD instruction set such as you would get when compiling C or C++ with `-march=native`. There is a flag to pass to rustc to
+enable these optimizations however I'm not sure how to pass it to rustc through Cargo.
 It looks to currently be an open issue, [#544](https://github.com/rust-lang/cargo/issues/544) and
 [#1137](https://github.com/rust-lang/cargo/issues/1137), if it is possible now please do let me know!
 I'd expect at least some performance gain with the use of auto-vectorization and SSE/AVX instructions.
 
-#### Sharing Data Between Threads
+#### Sharing Immutable Data Between Threads
 In a ray tracer we also need to share some immutable data between threads so that they all know what scene they're rendering.
 In Rust this is done with atomic reference counted pointers using the [Arc](http://doc.rust-lang.org/std/sync/struct.Arc.html)
 struct. This works pretty nicely although I ran into some minor annoyances. Currently if you want to put a trait in an Arc
-it must be in a Box as well, even though the Arc has it's own box (correct me if this is wrong!). That is to say if we had a
+it must be in a Box as well, even though the Arc has it's own box (correct me if this is wrong). That is to say if we had a
 trait Geometry and we wanted to share some instance between threads we can't currently write:
 
 {% highlight rust %}
@@ -176,7 +180,7 @@ let geom_correct = Arc::new(Box::new(Sphere::new()) as Box<Geometry>);
 Additionally it's not possible to immutably borrow an object across multiple threads even if it can be proven that the object
 being borrowed outlives all the threads. From what I've been told both of these issues are being worked on, the Arc\<Trait\>
 type might actually be possible with unsized types but I've had some difficulty finding reading material on how to use these.
-If anyone has a link to a good write-up on unsized types it'd be appreciated, or I'll bug folks in IRC for info about it.
+If anyone has a link to a good write-up on unsized types it'd be much appreciated, or I'll bug folks in IRC for info about it.
 As far as sharing Arcs vs. immutable borrows (what I did in the C++ version) I think I prefer using Arcs even though both
 methods should be valid to write in the language eventually. Note that we don't have any overhead from updating the reference
 count during rendering since we can immutably borrow within the thread to refer to hit geometry and instances.
@@ -184,30 +188,31 @@ count during rendering since we can immutably borrow within the thread to refer 
 Managing Dependencies with Cargo
 ---
 In addition to helping build your project, its docs and run tests [Cargo](https://crates.io/) is also a powerful dependency
-management tool. During some of the updates to Rust the more experimental library features such as `EnumSet` got moved
-out into [collect-rs](https://github.com/Gankro/collect-rs), getting this crate and linking my project was pretty simple to do
+management tool. During some of the updates to Rust the more experimental and niche modules such as EnumSet got moved
+out into [collect-rs](https://github.com/Gankro/collect-rs), getting this crate and linking my project was really easy to do
 with Cargo by adding the [package](https://crates.io/crates/collect) as a dependency. It's also possible to depend on git repositories
 as I've done with [image](https://github.com/PistonDevelopers/image) by specifying a git dependency, so now tray\_rust can output
 PNG and JPEG images!
 
 For executables Cargo also locks the versions you depend on so others trying to build your project will build with the same versions
-of the libraries you're building with making it smoother to build other people's packages and programs. It even works well on
+of the libraries you're building with, making it smoother to build other people's packages and programs. It even works well on
 Windows which is always a bit of a hassle when trying to manage C or C++ dependencies. Rust is still quite young and the
 ecosystem is very small compared to C and C++ so the comparison isn't really fair but I'm hopeful that Cargo will
 keep dependency management painless even as the ecosystem grows.
 
-Final Thoughts for Part 2
+Final Thoughts
 ---
 After working with Rust for longer I'm pretty happy with how the language is shaping up. To name a few features I
-had fun with over the past month, match expressions and the powerful iterator module are really nice to work with.
+had fun with over the past month: match expressions and the powerful iterator module are really nice to work with.
 The community is also very friendly and helpful, the Rust IRC channel and subreddit have been great resources over
-the past month and the [This Week in Rust](http://this-week-in-rust.org/) series is invaluable when keeping up with
-changes in the nightlies or just finding cool Rust write-ups.
+the past month and [This Week in Rust](http://this-week-in-rust.org/) is invaluable when keeping up with
+changes in the nightlies or just finding cool Rust write-ups and discussion.
 
+#### Until Next Time
 For part 3 I'll work on getting a proper path tracing implementation running and fix some lingering bugs in the current
-code that I've worked around so far to render the scene for this post. I'll also take a look at the possibilities
-of rendering across multiple machines since path tracing will need much more compute power to render the scene quickly
-and this should be a fun idea to play with.
+code that I've worked around to render the scene for this post. I'll also take a look at the performance of giving
+each thread its own channel vs. a shared mpsc and possibilities for rendering across multiple machines.
+Path tracing will need much more compute power to render the scene quickly and this should be really fun to play with.
 
 If you have comments, suggestions for improvements or just want to say "hi" feel free to comment below, [tweet at me](https://twitter.com/_wusher)
 or ping me on IRC (I'm Twinklebear on freenode and moznet).
