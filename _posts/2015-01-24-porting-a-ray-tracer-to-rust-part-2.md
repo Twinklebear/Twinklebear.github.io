@@ -42,7 +42,7 @@ I'll have to investigate further. Do let me know if you have any thoughts in thi
 
 To get around this for now without introducing a lot of allocations during rendering I chose to have the materials allocate a Vec of
 their BxDFs when they're created and then return BSDFs that just refer to these BxDFs. We do still need to allocate a BSDF
-on the stack each time and return it (via moving) when getting the surface properties for some material but this isn't too
+on the stack each time and return it (via moving) when getting the surface properties for an object but this isn't too
 expensive.
 
 #### Working with BxDFs using Iterators
@@ -68,15 +68,16 @@ self.bxdfs.iter().filter_map(|ref x| if x.matches(flags) { Some(x.eval(&w_o, &w_
     .fold(Colorf::broadcast(0.0), |x, y| x + y)
 {% endhighlight %}
 
-It's worth mentioning that the current BSDF implementation is incredibly naive, since we know that our materials are
-either diffuse, specularly reflective or specularly reflective and transmissive and thus only have a single component
-per light interaction (reflection or transmission) we can get away without doing any random sampling of
-the BSDF components. When path tracing is implemented this will have to be fixed, however
-it won't change the code listing above by much.
+It's worth mentioning that the current BSDF implementation is incredibly naive, since the only currently supported materials are
+either diffuse, specularly reflective or specularly reflective and transmissive they only have a single component
+per light interaction (reflection or transmission) and we can get away without doing any random sampling of
+the BSDF components. When path tracing is implemented and more complex materials are added this will have to be fixed, however
+it won't change the above code listing by much.
 
 Iterators combined with lambdas and closures make for some very powerful functionality. Similar expressions
-can of course be written in C++11/14 using lambdas and the corresponding methods from the [algorithms library](http://en.cppreference.com/w/cpp/algorithm)
-although I'm not sure if there's similar functionality to filter and filter\_map provided by the C++ standard library.
+can of course be written in C++11/14 using lambdas and the corresponding methods from the
+[algorithms library](http://en.cppreference.com/w/cpp/algorithm), although I'm not sure if there's similar functionality
+to filter and filter\_map provided by the C++ standard library.
 
 If we take a slight tangent away from materials for a moment, we find that we can even express the operation of checking
 a ray for intersection with all the instances of geometry in the scene
@@ -99,22 +100,24 @@ pub fn intersect(&self, ray: &mut Ray) -> Option<Intersection> {
 }
 {% endhighlight %}
 
-Using this method I've also chosen a fix for the poor design decision I made last time. Following from some helpful discussion in the comments
+Using this method I've also chosen a fix for the [poor design decision](/2014/12/30/porting-a-ray-tracer-to-rust-part-1/#a-poor-design-choice)
+I made last time. Following from some helpful discussion in the comments
 on part 1, Reddit, Hacker News and IRC I've made the Geometry trait and Instance struct return different types from their intersect methods
 and will instead implement the BVH to take types that implement a Boundable trait. Traversal will then be done by
-returning an iterator that performs the bounding volume intersection tests and iterates over all potentially intersected
-objects. The caller can then perform whatever operations it likes over the potentially intersected geometry or instances.
+returning an iterator that traverses the BVH and iterates over all potentially intersected
+objects. The caller can then perform whatever operations it likes over the objects returned by the iterator, be it intersection testing on
+Geometry or Instances or anything really.
 
 Parallelism
 ---
 While ray tracing is an extremely easy problem to parallelize there's still room for some interesting implementations, and I think
-the one I've gone with in Rust is pretty neat and leaves the door open for even more fun. It's possible to
+the one I've gone with is pretty neat and leaves the door open for even more fun. It's possible to
 write a ray tracer that doesn't do any synchronization by assigning threads their work up front and having them only write to disjoint regions
 of the framebuffer, but this design doesn't do a very good job of load balancing (what if one thread gets all the hard pixels?)
-and makes it impossible to implement [reconstruction filtering](http://www.luxrender.net/wiki/LuxRender_Render_settings#Filter)
+and makes it very difficult to implement [reconstruction filtering](http://www.luxrender.net/wiki/LuxRender_Render_settings#Filter)
 (now samples affect adjacent pixels as well, and the regions are no longer disjoint). To have a robust and high quality
 renderer it's worth it to support this minimal level of synchronization between threads, to avoid hurting performance too much
-this synchronization should be kept as lightweight as possible ideally using only atomics.
+this synchronization should be kept as lightweight as possible, ideally using only atomics.
 
 In tray I followed PBRT and implemented the framebuffer using atomic floats with C++'s `std::atomic<float>` type, updating pixel values
 using compare exchange loops. This same method is also possible to implement in Rust by either directly using the LLVM intrinsics
@@ -122,7 +125,7 @@ or working through the [`AtomicUsize`](http://doc.rust-lang.org/std/sync/atomic/
 identical to `std::atomic<float>`. To implement the atomic float method I would still need to write some minor bits of unsafe code to
 transmute the bits of the float to a usize to go through AtomicUsize, so I decided to try Rust's safe lock-free multi-producer
 single-consumer channel in [std::sync::mpsc](http://doc.rust-lang.org/std/sync/mpsc/) first,
-as this wouldn't require any unsafe code on my end. I still chose to divide up work in the same way I did previously using an array
+as this wouldn't require any unsafe code on my end. I still chose to divide up work in the same way I did previously with an array
 of block start positions which are indexed by an atomic uint (AtomicUsize in Rust), each thread just does a fetch add to find
 the next block to work on and returns when there are none left.
 
@@ -132,13 +135,13 @@ main thread which reads samples from the channel and writes them to the framebuf
 provides some interesting trade-offs with the atomic float framebuffer method, instead of conflicting on every channel of the
 pixel (RGB and weight) threads will only conflict on the two atomics in the channel when trying to send their samples.
 However if we aren't doing reconstruction filtering then the threads in the atomic float method never conflict and just pay the cost
-of a few atomic operations while in the channel implementation threads are far more likely to conflict since they're all still writing
-to the same channel. Another option I didn't look into yet is to give each thread their own channel to write too and use select to
+of a few atomic operations while in the channel implementation threads will conflict since they're all still writing
+to the same channel. Another option I didn't look into yet is to give each thread their own channel to write to and use select to
 read samples as they come in from each channel. If this would also be lock-free from the sender side then it's possible this is
 an even better implementation since the worker threads don't actually need to care about each others samples since they
-aren't writing them to the framebuffer. I'd be interested to hear other people's thoughts on this possibility.
+aren't writing them to the framebuffer. I'd be interested to hear other people's thoughts on this implementation.
 
-The mpsc channel implementation does perform quite nicely, using 8 threads on my desktop with an i7-4790K @ 4GHz we
+The mpsc channel implementation does perform quite nicely, using 8 worker threads on my desktop with an i7-4790K @ 4GHz we
 can render the [smallpt scene](http://www.kevinbeason.com/smallpt/) with one sample per pixel in 144ms! What's even more exciting about the channel
 implementation is that it easily extends to support rendering across multiple machines on a network.
 Each thread on the worker machines would send their samples to a network thread which would batch up samples and send them to the master machine
@@ -166,8 +169,8 @@ I'd expect at least some performance gain with the use of auto-vectorization and
 In a ray tracer we also need to share some immutable data between threads so that they all know what scene they're rendering.
 In Rust this is done with atomic reference counted pointers using the [Arc](http://doc.rust-lang.org/std/sync/struct.Arc.html)
 struct. This works pretty nicely although I ran into some minor annoyances. Currently if you want to put a trait in an Arc
-it must be in a Box as well, even though the Arc has it's own box (correct me if this is wrong). That is to say if we had a
-trait Geometry and we wanted to share some instance between threads we can't currently write:
+it must be in a Box as well, even though the Arc has it's own box (this may have changed with unsized types, see below).
+That is to say if we had a trait Geometry and we wanted to share some instance between threads we can't currently write:
 
 {% highlight rust %}
 // This doesn't work!
@@ -203,15 +206,15 @@ Final Thoughts
 ---
 After working with Rust for longer I'm pretty happy with how the language is shaping up. To name a few features I
 had fun with over the past month, match expressions and the powerful iterator module are really nice to work with.
-The community is also very friendly and helpful, the Rust IRC channel and subreddit have been great resources over
+The community is also very friendly and helpful, the Rust IRC and subreddit have been great resources over
 the past month and [This Week in Rust](http://this-week-in-rust.org/) is invaluable when keeping up with
-changes in the nightlies or just finding cool Rust write-ups and discussion.
+changes in the nightlies or just finding cool Rust related write-ups and discussion.
 
 #### Until Next Time
 For part 3 I'll work on getting a proper path tracing implementation running and fix some lingering bugs in the current
 code that I've worked around to render the scene for this post. I'll also take a look at the performance of giving
 each thread its own channel vs. a shared mpsc and possibilities for rendering across multiple machines.
-Path tracing will need much more compute power to render the scene quickly and this should be really fun to play with.
+Path tracing will need much more compute power to render the scene quickly and networked rendering should be really fun to play with.
 
 If you have comments, suggestions for improvements or just want to say "hi" feel free to comment below, [tweet at me](https://twitter.com/_wusher)
 or ping me on IRC (I'm Twinklebear on freenode and moznet).
