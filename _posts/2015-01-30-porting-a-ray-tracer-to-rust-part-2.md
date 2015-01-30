@@ -1,8 +1,8 @@
 ---
-published: false
+published: true
 layout: post
 title: "Porting a Ray Tracer to Rust, part 2"
-description: "Whitted Recursive Ray Tracing"
+description: "Shading and parallelism"
 category: 
 tags: ["Rust", "ray tracing", "graphics"]
 ---
