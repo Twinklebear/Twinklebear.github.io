@@ -85,7 +85,6 @@ as a fold operation! By capturing the ray as a mutable borrow in the closure and
 intersection we can use the following to find the nearest intersection and return it, or None if nothing was hit.
 
 {% highlight rust %}
-
 /// Test the ray for intersections against the objects in the scene.
 /// Returns Some(Intersection) if an intersection was found and None if not.
 pub fn intersect(&self, ray: &mut Ray) -> Option<Intersection> {
@@ -98,6 +97,14 @@ pub fn intersect(&self, ray: &mut Ray) -> Option<Intersection> {
                                     None => p,
                                 })
 }
+{% endhighlight %}
+
+**Edit 1/31/15**: [/u/Veedrac](https://www.reddit.com/r/rust/comments/2u8jtd/porting_a_ray_tracer_to_rust_part_2/co6onlx) pointed
+out that we could make the intersection code even clearer using the [or](http://doc.rust-lang.org/std/option/enum.Option.html#method.or) method
+of Option, I've updated the code to now be:
+
+{% highlight rust %}
+self.instances.iter().fold(None, |p, ref i| i.intersect(ray).or(p))
 {% endhighlight %}
 
 Using this method I've also chosen a fix for the [poor design decision](/2014/12/30/porting-a-ray-tracer-to-rust-part-1/#a-poor-design-choice)
