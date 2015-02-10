@@ -1,0 +1,224 @@
+---
+layout: page
+title: "CS 6960 Spring 2015 - Assignment 2"
+description: ""
+---
+{% include JB/setup %}
+
+<div class="col-lg-10 col-md-10 col-md-offset-1">
+	<h3>Analysis - Perfomance vs. Area</h3>
+	<img class="responsive" src="tmperf.png"/>
+	<p>
+	With one single banked icache we peak out on FPS/area at around 4-5 threads.
+	Adding an extra	thread doesn't significantly increase the size of the chip
+	because the thread processors are much smaller than other components since
+	they share the large functional units and the L1/L2 cache. When we add another
+	thread we're really just adding on room for its registers, stack and program
+	counter since in tiny.config everything (even branch and bitwise units) are shared.
+	</p>
+
+	<h3>Analysis - Bottlenecks</h3>
+	<p>
+	With 32 threads the one single banked icache is causing the most stalls.
+	If we take a look at the issue statistics we see that on average 92.67% of
+	cycles failed to issue due to icache conflicts resulting in an abysmal issue rate
+	of only 5.8%!
+	</p>
+	{% highlight text %}
+	Issue statistics:
+	--Average #threads Issuing each cycle: 1.8565
+	--Issue Rate: 5.80%
+	--iCache conflicts: 164432534 (92.678513%)
+	--thread*cycles of resource conflicts: 825920 (0.465510%)
+	--thread*cycles of data dependence: 707513 (0.398773%)
+	--thread*cycles halted: 371635 (0.209463%)
+	--thread*cycles of issue NOP/other: 791858 (0.446312%)
+	Module Utilization
+
+	FP AddSub:   29.44
+	FP MinMax:   21.75
+	FP Compare:   10.11
+	Int AddSub:   23.43
+	FP Mul:   31.49
+	Int Mul:    0.07
+	FP InvSqrt:    0.37
+	FP Div:    2.05
+	Conversion Unit:    0.15
+	{% endhighlight %}
+	<p>
+	The obvious target to improve performance is to make the icache multi banked,
+	I ended up using 32. Doing this removes almost all
+	icache conflicts and reveals other bottlenecks that were being hidden
+	due to threads getting hung up on the icache conflicts. These new bottlenecks
+	show up in the high utilization of some of our modules, seen below (and in
+	the thread resource conflict output).
+	</p>
+	{% highlight text %}
+	Issue statistics:
+	--Average #threads Issuing each cycle: 5.8506
+	--Issue Rate: 18.28%
+	--iCache conflicts: 27679 (0.049164%)
+	--thread*cycles of resource conflicts: 37271398 (66.201759%)
+	--thread*cycles of data dependence: 7788590 (13.834156%)
+	--thread*cycles halted: 126800 (0.225223%)
+	--thread*cycles of issue NOP/other: 791885 (1.406552%)
+	Module Utilization
+
+	FP AddSub:   92.80
+	FP MinMax:   68.54
+	FP Compare:   31.85
+	Int AddSub:   73.83
+	FP Mul:   99.23
+	Int Mul:    0.23
+	FP InvSqrt:    1.16
+	FP Div:    6.45
+	Conversion Unit:    0.47
+	{% endhighlight %}
+	<p>
+	From here I spent some time tweaking the various functional units on the chip
+	and re-running to see how the resource conflicts and performance per area
+	changed. The final chip I settled on computed the small Cornell box scene
+   	in 625372 cycles giving it an estimated FPS of 1599.0482.
+	The chip is 1.376715mm^2, giving it an
+	FPS/area of 1161.495. The full simulator output and chip configuration can
+	be found in <a href="bottlenecks_final.txt">bottlenecks_final.txt</a> the chip
+	configuration I settled on is below.
+	</p>
+	{% highlight text %}
+	FPADD 2 6
+	FPMIN 1 6
+	FPCMP 1 4
+	INTADD 1 6
+	FPMUL 2 6
+	INTMUL 1 1
+	FPINV 16 1
+	CONV 1 2
+	BLT 1 12
+	BITWISE 1 12
+	{% endhighlight %}
+
+	<h3>Analysis - Traversal Algorithm</h3>
+	<p>
+	An interesting result I found with the traversal (or perhaps a result of an
+	incorrect traversal implementation) is that the estimated FPS wasn't significantly
+	effected by the added optimizations.
+	</p>
+	<table class="table">
+		<tr>
+			<th>Scene</th>
+			<th>Optimized FPS</th>
+			<th>Unoptimized FPS</th>
+			<th>Optimized Cycles</th>
+			<th>Unoptimized Cycles</th>
+			<th>Optimized Power Usage (W)</th>
+			<th>Unoptimized Power Usage (W)</th>
+		</tr>
+		<tr>
+			<td>Conference</td>
+			<td>54.2787</td>
+			<td>54.8193</td>
+			<td>18423419</td>
+			<td>18241767</td>
+			<td>14.789</td>
+			<td>15.325</td>
+		</tr>
+		<tr>
+			<td>Dragon</td>
+			<td>17.7972</td>
+			<td>17.5955</td>
+			<td>56188459</td>
+			<td>56832828</td>
+			<td>19.346</td>
+			<td>20.305</td>
+		</tr>
+		<tr>
+			<td>Hairball</td>
+			<td>13.7124</td>
+			<td>13.2762</td>
+			<td>72926577</td>
+			<td>75322888</td>
+			<td>19.414</td>
+			<td>20.258</td>
+		</tr>
+	</table>
+	<p>
+	Although the estimated framerates are quite close the difference in cycles and
+	power consumption for
+	the optimized vs. unoptimized traversal is more pronounced, especially for the
+	dragon and hairball scene, which are also the ones where we'd expect the most
+	benefit from the optimizations due to their high geometric complexity.
+
+	The DRAM system is the biggest power consumer in all simulations though, for
+	each simulation it accounts for at least 95% of the total power consumption.
+	</p>
+	<table class="table">
+		<tr>
+			<th>DRAM Read Latency</th>
+			<th>Optimized</th>
+			<th>Unoptimized</th>
+		</tr>
+		<tr>
+			<td>Conference</td>
+			<td>48.4219</td>
+			<td>49.5442</td>
+		</tr>
+		<tr>
+			<td>Dragon</td>
+			<td>70.3926</td>
+			<td>72.6787</td>
+		</tr>
+		<tr>
+			<td>Hairball</td>
+			<td>71.4223</td>
+			<td>73.4373</td>
+		</tr>
+	</table>
+	<p>
+	In each scene the DRAM read latency for the unoptimized traversal is higher than
+	for the optimized version. My guess would be that in the unoptimized traversal
+	we end up having to test the ray against more triangles resulting in making a
+	greater number of incoherent memory accesses to fetch them than we would with
+	the optimized traversal, where we would know that we don't need to test those
+	triangles. This would result in spilling the row buffer more frequently as
+	we jump around more in DRAM, leading to higher latency on reads.
+	</p>
+
+	<h3>Path Tracer Source Code</h3>
+	<p>
+	The source code is hosted on my
+	<a href="https://www.dropbox.com/s/f5g8uhomg1kk1gz/pathtracer-asn2.tar.gz?dl=0">
+	dropbox</a>, the only part I really worked in was the BVH file.
+	Below are the images rendered by the simulator when profiling the effects of the
+	BVH traversal optimization, because they look kinda neat.
+	</p>
+	<div class="col-lg-4 col-md-4">
+		<img src="conference.png" class="responsive">
+	</div>
+	<div class="col-lg-4 col-md-4">
+		<img src="dragon.png" class="responsive">
+	</div>
+	<div class="col-lg-4 col-md-4">
+		<img src="hairball.png" class="responsive">
+	</div>
+
+	<h3>Time Required and Difficulty</h3>
+	<p>
+	I found the assignment took more time and seemed more difficult than it should
+	have due to me not reading the box intersection code properly. Instead of
+	returning the t value that the ray hit the box at I thought it returned true or
+	false as to whether the ray hit the box or not. Since I used this to
+	check whether to enter the box in the traversal with
+	<code>if (box.intersect(...))</code> I found
+	that my initial BVH implementation was incredibly slow (2x as slow as the
+	naive triangle loop!). Once Kui pointed this out it wasn't too hard 
+	to get the assignment running properly. As a rough estimate if I had
+	read the code properly the assignment may have taken 3-4 hours overall.
+	Unfortunately I only took a short glance at the box intersection code and so
+	I spent about 30min doing the naive triangle loop and most of
+	Saturday debugging the strange behaviors of my BVH (7-8hrs or so).
+	</p>
+</div>
+<div class="col-lg-12 col-md-12" style="padding: 0px 0px 32px 0px">
+	<br />
+</div>
+

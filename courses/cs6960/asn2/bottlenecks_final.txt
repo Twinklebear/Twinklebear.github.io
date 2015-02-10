@@ -1,0 +1,201 @@
+--model ../samples/scenes/cornell/CornellBox.obj
+--view-file ../samples/scenes/cornell/cornell.view
+--light-file ../samples/scenes/cornell/cornell.light
+--load-assembly ../samples/src/pathtracer/rt-llvm.s
+--config-file ../samples/configs/asn2_high_area_perf.config
+--num-thread-procs 32
+--num-TMs 1
+--simulation-threads 1
+--num-icaches 1
+--num-icache-banks 32
+--l1-off
+--l2-off
+--use-png-ext
+--width 64
+--height 64
+--ray-depth 1
+--disable-usimm
+--pack-split-axis
+loading model ../samples/scenes/cornell/CornellBox.obj
+loading material file ../samples/scenes/cornell/CornellBox.mtl
+4 total materials
+32 total triangles
+0 total vertex normals
+vertex min/max = x: (0.000000, 556.000000) y: (0.000000, 559.200012) z: (0.000000, 548.799988)
+Starting BVH build.
+BVH build complete with 33 nodes.
+before rotations, SAH cost = 11.836378
+Scene starts at 16551 (0x000040a7)
+BVH bounds [0.000000 0.000000 0.000000] [556.000000 559.200012 548.799988]
+Loading assembly file ../samples/src/pathtracer/rt-llvm.s
+	 <== Setup time: 0.791 seconds (0:0:0.791) ==>
+Creating thread 0...
+Thread 0 running cores	0 to	0 ...
+	 <== Frame time: 4.579 seconds (0:0:4.579) ==>
+System-wide instruction stats (sum/average of all cores):
+profile data:
+kernel	total calls	total cycles
+Data dependence stalls (caused by):
+   LOAD        	5665926	(69.948 %)
+   FPINVSQRT   	284274	(3.509 %)
+   RAND        	5127	(0.063 %)
+   add_s       	210016	(2.593 %)
+   div         	57161	(0.706 %)
+   div_s       	1258473	(15.536 %)
+   mul_s       	273192	(3.373 %)
+   sub_s       	346016	(4.272 %)
+Number of thread-cycles resource conflicts found when issuing:
+   FPMIN       	29449	(7.073 %)
+   FPMAX       	54561	(13.104 %)
+   ATOMIC_INC  	270	(0.065 %)
+   FPINVSQRT   	1077	(0.259 %)
+   RAND        	656	(0.158 %)
+   neg_s       	20	(0.005 %)
+   addiu       	9782	(2.349 %)
+   addu        	3336	(0.801 %)
+   add_s       	21965	(5.276 %)
+   cvt_s_w     	221	(0.053 %)
+   c_olt_s     	1548	(0.372 %)
+   c_ule_s     	765	(0.184 %)
+   c_ult_s     	299	(0.072 %)
+   div         	1020	(0.245 %)
+   div_s       	27021	(6.490 %)
+   mul         	265	(0.064 %)
+   mul_s       	138635	(33.297 %)
+   slt         	217	(0.052 %)
+   subu        	82	(0.020 %)
+   sub_s       	125147	(30.058 %)
+   teq         	19	(0.005 %)
+Dynamic Instruction Mix: (11082732 total)
+   FPMIN       	600005	(5.414 %)
+   FPMAX       	600005	(5.414 %)
+   LOAD        	1301966	(11.748 %)
+   ATOMIC_INC  	4128	(0.037 %)
+   FPINVSQRT   	20480	(0.185 %)
+   STORE       	12288	(0.111 %)
+   move        	16997	(0.153 %)
+   RAND        	10378	(0.094 %)
+   lbu         	56057	(0.506 %)
+   sb          	23661	(0.213 %)
+   neg_s       	3389	(0.031 %)
+   addi        	32	(0.000 %)
+   addiu       	946264	(8.538 %)
+   addu        	304556	(2.748 %)
+   add_s       	389518	(3.515 %)
+   andi        	110102	(0.993 %)
+   and_m       	9848	(0.089 %)
+   bal         	64	(0.001 %)
+   bc1f        	272079	(2.455 %)
+   bc1t        	246455	(2.224 %)
+   beqz        	78888	(0.712 %)
+   bnez        	106154	(0.958 %)
+   blez        	22799	(0.206 %)
+   bne         	74760	(0.675 %)
+   cvt_s_w     	8288	(0.075 %)
+   c_olt_s     	316423	(2.855 %)
+   c_ule_s     	175592	(1.584 %)
+   c_ult_s     	64952	(0.586 %)
+   div         	4096	(0.037 %)
+   div_s       	109364	(0.987 %)
+   lui         	320	(0.003 %)
+   lw          	76921	(0.694 %)
+   lwc1        	408797	(3.689 %)
+   mfhi        	4096	(0.037 %)
+   mflo        	4096	(0.037 %)
+   movf        	9848	(0.089 %)
+   movn        	9848	(0.089 %)
+   movt        	28585	(0.258 %)
+   mov_s       	118614	(1.070 %)
+   movn_s      	4924	(0.044 %)
+   movz_s      	14296	(0.129 %)
+   mtc1        	60342	(0.544 %)
+   mul         	4128	(0.037 %)
+   mul_s       	1745813	(15.753 %)
+   j           	147764	(1.333 %)
+   jal         	32	(0.000 %)
+   jr          	64	(0.001 %)
+   nop         	768413	(6.933 %)
+   sll         	315067	(2.843 %)
+   slt         	35803	(0.323 %)
+   sra_m       	70664	(0.638 %)
+   subu        	8192	(0.074 %)
+   sub_s       	1232803	(11.124 %)
+   sw          	64729	(0.584 %)
+   swc1        	54825	(0.495 %)
+   teq         	4096	(0.037 %)
+   xor_m       	64	(0.001 %)
+Issue statistics:
+ --Average #threads Issuing each cycle: 16.4931
+ --Issue Rate: 51.54%
+ --iCache conflicts: 308816 (1.543164%)
+ --thread*cycles of resource conflicts: 416355 (2.080540%)
+ --thread*cycles of data dependence: 8100185 (40.476898%)
+ --thread*cycles halted: 103816 (0.518772%)
+ --thread*cycles of issue NOP/other: 768413 (3.839786%)
+Module Utilization
+
+	           FP AddSub:   43.51
+	           FP MinMax:   31.98
+	          FP Compare:   22.40
+	          Int AddSub:   34.62
+	              FP Mul:   46.53
+	             Int Mul:    0.66
+	          FP InvSqrt:    3.27
+	              FP Div:   18.14
+	     Conversion Unit:    0.66
+
+System-wide L1 stats (sum of all TMs):
+L1 OFF!
+L1 accesses: 	1314254
+L1 hits: 	0
+L1 misses: 	1314254
+L1 bank conflicts: 	0
+L1 stores: 	12288
+L1 hit rate: 	0.000000
+Hit under miss: 1213916
+
+ -= L2 #0 =-
+L2 OFF!
+L2 accesses: 	100338
+L2 hits: 	0
+L2 misses: 	94100
+L2 stores: 	12288
+L2 bank conflicts: 	0
+L2 hit rate: 	0.000000
+L2 memory faults: 0
+L2 bandwidth limited stalls: 0
+
+Bandwidth numbers for 1000MHz clock (GB/s):
+   L1 to register bandwidth: 	 8.406222
+   L2 to L1 bandwidth: 		 9.010957
+   memory to L2 bandwidth: 	 9.630108
+
+Chip area (mm2):
+   Functional units: 	 0.271348
+   L1 data caches: 	 0.000000
+   L2 data caches: 	 0.000000
+   Instruction caches: 	 0.186014
+   Localstore units: 	 0.446825
+   Register files: 	 0.472528
+   ------------------------------
+   Total: 		 1.376715
+
+Energy consumption (Joules):
+   Functional units: 	 0.000065
+   L1 data caches: 	 0.000000
+   L2 data caches: 	 0.000000
+   Instruction caches: 	 0.000168
+   Localstore units: 	 0.000005
+   Register files: 	 0.000263
+   DRAM: 		 0.000000
+   ------------------------------
+   Total: 		 0.000500
+   Power draw (watts): 	 0.799847
+
+FPS Statistics:
+   Total clock cycles: 		 625372
+   FPS assuming 1000MHz clock: 	 1599.0482
+
+
+	 <== Total time: 5.383 seconds (0:0:5.383) ==>
+
