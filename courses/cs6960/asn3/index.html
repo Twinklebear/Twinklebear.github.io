@@ -1,0 +1,98 @@
+---
+layout: page
+title: "CS 6960 Spring 2015 - Assignment 3"
+description: ""
+---
+{% include JB/setup %}
+
+<div class="col-lg-10 col-md-10 col-md-offset-1">
+	<h3>L1 Cache Analysis</h3>
+	<b>Initial Configuration</b>
+	<p>
+	With the initial cache configuration in bigcache.config pasted into my best chip
+	configuration from the last assignment I found an L1 hit + hit under miss rate of: 0.98331.
+	The L1 cache
+	is very effective at caching data in this configuration so I wouldn't expect to
+	see a significant number data dependent stalls caused by LOADs, since we only
+	have to go out to main
+	memory ~0.02% of the time. If we take a look at the instruction statistics we find
+	that LOADs caused some stalls but weren't a huge issue:
+	</p>
+	{% highlight text %}
+	Data dependence stalls (caused by):
+	LOAD        	14065695	(22.065 %)
+	FPINVSQRT   	2906328	(4.559 %)
+	RAND        	61415	(0.096 %)
+	add_s       	3205814	(5.029 %)
+	div         	227953	(0.358 %)
+	div_s       	21134335	(33.153 %)
+	mul_s       	8328512	(13.065 %)
+	sub_s       	13817352	(21.675 %)
+	{% endhighlight %}
+	<b>Comparison of Energy Consumption</b>
+	<p>
+	The chip with the L1 enabled used 10.659W while the chip without an L1 used
+	15.034W, requiring 4.375 watts more than the chip with the L1. This is what we'd expect
+	since without an L1 each memory request has to go out to DRAM which requires much
+	more energy to access than the L1.
+	</p>
+	<b>Experimenting with Different L1 Caches</b>
+	<p>
+	The initial L1 configuration in bigcache gave an FPS/Area of 16.904, after tweaking
+	the number of banks and cache size a bit I settled on a 16kB L1 with 16 banks which
+	achieved an FPS/Area of 20.128. The different L1 cache simulation outputs are located
+	under <a href="https://github.com/Twinklebear/Twinklebear.github.io/tree/master/courses/cs6960/asn3/p1">p1</a>.
+	</p>
+
+	<h3>L2 Cache Analysis</h3>
+	<p>
+	The chip with the L2 required 62.11W while the chip without the L2 used 62.214. While the
+	difference in power consumption isn't very big the difference in performance is huge. With
+	the L2 cache the chip reaches 926.863 FPS giving 14.922 FPS/W while without the L2 we
+	only get 661.633 FPS for 10.634 FPS/W. With this result in mind it's clear the L2 is a
+	valuable component to have on our processor. The L2 on/off simulator output files
+	are located in <a href="https://github.com/Twinklebear/Twinklebear.github.io/tree/master/courses/cs6960/asn3/p2">p2</a>.
+	</p>
+
+	<h3>DRAM Access Patterns</h3>
+	<p>
+	With the requirement to use 4 threads and have equal data transferred from each of the 4
+	DRAM channels the easy choice for how to access DRAM is to assign each thread its own
+	channel to work with. Then by choosing how we access the rows within each bank of a channel
+	we can achieve fantastic or terrible throughput with almost identical programs.
+	To get good memory bandwidth
+	I had each thread open a row in each bank in its channel and then read every column out
+	of that row, giving a total data transfer of 512kB of unique data. This gave a DRAM to L2
+	bandwidth of 126.334 GB/s which is very close to the maximum bandwidth of the system. This
+	works because we never have to open or close a row after our first request since each bank
+	has its own	row buffer that we load into once and then read from for the rest of the program.
+	</p>
+	<p>
+	To achieve terrible bandwidth I used the opposite access pattern, each thread still gets
+	its own channel to fulfill the requirement that each channel is used equally but instead
+	reads from a single bank, requesting a new row on every load.
+	This results in having to open and close a row for
+	every single memory request giving an awful memory to L2 bandwidth of 38.227 GB/s,
+	which is a bit above the peak bandwidth for a single channel.
+	With just a simple tweak to our access patterns it's as if our 4 channel DRAM has only one.
+	The program for max/min bandwidth is
+	<a href="p3/mem_throughput.cc">mem_throughput.cc</a>, both
+	the min and max 'programs' are just functions within the mem_throughput.cc file. The
+	good and bad access simulator output are located in <a href="https://github.com/Twinklebear/Twinklebear.github.io/tree/master/courses/cs6960/asn3/p3">p3</a>.
+	</p>
+
+	<h3>Time Required and Difficulty</h3>
+	<p>
+	The assignment wasn't too bad, as a rough estimate I think I spent 4-5 hours on it.
+	I ran into a bit of difficulty interpreting the structure of the address since I didn't
+	notice the change the L2 makes to the address before sending the request to DRAM.
+	This made it a bit harder to
+	figure out which bits in the address corresponded to which sections (row, bank, etc.) since
+	they didn't match what seemed to be implied by the gddr config file and took some
+	experimentation to figure out.
+	</p>
+</div>
+<div class="col-lg-12 col-md-12" style="padding: 0px 0px 32px 0px">
+	<br />
+</div>
+

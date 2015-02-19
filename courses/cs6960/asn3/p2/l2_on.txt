@@ -1,0 +1,303 @@
+--model ../samples/scenes/conference/conference.obj
+--view-file ../samples/scenes/conference/conference.view
+--light-file ../samples/scenes/conference/conference.light
+--load-assembly ../samples/src/pathtracer/rt-llvm.s
+--config-file ../samples/configs/asn3.config
+--usimm-config ../samples/configs/usimm_configs/gddr5_2ch.cfg
+--num-thread-procs 32
+--num-TMs 16
+--simulation-threads 16
+--num-icaches 1
+--num-icache-banks 32
+--use-png-ext
+--width 128
+--height 128
+--ray-depth 3
+--pack-split-axis
+loading model ../samples/scenes/conference/conference.obj
+loading material file ../samples/scenes/conference/conference.mtl
+43 total materials
+282664 total triangles
+604956 total vertex normals
+vertex min/max = x: (-0.177790, 11.125200) y: (-0.164592, 7.010400) z: (-0.005078, 2.712720)
+Starting BVH build.
+BVH build complete with 265731 nodes.
+before rotations, SAH cost = 40.131207
+Scene starts at 66678 (0x00010476)
+BVH bounds [-0.177790 -0.164592 -0.005078] [11.125200 7.010400 2.712720]
+Loading assembly file ../samples/src/pathtracer/rt-llvm.s
+Initializing usimm memory module.
+---------------------------------------------
+-- USIMM: the Utah SImulated Memory Module --
+--              Version: 1.3               --
+---------------------------------------------
+Reading vi file: 1Gb_x16_amd2GHz.vi	
+16 Chips per Rank
+	 <== Setup time: 6.852 seconds (0:0:6.852) ==>
+Creating thread 0...
+Creating thread 1...
+Creating thread 2...
+Creating thread 3...
+Creating thread 4...
+Thread 0 running cores	0 to	0 ...
+Creating thread 5...
+Creating thread 6...
+Creating thread 7...
+Thread 1 running cores	1 to	1 ...
+Creating thread 8...
+Thread 2 running cores	2 to	2 ...
+Creating thread 9...
+Thread 3 running cores	3 to	3 ...
+Creating thread 10...
+Creating thread 11...
+Thread 4 running cores	4 to	4 ...
+Creating thread 12...
+Thread 5 running cores	5 to	5 ...
+Creating thread 13...
+Thread 6 running cores	6 to	6 ...
+Creating thread 14...
+Thread 7 running cores	7 to	7 ...
+Creating thread 15...
+Thread 8 running cores	8 to	8 ...
+Thread 9 running cores	9 to	9 ...
+Thread 10 running cores	10 to	10 ...
+Thread 11 running cores	11 to	11 ...
+Thread 12 running cores	12 to	12 ...
+Thread 13 running cores	13 to	13 ...
+Thread 14 running cores	14 to	14 ...
+Thread 15 running cores	15 to	15 ...
+	 <== Frame time: 168.736 seconds (0:2:48.736) ==>
+System-wide instruction stats (sum/average of all cores):
+profile data:
+kernel	total calls	total cycles
+Data dependence stalls (caused by):
+   LOAD        	28926758	(36.809 %)
+   FPINVSQRT   	2908465	(3.701 %)
+   RAND        	61565	(0.078 %)
+   add_s       	3210328	(4.085 %)
+   div         	228095	(0.290 %)
+   div_s       	21051138	(26.787 %)
+   mul_s       	8365729	(10.645 %)
+   sub_s       	13834805	(17.604 %)
+Number of thread-cycles resource conflicts found when issuing:
+   FPMIN       	802693	(6.889 %)
+   FPMAX       	1216813	(10.443 %)
+   LOAD        	4731869	(40.611 %)
+   ATOMIC_INC  	1227	(0.011 %)
+   FPINVSQRT   	1294	(0.011 %)
+   STORE       	12203	(0.105 %)
+   RAND        	4120	(0.035 %)
+   neg_s       	674	(0.006 %)
+   addiu       	1065742	(9.147 %)
+   addu        	401545	(3.446 %)
+   add_s       	237995	(2.043 %)
+   cvt_s_w     	1509	(0.013 %)
+   c_olt_s     	43437	(0.373 %)
+   c_ule_s     	24372	(0.209 %)
+   c_ult_s     	7281	(0.062 %)
+   div         	1302	(0.011 %)
+   div_s       	133471	(1.146 %)
+   mul         	1	(0.000 %)
+   mul_s       	1517271	(13.022 %)
+   slt         	27857	(0.239 %)
+   subu        	3196	(0.027 %)
+   sub_s       	1415317	(12.147 %)
+   teq         	458	(0.004 %)
+Dynamic Instruction Mix: (425469831 total)
+   FPMIN       	29723265	(6.986 %)
+   FPMAX       	29723265	(6.986 %)
+   LOAD        	58407796	(13.728 %)
+   ATOMIC_INC  	16896	(0.004 %)
+   FPINVSQRT   	212960	(0.050 %)
+   STORE       	49152	(0.012 %)
+   move        	304271	(0.072 %)
+   RAND        	125242	(0.029 %)
+   lbu         	2925921	(0.688 %)
+   sb          	278433	(0.065 %)
+   neg_s       	129398	(0.030 %)
+   addi        	512	(0.000 %)
+   addiu       	41367974	(9.723 %)
+   addu        	14820710	(3.483 %)
+   add_s       	7233553	(1.700 %)
+   andi        	4080677	(0.959 %)
+   and_m       	218964	(0.051 %)
+   bal         	1024	(0.000 %)
+   bc1f        	10486933	(2.465 %)
+   bc1t        	8718316	(2.049 %)
+   beqz        	3359878	(0.790 %)
+   bnez        	4138062	(0.973 %)
+   blez        	367913	(0.086 %)
+   bne         	3277450	(0.770 %)
+   cvt_s_w     	34304	(0.008 %)
+   c_olt_s     	11407456	(2.681 %)
+   c_ule_s     	6307213	(1.482 %)
+   c_ult_s     	2097459	(0.493 %)
+   div         	16384	(0.004 %)
+   div_s       	1751743	(0.412 %)
+   lui         	5120	(0.001 %)
+   lw          	3013985	(0.708 %)
+   lwc1        	10345618	(2.432 %)
+   mfhi        	16384	(0.004 %)
+   mflo        	16384	(0.004 %)
+   movf        	218964	(0.051 %)
+   movn        	218964	(0.051 %)
+   movt        	387915	(0.091 %)
+   mov_s       	1256231	(0.295 %)
+   movn_s      	109482	(0.026 %)
+   movz_s      	335145	(0.079 %)
+   mtc1        	1284837	(0.302 %)
+   mul         	16896	(0.004 %)
+   mul_s       	57033042	(13.405 %)
+   j           	5553134	(1.305 %)
+   jal         	512	(0.000 %)
+   jr          	1024	(0.000 %)
+   nop         	30918648	(7.267 %)
+   sll         	15172229	(3.566 %)
+   slt         	1019671	(0.240 %)
+   sra_m       	3261066	(0.766 %)
+   subu        	98284	(0.023 %)
+   sub_s       	49998115	(11.751 %)
+   sw          	2966369	(0.697 %)
+   swc1        	621280	(0.146 %)
+   teq         	16384	(0.004 %)
+   xor_m       	1024	(0.000 %)
+Issue statistics:
+ --Average #threads Issuing each cycle: 375.2987
+ --Issue Rate: 73.30%
+ --iCache conflicts: 10120880 (1.880269%)
+ --thread*cycles of resource conflicts: 11651647 (2.164679%)
+ --thread*cycles of data dependence: 78586883 (14.600580%)
+ --thread*cycles halted: 12473031 (2.309836%)
+ --thread*cycles of issue NOP/other: 1927982 (5.744135%)
+Module Utilization
+
+	           FP AddSub:   56.83
+	           FP MinMax:   58.90
+	          FP Compare:   29.64
+	          Int AddSub:   56.80
+	              FP Mul:   56.51
+	             Int Mul:    0.10
+	          FP InvSqrt:    1.27
+	              FP Div:   10.51
+	     Conversion Unit:    0.10
+
+System-wide L1 stats (sum of all TMs):
+L1 accesses: 	58456948
+L1 hits: 	52282173
+L1 misses: 	6174775
+L1 bank conflicts: 	2984289
+L1 stores: 	49152
+L1 hit rate: 	0.894371
+Hit under miss: 4664776
+
+ -= L2 #0 =-
+L2 accesses: 	1509999
+L2 hits: 	967197
+L2 misses: 	542802
+L2 stores: 	49152
+L2 bank conflicts: 	1759783
+L2 hit rate: 	0.640528
+L2 memory faults: 0
+
+Bandwidth numbers for 1000MHz clock (GB/s):
+   L1 to register bandwidth: 	 216.726547
+   L2 to L1 bandwidth: 		 86.656410
+   memory to L2 bandwidth: 	 28.208578
+
+Chip area (mm2):
+   Functional units: 	 4.341568
+   L1 data caches: 	 27.218672
+   L2 data caches: 	 5.960245
+   Instruction caches: 	 2.976224
+   Localstore units: 	 7.149204
+   Register files: 	 7.560448
+   ------------------------------
+   Total: 		 55.206361
+
+Energy consumption (Joules):
+   Functional units: 	 0.001793
+   L1 data caches: 	 0.018149
+   L2 data caches: 	 0.000894
+   Instruction caches: 	 0.006441
+   Localstore units: 	 0.000140
+   Register files: 	 0.010079
+   DRAM: 		 0.029517
+   ------------------------------
+   Total: 		 0.067012
+   Power draw (watts): 	 62.110766
+
+FPS Statistics:
+   Total clock cycles: 		 1078907
+   FPS assuming 1000MHz clock: 	 926.8639
+
+
+-------------DRAM stats-------------
+Cycles 2157814
+-------- Channel 0 Stats-----------
+Total Reads Serviced :          116158 
+Total Writes Serviced :         3293   
+Average Read Latency :          121.37013
+Average Read Queue Latency :    89.37013
+Average Write Latency :         5497.30823
+Average Write Queue Latency :   5463.30823
+Read Page Hit Rate :            0.41395
+Write Page Hit Rate :           0.85970
+Max write queue length:         42
+Max read queue length:          55
+Average read queue length:      4.864745
+Average column reads per ACT:   1.706349
+Single column reads:            43180
+Single column reads(%):        37.173504
+------------------------------------
+-------- Channel 1 Stats-----------
+Total Reads Serviced :          111760 
+Total Writes Serviced :         3197   
+Average Read Latency :          128.17863
+Average Read Queue Latency :    96.17863
+Average Write Latency :         5455.52049
+Average Write Queue Latency :   5421.52049
+Read Page Hit Rate :            0.41250
+Write Page Hit Rate :           0.84861
+Max write queue length:         43
+Max read queue length:          62
+Average read queue length:      5.033188
+Average column reads per ACT:   1.702128
+Single column reads:            41851
+Single column reads(%):        37.447208
+------------------------------------
+-------- Channel 2 Stats-----------
+Total Reads Serviced :          135333 
+Total Writes Serviced :         2787   
+Average Read Latency :          206.54320
+Average Read Queue Latency :    174.54320
+Average Write Latency :         10049.04557
+Average Write Queue Latency :   10015.04557
+Read Page Hit Rate :            0.39678
+Write Page Hit Rate :           0.90240
+Max write queue length:         43
+Max read queue length:          75
+Average read queue length:      11.009655
+Average column reads per ACT:   1.657761
+Single column reads:            51410
+Single column reads(%):        37.987778
+------------------------------------
+-------- Channel 3 Stats-----------
+Total Reads Serviced :          112287 
+Total Writes Serviced :         3382   
+Average Read Latency :          131.15352
+Average Read Queue Latency :    99.15352
+Average Write Latency :         5467.96038
+Average Write Queue Latency :   5433.96038
+Read Page Hit Rate :            0.41023
+Write Page Hit Rate :           0.90509
+Max write queue length:         42
+Max read queue length:          51
+Average read queue length:      5.211727
+Average column reads per ACT:   1.695564
+Single column reads:            42303
+Single column reads(%):        37.673996
+------------------------------------
+
+#-------------------------------------------------------------------------------------------------
+Total memory system power = 27.358501 W
+	 <== Total time: 175.617 seconds (0:2:55.617) ==>

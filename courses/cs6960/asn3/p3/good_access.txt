@@ -1,0 +1,181 @@
+--load-assembly ../samples/src/mem_throughput/rt-llvm.s
+--config-file ../samples/configs/asn3_mem_throughput.config
+--usimm-config ../samples/configs/usimm_configs/gddr5_2ch.cfg
+--num-thread-procs 4
+--num-TMs 1
+--simulation-threads 1
+--num-icaches 4
+--num-icache-banks 16
+--no-scene
+--l1-off
+--l2-off
+--wait-usimm
+Loading assembly file ../samples/src/mem_throughput/rt-llvm.s
+Initializing usimm memory module.
+---------------------------------------------
+-- USIMM: the Utah SImulated Memory Module --
+--              Version: 1.3               --
+---------------------------------------------
+Reading vi file: 1Gb_x16_amd2GHz.vi	
+16 Chips per Rank
+	 <== Setup time: 0.000 seconds (93:0:0.000) ==>
+Creating thread 0...
+Thread 0 running cores	0 to	0 ...
+	 <== Frame time: 0.000 seconds (175:0:0.000) ==>
+System-wide instruction stats (sum/average of all cores):
+profile data:
+kernel	total calls	total cycles
+Data dependence stalls (caused by):
+Number of thread-cycles resource conflicts found when issuing:
+   LOAD        	5636	(100.000 %)
+Dynamic Instruction Mix: (10368 total)
+   LOAD        	8192	(79.012 %)
+   MOV         	4	(0.039 %)
+   move        	16	(0.154 %)
+   addi        	4	(0.039 %)
+   addiu       	540	(5.208 %)
+   bal         	8	(0.077 %)
+   bne         	512	(4.938 %)
+   lw          	12	(0.116 %)
+   j           	4	(0.039 %)
+   jal         	4	(0.039 %)
+   jr          	8	(0.077 %)
+   nop         	528	(5.093 %)
+   or_m        	512	(4.938 %)
+   sll         	4	(0.039 %)
+   sw          	12	(0.116 %)
+   xor_m       	8	(0.077 %)
+Issue statistics:
+ --Average #threads Issuing each cycle: 2.4588
+ --Issue Rate: 61.47%
+ --iCache conflicts: 0 (0.000000%)
+ --thread*cycles of resource conflicts: 5636 (35.216196%)
+ --thread*cycles of data dependence: 0 (0.000000%)
+ --thread*cycles halted: 4 (0.024994%)
+ --thread*cycles of issue NOP/other: 528 (3.299175%)
+Module Utilization
+
+	          Int AddSub:    0.26
+
+System-wide L1 stats (sum of all TMs):
+L1 OFF!
+L1 accesses: 	8192
+L1 hits: 	0
+L1 misses: 	8192
+L1 bank conflicts: 	0
+L1 stores: 	0
+L1 hit rate: 	0.000000
+Hit under miss: 0
+
+ -= L2 #0 =-
+L2 OFF!
+L2 accesses: 	8192
+L2 hits: 	0
+L2 misses: 	8192
+L2 stores: 	0
+L2 bank conflicts: 	0
+L2 hit rate: 	0.000000
+L2 memory faults: 0
+
+Bandwidth numbers for 1000MHz clock (GB/s):
+   L1 to register bandwidth: 	 7.895904
+   L2 to L1 bandwidth: 		 126.334458
+   memory to L2 bandwidth: 	 126.334458
+
+Chip area (mm2):
+   Functional units: 	 0.313588
+   L1 data caches: 	 0.000000
+   L2 data caches: 	 0.000000
+   Instruction caches: 	 0.522384
+   Localstore units: 	 0.055853
+   Register files: 	 0.059066
+   ------------------------------
+   Total: 		 0.950891
+
+Energy consumption (Joules):
+   Functional units: 	 0.000000
+   L1 data caches: 	 0.000000
+   L2 data caches: 	 0.000000
+   Instruction caches: 	 0.000000
+   Localstore units: 	 0.000000
+   Register files: 	 0.000000
+   DRAM: 		 0.000207
+   ------------------------------
+   Total: 		 0.000208
+   Power draw (watts): 	 50.078587
+
+FPS Statistics:
+   Total clock cycles: 		 4150
+   FPS assuming 1000MHz clock: 	 240963.8554
+
+
+-------------DRAM stats-------------
+Cycles 8300
+-------- Channel 0 Stats-----------
+Total Reads Serviced :          2048   
+Total Writes Serviced :         0      
+Average Read Latency :          341.80273
+Average Read Queue Latency :    309.80273
+Average Write Latency :         0.00000
+Average Write Queue Latency :   0.00000
+Read Page Hit Rate :            0.99219
+Write Page Hit Rate :              -nan
+Max write queue length:         0
+Max read queue length:          81
+Average read queue length:      76.689639
+Average column reads per ACT:   128.000000
+Single column reads:            0
+Single column reads(%):        0.000000
+------------------------------------
+-------- Channel 1 Stats-----------
+Total Reads Serviced :          2048   
+Total Writes Serviced :         0      
+Average Read Latency :          341.80273
+Average Read Queue Latency :    309.80273
+Average Write Latency :         0.00000
+Average Write Queue Latency :   0.00000
+Read Page Hit Rate :            0.99219
+Write Page Hit Rate :              -nan
+Max write queue length:         0
+Max read queue length:          81
+Average read queue length:      76.689639
+Average column reads per ACT:   128.000000
+Single column reads:            0
+Single column reads(%):        0.000000
+------------------------------------
+-------- Channel 2 Stats-----------
+Total Reads Serviced :          2048   
+Total Writes Serviced :         0      
+Average Read Latency :          341.80273
+Average Read Queue Latency :    309.80273
+Average Write Latency :         0.00000
+Average Write Queue Latency :   0.00000
+Read Page Hit Rate :            0.99219
+Write Page Hit Rate :              -nan
+Max write queue length:         0
+Max read queue length:          81
+Average read queue length:      76.689639
+Average column reads per ACT:   128.000000
+Single column reads:            0
+Single column reads(%):        0.000000
+------------------------------------
+-------- Channel 3 Stats-----------
+Total Reads Serviced :          2048   
+Total Writes Serviced :         0      
+Average Read Latency :          341.80273
+Average Read Queue Latency :    309.80273
+Average Write Latency :         0.00000
+Average Write Queue Latency :   0.00000
+Read Page Hit Rate :            0.99219
+Write Page Hit Rate :              -nan
+Max write queue length:         0
+Max read queue length:          81
+Average read queue length:      76.689639
+Average column reads per ACT:   128.000000
+Single column reads:            0
+Single column reads(%):        0.000000
+------------------------------------
+
+#-------------------------------------------------------------------------------------------------
+Total memory system power = 49.985402 W
+	 <== Total time: 0.000 seconds (272:0:0.000) ==>
