@@ -230,6 +230,8 @@ and row 1 will have tiles 2 and 3: `2/2 == 1` and `3/2 == 1` giving the correct 
 All that's left to do is convert the indices into the pixel coordinates of the tile, which is done by multiplying
 the x and y indices by the tile size, and our tiling loop is done!
 
+**Note:** All of this rendering code will be placed within our main loop, similar to lesson 1.
+
 {% highlight c++ %}
 //Determine how many tiles we'll need to fill the screen
 int xTiles = SCREEN_WIDTH / TILE_SIZE;

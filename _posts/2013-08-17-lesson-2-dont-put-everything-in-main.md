@@ -205,6 +205,8 @@ and then draw each tile, adjusting each draw over and down as needed.
 it would be ridiculous to do so if we wanted to put down a large number of tiles. How could we compute
 the tile positions to fill the screen completely?
 
+**Note:** All of this rendering code will be placed within our main loop, similar to lesson 1.
+
 {% highlight c++ %}
 SDL_RenderClear(renderer);
 
@@ -235,7 +237,7 @@ int y = SCREEN_HEIGHT / 2 - iH / 2;
 renderTexture(image, renderer, x, y);
 
 SDL_RenderPresent(renderer);
-SDL_Delay(2000);
+SDL_Delay(1000);
 
 {% endhighlight %}
 <br />

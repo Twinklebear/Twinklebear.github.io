@@ -122,12 +122,23 @@ and destination rectangles for `SDL_RenderCopy`. We'll also
 want to keep the window open for a bit so we can see the result before the program exits, so we'll add in a call
 to [`SDL_Delay`](http://wiki.libsdl.org/moin.fcg/SDL_Delay).
 
-{% highlight c++ %}
-SDL_RenderClear(ren);
-SDL_RenderCopy(ren, tex, NULL, NULL);
-SDL_RenderPresent(ren);
+We'll place all this rendering code within the main loop of our program, which for now will be a simple for loop.
+Each iteration through our loop we'll sleep for a second, so we can increase or decrease the counter to make our
+program run for a longer or shorter period. When we get to event handling we'll instead track a boolean that indicates
+if the user wants to quit our program (eg. clicked the X on the window) and exit our loop in that case.
 
-SDL_Delay(2000);
+{% highlight c++ %}
+//A sleepy rendering loop, wait for 3 seconds and render and present the screen each time
+for (int i = 0; i < 3; ++i){
+	//First clear the renderer
+	SDL_RenderClear(ren);
+	//Draw the texture
+	SDL_RenderCopy(ren, tex, NULL, NULL);
+	//Update the screen
+	SDL_RenderPresent(ren);
+	//Take a quick break after all that hard work
+	SDL_Delay(1000);
+}
 {% endhighlight %}
 <br />
 
