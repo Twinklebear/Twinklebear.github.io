@@ -1,0 +1,151 @@
+---
+layout: page
+title: "CS 6610 Spring 2015 - Final Project"
+description: ""
+---
+{% include JB/setup %}
+
+<div class="col-lg-12 col-md-12">
+	<h3>Description</h3>
+	<p>
+	I chose to implement <a href="http://graphics.cs.williams.edu/papers/SAOHPG12/">Scalable Ambient
+	Obscurance</a> [MML12] for my project, which is a fast improved screen space ambient occlusion method.
+	This method improves performance and quality of a method introduced previously by McGuire et al., the
+	<a href="http://graphics.cs.williams.edu/papers/AlchemyHPG11/">Alchemy Ambient Obscurance algorithm</a> [MOBH11].
+	Ambient occlusion methods attempting to approximate the effect of decreased ambient/environment light
+	illuminating inside crevasses on an object. The effect that's
+	being implemented can be seen as the illumination of an object on a cloudy day, like the statue below.
+	</p>
+	<p>The areas we're interested in here are the shadows beneath the collar, in the creases in the neck,
+	where the jacket meets the shirt and in the facial features. For comparison the lion head from the
+	<a href="http://www.crytek.com/cryengine/cryengine3/downloads">Crytek Sponza</a> scene is shown,
+	displaying the value of the ambient obscurance light modulation term. Note especially the darkening
+	within the crevasses on the model, giving a similar effect to that on the photo of the statue.
+	</p>
+	<div class="col-lg-12 col-md-12 col-xs-12 col-lg-offset-2 col-md-offset-2 col-xs-offset-2">
+		<div class="col-lg-4 col-md-4 col-xs-8" style="text-align:center">
+			<img class="img-responsive center-block" src="ao_cloudy_statue.png">
+			<p>Slides of [MML12, MOBH11]</p>
+		</div>
+		<div class="col-lg-4 col-md-4 col-xs-8" style="text-align:center">
+			<img class="img-responsive center-block" src="ao_sponza_lion.png">
+		</div>
+	</div>
+	<h3>Geometric Construction</h3>
+	<p>
+	The geometric construction of the effect follows from an approximation of how ambient occlusion
+	works. A hemisphere is placed at the point aligned with the surface normal and we determine how much of this
+	hemisphere has objects in it that could be blocking environment light incident on this point. Due to this approximation
+	the accuracy of the method is heavily dependent on the hemisphere capturing the local effects properly.
+	</p>
+	<div class="col-lg-12 col-md-12 col-xs-12">
+		<div class="col-lg-6 col-md-6 col-xs-8 col-lg-offset-3 col-md-offset-3 col-xs-offset-2"
+			style="text-align:center">
+			<img class="img-responsive center-block" src="ao_geom.png">
+			<p>[MML12, MOBH11]</p>
+		</div>
+	</div>
+	<p>
+	The Scalable AO (and Alchemy AO) methods choose some number of points around the hemisphere and
+	compute a vector from the point we're computing the AO value for. This gives us information
+	about the distance to the point and the difference in depth between the points, eg. if this
+	point \(P\) would block ambient light from reaching \(C\) where the distance gives us an idea of
+	how much it effects \(C\). For performance reasons this computation is done in screen space using
+	information from the scene's depth buffer to reconstruct camera space positions where we sample
+	some pixel to find \(C\) and then sample on a circle of pixels around it to find neighboring points \(P_i\).
+	</p>
+	<div class="col-lg-12 col-md-12 col-xs-12">
+		<div class="col-lg-6 col-md-6 col-xs-8 col-lg-offset-3 col-md-offset-3 col-xs-offset-2"
+			style="text-align:center">
+			<img class="img-responsive center-block" src="sao_method.png">
+			<p>[MML12, MOBH11]</p>
+		</div>
+	</div>
+	<p>
+	The ambient occlusion at a point \(C\) is computed by taking \(s\) samples distributed on a hemisphere
+	around the point and recovering their camera space position \(P_i\).
+	We then find \(v_i = P_i - C\) and sum up the occlusion contributions of each sample. On a simplified level
+	the dot product \(v_i \cdot \hat{n_C}\) tells us how far in front of the surface \(P_i\) is. A small amount
+	of bias is also applied in the form of \(\beta\) to prevent self shadowing, similar to what's done in shadow mapping bias.
+	This contribution is then divided by the length of \(v_i\) to reduce the shadowing contribution of points further
+	away from the point being computed, the \(\varepsilon\) term is a small value used to prevent division by zero.
+	See [MOBH11] for full details of the derivation of the ambient occlusion estimator used, shown below.
+	</p>
+	$$
+	A(C) = \text{max}\left(0, 1 - \frac{2 \sigma}{s} \sum_{i = 1}^{s}
+	\frac{\text{max}(0, \vec{v_i} \cdot \hat{n_C} + z_C \beta)}
+	{\vec{v_i} \cdot \vec{v_i} + \varepsilon}\right)^\kappa
+	$$
+	<p>
+
+	</p>
+	<h3>Results</h3>
+	<p>
+	To make it easier to compare against the original paper I rendered the Crytek Sponza scene
+	used by McGuire et al. to demonstrate their results in [MML12]. My implementation is not as fast as the
+	paper's since I've left some parameters tune-able and am passing the camera space positions
+	directly in an RGB32F buffer, thus consuming much more bandwidth vs. reconstructing positions from a
+	32F depth buffer. The ambient occlusion effect can
+	be a bit subtle in some areas, the best way to see the difference is to open the full and no AO
+	images in separate tabs and flip between them to compare.
+	</p>
+	<div class="col-lg-12 col-md-12" style="padding: 0px 0px 12px 0px">
+		<div class="col-lg-4 col-md-4" style="text-align:center">
+			<h4>AO Value Texture</h4>
+			<a href="http://i.imgur.com/byM8iNh.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/byM8iNh.png">
+			</a>
+			<br />
+			<a href="http://i.imgur.com/kDwy81q.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/kDwy81q.png">
+			</a>
+			<br />
+			<a href="http://i.imgur.com/LvP3LJE.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/LvP3LJE.png">
+			</a>
+		</div>
+		<div class="col-lg-4 col-md-4" style="text-align:center">
+			<h4>Full Render</h4>
+			<a href="http://i.imgur.com/v7wWg9O.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/v7wWg9O.png">
+			</a>
+			<br />
+			<a href="http://i.imgur.com/F4kVLxu.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/F4kVLxu.png">
+			</a>
+			<br />
+			<a href="http://i.imgur.com/PWOKcQF.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/PWOKcQF.png">
+			</a>
+		</div>
+		<div class="col-lg-4 col-md-4" style="text-align:center">
+			<h4>No AO</h4>
+			<a href="http://i.imgur.com/RMeZdk5.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/RMeZdk5.png">
+			</a>
+			<br />
+			<a href="http://i.imgur.com/SEZcMhY.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/SEZcMhY.png">
+			</a>
+			<br />
+			<a href="http://i.imgur.com/RshKp78.png">
+				<img class="img-responsive center-block" src="http://i.imgur.com/RshKp78.png">
+			</a>
+		</div>
+	</div>
+	<h3>References</h3>
+	<p>
+	[MML12] <span style="font-variant:small-caps">McGuire, M., Mara, M., and Luebke, D.</span>:
+	Scalable Ambient Obscurance.
+	In <i>High Performance Graphics 2012</i>.
+	<br/>
+	[MOBH11] <span style="font-variant:small-caps">McGuire, M., Osman, B., Bukowski, M.,
+	and Hennessy, P.</span>: The Alchemy Screen-Space Ambient
+	Obscurance Algorithm. In <i>High Performance Graphics 2011</i>.
+	</p>
+</div>
+<div class="col-lg-12 col-md-12" style="padding: 0px 0px 32px 0px">
+	<br />
+</div>
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+
