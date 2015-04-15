@@ -85,9 +85,10 @@ description: ""
 	used by McGuire et al. to demonstrate their results in [MML12]. My implementation is not as fast as the
 	paper's since I've left some parameters tune-able and am passing the camera space positions
 	directly in an RGB32F buffer, thus consuming much more bandwidth vs. reconstructing positions from a
-	32F depth buffer. The ambient occlusion effect can
-	be a bit subtle in some areas, the best way to see the difference is to open the full and no AO
-	images in separate tabs and flip between them to compare.
+	32F depth buffer. There are also areas where the quality of my implementation could be improved,
+	the blur and smoothness of the ambient occlusion looks much better in [MML12]'s implementation.
+	The ambient occlusion effect can be a bit subtle in some areas, the best way to see the difference
+	is to open the full and no AO images in separate tabs and flip between them to compare.
 	</p>
 	<div class="col-lg-12 col-md-12" style="padding: 0px 0px 12px 0px">
 		<div class="col-lg-4 col-md-4" style="text-align:center">
