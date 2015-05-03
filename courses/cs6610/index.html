@@ -76,8 +76,32 @@ description: ""
 	\frac{\text{max}(0, \vec{v_i} \cdot \hat{n_C} + z_C \beta)}
 	{\vec{v_i} \cdot \vec{v_i} + \varepsilon}\right)^\kappa
 	$$
+	<h3>Implementation Details</h3>
 	<p>
-
+	My project takes advantage of a few recent OpenGL features like MultiDrawIndirect, shader storage buffer objects
+	and texture arrays. By using these features it becomes possible to draw the entire sponza scene below using a single
+	call to MultiDrawIndirect. This is achieved by packing all textures used by the objects in the scene into as few
+	texture arrays as possible and storing information about material properties and texture location and index in
+	a SSBO. Additionally all model data for objects in the scene are packed into a single buffer which contains
+	the vertex and index data. The end result of this is that we can pass a per-instance parameter specifying which
+	material to use and the object can access its material properties and texture data through the SSBO and texture
+	arrays passed, allowing us to draw all objects in the scene with a single draw call.
+	</p>
+	<p>
+	The Crytek Sponza model itself is not very complex by modern standards but has some nice texture work that make it
+	look very nice, including some techinques we learned about in class. The images rendered include bump mapping,
+	alpha mapping and specular mapping effects along with a typical diffuse texture map.
+	</p>
+	<p>
+	My scalable AO implementation is not quite scalable AO as described in the paper since I've chosen to be a bit
+	lazy and not bother with
+	reconstructing camera space positions from the depth buffer and to instead just render the positions out to
+	an RGB32F texture. This allows me to not worry about the various precision issues discussed in the paper however
+	it also impacts the performance of my method a decent bit due to the increased bandwidth usage. I also was curious
+	what it would look like using the bump mapped normals to compute AO and provide an option to toggle this,
+	however I didn't find the results very nice. McGuire et al. also recommend a new AO estimator over the Alchemy AO
+	estimator used originally but I couldn't get this new estimator to behave very well. This new estimator is supposed
+	to smooth the transition into shadow and is discussed at the end of [MML12] and in their slides from HPG.
 	</p>
 	<h3>Results</h3>
 	<p>
