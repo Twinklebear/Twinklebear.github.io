@@ -85,6 +85,30 @@ impl Mul<f32, Vector> for Vector {
 }
 {% endhighlight %}
 
+**Edit (5/9/15)**: Overloading left and right multiply is now supported in Rust. Additionally the method
+for writing overloaded operators has changed significantly with the addition of associated types. The
+current implementation of right and left multiply for `Vector` are now:
+
+{% highlight rust %}
+// Multiply a vector by a f32 on the right, eg. `vec * 2.0`
+impl Mul<f32> for Vector {
+    type Output = Vector;
+    /// Scale the vector by some value
+    fn mul(self, rhs: f32) -> Vector {
+        Vector { x: self.x * rhs, y: self.y * rhs, z: self.z * rhs }
+    }
+}
+
+// Multiply a f32 by a vector on the right, eg. `2.0 * vec`
+impl Mul<Vector> for f32 {
+    type Output = Vector;
+    /// Scale the vector by some value
+    fn mul(self, rhs: Vector) -> Vector {
+        Vector { x: self * rhs.x, y: self * rhs.y, z: self * rhs.z }
+    }
+}
+{% endhighlight %}
+
 Because operator overloading is done through traits we can set constraints on generic
 functions to require that the types being worked on implement certain operations. This makes
 the function clearer than in C++ (eg. what types it takes) and also gives much better compilation
