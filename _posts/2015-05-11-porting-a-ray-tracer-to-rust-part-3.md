@@ -231,11 +231,24 @@ impl Geometry for Mesh {
 
 ### Publishing Crates on Cargo
 The next thing we'd like to do with triangle mesh geometry is load up some models and render them! The
-[Wavefront OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) is relatively simple to support (at least if
-you're only doing triangles/triangle strip) meshes and is widely supported in modeling software like Blender,
+[Wavefront OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) format is relatively simple to load (at least if
+you're only doing triangles/triangle strips) and is widely supported in modeling software like Blender,
 making it easy to find meshes and convert them as needed. While it's possible to write an OBJ loader integrated
 into the ray tracer I thought this seemed like a cool opportunity to learn about publishing my own Crates
-(a library) with [Cargo](https://crates.io).
+(a library) with [Cargo](https://crates.io), especially since managing dependencies with Cargo is very smooth.
+
+To load OBJ files I've written [tobj](https://github.com/Twinklebear/tobj) which takes inspiration from the
+OBJ loader I use in my C++ projects, [tinyobjloader](https://github.com/syoyo/tinyobjloader). To figure out how
+to publish the crate online I followed [the guide on publishing](http://doc.crates.io/crates-io.html#publishing-crates)
+and [here it is](https://crates.io/crates/tobj)! Now adding this library as dependency to tray\_rust can be done
+by adding `tobj = "0.0.8"` to the `[dependencies]` list and the crate will be downloaded and available for use
+via `extern crate tobj;`.
+
+For some extra fun I used the Travis-CI integration discussed in Huon's "Travis on the Train" series
+[part 1](http://huonw.github.io/blog/2015/04/helping-travis-catch-the-rustc-train/),
+[part 2](http://huonw.github.io/blog/2015/05/travis-on-the-train-part-2/) and now can take advantage of Travis-CI
+to run tests and even build and upload [rustdoc](http://www.willusher.io/tobj/tobj/) for tobj, which is really
+convenient. I've started using this for tray\_rust as well.
 
 Measured Material Data
 ---
