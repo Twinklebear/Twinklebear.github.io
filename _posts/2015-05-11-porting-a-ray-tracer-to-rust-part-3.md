@@ -154,13 +154,13 @@ pub struct BVH<T: Boundable> {
 
 Finally we can put together our intersection function for the BVH. This function will take a mutably borrowed ray and test it against
 geometry in the BVH that it might intersect. After traversal has completed we'll return an option type to indicate if an intersection happened or not.
-Additionally the user function will modify the ray's max t value (how long it is) as we find intersections with geometry during traversal.
+Additionally the caller's function will modify the ray's max t value (how long it is) as we find intersections with geometry during traversal.
 We can require an appropriate user function by taking a generic type and constraining it to implement the [Fn](http://doc.rust-lang.org/std/ops/trait.Fn.html)
-trait with the parameters and return values we expect and since we've parameterized our function on the type the compiler can even inline
-calls to the function we've passed, similar to C++11 lambdas.
+trait with the parameters and return values we expect. As en extra bonus, since we've made our intersect function generic on
+the caller's function and we take it by value the compiler can even inline calls to the Fn passed, similar to C++11 lambdas.
 
 The signature of our BVH intersect function then comes out like below. Note that the lifetime annotations are required as we
-may be returning a reference to objects in the BVH in `R` and the compiler needs to know these references will be valid after
+may be returning a reference to objects in the BVH in R and the compiler needs to know these references will be valid after
 the call. This actually turned out to be a tough error to work through and the Rust IRC channel was very helpful.
 
 {% highlight rust %}
@@ -169,7 +169,9 @@ pub fn intersect<'a, F, R>(&'a self, ray: &mut Ray, f: F) -> Option<R>
 {% endhighlight %}
 
 Now to traverse geometry in the BVH and intersect the instances or triangles within it's as simple as passing a closure! For example,
-here's the intersect call of a `BVH<Instance>` in scene.rs.
+here's the intersect call of a `BVH<Instance>` in scene.rs. Here our Fn takes a &mut Ray and &Instance and returns an Option<Intersection>
+which represents the closest intersection with an instance found. The BVH will then traverse the hierarchy and call our function
+on the geometry in each leaf node that our ray enters.
 
 {% highlight rust %}
 pub fn intersect(&self, ray: &mut Ray) -> Option<Intersection> {
@@ -177,11 +179,63 @@ pub fn intersect(&self, ray: &mut Ray) -> Option<Intersection> {
 }
 {% endhighlight %}
 
+### Lifetime Errors Can be Challenging
+The hardest problems I encountered when writing the traversal where lifetime errors encountered in the course of trying
+to return a reference to the type in the BVH, eg. in the Intersection of DifferentialGeometry structure. Since the
+error itself is given at the call to intersect it wasn't clear what I'd need to do to help the compiler sort out the
+lifetimes. A short self-contained example of the error can be found on [Rust playpen](http://is.gd/uHBGlA). In the end
+to make sense of the problem and figure out the solution I asked folks on the Rust IRC, who have always been
+extremely helpful, and pointed out that I need to tie the lifetime of the reference passed to the caller's Fn
+with the lifetime of the BVH itself, thus indicating to the compiler that the reference will be valid as
+long as the BVH is alive.
+
+Without the help of people in IRC this probably would have taken much longer to figure out (if I could have figured it
+out at all). Since Rust is a very young language the documentation and compiler are still being worked on and I think
+more advanced lifetime handling and error reporting are areas that could be improved on. The concepts of lifetime
+and ownership are key to the language's power but can be difficult to reason about and errors can be hard
+to interpret at times.
+
 Triangle Meshes
 ---
 **TODO:** Triangle meshes are neat. Cite sources for Rust logo, Buddha and Dragon. Mention tobj and the
 process of publishing a crate on Cargo. Mention @huonw's awesome travis-ci script. Talk about
 testing and benching in Rust.
+
+Because we've implemented our BVH to be generic on the type it stores it's simple for us to also write a
+triangle mesh that uses a BVH internally to accelerate intersection testing against its triangles. The triangles
+themselves store the index of each of their vertices and share an Arc to Vecs containing the position, normal
+and texture coordinate information. This is different than my C++ implementation where the Mesh would store
+these vectors and the triangles would store a reference to the Mesh and their indices. However this implementation
+will result in dangling references if the mesh is moved, copied or such and when I first tried to implement this
+the Rust compiler correctly tossed up some lifetime errors. Although there's a bit of added size to each triangle
+to store the Arc to each Vec this implementation is actually safe to use in general, unlike my C++ one (which I should correct).
+I use a standard triangle intersection test from PBRT and after building
+a BVH on the mesh's triangles we end up with a very simple mesh type. The struct is just a BVH of triangles:
+
+{% highlight rust %}
+pub struct Mesh {
+    bvh: BVH<Triangle>,
+}
+{% endhighlight %}
+
+Testing the triangles of the mesh for intersection is the same as testing for intersections against Instances
+of geometry but we instead return an `Option<DifferentialGeometry>`.
+
+{% highlight rust %}
+impl Geometry for Mesh {
+    fn intersect(&self, ray: &mut linalg::Ray) -> Option<DifferentialGeometry> {
+        self.bvh.intersect(ray, |r, i| i.intersect(r))
+    }
+}
+{% endhighlight %}
+
+### Publishing Crates on Cargo
+The next thing we'd like to do with triangle mesh geometry is load up some models and render them! The
+[Wavefront OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) is relatively simple to support (at least if
+you're only doing triangles/triangle strip) meshes and is widely supported in modeling software like Blender,
+making it easy to find meshes and convert them as needed. While it's possible to write an OBJ loader integrated
+into the ray tracer I thought this seemed like a cool opportunity to learn about publishing my own Crates
+(a library) with [Cargo](https://crates.io).
 
 Measured Material Data
 ---
@@ -201,6 +255,7 @@ The code for the Rust ray tracer is MIT licensed and available on [Github](https
 [MPBM03] <span style="font-variant:small-caps">Wojciech Matusik, Hanspeter Pfister, Matt Brand and Leonard McMillan</span>:
 A Data-Driven Reflectance Model. In <i>ACM Transactions on Graphics 2003</i>.
 </p>
+<p>Add Kajiya citation?</p>
 
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
