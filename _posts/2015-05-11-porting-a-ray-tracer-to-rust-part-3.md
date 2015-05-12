@@ -63,39 +63,39 @@ pick a random direction on the hemisphere to shoot another ray, find what it hit
 at some number of bounces since after a certain point there's very little illumination coming back along the ray to the first point we hit.
 The [pseudo-code](http://en.wikipedia.org/wiki/Path_tracing#Algorithm) on Wikipedia gives a decent overview of the algorithm.
 
-Although we're now able to render any scene Path tracing our usage of Monte Carlo integration requires that we must take huge numbers of samples
+Although we're able to render any scene with path tracing our usage of Monte Carlo integration requires that we must take huge numbers of samples
 to accurately compute the integral. The effect of sampling rate on quality is shown below, with very few samples per pixel the result is quite poor and
 noisy but as we take more and more it converges to a high quality image. Taking more samples per pixel also comes with an increased rendering cost,
-as you'd would expect. The image with 2 samples per pixel takes a mere 90ms to render while with 2048 samples it takes 94.203s at to render the
-200x200 pixel image.
+as you would expect. The image with 2 samples per pixel takes a mere 90ms to render while with 2048 samples it takes 94.203s to render the
+200x200 pixel image. A whopping increase in render time of three orders of magnitude!
 
 <div class="col-lg-12 col-md-12 col-xs-12">
-<div class="col-lg-2 col-md-2 col-xs-2" style="text-align:center">
+<div class="col-lg-4 col-md-4 col-xs-4" style="text-align:center">
 <a href="http://i.imgur.com/sPGEQhO.png"><img class="img-responsive" src="http://i.imgur.com/sPGEQhO.png"></a>
 <p>2 samples</p>
 </div>
 
-<div class="col-lg-2 col-md-2 col-xs-2" style="text-align:center">
+<div class="col-lg-4 col-md-4 col-xs-4" style="text-align:center">
 <a href="http://i.imgur.com/rF0SWIY.png"><img class="img-responsive" src="http://i.imgur.com/rF0SWIY.png"></a>
 <p>8 samples</p>
 </div>
 
-<div class="col-lg-2 col-md-2 col-xs-2" style="text-align:center">
+<div class="col-lg-4 col-md-4 col-xs-4" style="text-align:center">
 <a href="http://i.imgur.com/Tbbuzhs.png"><img class="img-responsive" src="http://i.imgur.com/Tbbuzhs.png"></a>
 <p>32 samples</p>
 </div>
 
-<div class="col-lg-2 col-md-2 col-xs-2" style="text-align:center">
+<div class="col-lg-4 col-md-4 col-xs-4" style="text-align:center">
 <a href="http://i.imgur.com/eJJ290s.png"><img class="img-responsive" src="http://i.imgur.com/eJJ290s.png"></a>
 <p>128 samples</p>
 </div>
 
-<div class="col-lg-2 col-md-2 col-xs-2" style="text-align:center">
+<div class="col-lg-4 col-md-4 col-xs-4" style="text-align:center">
 <a href="http://i.imgur.com/mUZOd0L.png"><img class="img-responsive" src="http://i.imgur.com/mUZOd0L.png"></a>
 <p>512 samples</p>
 </div>
 
-<div class="col-lg-2 col-md-2 col-xs-2" style="text-align:center">
+<div class="col-lg-4 col-md-4 col-xs-4" style="text-align:center">
 <a href="http://i.imgur.com/rYA2keF.png"><img class="img-responsive" src="http://i.imgur.com/rYA2keF.png"></a>
 <p>2048 samples</p>
 </div>
