@@ -104,7 +104,78 @@ as you would expect. The image with 2 samples per pixel takes a mere 90ms to ren
 Bounding Volume Hierarchy
 ---
 **TODO:** The BVH is interesting in that it takes advantage of traits very nicely. Mention the annoyance with bounds on
-user defined traits. Mention the Fn being inlined. Link to the [Abstraction without overhead](http://blog.rust-lang.org/2015/05/11/traits.html) post.
+user defined traits. Mention the Fn being inlined. Link to the 
+
+If we wanted to render a scene with millions (or billions!) of triangles in it the process of quickly finding the first intersection
+along a ray can become incredible expensive, eg. using a naive loop over the triangles would probably have us waiting weeks for our image.
+To avoid this issue we use some form of spatial partitioning data structure that will let us ignore objects that the ray has no chance of hitting.
+There are many possibilities for choosing a spatial data structure but the two most popular in ray tracing are
+[Bounding Volume Hierarchies](http://en.wikipedia.org/wiki/Bounding_volume_hierarchy) and [k-d trees](http://en.wikipedia.org/wiki/K-d_tree).
+
+I've chosen to implement a BVH since building a reasonably high quality one is not too costly a process and traversal is pretty straightforward. At a high
+level we construct a tree of bounding axis aligned boxes that contain geometry in the scene and partition them into groups such that estimated
+cost of testing the geometry in each child is as equal as possible. This method is known as the Surface Area Heurstic as we use the object's
+surface area to estimate the cost of entering a node in the BVH. Traversal is then as simple as testing the bounding boxes of each child, if a child
+is intersected then we traverse it recursively, although typically recursion is avoided and we manage a stack of nodes ourself.
+Again I'll defer the detailed explanation to [PBRT](http://pbrt.org/) and instead we'll focus on some cool Rust features in this section
+related to the implementation.
+
+We'd like our BVH to be generic over the type it stores and require only the information needed to construct the BVH be required, that is that
+the things being stored can report their bounds as an axis aligned box. As I mentioned in the
+[first post of this series](http://www.willusher.io/2014/12/30/porting-a-ray-tracer-to-rust-part-1/#a-poor-design-choice) by doing this we'll be able to put both
+our instances of geometry in the world and triangles in a mesh within the same BVH and re-use the code. After some helpful discussion in the comments of
+that post (thanks Kevin!) I've settled on a flexible and powerful implementation that takes advantage of Rust's trait system. For some really
+great discussion and background on traits in Rust take a look at [Aaron Turon's Abstraction without overhead](http://blog.rust-lang.org/2015/05/11/traits.html) post.
+
+To provide a generic BVH that only requires types can report their world space bounds we'll need two things. First we'll need a trait to
+implement on these objects (easy enough) and second we'll need a way to pass a function to be called during the BVH traversal so that
+the caller can run intersection tests for example. Additionally we'd like to return whatever this function returns from our traversal
+(eg. this is information about the nearest hit) and we'd like this function to be inlined as it will be called a lot in our rendering loop.
+Using Rust's traits we can meet all these demands handily.
+
+We'll start by putting together a `Boundable` trait for types that can report their bounds in space:
+
+{% highlight rust %}
+// Trait implemented by scene objects that can report an AABB describing their bounds
+pub trait Boundable {
+    // Get an AABB reporting the object's bounds in space
+    fn bounds(&self) -> BBox;
+}
+{% endhighlight %}
+
+Now we can put a constraint on the types that our BVH will accept:
+
+{% highlight rust %}
+pub struct BVH<T: Boundable> {
+    geometry: Vec<T>,
+    ...
+}
+{% endhighlight %}
+
+Finally we can put together our intersection function for the BVH. This function will take a mutably borrowed ray and test it against
+geometry in the BVH that it might intersect. After traversal has completed we'll return an option type to indicate if an intersection happened or not.
+Additionally the user function will modify the ray's max t value (how long it is) as we find intersections with geometry during traversal.
+We can require an appropriate user function by taking a generic type and constraining it to implement the [Fn](http://doc.rust-lang.org/std/ops/trait.Fn.html)
+trait with the parameters and return values we expect and since we've parameterized our function on the type the compiler can even inline
+calls to the function we've passed, similar to C++11 lambdas.
+
+The signature of our BVH intersect function then comes out like below. Note that the lifetime annotations are required as we
+may be returning a reference to objects in the BVH in `R` and the compiler needs to know these references will be valid after
+the call. This actually turned out to be a tough error to work through and the Rust IRC channel was very helpful.
+
+{% highlight rust %}
+pub fn intersect<'a, F, R>(&'a self, ray: &mut Ray, f: F) -> Option<R>
+        where F: Fn(&mut Ray, &'a T) -> Option<R>
+{% endhighlight %}
+
+Now to traverse geometry in the BVH and intersect the instances or triangles within it's as simple as passing a closure! For example,
+here's the intersect call of a `BVH<Instance>` in scene.rs.
+
+{% highlight rust %}
+pub fn intersect(&self, ray: &mut Ray) -> Option<Intersection> {
+    self.bvh.intersect(ray, |r, i| i.intersect(r))
+}
+{% endhighlight %}
 
 Triangle Meshes
 ---
