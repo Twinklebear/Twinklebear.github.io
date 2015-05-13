@@ -183,7 +183,7 @@ pub fn intersect(&self, ray: &mut Ray) -> Option<Intersection> {
 }
 {% endhighlight %}
 
-### Lifetime Errors can be Challenging
+### Lifetime Errors can be Challenging to Decipher
 The hardest problems I encountered when writing the traversal were lifetime errors encountered in the course of trying
 to return a reference to an object in the BVH, eg. in the Intersection or DifferentialGeometry structures which return
 a reference to the hit Instance or Geometry respectively. Since the
@@ -203,18 +203,17 @@ hard to interpret.
 
 Triangle Meshes
 ---
-**TODO** Review
-
 Because we've implemented our BVH to be generic on the type it stores it's simple for us to also write a
 triangle mesh that uses a BVH internally to accelerate intersection testing against its triangles. The triangles
-themselves store the index of each of their vertices and share an Arc to Vecs containing the position, normal
-and texture coordinate information. This is different than my C++ implementation where the Mesh would store
-these vectors and the triangles would store a reference to the Mesh and their indices. However this implementation
-will result in dangling references if the mesh is moved, copied or such and when I first tried to implement this
-the Rust compiler correctly tossed up some lifetime errors. Although there's a bit of added size to each triangle
+share an Arcs to Vecs containing the position, normal and texture coordinate information and the index of each of
+their vertices within these Vecs. This is different than my C++ implementation where the Mesh would store
+these vectors and the triangles would store a reference to the Mesh instead of shared\_ptr's to the vectors. However the C++
+implementation will result in dangling references unless used very carefully, eg. if the mesh is moved, copied or such we'll end up
+with dangling pointers. When I first tried to implement the Mesh I tried my C++ approach and the Rust compiler correctly
+gave me some lifetime errors. Although there's a bit of added size to each triangle
 to store the Arc to each Vec this implementation is actually safe to use in general, unlike my C++ one (which I should correct).
 I use a standard triangle intersection test from PBRT and after building
-a BVH on the mesh's triangles we end up with a very simple mesh type. The struct is just a BVH of triangles:
+a BVH on the mesh's triangles we end up with a very simple mesh type. The struct is just a BVH containing its triangles:
 
 {% highlight rust %}
 pub struct Mesh {
@@ -223,7 +222,7 @@ pub struct Mesh {
 {% endhighlight %}
 
 Testing the triangles of the mesh for intersection is the same as testing for intersections against Instances
-of geometry but we instead return an `Option<DifferentialGeometry>`.
+of geometry, but instead we return an `Option<DifferentialGeometry>`.
 
 {% highlight rust %}
 impl Geometry for Mesh {
@@ -234,18 +233,19 @@ impl Geometry for Mesh {
 {% endhighlight %}
 
 ### Publishing Crates on Cargo
-The next thing we'd like to do with triangle mesh geometry is load up some models and render them! The
+With support for intersecting rays against triangle meshes now we'd like load up some models and render them! The
 [Wavefront OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) format is relatively simple to load (at least if
 you're only doing triangles/triangle strips) and is widely supported in modeling software like Blender,
-making it easy to find meshes and convert them as needed. While it's possible to write an OBJ loader integrated
+making it easy to find meshes and convert them if needed. While it's possible to write an OBJ loader integrated
 into the ray tracer I thought this seemed like a cool opportunity to learn about publishing my own Crates
-(a library) with [Cargo](https://crates.io), especially since managing dependencies with Cargo is very smooth.
+(a Rust library) with [Cargo](https://crates.io) (Rust's package manager), especially since managing dependencies with
+Cargo is very smooth.
 
-To load OBJ files I've written [tobj](https://github.com/Twinklebear/tobj) which takes inspiration from the
+To load OBJ files I've written [tobj](https://github.com/Twinklebear/tobj) (Tiny OBJ Loader) which takes inspiration from the
 OBJ loader I use in my C++ projects, [tinyobjloader](https://github.com/syoyo/tinyobjloader). To figure out how
 to publish the crate online I followed [the guide on publishing](http://doc.crates.io/crates-io.html#publishing-crates)
-and [here it is](https://crates.io/crates/tobj)! Now adding this library as dependency to tray\_rust can be done
-by adding `tobj = "0.0.8"` to the `[dependencies]` list and the crate will be downloaded and available for use
+and [here it is](https://crates.io/crates/tobj)! Adding this library as dependency to tray\_rust can be done
+by adding `tobj = "0.0.8"` to the `[dependencies]` list in the project's Cargo.toml and the crate will be downloaded and available for use
 via `extern crate tobj;`.
 
 For some extra fun I used the Travis-CI integration discussed in Huon's "Travis on the Train" series
@@ -256,24 +256,31 @@ convenient. I've started using this for tray\_rust as well.
 
 Measured Material Data
 ---
-**TODO:** Review, mention extension traits and relation to byteorder crate? Comes back to Rust's super cool extension trait functionality.
-
-The final thing we need to make some really gorgeous images are some high quality material models. There are
+The final thing we need to make some really nice images are accurate material models, ie. ones that can closely approximate
+the reflectance properties of various types of materials. There are
 a wide range of analytical models that we can choose from that attempt to accurately model various
-types of materials, a few are [listed on Wikipedia](http://en.wikipedia.org/wiki/Bidirectional_reflectance_distribution_function#Models).
-The current analytical models supported in tray\_rust are Lambertian, Oren-Nayar and specular relfection and transparency.
-An alternative to analytical models is to directly use measured data acquired by taking real world objects
-and scanning them in some way. These measured models can be a bit harder to use as they don't offer as much
-artist flexibility, but since I'm a terrible artist this isn't really a problem! On excellent source of measured
+types of materials, [Wikipedia](http://en.wikipedia.org/wiki/Bidirectional_reflectance_distribution_function#Models) has a decent list.
+The current analytical models supported in tray\_rust are [Lambertian](http://en.wikipedia.org/wiki/Lambertian_reflectance) (an ideal diffuse material),
+[Oren-Nayar](http://en.wikipedia.org/wiki/Oren%E2%80%93Nayar_reflectance_model) (more accurate model of rough surface reflactance)
+and specular reflection (perfect mirror) and specular transparency (perfectly smooth glass).
+An alternative to analytical models is to use measured data acquired by taking real world objects
+and scanning them in some way to measure their BRDF. These measured models can be a bit harder to use as they don't offer much
+artist flexibility, but since I'm a terrible artist this isn't a problem! One excellent source of measured
 BRDF data is the [MERL BRDF Database](http://www.merl.com/brdf/) which has a wide variety of regularly sampled
 isotropic surface material data, and is what we'll be using here.
 
-The file format itself is a bit odd but is well explained in [PBRT](http://pbrt.org/), after loading the data in access
-is actually quite efficient but the process of loading and scaling the data can seem a bit odd. The file stores
-scaled RGB values for samples taken at various angles of incident and exiting light where components are scaled by
-(1500, 1500, 1500 / 1.66) in the file, so we must apply the inverse. Additionally the values in the files are stored
-in little Endian double precision and in chunks, so all the red values come first, followed by green and then blue. To load these binary files
-I made use of the [byteorder crate](https://crates.io/crates/byteorder).
+The file format itself may seem a bit odd but is well explained in [PBRT](http://pbrt.org/) and after loading the data in access
+is actually quite efficient. The file stores scaled RGB values for samples taken at various angles of incident and exiting light
+where components are scaled by (1500, 1500, 1500 / 1.66) for (R, G, B) in the file, so we must apply the inverse. Additionally the values
+in the files are stored in little Endian double precision and in chunks, so all the red values come first, followed by green and then blue.
+To load these binary files I made use of the [byteorder crate](https://crates.io/crates/byteorder), which brings up another cool feature of Rust:
+extension traits. It's possible for libraries to add new traits to existing types, extending them with new methods. This is kept in check
+by only having traits be in scope if you use them, eg. `use my_lib::CoolTrait` will make CoolTrait's methods available on implementing types.
+The byteorder crate extends methods on types that implement [Read](http://doc.rust-lang.org/std/io/trait.Read.html) with
+[ReadBytesExt](http://burntsushi.net/rustdoc/byteorder/trait.ReadBytesExt.html)
+(see the Implementors section at the bottom) to add on sized binary io methods. This makes integrating new libraries with
+existing types really nice, and if I had some struct that implemented Read using ReadBytesExt would make those same functions available
+on my type!
 
 Results
 ---
@@ -286,12 +293,12 @@ from a reasonably beefy machine we have at the lab with dual
 [Xeon E5-2680 @ 2.7GHz](http://ark.intel.com/products/64583/Intel-Xeon-Processor-E5-2680-20M-Cache-2_70-GHz-8_00-GTs-Intel-QPI),
 I ran tray\_rust with 32 threads for these renders. There is also still a bug in my BVH construction which is leading
 to less than optimal BVHs so I think these times could be improved a bit once I get that fixed. Area lights are also
-still on my todo list, these scenes are just lit by a single point light and as such we don't get any nice soft shadows.
-Render times are formatted as hh:mm:ss along with the total time in milliseconds in parens.
+still on my todo list so these scenes are just lit by a single point light and as such we don't get any nice soft shadows.
+Render times are formatted as hh:mm:ss along with the total time in milliseconds shown in parenthesis.
 
 <div class="col-lg-12 col-md-12 col-xs-12" style="text-align:center">
 <a href="http://i.imgur.com/JouSgr5.png"><img class="img-responsive" src="http://i.imgur.com/JouSgr5.png"></a>
-<p>800x600, 1024 samples, using a black oxidized steel material. Render time: 00:09:00.2 (540208ms)</p>
+<p>800x600, 1024 samples, using a black oxidized steel material. Render time: 00:09:00.208 (540208ms)</p>
 </div>
 <div class="col-lg-12 col-md-12 col-xs-12" style="text-align:center">
 <a href="http://i.imgur.com/t3bLX9W.png"><img class="img-responsive" src="http://i.imgur.com/t3bLX9W.png"></a>
@@ -311,8 +318,8 @@ Render times are formatted as hh:mm:ss along with the total time in milliseconds
 </div>
 <div class="col-lg-12 col-md-12 col-xs-12">
 <a href="http://i.imgur.com/9QU6fOU.png"><img class="img-responsive" src="http://i.imgur.com/9QU6fOU.png"></a>
-<p>1920x1080, 2048 samples, the logo is using black oxidized steel, the Stanford Buddha
-is using a gold metallic paint and the Stanford Dragon is using a blue acrylic. Render time: 01:13:52.13 (4432127ms)</p>
+<p>1920x1080, 2048 samples. The Rust logo is using black oxidized steel, the Stanford Buddha
+is using gold metallic paint and the Stanford Dragon is using blue acrylic. Render time: 01:13:52.13 (4432127ms)</p>
 </div>
 
 Final Thoughts
@@ -320,9 +327,9 @@ Final Thoughts
 There are still a few things left on my todo list for tray\_rust. I need to fix my BVH construction so it doesn't give some
 poor quality splits, add support for area lights and make some kind of scene file format so that changing a scene doesn't require
 re-compiling. I'd also like to implement some more material models, I have a few nice microfacet based analytic models in tray
-to port over and would like to add some sort of rough glass model. Materials with subsurface scattering properties would also
-be really cool to implement. Depending on time I've also got some more advanced rendering methods on my list such as
-bidirectional path tracing and [vertex connection and merging](http://iliyan.com/publications/VertexMerging), a recently introduced
+to port over and would like to add some sort of rough glass model. Materials with [subsurface scattering](http://en.wikipedia.org/wiki/Subsurface_scattering)
+properties would also be really cool to implement. Depending on how much free time I find, I've also got some more advanced rendering
+methods on my list such as bidirectional path tracing and [vertex connection and merging](http://iliyan.com/publications/VertexMerging), a recently introduced
 powerful and robust rendering approach that has seen fast adoption in commercial renderers. There are of course other methods
 that are fun to work with as well, such as photon mapping and its variants, but I'm not sure how much more I want to add to tray\_rust.
 I'm definitely not aiming to implement something as massive and impressive as [Mitsuba](https://www.mitsuba-renderer.org/),
@@ -332,8 +339,8 @@ After working with Rust for a longer period and following changes and developmen
 and look forward to continuing to use it. There are of course some complaints and annoyances I've run into as well though. Good learning material
 can be a bit hard to come by but this is being worked on and should be solid by 1.0. Compiler error messages can be a bit difficult to figure out
 sometimes, especially relating to lifetime issues. Fortunately the community is very helpful in working through these and it sounds like this is on
-the list of post-1.0 work. It's also not possible at the moment to implement memory pool style patterns in Rust, which I used extensively
-in my C++ version. Finally compile times can be pretty slow, especially when compiling with link time optimization. Rust is still a young
+the list of post-1.0 work. It's also not possible at the moment to implement memory pool style patterns in Rust, something which I used extensively
+in my C++ ray tracer. Compile times can be pretty slow, especially when compiling with optimization level 3 and link time optimization. Rust is still a young
 language and I think all of these issues (and more) are on the [priorities after 1.0](https://internals.rust-lang.org/t/priorities-after-1-0/1901)
 list and will be addressed in the future.
 
