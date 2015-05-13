@@ -62,7 +62,8 @@ While it's possible to solve the rendering equation analytically for some very s
 To compute the integral for general scenes we turn to random sampling and employ [Monte Carlo integration](http://en.wikipedia.org/wiki/Monte_Carlo_method). Solving
 the rendering equation with path tracing amounts to tracing millions of rays, taking thousands of samples per pixel to sufficiently sample the integral.
 Starting with an eye ray we find the first surface it hits, sample a light source for direct illumination (if there's many we just pick one at random)
-and compute \\(f(x, w_l, w_o)\\) to modulate this incident light coming along \\(w_l\\). Next we pick a random direction on the hemisphere to shoot another ray
+and compute \\(f(x, w_l, w_o)\\) to modulate this incident light coming along \\(w_l\\). Next we pick a random direction from a cosine weighted distribution
+on the hemisphere to shoot another ray
 to sample indirect lighting and again compute \\(f(x, w_i, w_o)\\) for this direction to modulate the incident indirect light then find what
 this secondary ray hits and repeat. This process can continue infinitely so we'll terminate the ray
 at some configurable number of bounces, since the indirect light reaching our first hit is attenuated at each bounce after a certain depth there's very little
