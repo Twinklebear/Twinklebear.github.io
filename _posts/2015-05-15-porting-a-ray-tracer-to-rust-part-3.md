@@ -1,8 +1,8 @@
 ---
-published: false
+published: true
 layout: post
 title: "Porting a Ray Tracer to Rust, part 3"
-description: "Path Tracing and Meshes"
+description: "Path Tracing the Rust Logo!"
 category:
 tags: ["Rust", "ray tracing", "graphics"]
 ---
@@ -19,7 +19,7 @@ by rendering the Rust logo in Rust using a model made by
 [Nylithius on BlenderArtists](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo).
 
 If you've been following Rust's development a bit you have probably noticed that the timing of this post is not a
-coincidence, since Rust 1.0.0 is being released [today](http://blog.rust-lang.org/2015/02/13/Final-1.0-timeline.html)!
+coincidence, since Rust 1.0.0 is being released [today](http://blog.rust-lang.org/2015/05/15/Rust-1.0.html)!
 
 <!--more-->
 
@@ -298,7 +298,7 @@ and with some friends from the computer graphics community: the Buddha and Drago
 [Stanford 3D Scanning repository](http://graphics.stanford.edu/data/3Dscanrep/). The Rust logo has 28,844 triangles, the version
 of the Buddha I used has 1,087,474 triangles and the version of the Dragon has 871,306 triangles. The render times are
 from a reasonably beefy machine we have at the lab with dual
-[Xeon E5-2680 @ 2.7GHz](http://ark.intel.com/products/64583/Intel-Xeon-Processor-E5-2680-20M-Cache-2_70-GHz-8_00-GTs-Intel-QPI),
+[Xeon E5-2680's @ 2.7GHz](http://ark.intel.com/products/64583/Intel-Xeon-Processor-E5-2680-20M-Cache-2_70-GHz-8_00-GTs-Intel-QPI),
 I ran tray\_rust with 32 threads for these renders. There is also still a bug in my BVH construction which is leading
 to less than optimal BVHs so I think these times could be improved a bit once I get that fixed. Area lights are also
 still on my todo list so these scenes are just lit by a single point light and as such we don't get any nice soft shadows.
