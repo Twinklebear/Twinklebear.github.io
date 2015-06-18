@@ -55,7 +55,7 @@
 	{
 		"title": "μPacket",
 		"image": "http://i.imgur.com/WcM6Rcl.png",
-		"gh_user": "Twinklbear",
+		"gh_user": "Twinklebear",
 		"gh_repo": "micro-packet",
 		"description": "μPacket is an extremely simple packet based ray tracer that uses the AVX/AVX2 instruction
 			set to trace eight rays at once through the scene. Currently it only supports spheres and planes
