@@ -1,4 +1,5 @@
 [
+	[
 	{
 		"title": "tray_rust",
 		"image": "http://i.imgur.com/9QU6fOU.png",
@@ -20,6 +21,38 @@
 			and more advanced integration methods (eg. vertex connection and merging)."
 	},
 	{
+		"title": "tobj",
+		"image": "http://i.imgur.com/wImyNG4.png",
+		"gh_user": "Twinklebear",
+		"gh_repo": "tobj",
+		"description": "tobj is a tiny OBJ loader in Rust that draws inspiration for its API and design from
+			Syoyo's excellent library, [tinyobjloader](https://github.com/syoyo/tinyobjloader).
+			The crate aims to be a simple, fast and
+			lightweight option for loading OBJ and MTL files for easy integration with realtime and offline
+			renderers, or really any other project where you need to load OBJ files!\n\n
+			The image shown is from a demo viewer written to test tobj named
+			[tobj_viewer](https://github.com/Twinklebear/tobj_viewer) displaying the
+			[Rungholt](http://graphics.cs.williams.edu/data/meshes.xml) model. The model can be found on
+			Morgan McGuire's meshes page and was originally built by kescha."
+	},
+	{
+		"title": "ssao",
+		"image": "http://i.imgur.com/byM8iNh.png",
+		"gh_user": "Twinklebear",
+		"gh_repo": "ssao",
+		"description": "This is sort of an implementation of
+			[Scalable Ambient Obscurance by McGuire et al.](http://graphics.cs.williams.edu/papers/SAOHPG12/)
+			however I make a few simplifying shortcuts in my implementation and don't achieve as good performance
+			or quality. I was also unable to get their new recommended estimator to behave so this implementation
+			still uses the Alchemy AO estimator initially recommended in the paper. There's a somewhat longer write
+			up available on [my classpage](http://www.willusher.io/courses/cs6610/) since this was initially
+			implemented as a class project.\n\n
+			The image shows just the ambient occlusion value for a view of the Crytek Sponza scene."
+	}
+	],
+
+	[
+	{
 		"title": "μPacket",
 		"image": "http://i.imgur.com/WcM6Rcl.png",
 		"gh_user": "Twinklbear",
@@ -36,21 +69,6 @@
 			integrator for higher quality images."
 	},
 	{
-		"title": "tobj",
-		"image": "http://i.imgur.com/wImyNG4.png",
-		"gh_user": "Twinklebear",
-		"gh_repo": "tobj",
-		"description": "tobj is a tiny OBJ loader in Rust that draws inspiration for its API and design from
-			Syoyo's excellent library, [tinyobjloader](https://github.com/syoyo/tinyobjloader).
-			The crate aims to be a simple, fast and
-			lightweight option for loading OBJ and MTL files for easy integration with realtime and offline
-			renderers, or really any other project where you need to load OBJ files!\n\n
-			The image shown is from a demo viewer written to test tobj named
-			[tobj_viewer](https://github.com/Twinklebear/tobj_viewer) displaying the
-			[Rungholt](http://graphics.cs.williams.edu/data/meshes.xml) model. The model can be found on
-			Morgan McGuire's meshes page and was originally built by kescha."
-	},
-	{
 		"title": "tray",
 		"image": "http://i.imgur.com/zPpNVDs.png",
 		"gh_user": "Twinklebear",
@@ -64,20 +82,6 @@
 			of my ray tracing work is now going on there."
 	},
 	{
-		"title": "ssao",
-		"image": "http://i.imgur.com/byM8iNh.png",
-		"gh_user": "Twinklebear",
-		"gh_repo": "ssao",
-		"description": "This is sort of an implementation of
-			[Scalable Ambient Obscurance by McGuire et al.](http://graphics.cs.williams.edu/papers/SAOHPG12/)
-			however I make a few simplifying shortcuts in my implementation and don't achieve as good performance
-			or quality. I was also unable to get their new recommended estimator to behave so this implementation
-			still uses the Alchemy AO estimator initially recommended in the paper. There's a somewhat longer write
-			up available on [my classpage](http://www.willusher.io/courses/cs6610/) since this was initially
-			implemented as a class project.\n\n
-			The image shows just the ambient occlusion value for a view of the Crytek Sponza scene."
-	},
-	{
 		"title": "lfwatch",
 		"gh_user": "Twinklebear",
 		"gh_repo": "lfwatch",
@@ -86,5 +90,6 @@
 			about the file change event. This was written to do hot reloading of GLSL shaders but could be
 			useful for some other applications."
 	}
+	]
 ]
 
