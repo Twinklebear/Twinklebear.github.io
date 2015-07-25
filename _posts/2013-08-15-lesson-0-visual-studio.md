@@ -132,7 +132,6 @@ project selection page.
 <a href="/assets/img/lesson_0_vs/selecting_a_template.png">
 <img class="centered" width="600" height="auto"
 	src="/assets/img/lesson_0_vs/selecting_a_template.png">
-</img>
 </a>
 <br />
 
