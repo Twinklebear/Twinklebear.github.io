@@ -1,0 +1,21 @@
+[
+	[
+		{
+			"title": "CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees",
+			"authors": "Ingo Wald, Aaron Knoll, Gregory P. Johnson, Will Usher, Valerio Pasucci, Michael E. Papka",
+			"venue": "*IEEE Visweek 2015* (to appear)",
+			"url": "http://sci.utah.edu/~will/pkd_tree.pdf",
+			"image": "http://sci.utah.edu/~will/pkd_tree_header.png",
+			"abstract": "We present a novel approach to rendering large particle data sets from molecular dynamics,
+						 astrophysics and other sources. We employ a new data structure adapted from the original
+						 balanced k-d tree, which allows for representation of data with trivial or no overhead.
+						 In the OSPRay visualization framework, we have developed an efficient CPU algorithm for
+						 traversing, classifying and ray tracing these data. Our approach is able to render up
+						 to billions of particles on a typical workstation, purely on the CPU, without any
+						 approximations or level-of-detail techniques, and optionally with attribute-based color
+						 mapping, dynamic range query, and advanced lighting models such as ambient occlusion
+						 and path tracing."
+		}
+	]
+]
+
