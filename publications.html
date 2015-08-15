@@ -9,9 +9,9 @@ title: Publications
 	{% for pub in col %}
 	<div class="col-lg-12 col-md-12 col-s-12 col-xs-12">
 		<a href="{{ pub.url }}"><h3>{{ pub.title }}</h3></a>
-		{% if pub.image %}
+		{% if pub.image && pub.thumb %}
 		<a href="{{ pub.image }}">
-			<img class="img-responsive" src="{{ pub.image }}"
+			<img class="img-responsive" src="{{ pub.thumb }}"
 				style="padding-bottom:8px;padding-left:8px;padding-right:8px;"/>
 		</a>
 		{% endif %}
