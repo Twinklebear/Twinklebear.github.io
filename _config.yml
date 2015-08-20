@@ -29,7 +29,7 @@ production_url : www.willusher.io
 
 nav_pages:
     - {title: Projects, group: navigation, url: /projects.html}
-    - {title: Publications, group: navigation, url: /publications.html}
+#    - {title: Publications, group: navigation, url: /publications.html}
     - {title: SDL2 Tutorials, group: navigation, url: /pages/sdl2}
     - {title: Archive, group: navigation, url: /archive.html}
 #   - {title: Categories, group: navigation, url: /categories.html}
