@@ -4,6 +4,8 @@ body {
 body .content {
 	background-color: white;
 	border-radius: 0px 0px 6px 6px;
+	font-size: 17px;
+	line-height: 1.35em;
 }
 /* Chuck out bootstrap's syntax highlighting stuff */
 pre, pre code {
@@ -13,7 +15,7 @@ pre, pre code {
 	padding-left: 8px;
 	padding-right: 8px;
 	margin: 0px 0px 0px;
-	font-size: 1em;
+	font-size: 14px;
 	color: white;
 	line-height: 1.42857;
 	color: white;
