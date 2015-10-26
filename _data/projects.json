@@ -69,6 +69,18 @@
 			integrator for higher quality images."
 	},
 	{
+		"title": "bspline",
+		"image": "http://i.imgur.com/RUEw8EW.png",
+		"gh_user": "Twinklebear",
+		"gh_repo": "bspline",
+		"description": "A Rust library for computing B-spline interpolating curves on generic control points.
+			bspline can be used to evaluate B-splines of varying orders on any type that can be linearly
+			interpolated, ranging from floats, positions, RGB colors to transformation matrices and so on.
+
+			The bspline logo (above) was generated using this library with a cubic B-spline in 2D for the
+			positioning of the curve and a quadratic B-spline in RGB space to color it."
+	},
+	{
 		"title": "tray",
 		"image": "http://i.imgur.com/zPpNVDs.png",
 		"gh_user": "Twinklebear",
