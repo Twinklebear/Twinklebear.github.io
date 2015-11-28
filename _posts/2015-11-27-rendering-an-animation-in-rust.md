@@ -43,15 +43,19 @@ will appear as more noise.
 
 To pick the time ranges to assign to rays we chop the time for the scene, say four seconds, into frames. We can
 pick a common film framerate of 24 frames per second, or whatever we want really. At 24 FPS we'll need 96 frames
-in total for this scene where each one captures about 0.041667 seconds of the scene. We can have a simple loop
+in total for this scene where each one captures 1/24 seconds of the scene. We can have a simple loop
 over the frames to render that will update the camera's shutter open/close times appropriately and when picking
 the time value for a ray we scale our random sample into the current shutter time.
 
 An interesting thing to explore is how changing the shutter open time effects the captured frame. In movies
-the shutter is typically open for 1/48 of a second for a 1/24 second frame time, it's open for half
-the frame since the shutter that blocks the light is 180 degrees. In [Saving Private Ryan](http://cinemashock.org/2012/07/30/45-degree-shutter-in-saving-private-ryan/) they used a 45 degree shutter, resulting in a shutter
-open time of just 1/192 seconds, resulting in much less motion blur appearing on moving objects. This is not
-currently implemented in `tray_rust` but is on my list and should be cool to try out.
+the shutter is typically open for 1/48 of a second for a 1/24 second frame time. It's open for half
+the frame since the shutter that blocks the light is 180 degrees. In
+[Saving Private Ryan](http://cinemashock.org/2012/07/30/45-degree-shutter-in-saving-private-ryan/) they
+used a 45 degree shutter, resulting in a shutter open time of just 1/192 seconds, resulting in less
+motion blur appearing on moving objects. This is not currently implemented in `tray_rust` but is on my list
+and should be cool to try out.
+
+**TODO:** Maybe we could have some kind of D3/SVG animation showing the different shutters in motion?
 
 # Transforming Objects Over Time
 
@@ -76,8 +80,65 @@ current smaller time range we're actually rendering.
 
 # Smooth Animations with B-Splines
 
+We would also like the motion that our objects go through to be smooth, that is the paths they follow should
+not have discontinuities (unless we actually want them) and they should smoothly accelerate when starting
+and stopping the motion. This leaves us with a small problem, since linear interpolation between the nearest
+two transforms at some time will give exactly this (**TODO show lines vs. b-spline)**,
+as it's equivalent to just drawing lines between the control transforms we specify for the path.
+
+To compute smooth animation paths from the list of control transforms for the object we can use
+[B-Splines](https://en.wikipedia.org/wiki/B-spline), which will smoothly interpolate the transforms,
+though may not exactly pass through them. There wasn't an existing B-Spline interpolation library in
+Rust so I created
+a [generic one](https://github.com/Twinklebear/bspline) which lets us see some more of the power of the trait
+system. A B-Spline curve can be used to interpolate anything "control point" type that can be linearly
+interpolated, since computing a point on the spline can be treated as a sequence of linear interpolations
+that build on each other. So in Rust our library can define a trait for types that can be linearly interpolated:
+
+{% highlight rust %}
+pub trait Interpolate {
+    // Linearly interpolate between `self` and `other` using `t`, for example with floats:
+    // self * (1.0 - t) + other * t
+    fn interpolate(&self, other: &Self, t: f32) -> Self;
+}
+{% endhighlight %}
+
+For convenience we can even provide a default implementation for any types which can be multiplied by a float,
+added to each other and copied (to return the result). Then if someone uses our Interpolate trait they
+won't necessarily need to write this simple implementation themselves, they would only need to provide it
+in the case that their type needed some special handling (e.g. spherical linear interpolation for quaternions).
+
+
+{% highlight rust %}
+impl<T: Mul<f32, Output = T> + Add<Output = T> + Copy> Interpolate for T {
+    fn interpolate(&self, other: &Self, t: f32) -> Self {
+        *self * (1.0 - t) + *other * t
+    }
+}
+{% endhighlight %}
+
+Then our B-Spline curve can operate on any type that implements Interpolate and Copy. We need copy to save
+intermediate results and return the final interpolated value. So our B-Spline struct turns out like so:
+
+{% highlight rust %}
+pub struct BSpline<T: Interpolate + Copy> {
+    // Degree of the polynomial that we use to make the curve segments
+    degree: usize,
+    // Control points for the curve
+    control_points: Vec<T>,
+    // The knot vector
+    knots: Vec<f32>,
+}
+{% endhighlight %}
+
+**TODO:** Something comparing linear motion with b-spline pathed motion? Or some kind of ease-in/out thing.
+Could maybe show an example B-Spline curve w/ D3.
 
 # Creating and Rendering a Cool Scene!
 
-At last the pay-off...
+With all the pieces together all that's left to do is make a really awesome animation! This is actually
+a bit challenging at the moment since I don't have any sort of graphical editor (and no plugin for Blender).
+Creating a scene is currently done by typing in the control transforms, knot vectors and so on into
+a [huge JSON scene file **todo: link to scene on github**]() and then testing if you've got about what you
+had in mind by rendering some lower resolution frames to see the motion.
 
