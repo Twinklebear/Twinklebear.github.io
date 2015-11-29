@@ -118,7 +118,7 @@ impl<T: Mul<f32, Output = T> + Add<Output = T> + Copy> Interpolate for T {
 {% endhighlight %}
 
 Then our B-Spline curve can operate on any type that implements Interpolate and Copy. We need copy to save
-intermediate results and return the final interpolated value. So our B-Spline struct turns out like so:
+intermediate results and return the final interpolated value. So our B-Spline struct turns out like this:
 
 {% highlight rust %}
 pub struct BSpline<T: Interpolate + Copy> {
@@ -132,7 +132,7 @@ pub struct BSpline<T: Interpolate + Copy> {
 {% endhighlight %}
 
 **TODO:** Something comparing linear motion with b-spline pathed motion? Or some kind of ease-in/out thing.
-Could maybe show an example B-Spline curve w/ D3.
+Could maybe show an example B-Spline curve w/ D3 compared to a linear interpolation.
 
 # Creating and Rendering a Cool Scene!
 
@@ -140,5 +140,40 @@ With all the pieces together all that's left to do is make a really awesome anim
 a bit challenging at the moment since I don't have any sort of graphical editor (and no plugin for Blender).
 Creating a scene is currently done by typing in the control transforms, knot vectors and so on into
 a [huge JSON scene file **todo: link to scene on github**]() and then testing if you've got about what you
-had in mind by rendering some lower resolution frames to see the motion.
+had in mind by rendering some lower resolution frames to see the motion. As a result of this putting together
+even just this 25 second animation took quite a while, since I'd spend a lot of time playing with object
+and camera paths, materials and so on. I also encountered and fixed a few bugs in while working on the scene
+which took some time as well. The animation is 1920x1080 and was rendered at 2048 samples per pixel.
+
+(**TODO** Embed youtube of the animation)
+
+This animation contains quite a few different models:
+
+- The Stanford Bunny, Buddha, Dragon and Lucy from the [Stanford 3D Scanning Repository]()
+- The Utah Teapot (I used [Morgan McGuire's version]())
+- Low-poly trees from [Kenny.nl]()
+- The Ajax bust from [site link]()
+- The Rust logo modeled by [that guy]()
+- The Cow model from [place in the obj file]()
+
+Additionally I make use of a mix of analytic and measured material models, the measured materials come
+from the [MERL BRDF Database]().
+
+## Render Time
+
+The scene was rendered in a sort-of distributed fashion. While at the time I rendered this `tray_rust` didn't
+support true distributed rendering it's simple enough to just assign a subset of the frames to each machine
+and have them split the work. Each frame is saved out as a png which I then stitch together into the final
+movie using ffmpeg. This allows for reasonably effective use of a cluster of machines as long as you have more
+frames than nodes.
+
+To render the scene I used two clusters at my lab which are pretty quiet over the weekend. I used 40 nodes
+with two Xeon X5550's per node on one cluster and 20 nodes with two Xeon E5-2660's per node for a total
+of 1280 logical cores (640 physical). I tried to balance the performance of the nodes when assigning frames
+to aim for an even-ish work distribution. The scene took a wall time of ~53 hours to render, due to some
+of my jobs starting a bit later than other ones. The total wall time (sum of all nodes) is 2772 hours,
+so on average it was about 46.2 hours per node of wall time. The total CPU time (sum of all nodes) was
+56853 hours. Without using these clusters I don't think I would have been able to render in 1080p, simply
+due to how long it would have taken! I definitely need to spend some time improving the performance of
+my ray tracer.
 
