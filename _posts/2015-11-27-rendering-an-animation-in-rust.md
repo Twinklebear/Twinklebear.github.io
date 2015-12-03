@@ -16,24 +16,6 @@ we can associate time points with transformations of objects to make them move a
 paths with B-Splines. Then we'll wrap up with rendering a really cool animation by using 60 different
 nodes spread across two clusters at my lab to render subsequences of the animation's frames.
 
-# TODO: Topics to cover
-
-1. Concept of sampling time with rays to get motion and motion blur
-	- Could also talk about possibilities to extend current system with varying shutter times vs. frame time
-
-2. Transforms of objects (and light emission) are now tied to time values
-	- Also mention no skeletal animation currently
-	- Mention that since the camera is also positioned w/ transform we can animate it as well
-	- Re-building the BVH each frame
-
-3. B-spline transformations for rigid body animation paths (mention bspline crate)
-	- Maybe we can show some comparisons of SVG animations or something with linear vs. b-spline based?
-
-4. Rendering of the raytracing compo animation, describe how the frames were distributed and
-rendering time spent
-	- Also mention limitations of no graphical editor, describe how people could make their own scenes,
-	should commit the compo scene to repo
-
 <!--more-->
 
 # Rendering Time
@@ -178,46 +160,54 @@ I don't have a GUI editor for tray\_rust.
 # Creating and Rendering a Cool Scene!
 
 With all the pieces together all that's left to do is make a really awesome animation! This is actually
-kind of challenging at the moment since I don't have any sort of graphical editor (and no plugin for Blender).
-To create a scene you must type in the control transforms, knot vectors and so on into a (potentiall huge)
-[JSON scene file **todo: link to scene on github**]() and then testing if you've got about what you
-had in mind by rendering some lower resolution frames to see the position and motion of objects and the camera.
-As a result of this putting together
-even just this 25 second animation took quite a while, since I'd spend a lot of time playing with object
-and camera paths, materials and so on. I also found and fixed a few bugs while working on the scene,
-which took some time as well (but flushing out bugs is a good use of time). The animation is
-1920x1080 and was rendered at 2048 samples per pixel, to get 25 seconds at 24 FPS it took 600 frames.
+a bit challenging at the moment since I don't have any sort of graphical editor (and no plugin for Blender).
+To create a scene you must type in the control transforms, knot vectors and so on into a (potentially huge)
+[JSON scene file **todo: link to scene on github**]() and then check if you've got about what you
+had in mind by rendering some lower resolution frames to see the motion of objects and the camera.
+Putting together even just this short 25 second animation took quite a while, since I'd spend a
+lot of time playing with object and camera paths, materials and so on. I also found and fixed a few bugs
+while working on the animation which took some time as well. The animation is
+1920x1080 and was rendered at 2048 samples per pixel, to get 25 seconds of animation at 24 frames
+per second we need to render 600 individual frames. Each frame is saved out as a separate png, to produce
+the animation I used ffmpeg to stitch them together into a video.
 
 (**TODO** Embed youtube of the animation)
 
 This animation contains quite a few different models:
 
-- The Stanford Bunny, Buddha, Dragon and Lucy from the [Stanford 3D Scanning Repository]()
-- The Utah Teapot (I used [Morgan McGuire's version]())
-- Low-poly trees from [Kenny.nl]()
-- The Ajax bust from [site link]()
-- The Rust logo modeled by [that guy]()
-- The Cow model from [place in the obj file]()
+- The Stanford Bunny, Buddha, Dragon and Lucy are from the
+[Stanford 3D Scanning Repository](http://graphics.stanford.edu/data/3Dscanrep/)
+
+- The Utah Teapot (I used [Morgan McGuire's version](http://graphics.cs.williams.edu/data/meshes.xml))
+
+- Low-poly pine trees by [Kenney](http://kenney.nl/)
+
+- The Ajax bust is from [jotero](http://forum.jotero.com/viewtopic.php?t=3)
+
+- The Rust logo modeled by [Nylithius](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo)
+
+- The Cow model is from Viewpoint Animation, I downloaded the model from the Suggestive Contours paper
+[example page](http://gfx.cs.princeton.edu/proj/sugcon/models/).
 
 Additionally I make use of a mix of analytic and measured material models, the measured materials come
-from the [MERL BRDF Database]().
+from the [MERL BRDF Database](http://www.merl.com/brdf/).
 
 ## Render Time
 
-The scene was rendered in a sort-of distributed fashion. While at the time I rendered this tray\_rust didn't
-support true distributed rendering it's simple enough to just assign a subset of the frames to each machine
-and have them split the work. Each frame is saved out as a png which I then stitch together into the final
-movie using ffmpeg. This allows for reasonably effective use of a cluster of machines as long as you have more
-frames than nodes.
+When I rendered this tray\_rust didn't support true distributed rendering, however a simple and effective
+approach is to just assign a subset of the frames to each machine so they split the work.
+Since each frame is saved out as a png each node's job is completely independent of the others so we can
+just launch the renderer on a bunch of different machines and not worry much about fault handling or
+communication overhead (since there's none). This method actually achieves pretty effective use of a cluster,
+as long as you have more frames than nodes.
 
-To render the scene I used two clusters at my lab which are pretty quiet over the weekend. I used 40 nodes
-with two Xeon X5550's per node on one cluster and 20 nodes with two Xeon E5-2660's per node for a total
-of 1280 logical cores (640 physical). I tried to balance the performance of the nodes when assigning frames
-to aim for an even-ish work distribution. The scene took a wall time of ~53 hours to render, due to some
-of my jobs starting a bit later than other ones. The total wall time (sum of all nodes) is 2772 hours
-(16.5 weeks!),
-so on average it was about 46.2 hours per node of wall time. The total CPU time (sum of all nodes) was
-56853 hours (6.486 years!. Without using these clusters I don't think I would have been able to render
-in 1080p, simply due to how long it would have taken! I definitely need to spend some time improving the
-performance of my ray tracer.
+To render the scene I used two clusters at my lab which don't get much use over the weekend. I used 40 nodes
+with two Xeon X5550's per node on one cluster and 20 nodes with two Xeon E5-2660's per node on the other,
+for a total of 1280 logical cores (640 physical). I tried to balance the performance of the nodes when
+assigning frames to aim for an even-ish work distribution. The scene took a wall time of ~53 hours to render
+due to some of my jobs starting a bit later than other ones. The total wall time (sum of all nodes) is 2772 hours
+(16.5 weeks!), on average rendering took about 46.2 hours per node (wall time). The total CPU time
+(sum of all nodes) was 56853 hours (6.486 years!). Without using these clusters I don't think I would have
+been able to render in 1080p, just due to how long it would have taken. I definitely need to spend some time
+improving the performance of tray\_rust.
 
