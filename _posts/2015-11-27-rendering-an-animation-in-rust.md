@@ -173,19 +173,14 @@ the animation I used ffmpeg to stitch them together into a video.
 
 (**TODO** Embed youtube of the animation)
 
-This animation contains quite a few different models:
+The animation contains quite a few different models:
 
 - The Stanford Bunny, Buddha, Dragon and Lucy are from the
 [Stanford 3D Scanning Repository](http://graphics.stanford.edu/data/3Dscanrep/)
-
 - The Utah Teapot (I used [Morgan McGuire's version](http://graphics.cs.williams.edu/data/meshes.xml))
-
 - Low-poly pine trees by [Kenney](http://kenney.nl/)
-
 - The Ajax bust is from [jotero](http://forum.jotero.com/viewtopic.php?t=3)
-
-- The Rust logo modeled by [Nylithius](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo)
-
+- A Rust logo model by [Nylithius](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo)
 - The Cow model is from Viewpoint Animation, I downloaded the model from the Suggestive Contours paper
 [example page](http://gfx.cs.princeton.edu/proj/sugcon/models/).
 
