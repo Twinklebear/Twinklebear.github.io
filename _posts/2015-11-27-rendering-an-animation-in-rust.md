@@ -87,7 +87,7 @@ While it may be possible with the current system it would be pretty slow and ine
 We would also like the motion that our objects go through to be smooth, that is the paths they follow should
 not have discontinuities (unless we actually want them) and they should smoothly accelerate when starting
 and stopping the motion. This leaves us with a small problem, since linear interpolation between the nearest
-two transforms at some time is likely to give disconituities in paths and not have smooth acceleration. Additionally,
+two transforms at some time is likely to give discontinuities in paths and not have smooth acceleration. Additionally,
 since linear interpolation is equivalent to drawing lines between the transforms we specify, it would be tedious
 to set up an animation that followed a smooth curve as it would require many tiny linear paths to approximate.
 
@@ -171,7 +171,15 @@ while working on the animation which took some time as well. The animation is
 per second we need to render 600 individual frames. Each frame is saved out as a separate png, to produce
 the animation I used ffmpeg to stitch them together into a video.
 
-(**TODO** Embed youtube of the animation)
+Here's the resulting video. If you'd prefer to watch on youtube I've [uploaded it there]() as well but the quality is
+not as good due to compression. If your browser doesn't play the video you can
+[download it](http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4) and watch it locally.
+
+<video class="img-responsive" src="http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4" type="video/mp4" controls
+	style="padding-top:16px;padding-bottom:16px;">
+Sorry your browser doesn't support HTML5 video, but don't worry you can download the video
+<a href="http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4">here</a> and watch it locally.
+</video>
 
 The animation contains quite a few different models:
 
@@ -189,9 +197,9 @@ from the [MERL BRDF Database](http://www.merl.com/brdf/).
 
 ## Render Time
 
-When I rendered this tray\_rust didn't support true distributed rendering, however a simple and effective
-approach is to just assign a subset of the frames to each machine so they split the work.
-Since each frame is saved out as a png each node's job is completely independent of the others so we can
+When I rendered this animation tray\_rust didn't support true distributed rendering, however a simple and effective
+approach is to assign a subset of the frames to each machine so they split the work.
+Since each frame is saved out as a png each nodes job is completely independent of the others so we can
 just launch the renderer on a bunch of different machines and not worry much about fault handling or
 communication overhead (since there's none). This method actually achieves pretty effective use of a cluster,
 as long as you have more frames than nodes.
