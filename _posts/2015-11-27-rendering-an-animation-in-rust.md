@@ -10,23 +10,24 @@ tags: ["Rust", "ray tracing", "graphics", "animation"]
 ---
 {% include JB/setup %}
 
-In this post we'll look at implementing a pretty awesome new feature in [tray\_rust](https://github.com/Twinklebear/tray_rust),
+In this post we'll look at adding a pretty awesome new feature to [tray\_rust](https://github.com/Twinklebear/tray_rust),
 something I've never implemented before: animation! We'll take a look at a simple way for sampling time in our scene, how
 we can associate time points with transformations of objects to make them move and how to compute smooth animation
 paths with B-Splines. Then we'll wrap up with rendering a really cool animation by using 60 different
-nodes spread across two clusters at my lab to render subsequences of the animation's frames.
+machines spread across two clusters at my lab to render subsets of the animation's total set of frames.
 
 <!--more-->
 
 # Rendering Time
 
-Now that objects in our scene move over time, we need some way to account for time when rendering
-a scene. A straightforward approach is to consider time as just another variable we're integrating over in
-the [rendering equation](https://en.wikipedia.org/wiki/Rendering_equation). When we shoot a ray to sample
+Now that we want objects in our scene to move over time, we need some way to account for time when rendering.
+A straightforward approach is to consider time as just another variable we're integrating over in
+the [rendering equation](https://en.wikipedia.org/wiki/Rendering_equation) (Wikipedia is one step ahead of us and
+already has time in the equation). When we shoot a ray to sample
 a pixel in the scene we're also sampling a specific point in time, so each ray will have a time value
 associated with it. This time value will allow us to find out where objects are when this ray "see's" the scene
 so to speak. Since we blend our samples together to form the final image this will also let us compute nice motion
-blur, though it will require more samples as it introduces further variance into the image which
+blur, though it will require more samples as it introduces further variance into the image, which
 will appear as more noise.
 
 To pick the time values to assign to rays we chop up the time for the scene, say four seconds, into frames. We can
@@ -34,18 +35,18 @@ pick a common film framerate of 24 frames per second, or whatever we want really
 for a 4 second scene, where each frame captures 1/24 of a second of the scene. We can have a simple loop
 over the frames to be rendered that will update the camera's shutter open/close times to span the current frame.
 When firing a new ray into the scene we pick its time value by scaling a random sample in \[0, 1\] into the current shutter time range.
-This way we'll advance the scene forward in time by advancing the camera's shutter time (so we see motion) and
-will sample a range of time values at for frame while the shutter is open (so we see motion blur).
+This way we'll advance the scene forward in time by advancing the camera's shutter time (so we see motion across frames) and
+will sample a range of time values at for frame while the shutter is open (so we see motion blur in a frame).
 
-An interesting technique to explore is how changing how long the shutter is open for each frame effects the captured image.
+An interesting technique to explore is how changing the length of time the shutter is open for each frame effects the captured image.
 In movies the shutter is typically open for 1/48 of a second for a 1/24 second frame time. It's open for half
 the frame since the shutter that blocks the light is 180 degrees and rotates 360 degrees every 1/24 a second. In
 [Saving Private Ryan](http://cinemashock.org/2012/07/30/45-degree-shutter-in-saving-private-ryan/) they
-used a 45 degree shutter giving in a shutter open time of just 1/192 of a second. This results in less
-motion blur appearing on moving objects since the range of time we sample is much shorter and the object moves
-less while the shutter is open. This is not currently supported in tray\_rust but is on my list and should be really
-cool to implement. For example by controlling the shutter speed we can reduce the motion blur and get a stop
-motion appearance to our animations.
+used a 45 degree shutter giving a shutter open time of just 1/192 of a second. This results in less
+motion blur appearing on moving objects since the range of time we sample is much shorter so the object moves
+a shorter distance while the shutter is open. This is not currently supported in tray\_rust but is on my list and should be really
+cool to implement. For example by controlling the shutter speed we can reduce the amount of motion blur we see and create a stop
+motion appearance in our animations.
 
 <figure class="img-responsive">
 	<img class="img-responsive" src="http://i.imgur.com/Q98K76K.png" alt="Shutter Angle, wikipedia" />
@@ -57,11 +58,11 @@ motion appearance to our animations.
 
 To get rigid body animation we can associate an object's transform with a specific point in time and interpolate
 between one or more neighboring transforms (in time) to animate it during the scene.
-This falls out of our rays sampling a specific point in time, when we want to compute where the object is at
-the time this ray traverses the scene we can interpolate its transformations near the time point to compute its
+This falls out of our rays sampling a specific point in time. When we want to compute where the object is at
+the time this ray traverses the scene we can interpolate the transformations near the time point to compute its
 transform at the ray's time.
 By sampling over the shutter time and across multiple frames we can move an object in the scene and
-compute both motion blur as it moves. In order to properly interpolate the transforms they are decomposed
+compute motion blur as it moves. In order to properly interpolate the transforms they are decomposed
 into separate translation, scaling and rotation components, interpolated separately and then combined to the
 final transformation.
 
@@ -74,32 +75,36 @@ for objects must actually bound them over the time range that we're rendering fo
 objects can actually disappear or get clipped because we won't traverse the acceleration structure to
 intersect them since we think we miss their bounding box! My current approach is to sample the
 transformation of the object over the current shutter time and find the union of these bounding boxes. This is
-not the most accurate solution ([pbrt-v3](https://github.com/mmp/pbrt-v3) introduces a better one) but is
+not the most accurate solution ([pbrt-v3](https://github.com/mmp/pbrt-v3) introduces a better one) but it's
 simple to implement. To try and avoid the BVH becoming low quality due to the motion of objects causing all their
 bounding boxes to overlap (thus requiring us to traverse the tree deeper) I also re-build the BVH each frame to only contain
 the motion bounds of objects within the current shutter time range we're actually rendering (e.g. 1/24 of a second at 24 FPS).
 
 One thing worth mentioning is that currently tray\_rust doesn't support skeletal animation, just rigid body animation.
-While it may be possible with the current system it would be pretty slow and inefficient.
+While it may be possible with the current system it would be pretty slow and inefficient. There currently is no support
+for bone transforms that would be weighted and referenced by many triangles and my current BVH construction is too slow
+to efficiently handle animating complicated meshes. Animated meshes would also cause problems for the instancing system,
+where different instances can go through different animations at any time.
 
 # Smooth Animations with B-Splines
 
-We would also like the motion that our objects go through to be smooth, that is the paths they follow should
+We would like the motion our objects go through to be smooth, that is the paths they follow should
 not have discontinuities (unless we actually want them) and they should smoothly accelerate when starting
 and stopping the motion. This leaves us with a small problem, since linear interpolation between the nearest
 two transforms at some time is likely to give discontinuities in paths and not have smooth acceleration. Additionally,
 since linear interpolation is equivalent to drawing lines between the transforms we specify, it would be tedious
-to set up an animation that followed a smooth curve as it would require many tiny linear paths to approximate.
+to set up an animation that followed a smooth curve as it would require many tiny linear paths to approximate the
+smooth path we actually want.
 
 To compute smooth animation paths from the list of control transforms for the object we can use
-[B-Splines](https://en.wikipedia.org/wiki/B-spline), which will smoothly interpolate the transforms
+[B-Splines](https://en.wikipedia.org/wiki/B-spline), which will smoothly interpolate the transforms,
 though may not exactly pass through them. There wasn't an existing B-Spline interpolation library in
 Rust so I created a [generic one](https://github.com/Twinklebear/bspline). In the implementation of this
-library we can also explore another powerful aspect of Rust's trait system.
+library we also get to explore another powerful aspect of Rust's trait system.
 To compute a point on the curve we perform a sequence of linear interpolations that build on each other,
 thus a B-Spline curve can be used to interpolate any "control point" type that can be linearly
-interpolated, e.g. 2/3D positions, even RGB colors.
-Our library can define a trait for types that can be linearly interpolated:
+interpolated, e.g. 2/3D positions, RGB colors or even transformations. Our library can define a trait for
+types that can be linearly interpolated:
 
 {% highlight rust %}
 pub trait Interpolate {
@@ -154,12 +159,13 @@ included with the library.
 </div>
 
 Although the B-Spline curve provides us with a much smoother and more desirable animation path it also doesn't pass
-through the control points that manipulate the curve. This makes it slightly challenging to model animations with since
-I don't have a GUI editor for tray\_rust.
+through the control points that manipulate the curve. This makes it somewhat challenging to model animations since
+I don't have a GUI editor for tray\_rust and it's tough to visualize how the curve looks when typing in control
+transforms and knots.
 
 # Creating and Rendering a Cool Scene!
 
-With all the pieces together all that's left to do is make a really awesome animation! This is actually
+With the pieces together all that's left to do is make a really awesome animation! This is actually
 a bit challenging at the moment since I don't have any sort of graphical editor (and no plugin for Blender).
 To create a scene you must type in the control transforms, knot vectors and so on into a (potentially huge)
 [JSON scene file **todo: link to scene on github**]() and then check if you've got about what you
@@ -171,7 +177,7 @@ while working on the animation which took some time as well. The animation is
 per second we need to render 600 individual frames. Each frame is saved out as a separate png, to produce
 the animation I used ffmpeg to stitch them together into a video.
 
-Here's the resulting video. If you'd prefer to watch on youtube I've [uploaded it there]() as well but the quality is
+Here's the resulting video. If you'd prefer to watch on YouTube I've [uploaded it there](https://youtu.be/sweEpfRyDlE) as well but the quality is
 not as good due to compression. If your browser doesn't play the video you can
 [download it](http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4) and watch it locally.
 
@@ -199,7 +205,7 @@ from the [MERL BRDF Database](http://www.merl.com/brdf/).
 
 When I rendered this animation tray\_rust didn't support true distributed rendering, however a simple and effective
 approach is to assign a subset of the frames to each machine so they split the work.
-Since each frame is saved out as a png each nodes job is completely independent of the others so we can
+Since each frame is saved out as a png each node's job is completely independent of the others so we can
 just launch the renderer on a bunch of different machines and not worry much about fault handling or
 communication overhead (since there's none). This method actually achieves pretty effective use of a cluster,
 as long as you have more frames than nodes.
@@ -207,10 +213,10 @@ as long as you have more frames than nodes.
 To render the scene I used two clusters at my lab which don't get much use over the weekend. I used 40 nodes
 with two Xeon X5550's per node on one cluster and 20 nodes with two Xeon E5-2660's per node on the other,
 for a total of 1280 logical cores (640 physical). I tried to balance the performance of the nodes when
-assigning frames to aim for an even-ish work distribution. The scene took a wall time of ~53 hours to render
+assigning frames to aim for an even-ish work distribution. The scene took a wall time of about 53 hours to render
 due to some of my jobs starting a bit later than other ones. The total wall time (sum of all nodes) is 2772 hours
 (16.5 weeks!), on average rendering took about 46.2 hours per node (wall time). The total CPU time
 (sum of all nodes) was 56853 hours (6.486 years!). Without using these clusters I don't think I would have
-been able to render in 1080p, just due to how long it would have taken. I definitely need to spend some time
+been able to render in 1080p, just due to how long it would have taken. I definitely need to spend some more time
 improving the performance of tray\_rust.
 
