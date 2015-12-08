@@ -182,7 +182,7 @@ not as good due to compression. If your browser doesn't play the video you can
 [download it](http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4) and watch it locally.
 
 <video class="img-responsive" src="http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4" type="video/mp4" controls
-	style="padding-top:16px;padding-bottom:16px;">
+	style="padding-top:16px;padding-bottom:16px;" preload="metadata" poster="http://i.imgur.com/ftJyrnA.jpg">
 Sorry your browser doesn't support HTML5 video, but don't worry you can download the video
 <a href="http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4">here</a> and watch it locally.
 </video>
