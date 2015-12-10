@@ -12,7 +12,7 @@
 			and various physically based material models (including measured data from the
 			[MERL BRDF Database](http://www.merl.com/brdf/)) along with rigid body animation and distributed rendering. More
 			details on rendering performance and other features can be found in the readme
-			[README](https://github.com/Twinklebear/tray_rust/blob/master/README.md)\n\n
+			[README](https://github.com/Twinklebear/tray_rust/blob/master/README.md).\n\n
 			In the image above the Rust logo model was made by
 			[Nylithius on BlenderArtists](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo) and
 			the Buddha and Dragon are from the [Stanford 3D Scanning Repository](http://graphics.stanford.edu/data/3Dscanrep/)
