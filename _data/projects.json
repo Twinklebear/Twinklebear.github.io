@@ -10,15 +10,13 @@
 			[tray](https://github.com/Twinklebear/tray) to [Rust](http://www.rust-lang.org) to check out the language.
 			The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon),
 			and various physically based material models (including measured data from the
-			[MERL BRDF Database](http://www.merl.com/brdf/)). Rendering performance is also pretty decent, some
-			more details on timings and hardware used can be found in the
+			[MERL BRDF Database](http://www.merl.com/brdf/)) along with rigid body animation and distributed rendering. More
+			details on rendering performance and other features can be found in the readme
 			[README](https://github.com/Twinklebear/tray_rust/blob/master/README.md)\n\n
 			In the image above the Rust logo model was made by
 			[Nylithius on BlenderArtists](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo) and
 			the Buddha and Dragon are from the [Stanford 3D Scanning Repository](http://graphics.stanford.edu/data/3Dscanrep/)
-			The materials on the Rust logo, Buddha and Dragon are from the [MERL BRDF Database](http://www.merl.com/brdf/).\n\n
-			In the future I plan to add support for area lights, more complex materials (eg. subsurface scattering)
-			and more advanced integration methods (eg. vertex connection and merging)."
+			The materials on the Rust logo, Buddha and Dragon are from the [MERL BRDF Database](http://www.merl.com/brdf/)."
 	},
 	{
 		"title": "tobj",
