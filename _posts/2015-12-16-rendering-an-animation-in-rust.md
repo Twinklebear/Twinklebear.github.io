@@ -2,7 +2,7 @@
 
 published: true
 layout: post
-title: "Rendering Animations in Rust"
+title: "Rendering an Animation in Rust"
 description: ""
 category:
 tags: ["Rust", "ray tracing", "graphics", "animation"]
