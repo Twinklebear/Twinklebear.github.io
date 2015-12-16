@@ -1,6 +1,6 @@
 ---
 
-published: false
+published: true
 layout: post
 title: "Rendering Animations in Rust"
 description: ""
@@ -172,12 +172,13 @@ transforms and knots.
 
 With the pieces together all that's left to do is make a really awesome animation! This is actually
 a bit challenging at the moment since I don't have any sort of graphical editor (and no plugin for Blender).
-To create a scene you must type in the control transforms, knot vectors and so on into a (potentially huge)
-[JSON scene file **todo: link to scene on github**]() and then check if you've got about what you
-had in mind by rendering some lower resolution frames to see the motion of objects and the camera.
+To create a scene you type in the control transforms, knot vectors and so on into a potentially huge
+JSON scene file (for example [here's this animation's scene](https://github.com/Twinklebear/tray_rust/blob/master/scenes/tr15.json)).
+Then to check if you've got about what you
+had in mind render some lower resolution frames to see the motion of objects and the camera.
 Putting together even just this short 25 second animation took quite a while, since I'd spend a
-lot of time playing with the object and camera paths, materials and so on. I also found and fixed a few bugs
-while working on the animation which took some time as well. The animation is
+lot of time tweaking the object and camera paths, materials and so on. I also found and fixed a few bugs
+while working on the animation which took some time as well, but bug fixing is time well spent. The animation is
 1920x1080 and was rendered at 2048 samples per pixel. To get 25 seconds of animation at 24 frames
 per second we need to render 600 individual frames. Each frame is saved out as a separate png, to produce
 the animation I used ffmpeg to stitch them together into a video.
