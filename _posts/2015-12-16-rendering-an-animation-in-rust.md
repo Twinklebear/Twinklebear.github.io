@@ -185,13 +185,12 @@ the animation I used ffmpeg to stitch them together into a video.
 
 Here's the resulting video. If you'd prefer to watch on YouTube I've [uploaded it there](https://youtu.be/sweEpfRyDlE) as well but the quality is
 not as good due to compression. If your browser doesn't play the video properly you can
-[download it](http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4) and watch it locally (I've noticed
-some issues with Firefox on Windows 10).
+[download it](http://sci.utah.edu/~will/rt/rtc_2015_med_quality_420p.mp4) and watch it locally.
 
 <video class="img-responsive" src="http://sci.utah.edu/~will/rt/rtc_2015_med_quality_420p.mp4" type="video/mp4" controls
 	style="padding-top:16px;padding-bottom:16px;" preload="metadata" poster="http://i.imgur.com/ftJyrnA.jpg">
 Sorry your browser doesn't support HTML5 video, but don't worry you can download the video
-<a href="http://sci.utah.edu/~will/rt/rtc_2015_med_quality.mp4">here</a> and watch it locally.
+<a href="http://sci.utah.edu/~will/rt/rtc_2015_med_quality_420p.mp4">here</a> and watch it locally.
 </video>
 
 The animation contains quite a few different models:
