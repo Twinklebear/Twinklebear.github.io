@@ -1,5 +1,4 @@
 ---
-
 published: false
 layout: post
 title: "Distributed Rendering with Rust and Mio"
@@ -223,18 +222,257 @@ noisy as this image was rendered with just 256 samples per pixel.
 
 <div class="col-md-12 text-center">
 <img class="img-responsive" src="http://i.imgur.com/YEhp254.png" alt="Rendered result"></img>
-<i>Rendered Result</i>
+<i>Rendered Image</i>
 </div>
 
 # Coordinating the Workers
 
-- How the master coordinates with the worker nodes. How instructions are sent, how rendered results
-are sent back and how we deal with nodes potentially reporting different frames at the same time,
-e.g. some nodes running faster/slower than others.
+- How the master coordinates with the worker nodes. How we deal with nodes potentially reporting
+different frames at the same time, e.g. some nodes running faster/slower than others. Detecting
+when work has finished, possibility
 
 - How we use mio to let one thread handle all the workers with asynchronous I/O. Talk about the worker
 tmp buffers, filling them, detecting when we've got a frame from a worker, saving frames out. Tracking
 which frame the worker reported, etc.
+
+- Can also discuss lack of fault handling here
+
+The master node requires some more work to implement than the workers. The master needs to manage
+accepting data from multiple workers who are reporting different regions of (potentially different) frames
+of the sequence and combining these results. It also needs to track whether a frame has been completed and
+can be saved out to disk. Additionally we'd like the master to be as lightweight as possible so it could
+run on the same node as one of the workers and not take up much CPU time while being able to accept results
+from multiple workers simultaneously. What we'd really like is some kind of async event loop, where the
+master can accept data from multiple workers at the same time based on when they write some data.
+
+We'd also like to avoid having to make workers open a new TCP connection each time they want to send
+results to the master node. Having the master node listen on a TCP socket and behave as a blocking server
+that accepts connections from workers and reads data from one worker at a time likely won't scale to many
+workers reporting a lot of data simultaneously.
+
+## Asynchronous I/O with mio
+
+This is where [mio](https://github.com/carllerche/mio) comes in. Mio is a powerful low overhead I/O library
+for Rust and, most important for us, it provides abstractions for non-blocking TCP sockets and an event loop for
+reading/writing based on whether they're readable/writable or not. Having never used non-blocking sockets
+or event based I/O this took a bit of learning but has turned out very nice.
+
+Our master node can start out using mio to send instructions to the workers and read results from them
+in the event loop. When constructing the master we can open a bunch of TCP connections to the workers,
+who will all be listening on the same port. The master is given the list of worker hostnames or IP addresses
+specifying the worker nodes. To identify the connection that an event was received on mio allows you to specify
+a token of any type, we'll just use its index in the list of workers to identify each socket.
+
+{% highlight rust %}
+// Loop through the list of workers and connect to them.
+for (i, host) in workers.iter().enumerate() {
+    // to_socket_addrs returns a Result<Iterator> of SocketAddrs, if we fail parsing
+    // we should just abort so we use unwrap here.
+    let addr = (&host[..], worker::PORT).to_socket_addrs().unwrap().next().unwrap();
+    // Use mio's TcpStream to connect to the worker, if we succeed in starting the
+    // connection add this stream to the event loop
+    match TcpStream::connect(&addr) {
+        Ok(stream) => {
+            // Each worker is identified in the event loop by their index in the vec
+            match event_loop.register(&stream, Token(i), EventSet::all(), PollOpt::level()){
+                Err(e) => println!("Error registering stream from {}: {}", host, e),
+                Ok(_) => {},
+            }
+            connections.push(stream);
+        },
+        Err(e) => println!("Failed to contact worker {}: {:?}", host, e),
+    }
+}
+{% endhighlight %}
+
+After constructing the master we start running mio's event loop. Our Master struct implements the
+[`mio::Handler`](http://rustdoc.s3-website-us-east-1.amazonaws.com/mio/master/mio/trait.Handler.html)
+trait, which provides the `ready` method. This method is called by mio when an event
+is ready to be handled on one of the TCP streams we registered with the event loop when constructing
+the master.
+
+{% highlight rust %}
+impl Handler for Master {
+    type Timeout = ();
+    type Message = ();
+
+    fn ready(&mut self, event_loop: &mut EventLoop<Master>, token: Token, event: EventSet) {
+        let worker = token.as_usize();
+        if event.is_writable() {
+            // Send the worker their instructions and stop listening for writable events
+        }
+        if event.is_readable() {
+            // Read frame data sent by the worker
+        }
+    }
+}
+{% endhighlight %}
+
+The writable event handling isn't too interesting as we just send the worker their instructions (which blocks
+to render) using blocking I/O. The Instructions struct containing the worker's instructions is encoded
+with [bincode](https://github.com/TyOverby/bincode) and sent
+with [write_all](http://doc.rust-lang.org/std/io/trait.Write.html#method.write_all). The readable
+event handling is where the real work of dealing with async writes from multiple workers is done.
+
+## Reading From Multiple Workers Asynchronously
+
+While we've reduced the communication overhead quite a bit the workers are still going to be sending
+more data than we would get with a single call to
+[read](http://doc.rust-lang.org/std/io/trait.Read.html#tymethod.read) so if we wanted to read the
+entire frame data sent by the worker immediately upon receiving a readable event we'd still need to
+block. However blocking ruins the whole reason we've gone with mio and async I/O in the first place!
+While we're stuck blocking on this worker there's incoming writes from other workers that we should
+also be reading from.
+
+The solution that I've settled on for this is to have a buffer for each worker that we write too each
+time we get a new readable event, tracking how many bytes we've read so far and how many we expect to read.
+Each time we get a readable event on the worker we do a single `read` to get the bytes currently available
+to read, without blocking for more and place these in the buffer starting after the data we've read
+previously. Once we've read all the bytes the worker is sending us (our data starts with an unsigned
+64 bit int specifying the number of bytes sent) we can decode the frame with bincode and accumulate it.
+
+### The Worker Buffer
+
+A worker buffer is a partially read result from a worker, where we're still waiting on more bytes to
+come in from the network or TCP stack.
+
+{% highlight rust %}
+struct WorkerBuffer {
+    pub buf: Vec<u8>,
+    pub expected_size: usize,
+    pub currently_read: usize,
+}
+impl WorkerBuffer {
+    pub fn new() -> WorkerBuffer {
+        // We start with an expected size of 8 since we expect a 64 bit uint header
+        // telling us how many bytes are being sent
+        WorkerBuffer { buf: Vec::new(), expected_size: 8, currently_read: 0 }
+    }
+}
+{% endhighlight %}
+
+The buffer stores a partially read `Frame` sent back by a worker to report its results. The `Frame` struct
+begins with this 8 byte header specifying how many bytes it is when encoded with bincode.
+
+{% highlight rust %}
+struct Frame {
+    // Size header for binary I/O with bincode
+    pub encoded_size: u64,
+    // Which frame the worker is sending its results for
+    pub frame: usize,
+    // Block size of the blocks being sent
+    pub block_size: (usize, usize),
+    // Starting locations of each block
+    pub blocks: Vec<(usize, usize)>,
+    // Sample data for each block, RGBW_F32 (W = weight)
+    pub pixels: Vec<f32>,
+}
+{% endhighlight %}
+
+### Reading into a Worker Buffer
+
+When the master gets a readable event on a worker it adds the newly available bytes to the worker's buffer
+and checks if it's read the entire `Frame`. This is handled by the `read_worker_buffer` method, which returns
+true if we've got all the data the worker is sending and can decode the frame. This code is best
+explained inline with comments, so please see the snippet for details on how this works.
+
+{% highlight rust %}
+fn read_worker_buffer(&mut self, worker: usize) -> bool {
+    let mut buf = &mut self.worker_buffers[worker];
+    // If we haven't read the size of data being sent, read that now
+    if buf.currently_read < 8 {
+        // First 8 bytes are a u64 specifying the number of bytes being sent,
+        // make sure we have room to store 8 bytes
+        buf.buf.extend(iter::repeat(0u8).take(8));
+        match self.connections[worker].read(&mut buf.buf[buf.currently_read..]) {
+            Ok(n) => buf.currently_read += n,
+            Err(e) => println!("Error reading results from worker {}: {}", self.workers[worker], e),
+        }
+        // Recall that our initial expected size is 8, for the size header
+        // once we've read this we can decode the header and get the real size of the data.
+        if buf.currently_read == buf.expected_size {
+            // How many bytes we expect to get from the worker for a frame
+            buf.expected_size = decode(&buf.buf[..]).unwrap();
+            // Extend the Vec so we've got enough room for the remaning bytes, minus the 8 for the
+            // encoded size header
+            buf.buf.extend(iter::repeat(0u8).take(buf.expected_size - 8));
+        }
+    }
+    // If we've finished reading the size header we can now start reading the frame data
+    if buf.currently_read >= 8 {
+        match self.connections[worker].read(&mut buf.buf[buf.currently_read..]) {
+            Ok(n) => buf.currently_read += n,
+            Err(e) => println!("Error reading results from worker {}: {}", self.workers[worker], e),
+        }
+    }
+    buf.currently_read == buf.expected_size
+}
+{% endhighlight %}
+
+In our event loop we now call this function on readable events, passing the worker ID to read some
+of the frame data. If we've read the full amount being sent by the worker we then decode the frame
+with bincode, accumulate its data into the final frame the master stores and clean up to start
+reading the next frame being sent.
+
+{% highlight rust %}
+// Read results from the worker, if we've accumulated all the data being sent
+// decode and accumulate the frame
+if self.read_worker_buffer(worker) {
+    let frame: Frame = decode(&self.worker_buffers[worker].buf[..]).unwrap();
+    self.save_results(frame);
+    // Clean up the worker buffer for the next frame
+    self.worker_buffers[worker].buf.clear();
+    self.worker_buffers[worker].expected_size = 8;
+    self.worker_buffers[worker].currently_read = 0;
+}
+{% endhighlight %}
+
+### Handling Workers Reporting Different Frames
+
+Due to differences in scene complexity of parts of the image or the machines themselves some workers may
+finish their assigned blocks faster or slower than others. The master node can't assume that once it starts
+getting frame one from a worker that all workers have reported frame zero and it can be saved out. We need
+to track how many workers have reported a frame as we accumulate results from them to an in progress frame
+and only once all workers have reported their results for the frame can we save it out and mark it completed.
+
+This can be expressed Rust really nicely with the enum type. A frame can either be in progress and we're
+tracking which frame it is, how many workers have reported it and the image where we're accumulating results
+or it's completed and we aren't storing any extra data about it.
+
+{% highlight rust %}
+enum DistributedFrame {
+    InProgress {
+        // The number of workers who have reported results for this frame so far
+        num_reporting: usize,
+        render: Image,
+    },
+    Completed,
+}
+
+impl DistributedFrame {
+    // Start accumulating results for a frame, we begin with no workers reporting
+    pub fn start(img_dim: (usize, usize)) -> DistributedFrame {
+        DistributedFrame::InProgress { num_reporting: 0, render: Image::new(img_dim) }
+    }
+}
+{% endhighlight %}
+
+The master stores a `HashMap<usize, DistributedFrame>` which maps frame numbers to distributed frames
+so we can quickly look up a frame when we've
+decoded one from a worker to accumulate its results into the final image. When we try to look up
+a frame in the map there's two possibilities: the frame could be in the map and is either `InProgress`
+or `Completed`, or this worker is the first to report this frame and we must create the entry.
+
+This operation is performed with the hash map
+[`Entry`](http://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html) API. It's important to note
+that we use the `or_insert_with` method instead of just `or_insert` because starting a distributed frame
+involves allocating a new image to store the result. By passing a function to call instead of a value to
+insert we don't need to create a new frame each time we look up a frame, just when we find that it's actually
+not in the map.
+
+{% highlight rust %}
+let mut df = self.frames.entry(frame_num).or_insert_with(|| DistributedFrame::start(img_dim));
+{% endhighlight %}
 
 # Strong Scaling and Discussion
 
