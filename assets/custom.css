@@ -25,6 +25,9 @@ pre, pre code {
 	border: none;
 	border-radius: 0px;
 }
+pre.diagram {
+	color: black;
+}
 /* Don't set code formatted links to black */
 a code {
 	color: rgb(42, 100, 150);
@@ -48,12 +51,9 @@ figure {
 	max-width: 100%;
 	margin: 10px auto;
 }
-div .comments {
+div.comments {
 	margin: 50px 0px 16px 0px;
 	padding: 10px;
-	border-top-style: solid;
-	border-top-color: rgb(238, 238, 238);
-	border-top-width: 1px;
 }
 /* Make the tag list a list of comma-separated tags */
 .tag_list {
