@@ -1,4 +1,5 @@
 ---
+
 published: false
 layout: post
 title: "Distributed Rendering with Rust and Mio"
@@ -22,7 +23,10 @@ can use [mio](https://github.com/carllerche/mio) to write an efficient master pr
 can read results from multiple workers.
 
 After implementing a simple approach to distribute the job and manage the workers we'll also discuss
-strong scaling results of this approach and possible paths forward to improve scalability.
+strong scaling results of this approach and possible paths forward to improve scalability. I've
+also recently written a [plugin for Blender](https://github.com/Twinklebear/tray_rust_blender) so you can
+easily create your own scenes and
+will mention a bit on how to run the ray tracer on Google Compute Engine (or AWS EC2 if you prefer).
 
 <!--more-->
 
@@ -130,28 +134,28 @@ for a simple example.
 
 <div class="row">
 <div class="col-md-6 text-center">
-<img class="img-responsive" src="http://i.imgur.com/9UfVGse.png" alt="Node 0's results"></img>
+<img class="img-responsive" src="http://i.imgur.com/9UfVGse.png" alt="Node 0's results">
 <i>Worker 0's Results</i>
 </div>
 <div class="col-md-6 text-center">
-<img class="img-responsive" src="http://i.imgur.com/1PrdC7N.png" alt="node 1's results"></img>
+<img class="img-responsive" src="http://i.imgur.com/1PrdC7N.png" alt="node 1's results">
 <i>Worker 1's Results</i>
 </div>
 </div>
 
 <div class="row">
 <div class="col-md-4 text-center">
-<img class="img-responsive" src="http://i.imgur.com/NKXW7ap.png" alt="node 2's results"></img>
+<img class="img-responsive" src="http://i.imgur.com/NKXW7ap.png" alt="node 2's results">
 <i>Worker 2's Results</i>
 </div>
 
 <div class="col-md-4 text-center">
-<img class="img-responsive" src="http://i.imgur.com/lF8jwRE.png" alt="node 3's results"></img>
+<img class="img-responsive" src="http://i.imgur.com/lF8jwRE.png" alt="node 3's results">
 <i>Worker 3's Results</i>
 </div>
 
 <div class="col-md-4 text-center">
-<img class="img-responsive" src="http://i.imgur.com/Qz7yIyL.png" alt="node 4's results"></img>
+<img class="img-responsive" src="http://i.imgur.com/Qz7yIyL.png" alt="node 4's results">
 <i>Worker 4's Results</i>
 </div>
 </div>
@@ -221,7 +225,7 @@ division for each pixel and conversion to sRGB to save the frame out as a PNG. T
 noisy as this image was rendered with just 256 samples per pixel.
 
 <div class="col-md-12 text-center">
-<img class="img-responsive" src="http://i.imgur.com/YEhp254.png" alt="Rendered result"></img>
+<img class="img-responsive" src="http://i.imgur.com/YEhp254.png" alt="Rendered result">
 <i>Rendered Image</i>
 </div>
 
@@ -420,7 +424,7 @@ reading the next frame being sent.
 if self.read_worker_buffer(worker) {
     let frame: Frame = decode(&self.worker_buffers[worker].buf[..]).unwrap();
     self.save_results(frame);
-    // Clean up the worker buffer for the next frame
+    // Clear the worker buffer for the next frame
     self.worker_buffers[worker].buf.clear();
     self.worker_buffers[worker].expected_size = 8;
     self.worker_buffers[worker].currently_read = 0;
@@ -474,7 +478,53 @@ not in the map.
 let mut df = self.frames.entry(frame_num).or_insert_with(|| DistributedFrame::start(img_dim));
 {% endhighlight %}
 
-# Strong Scaling and Discussion
+Now we just handle the two cases of the entry existing in the map, either it's in progress and we can
+accumulate the results from the worker or it's been marked completed and something has gone wrong.
+If we've finished an in progress frame we save it to disk and mark that we've finished it by setting
+it to `Completed` outside the match. A frame is determined to be completed if the number of workers
+who've reported results for it is equal to the total number of workers.
+
+{% highlight rust %}
+match df {
+    &mut DistributedFrame::InProgress { ref mut num_reporting, ref mut render } => {
+        // Add results from the worker and see if we've finished the frame and can save
+    },
+    &mut DistributedFrame::Completed => println!("Worker reporting on completed frame {}?", frame_num),
+}
+{% endhighlight %}
+
+A possible improvement here is to have the job of adding the worker's results to the distributed frame
+be managed by a threadpool, or at least off load the work of saving the image out to disk to some
+other threads. This would free up more time on the event loop for the master to read more data from
+the workers since currently it will be busy for some time accumulating results from workers and saving
+the images.
+
+### Summary
+
+Some of the details are bit complicated but overall the distributed computation is not too complex.
+The work decomposition chosen allows us to get away without any communication between the workers,
+they just need to know what part of the image they're rendering and who to send results back to. Since
+we also assume that the scene data is available on each worker either through a shared file system
+or by simplying being copied to each machine we don't have to worry about sending the models and such over
+either. When the
+worker launches it starts listening for the master on a hard-coded port number (63234). The master
+is launched and passed the worker's hostnames or IP addresses to send instructions to and it
+starts opening TCP connections to each and enters mio's event loop.
+
+Once a worker is writable (we've connected successfully) the master sends the worker its instructions
+and stops watching for writable events on the connection. Upon recieving instructions the worker begins
+rendering using the desired number of threads (defaults to number of logical cores). After finishing
+its blocks for a frame the worker sends its results back to the master is reading asynchronously from
+all the workers to accumulate their results. Once the master has collected all results from the workers
+for a frame it saves out the image and marks it completed. After the workers have finished their blocks
+for the last frame being rendered they exit and once the master has saved out the last frame it also exits.
+
+### Code
+
+The full code for the distributed rendering is in tray\_rust's [exec::distrib](https://github.com/Twinklebear/tray_rust/tree/master/src/exec/distrib)
+module if you're interested in some more details.
+
+# Scalability
 
 - Scaling results on a few scenes and on mcp and wopr. Discussion of results, potential improvements?
 Work stealing to fix work imbalance issues are possible improvements that would be really interesting
@@ -482,6 +532,129 @@ to explore. Methods for grouping the samples to be sent into bigger blocks vs. j
 to reduce communication overhead will also help scale.
 
 - Quick wrap up, some info on how to run this yourself.
+
+Now that we've implemented a distributed computation we'd like to know how well it scales as we add
+more workers (strong scaling). For these tests I used two scenes: one is relatively simple with some minor
+work imbalance which should reveal issues more related to communication overhead while the other scene
+is very imbalanced and will test scaling issues in the presence of uneven work distribution.
+
+The simpler scene is the classic Cornell box which we'll render at 800x600 resolution with
+1024 samples per pixel using path tracing. The load imbalanced scene is the
+[Stanford Buddha](http://graphics.stanford.edu/data/3Dscanrep/) placed inside the Cornell box,
+this results in a few blocks of the image having a
+complex model to deal with while the majority of the image is just intersecting the walls. The Buddha
+box is rendered at 1280x720 with 1024 samples per pixel using path tracing. Since we're using
+path tracing it's likely that paths traced that initially hit the wall and bounce around the scene
+will also have to intersect the Buddha but the pixels that see it directly will still have more work
+vs. those that hit it indirectly.
+
+<div class="col-md-12 text-center">
+<img class="img-responsive" src="http://i.imgur.com/usuLnIj.png" alt="Cornell Box">
+<i>Cornell Box test scene</i>
+
+<img class="img-responsive" src="http://i.imgur.com/hOZmzlB.png" alt="Buddha Box">
+<i>Buddha Box test scene</i>
+</div>
+
+To run these scaling tests I used two clusters at my lab, one is a bit older which we'll refer to
+as *old* while the newer machine we'll call *new*. The machines specifications are as follows:
+
+- *old:* 64 nodes, each with two Xeon X5550 @ 2.67 GHz. This is a legacy machine though so a
+few nodes have failed and won't be repaired and since other users are running on it as well I was only
+able to get up to 44 nodes.
+
+- *new:* 32 nodes, each with two Xeon E5-2660 @ 2.2 GHz. Since some other users are running on
+this machine (but not using many threads) I only used 30 threads/node as others had the remaining two.
+While here I didn't use the full node (all 32 threads) this shouldn't change the speedup numbers since our
+baseline time (1x) is a single node with 30 threads. On this machine I tested up to 28 nodes as a few were
+down or otherwise occupied as well.
+
+These plots show speedup over a single node which is set as our baseline of 1x compared to perfect
+strong scaling. In the case of perfect strong scaling we'd expect that if 1 node is 1x then 20 nodes
+should run at 20x the speed, however this is hard to achieve.
+
+<div class="col-md-12">
+<div class="col-md-8 col-md-offset-2 text-center">
+<img class="img-responsive" src="/assets/img/distrib_rendering_scaling/old_scaling.svg">
+<i>Old cluster strong scaling</i>
+</div>
+<div class="col-md-8 col-md-offset-2 text-center">
+<img class="img-responsive" src="/assets/img/distrib_rendering_scaling/new_scaling.svg">
+<i>New cluster strong scaling</i>
+</div>
+</div>
+
+On the old cluster for the Cornell box we see a speedup of 37.57x when using 44 nodes, for
+the Buddha box we see only 30.53x speedup for the same number of nodes. On the new cluster
+for the Cornell box we get a speedup of 24.95x at 28 nodes while with the Buddha box we get
+a speedup of just 18.91x. So why do we not scale as well as we'd hope too? I have two ideas,
+and they're things that have been hinted at some throughout the article.
+
+## Grouping Worker's Results
+
+We currently introduce a pretty big chunk of communication overhead: for each 2x2 block of results
+sent by a worker it includes an additional 16 byte header specifying the block's location adding
+a 25% size overhead to the block. This is most clearly seen in the Cornell box tests since its workload
+is relatively balanced. We can see that it stays closer to perfect scaling for longer than the imbalanced
+Buddha box and when it starts to break down some (about 22 nodes on *old* and 16 on *new*) it still
+stays better than the imbalanced load. However it clearly is trailing off further from perfect scaling
+and as we get to higher node counts we get less and less speedup for each additional node.
+
+My thoughts are that this is coming from an increased amount of data sent to the master as we add nodes.
+Recall that when using reconstruction filtering nodes write to pixels in a block that is assigned to
+another node so both nodes will send these 2x2 blocks. The amount of redundant communication grows as
+we add more nodes since more nodes will overlap other node's regions. A possible solution here is to
+find the fewest number of bounding boxes that contain the pixels the node has written too that will
+minimize the amount of data we need to send (pixels and block headers).
+
+## Distributed Work Stealing
+
+The Buddha box scene performs even worse than the Cornell box scene, it starts to drop off at lower node
+counts than the Cornell box and continues to fall behind in terms of added speedup per node. While the culprit
+in the Cornell box scaling results I'm a bit less sure on (a non-reconstruction filtered run would clear
+this up) I'm confident that a lack of load balancing among the workers is what hurts the Buddha box scene's
+scaling the most.
+
+When looking at some of the individual worker outputs which log how long they took
+to render their blocks on a 25 node run on *new* the fastest worker finished in 39.2s while the slowest
+took 57.6s! In fact most nodes finished in about 39-42s while the few stuck with large portions of the Buddha
+took 51-57s,
+so for about 22s we have workers finishing and exiting when they could actually be helping other workers still
+rendering to finish faster.
+
+The clear fix here is to implement some form of distributed work stealing to allow workers to look around
+for more blocks to render once they finish their assigned blocks (minus any stolen from them). I don't
+know anything about distributed work stealing and it sounds like a pretty complicated topic so I haven't
+thought much about actually implementing this. It would really awesome to try out though and should help
+quite a bit with scalability, especially on imbalanced scenes.
+
+# Try tray\_rust Yourself!
+
+Recently I've put together a simple [Blender plugin](https://github.com/Twinklebear/tray_rust_blender)
+for tray\_rust which will let you export static and keyframe animated scenes from Blender to a tray\_rust
+scene. There are still quite a few limitations which you can see discussed on the Github page but most
+of these aren't as difficult to work around compared to positioning objects by hand in a text file.
+You'll still need to specify materials by hand in the scene file, this is documented somewhat in the
+[materials](http://www.willusher.io/tray_rust/tray_rust/material/index.html) module but is still somewhat
+user unfriendly.
+So definitely try it out, if you put together a scene I'd be really excited to see it so tweet your images to
+[@\_wusher](https://twitter.com/_wusher)!
+
+Here's a neat one I put together using Blender's physics simulation. This is done by simulating the physics
+in Blender then baking it to animation keyframes before exporting. If the video doesn't play
+properly you can download it [here](http://sci.utah.edu/~will/rt/rust_logos.mp4).
+
+<video class="img-responsive" src="http://sci.utah.edu/~will/rt/rust_logos.mp4" type="video/mp4" controls
+	style="padding-top:16px;padding-bottom:16px;" preload="metadata" poster="http://i.imgur.com/KFRqLAo.png">
+Sorry your browser doesn't support HTML5 video, but don't worry you can download the video
+<a href="http://sci.utah.edu/~will/rt/rust_logos.mp4">here</a> and watch it locally.
+</video>
+
+If you'd like to try using the distributed renderer you can do so with any machines on a network, so
+some home desktops or laptops or grab some compute instances from Google Compute Engine or AWS EC2.
+See the [exec::distrib](http://www.willusher.io/tray_rust/tray_rust/exec/distrib/index.html)
+module documentation for more information on how to run the distributed render,
+or run tray\_rust with the `-h` option a shorter summary of options.
 
 <script src="/assets/markdeep_modified.js"></script>
 
