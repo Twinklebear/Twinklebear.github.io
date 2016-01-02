@@ -1,6 +1,6 @@
 ---
 
-published: false
+published: true
 layout: post
 title: "Distributed Rendering with Rust and Mio"
 description: ""
@@ -12,28 +12,25 @@ tags: ["Rust", "ray tracing", "graphics", "animation", "distributed rendering"]
 
 In this post we'll take a look at adding distributed rendering to
 [tray\_rust](https://github.com/Twinklebear/tray_rust) which will let us take advantage of multiple
-machines when rendering an image, e.g. on a cluster. To avoid some possible confusion I don't mean
-[distribution ray tracing](https://en.wikipedia.org/wiki/Distributed_ray_tracing) (often
-called distributed ray tracing), in this post we'll be looking at the distributed computing sense of the
-term, where multiple machines collaborate on a computation.
-
-To do this we'll look at options for how to distribute the rendering job across multiple machines
+machines when rendering an image, like a compute cluster.
+To do this we'll look at options for how to distribute the rendering job across multiple nodes
 and what sort of communication is needed synchronize their work. We'll also look into how we
 can use [mio](https://github.com/carllerche/mio) to write an efficient master process that
-can read results from multiple workers asynchronously.
+can manage multiple workers effectively.
 
-After implementing a simple approach to distribute the job and manage the workers we'll discuss
+After implementing a simple technique to distribute the job we'll discuss
 the scalability of this approach and possible paths forward to improve it. I've
 also recently written a [plugin for Blender](https://github.com/Twinklebear/tray_rust_blender) so you can
 easily create your own scenes and
-will mention a bit on how to run the ray tracer on Google Compute Engine (or AWS EC2 if you prefer).
+will mention a bit on how to run the ray tracer on Google Compute Engine (or AWS EC2)
+if you want to try out the distributed rendering yourself.
 
 <!--more-->
 
 # Distributing Work in a Ray Tracer
 
-To motivate my choice for distributing the rendering job between nodes it's worth a short review
-of how work is distributed between threads on a single node.
+To motivate how to distribute the rendering job between nodes it's worth a short review
+of how work is distributed between threads on a single machine.
 
 ## Work Distribution Between Threads
 
@@ -47,14 +44,37 @@ block size bigger than 1x1 (a single pixel) but not too big gives a nice trade o
 blocks and synchronization overhead when a thread gets its next block.
 In an attempt to get some cache-coherence the block queue is sorted in
 [Z-order](https://en.wikipedia.org/wiki/Z-order_curve) so it's more likely a thread will pick a
-block closer to what it and other threads are working on giving a higher chance the meshes
+block closer to what it and other threads are working on, giving a higher chance the meshes
 and other data for that region are already in cache.
+
+<div class="col-md-12">
+<div class="col-md-8 col-md-offset-2 text-center">
+<pre class="diagram">
+                +----------+----------+
+                |          |          |
+                |          |          |
+   Given to --->+ block 0  | block 1  |<--- Given to
+   thread 0     |        --+-.        |     thread 1
+                |          |/         |
+                +----------/----------+
+                |         /|          |
+                |        '-+--        |
+ Next block --->| block 2  | block 3  |
+ to give out    |          |          |
+                |          |          |
+                +----------+----------+
+</pre>
+<i>Distributing blocks in Z-order for a 16x16 image rendered with two threads.
+Diagrams generated with <a href="http://casual-effects.com/markdeep/">Markeep</a>.</i>
+</div>
+</div>
 
 Saving the sampled color data from a ray in this system is also relatively simple, but requires a bit of
 synchronization to handle [reconstruction filtering](http://www.luxrender.net/wiki/LuxRender_Render_settings#Filter).
 When using a reconstruction filter the sample
 computed by a ray is written to multiple pixels, weighted by the filter weight at each pixel.
-Threads must synchronize their writes since the blocks of pixels they're writing to are not disjoint.
+Threads must synchronize their writes since the blocks of pixels they're writing to are not disjoint even
+though the blocks they're assigned are.
 This synchronization is handled with a fine-grained locking scheme, where each 2x2 block of pixels
 in the framebuffer is protected by a mutex that the thread must acquire before writing its samples to that
 region of the framebuffer. Without reconstruction filtering threads never write to the same pixel since
@@ -81,8 +101,8 @@ is where to find the scene file, which frames of the animation to render and wha
 they've been assigned.
 
 Suppose we're rendering a 400x304 image of the scene "cornell\_box.json" with five
-worker nodes. In total we have 1900 8x8 pixel blocks to render and the master
-will instruct each node to render 380 of those blocks, as shown below. In the case that
+worker nodes. In total we have 1900 8x8 blocks to render and the master
+will instruct each node to render 380 of them. In the case that
 the number of nodes doesn't evenly divide the number of blocks the remainder are given to the
 last worker.
 
@@ -108,8 +128,7 @@ last worker.
        |        +/     |        +/     |        +/     |        +/     |        +/          
        '--------'      '--------'      '--------'      '--------'      '--------'           
 </pre>
-<i>Master sends instructions to the worker nodes.
-Diagrams generated with <a href="http://casual-effects.com/markdeep/">Markeep</a></i>
+<i>Master sends instructions to the worker nodes</i>
 </div>
 
 ### Combining Results from Workers
@@ -164,18 +183,18 @@ we mentioned earlier.
 ### Reducing Communication Overhead
 
 Since most of the worker's framebuffer will be black as other nodes are assigned those regions there's no
-reason to send the whole thing. This significantly reduces communication overhead, if we sent the full
-framebuffer we would significantly increase the data sent as we added more nodes which will hurt scalability.
+reason to send the whole thing. This significantly reduces communication overhead, sending the full
+framebuffer would significantly increase the data transferred as we added more nodes which will hurt scalability.
 Consider rendering a 1920x1080 image: each node sends the master a RGBW float framebuffer
 for a total of about 32MB per node. If we used 64 nodes to render this we'd send a total of about 2.05GB,
 where only about 1.56% of each 32MB framebuffer sent by the workers has actually been written too!
 
-Since the worker only writes to a small portion of the framebuffer we can just send those blocks that it's
-actually written to.
+Since the worker only writes to a small portion of the framebuffer we can just send the blocks that it's
+actually written too.
 For convenience I currently send blocks of the same size as the framebuffer locks, so each worker will send
 a list of 2x2 blocks along with a list of where the blocks are in the image. This significantly reduces
 communication overhead and provides the master with all the information it needs to place a worker's results
-in the final framebuffer. This does add some overhead to each block: I send the x,y coordinates of the
+in the final framebuffer. This does add some overhead to each block: we send the x,y coordinates of the
 block as unsigned 64-bit ints which adds a 16 byte header to each 2x2 block (64 bytes of pixel data) for
 a 25% overhead per block.
 
@@ -218,7 +237,7 @@ one idea for potentially reducing this overhead further in the scalability secti
 
 Once the master has collected results from all the workers it can do the final filter weight
 division for each pixel and conversion to sRGB to save the frame out as a PNG. Here's the result
-for our 400x304 Cornell box example that we've been following along.
+for our 400x304 Cornell box example with 256 samples per pixel that we've been following along.
 
 <div class="col-md-12 text-center">
 <img class="img-responsive" src="http://i.imgur.com/YEhp254.png" alt="Rendered result">
@@ -250,8 +269,8 @@ or event based I/O this took a bit of learning but has turned out very nice.
 When constructing the master we can start a TCP connection to each worker,
 who are all listening on the same port. The master is given the list of worker hostnames or IP addresses
 specifying the worker nodes to contact. To identify the connection that an event was received on
-mio allows you to specify a token of any type, we'll just use its index in the list of workers to
-identify each socket.
+mio allows you to specify a [Token](http://rustdoc.s3-website-us-east-1.amazonaws.com/mio/master/mio/struct.Token.html)
+with a `usize`, we'll just use the worker's index in the list of workers.
 
 {% highlight rust %}
 // Loop through the list of workers and connect to them.
@@ -400,8 +419,9 @@ fn read_worker_buffer(&mut self, worker: usize) -> bool {
 }
 {% endhighlight %}
 
-In the master's event loop we call this function on readable events, passing the worker ID to read some
-of the frame data. If we've read the all the data being sent by the worker we decode the frame
+In the master's event loop we call this function on readable events, passing the ID of the worker we're
+reading from.
+If we've read the all the data being sent by the worker we decode the frame
 with bincode, accumulate its data into the combined frame and clean up to start
 reading the next frame.
 
@@ -459,7 +479,7 @@ This operation is performed with the hash map
 [`Entry`](http://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html) API. It's important to note
 that we use the `or_insert_with` method instead of just `or_insert` because starting a distributed frame
 involves allocating a new image to store the result. By passing a function to call instead of a value to
-insert we don't need to start a new distribute frame each time we look one up, just when we find that
+insert we don't need to start a new distributed frame each time we look one up, just when we find that
 it's not in the map.
 
 {% highlight rust %}
@@ -494,7 +514,7 @@ if finished {
 {% endhighlight %}
 
 A possible improvement here is to have the job of adding the worker's results to the distributed frame
-be managed by a threadpool, or at least off load the work of saving the image as a PNG to some
+be managed by a threadpool, or at least off load the work of saving the image to some
 other threads. This would free up more time on the event loop for the master to read more data from
 the workers, currently it will be busy for some time accumulating results from workers and saving
 the images.
@@ -527,7 +547,7 @@ module if you're interested in some more details.
 # Scalability
 
 Now that we've implemented a distributed computation we'd like to know how well it scales as we add
-more workers (strong scaling). For these tests I used two scenes: one is relatively simple with some minor
+more workers (strong scaling). For these tests I used two scenes: one is pretty simple with some minor
 work imbalance which should reveal issues more related to communication overhead while the other scene
 is very imbalanced and will test scaling issues in the presence of uneven work distribution.
 
@@ -579,10 +599,10 @@ should run at 20x the speed, however this is quite hard to achieve.
 </div>
 
 On the *old* cluster for the Cornell box we see a speedup of 37.57x when using 44 nodes, for
-the Buddha box we see only 30.53x speedup for the same number of nodes. On the *new* cluster
+the Buddha box we see only 30.53x. On the *new* cluster
 for the Cornell box we get a speedup of 24.95x at 28 nodes while with the Buddha box we get
 a speedup of just 18.91x. So why do we not scale as well as we'd hope, especially on the Buddha box?
-I have two ideas, and they're things that have been hinted at some throughout the article.
+I have two ideas on possible improvements to tray\_rust's scalability.
 
 ## Scaling Issue 1: Grouping Worker's Results
 
@@ -596,9 +616,9 @@ as we get to higher node counts where we get less and less speedup for each addi
 
 I think this is coming from an increased amount of data sent to the master as we add nodes.
 Recall that when using reconstruction filtering nodes write to pixels in blocks assigned to
-other nodes so they'll send overlapping data. The amount of overlapping data grows as
-we add more nodes since more nodes will overlap each other's regions. A possible solution here is to
-find the fewest number of bounding boxes that contain the pixels the node has written to that will
+other nodes so neighbors will send some overlapping data. The amount of overlapping data grows as
+we add more nodes since more nodes will overlap each other's regions. A possible solution is to
+find the fewest number of bounding rectangles that contain the pixels the node has written to that will
 minimize the amount of pixels and block headers we need to send.
 
 This is mostly a strong hunch at the moment but will be cleared up by doing some scaling tests
@@ -627,7 +647,7 @@ quite a bit with scalability, especially on imbalanced scenes.
 
 ## Scalability Cap
 
-As a result of the block based work decomposition we chose in the beginning we're also limited in how
+As a result of the block based work decomposition we chose in the beginning we're limited on how
 many threads we can take advantage of. For the 400x304 Cornell box example we have 1900 8x8 blocks to
 render, if we have more than 1900 cores available we can't take advantage of them as we simply have
 no work to assign them. An easy fix here would be to detect this case and have the master
@@ -639,7 +659,7 @@ assign these extra threads some work.
 Another limitation of the current distributed rendering is that there is no fault tolerance. If a worker
 goes down in the current system the master will detect the error and terminate, which will propagate the
 termination to the remaining workers. For long runs especially at high node counts worker failures
-are not that rare and a much better approach here would be to redistributed the failed workers blocks.
+are not that rare and a much better approach here would be to redistribute the failed worker's blocks.
 I'm unsure if this is something I'll implement, in the presence of work stealing it would become even more
 complex. For example we wouldn't want to re-assign blocks that were stolen from the worker before it crashed,
 but determining which blocks were stolen might be tough.
@@ -654,11 +674,15 @@ You'll still need to specify materials by hand in the scene file, this is docume
 [materials](http://www.willusher.io/tray_rust/tray_rust/material/index.html) module but is still pretty
 user unfriendly.
 Definitely try it out, if you put together a scene I'd be really excited to see it so tweet any
-renders to me on Twitter: [@\_wusher](https://twitter.com/_wusher)!
+renders to me on Twitter [@\_wusher](https://twitter.com/_wusher)!
 
-Here's a neat one I put together using Blender's physics simulation. This is done by simulating the physics
-in Blender then baking it to animation keyframes before exporting. If the video doesn't play
-properly you can download it [here](http://sci.utah.edu/~will/rt/rust_logos.mp4).
+Here's a neat one I put together using Blender's physics simulation by baking the simulation
+to keyframes before exporting. If the video doesn't play
+properly you can download it [here](http://sci.utah.edu/~will/rt/rust_logos.mp4). The Rust logo was
+modeled by [Nylithius](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo), many
+of the models in the scene make use of measured material data from the
+[MERL BRDF database](http://www.merl.com/brdf/). The animation was rendered with 28 nodes on *new*
+using the distributed renderer with 1024 samplers per pixel and took 03:44:02 to render.
 
 <video class="img-responsive" src="http://sci.utah.edu/~will/rt/rust_logos.mp4" type="video/mp4" controls
 	style="padding-top:16px;padding-bottom:16px;" preload="metadata" poster="http://i.imgur.com/KFRqLAo.png">
@@ -667,10 +691,11 @@ Sorry your browser doesn't support HTML5 video, but don't worry you can download
 </video>
 
 If you'd like to try using the distributed renderer you can do so with any machines on a network, so
-some home desktops or laptops or grab some compute instances from Google Compute Engine or AWS EC2.
+some desktops or laptops will work, or you can grab some compute instances from Google Compute Engine
+or AWS EC2.
 See the [exec::distrib](http://www.willusher.io/tray_rust/tray_rust/exec/distrib/index.html)
 module documentation for more information on how to run the distributed render,
 or run tray\_rust with `-h` for a shorter summary of options.
 
-<script src="/assets/markdeep_modified.js"></script>
+<script src="/assets/markdeep_modified_min.js"></script>
 
