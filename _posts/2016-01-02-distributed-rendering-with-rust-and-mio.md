@@ -1,6 +1,6 @@
 ---
 
-published: false
+published: true
 layout: post
 title: "Distributed Rendering with Rust and Mio"
 description: ""
