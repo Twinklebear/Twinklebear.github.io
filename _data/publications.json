@@ -4,9 +4,9 @@
 			"title": "CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees",
 			"authors": "Ingo Wald, Aaron Knoll, Gregory P. Johnson, Will Usher, Valerio Pasucci, Michael E. Papka",
 			"venue": "*IEEE Vis 2015 (conference)*",
-			"url": "http://sci.utah.edu/~will/pkd_tree.pdf",
-			"image": "http://sci.utah.edu/~will/pkd_tree_header.png",
-			"thumb": "http://sci.utah.edu/~will/pkd_tree_thumb.jpg",
+			"url": "http://sci.utah.edu/~will/papers/pkd/pkd_tree.pdf",
+			"image": "http://sci.utah.edu/~will/papers/pkd/header.png",
+			"thumb": "http://sci.utah.edu/~will/papers/pkd/thumbnail.jpg",
 			"abstract": "We present a novel approach to rendering large particle data sets from molecular dynamics,
 						 astrophysics and other sources. We employ a new data structure adapted from the original
 						 balanced k-d tree, which allows for representation of data with trivial or no overhead.
