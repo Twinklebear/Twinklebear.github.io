@@ -1,22 +1,41 @@
 [
-	[
-		{
-			"title": "CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees",
-			"authors": "Ingo Wald, Aaron Knoll, Gregory P. Johnson, Will Usher, Valerio Pasucci, Michael E. Papka",
-			"venue": "*IEEE Vis 2015 (conference)*",
-			"url": "http://sci.utah.edu/~will/papers/pkd/pkd_tree.pdf",
-			"image": "http://sci.utah.edu/~will/papers/pkd/header.png",
-			"thumb": "http://sci.utah.edu/~will/papers/pkd/thumbnail.jpg",
-			"abstract": "We present a novel approach to rendering large particle data sets from molecular dynamics,
-						 astrophysics and other sources. We employ a new data structure adapted from the original
-						 balanced k-d tree, which allows for representation of data with trivial or no overhead.
-						 In the OSPRay visualization framework, we have developed an efficient CPU algorithm for
-						 traversing, classifying and ray tracing these data. Our approach is able to render up
-						 to billions of particles on a typical workstation, purely on the CPU, without any
-						 approximations or level-of-detail techniques, and optionally with attribute-based color
-						 mapping, dynamic range query, and advanced lighting models such as ambient occlusion
-						 and path tracing."
-		}
-	]
+	{
+		"title": "VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures",
+		"authors": "Kenneth Moreland, Christopher Sewell, William Usher, Li-ta Lo, Jeremy Meredith,
+				David Pugmire, James Kress, Hendrik Schroots, Kwan-Liu Ma, Hank Childs, Matthew Larsen,
+				Chun-Ming Chen, Robert Maynard, Berk Geveci",
+		"venue": "IEEE Computer Graphics and Applications, 36(3)",
+		"url": "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7466740",
+		"doi": "10.1109/MCG.2016.48",
+		"show_abstract": false,
+		"year": 2016,
+		"abstract": "One of the most critical challenges for high-performance computing (HPC) scientific
+				visualization is execution on massively threaded processors. Of the many fundamental changes we are
+				seeing in HPC systems, one of the most profound is a reliance on new processor types optimized for
+				execution bandwidth over latency hiding. Our current production scientific visualization software
+				is not designed for these new types of architectures. To address this issue, the VTK-m framework serves
+				as a container for algorithms, provides flexible data representation, and simplifies the design of
+				visualization algorithms on new and future computer architecture.",
+	},
+	{
+		"title": "CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees",
+		"authors": "Ingo Wald, Aaron Knoll, Gregory P. Johnson, Will Usher, Valerio Pasucci, Michael E. Papka",
+		"venue": "IEEE Vis (conference)",
+		"url": "http://sci.utah.edu/~will/papers/pkd/pkd_tree.pdf",
+		"doi": "10.1109/SciVis.2015.7429492",
+		"image": "http://sci.utah.edu/~will/papers/pkd/header.png",
+		"thumb": "http://sci.utah.edu/~will/papers/pkd/thumbnail.jpg",
+		"show_abstract": true,
+		"year": 2015,
+		"abstract": "We present a novel approach to rendering large particle data sets from molecular dynamics,
+					 astrophysics and other sources. We employ a new data structure adapted from the original
+					 balanced k-d tree, which allows for representation of data with trivial or no overhead.
+					 In the OSPRay visualization framework, we have developed an efficient CPU algorithm for
+					 traversing, classifying and ray tracing these data. Our approach is able to render up
+					 to billions of particles on a typical workstation, purely on the CPU, without any
+					 approximations or level-of-detail techniques, and optionally with attribute-based color
+					 mapping, dynamic range query, and advanced lighting models such as ambient occlusion
+					 and path tracing."
+	}
 ]
 

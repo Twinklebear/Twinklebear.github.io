@@ -4,49 +4,52 @@ title: Publications
 ---
 {% include JB/setup %}
 
-{% for col in site.data.publications %}
+{% for pub in site.data.publications %}
 <div class="col-lg-6 col-md-6 col-s-12 col-xs-12">
-	{% for pub in col %}
-	<div class="col-lg-12 col-md-12 col-s-12 col-xs-12">
-		<a href="{{ pub.url }}"><h3>{{ pub.title }}</h3></a>
-		{% if pub.image && pub.thumb %}
-		<a href="{{ pub.image }}">
-			<img class="img-responsive" src="{{ pub.thumb }}"
-				style="padding-bottom:8px;padding-left:8px;padding-right:8px;"/>
-		</a>
-		{% endif %}
-		<p>
-		{{ pub.authors | markdownify }}
-		</p>
-		<p>
-		{{ pub.venue | markdownify }}
-		</p>
-		<p style="border-bottom:1px solid #EEE;padding-bottom:8px;text-align:right;">
-		<p>
-		{{ pub.abstract | markdownify}}
-		</p>
-		<p style="border-bottom:1px solid #EEE;padding-bottom:8px;text-align:right;">
-		{% if pub.gh_user && pub.gh_repo %}
-		<a aria-label="Star {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
-			data-count-aria-label="# stargazers on GitHub"
-			data-count-api="/repos/{{ pub.gh_user }}/{{ pub.gh_repo }}#stargazers_count"
-			data-count-href="/{{ pub.gh_user }}/{{ pub.gh_repo }}/stargazers"
-			data-style="mega"
-			data-icon="octicon-star"
-			href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}"
-			class="github-button">Star</a>
-		<a aria-label="Fork {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
-			data-count-aria-label="# forks on GitHub"
-			data-count-api="/repos/{{ pub.gh_user }}/{{ pub.gh_repo }}#forks_count"
-			data-count-href="/{{ pub.gh_user }}/{{ pub.gh_repo }}/network"
-			data-style="mega"
-			data-icon="octicon-git-branch"
-			href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}/fork"
-			class="github-button">Fork</a>
-		{% endif %}
-		</p>
-	</div>
-	{% endfor %}
+	<a href="{{ pub.url }}"><h3>{{ pub.title }}</h3></a>
+	{% if pub.image && pub.thumb %}
+	<a href="{{ pub.image }}">
+		<img class="img-responsive" src="{{ pub.thumb }}"
+			style="padding-bottom:8px;padding-left:8px;padding-right:8px;"/>
+	</a>
+	{% endif %}
+	<p>
+	{{ pub.authors | markdownify }}
+	</p>
+	<p><i>
+	{{ pub.venue }}, {{ pub.year }}
+	</i></p>
+	{% if pub.doi %}
+	<p>
+	DOI: <a href="https://dx.doi.org/{{ pub.doi }}">{{ pub.doi }}</a>
+	</p>
+	{% endif %}
+	{% if pub.show_abstract && pub.abstract %}
+	<p style="border-bottom:1px solid #EEE;padding-bottom:8px;text-align:right;">
+	<p>
+	{{ pub.abstract | markdownify}}
+	</p>
+	{% endif %}
+	<p style="border-bottom:1px solid #EEE;padding-bottom:8px;text-align:right;">
+	{% if pub.gh_user && pub.gh_repo %}
+	<a aria-label="Star {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
+		data-count-aria-label="# stargazers on GitHub"
+		data-count-api="/repos/{{ pub.gh_user }}/{{ pub.gh_repo }}#stargazers_count"
+		data-count-href="/{{ pub.gh_user }}/{{ pub.gh_repo }}/stargazers"
+		data-style="mega"
+		data-icon="octicon-star"
+		href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}"
+		class="github-button">Star</a>
+	<a aria-label="Fork {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
+		data-count-aria-label="# forks on GitHub"
+		data-count-api="/repos/{{ pub.gh_user }}/{{ pub.gh_repo }}#forks_count"
+		data-count-href="/{{ pub.gh_user }}/{{ pub.gh_repo }}/network"
+		data-style="mega"
+		data-icon="octicon-git-branch"
+		href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}/fork"
+		class="github-button">Fork</a>
+	{% endif %}
+	</p>
 </div>
 {% endfor %}
 
