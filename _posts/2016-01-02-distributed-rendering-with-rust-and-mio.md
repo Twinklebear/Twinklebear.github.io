@@ -682,7 +682,7 @@ properly you can download it [here](http://sci.utah.edu/~will/rt/rust_logos.mp4)
 modeled by [Nylithius](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo), many
 of the models in the scene make use of measured material data from the
 [MERL BRDF database](http://www.merl.com/brdf/). The animation was rendered with 28 nodes on *new*
-using the distributed renderer with 1024 samplers per pixel and took 03:44:02 to render.
+using the distributed renderer with 1024 samples per pixel and took 03:44:02 to render.
 
 <video class="img-responsive" src="http://sci.utah.edu/~will/rt/rust_logos.mp4" type="video/mp4" controls
 	style="padding-top:16px;padding-bottom:16px;" preload="metadata" poster="http://i.imgur.com/KFRqLAo.png">
