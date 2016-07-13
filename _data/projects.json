@@ -23,10 +23,10 @@
 		"image": "http://i.imgur.com/mFPYqF6.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "ispc-rs",
-		"description": "ispc-rs is a small library meant to be used as a compile time dependency
+		"description": "ispc-rs is a small Rust library meant to be used as a compile time dependency
 			for Rust projects to allow them to build and link with code written in
-			[ISPC](https://ispc.github.io/). ISPC is a language that makes it easier to take advantage
-			the CPU's vector units without hand-written intrinsics. Through this library it's easy
+			[ISPC](https://ispc.github.io/). ISPC is a language that makes it possible to take advantage
+			the CPU's vector units without needing hand-written intrinsics. Through this library it's easy
 			to write very fast vector code in ISPC and link it with (still quick!) higher-level code
 			in Rust to get a good balance of high performance and ease of use. The image shown is from
 			the [rt example](https://github.com/Twinklebear/ispc-rs/tree/master/examples/rt)
