@@ -20,7 +20,7 @@
 	},
 	{
 		"title": "ispc-rs",
-		"image": "http://i.imgur.com/mFPYqF6.png",
+		"image": "http://i.imgur.com/ACzYqAm.png"
 		"gh_user": "Twinklebear",
 		"gh_repo": "ispc-rs",
 		"description": "ispc-rs is a small Rust library meant to be used as a compile time dependency
@@ -28,10 +28,16 @@
 			[ISPC](https://ispc.github.io/). ISPC is a language that makes it possible to take advantage
 			the CPU's vector units without needing hand-written intrinsics. Through this library it's easy
 			to write very fast vector code in ISPC and link it with (still quick!) higher-level code
-			in Rust to get a good balance of high performance and ease of use. The image shown is from
-			the [rt example](https://github.com/Twinklebear/ispc-rs/tree/master/examples/rt)
-			which demonstrates a simple fast and parallel path tracer using ISPC
-			for the rendering and Rust to setup the scene and save the image."
+			in Rust to get a good balance of high performance and ease of use.
+			
+			The images shown above are from the
+			[rt example](https://github.com/Twinklebear/ispc-rs/tree/master/examples/rt) (top row)
+			which demonstrates a simple fast and parallel path tracer
+			and the [ddvol example](https://github.com/Twinklebear/ispc-rs/tree/master/examples/ddvol)
+			(bottom row) which is a scientific visualization volume
+			renderer. Both use higher level Rust code to read in a scene file and setup
+			the objects in the scene and then call into ISPC to render in parallel, making
+			good use of the CPU's SIMD units"
 	},
 	{
 		"title": "tobj",
