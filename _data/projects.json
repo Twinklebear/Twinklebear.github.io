@@ -20,7 +20,7 @@
 	},
 	{
 		"title": "ispc-rs",
-		"image": "http://i.imgur.com/ACzYqAm.png"
+		"image": "http://i.imgur.com/ACzYqAm.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "ispc-rs",
 		"description": "ispc-rs is a small Rust library meant to be used as a compile time dependency
@@ -37,7 +37,7 @@
 			(bottom row) which is a scientific visualization volume
 			renderer. Both use higher level Rust code to read in a scene file and setup
 			the objects in the scene and then call into ISPC to render in parallel, making
-			good use of the CPU's SIMD units"
+			good use of the CPU's SIMD units."
 	},
 	{
 		"title": "tobj",
