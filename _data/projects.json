@@ -28,8 +28,7 @@
 			[ISPC](https://ispc.github.io/). ISPC is a language that makes it possible to take advantage
 			the CPU's vector units without needing hand-written intrinsics. Through this library it's easy
 			to write very fast vector code in ISPC and link it with (still quick!) higher-level code
-			in Rust to get a good balance of high performance and ease of use.
-			
+			in Rust to get a good balance of high performance and ease of use.\n\n
 			The images shown above are from the
 			[rt example](https://github.com/Twinklebear/ispc-rs/tree/master/examples/rt) (top row)
 			which demonstrates a simple fast and parallel path tracer
