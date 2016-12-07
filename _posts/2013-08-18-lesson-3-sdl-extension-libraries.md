@@ -288,5 +288,5 @@ If everything went well you should see this draw to your window.
 If you have any issues check your error log and check back through the lesson. Feel free to post
 any questions you may have below.
 
-I'll see you again soon in [Lesson 4: Handling Events!]({% post_url 2013-8-20-lesson-4-handling-events %})
+I'll see you again soon in [Lesson 4: Handling Events!]({% post_url 2013-08-20-lesson-4-handling-events %})
 

@@ -21,7 +21,7 @@ title: Selected Projects
 		{{ project.description | markdownify}}
 		</p>
 		<p style="border-bottom:1px solid #EEE;padding-bottom:8px;text-align:right;">
-		{% if project.gh_user && project.gh_repo %}
+		{% if project.gh_user and project.gh_repo %}
 		<a aria-label="Star {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
 			data-count-aria-label="# stargazers on GitHub"
 			data-count-api="/repos/{{ project.gh_user }}/{{ project.gh_repo }}#stargazers_count"
