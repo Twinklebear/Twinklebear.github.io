@@ -7,6 +7,8 @@
 		"image": "http://sci.utah.edu/~will/papers/in_situ_particles/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/in_situ_particles/thumbnail.png",
 		"doi": "10.14529/jsfi160401",
+		"gh_user": "Twinklebear",
+		"gh_repo": "in-situ-particles",
 		"year": 2016,
 		"bibtex": "@article{Usher_InSituParticles_2016,
 				   author={Will Usher and Ingo Wald and Aaron Knoll and Michael Papka and Valerio Pascucci},
