@@ -48,8 +48,8 @@ a shorter distance while the shutter is open. This is not currently supported in
 cool to implement. For example by controlling the shutter speed we can reduce the amount of motion blur we see and create a stop
 motion appearance in our animations.
 
-<figure class="img-responsive">
-	<img class="img-responsive" src="http://i.imgur.com/Q98K76K.png" alt="Shutter Angle, wikipedia" />
+<figure class="img-fluid">
+	<img class="img-fluid" src="http://i.imgur.com/Q98K76K.png" alt="Shutter Angle, wikipedia" />
 	<figcaption><i>Shutter Angle, (<a href="https://en.wikipedia.org/wiki/Rotary_disc_shutter">Wikipedia</a>)</i>
 	</figcaption>
 </figure>
@@ -151,14 +151,14 @@ produced by changing the degree and knots of the [plot2d example](https://github
 included with the library.
 
 <div class="col-xs-12 col-md-6">
-<figure class="img-responsive">
-	<img class="img-responsive" src="http://i.imgur.com/LL5vG3z.png" alt="Linear Interpolation" />
+<figure class="img-fluid">
+	<img class="img-fluid" src="http://i.imgur.com/LL5vG3z.png" alt="Linear Interpolation" />
 	<figcaption><i>Linear Interpolation</i></figcaption>
 </figure>
 </div>
 <div class="col-xs-12 col-md-6">
-<figure class="img-responsive">
-	<img class="img-responsive" src="http://i.imgur.com/kk5rtXK.png" alt="Cubic B-Spline Interpolation" />
+<figure class="img-fluid">
+	<img class="img-fluid" src="http://i.imgur.com/kk5rtXK.png" alt="Cubic B-Spline Interpolation" />
 	<figcaption><i>Cubic B-Spline Interpolation</i></figcaption>
 </figure>
 </div>
@@ -187,7 +187,7 @@ Here's the resulting video. If you'd prefer to watch on YouTube I've [uploaded i
 not as good due to compression. If your browser doesn't play the video properly you can
 [download it](http://sci.utah.edu/~will/rt/rtc_2015_med_quality_420p.mp4) and watch it locally.
 
-<video class="img-responsive" src="http://sci.utah.edu/~will/rt/rtc_2015_med_quality_420p.mp4" type="video/mp4" controls
+<video class="img-fluid" src="http://sci.utah.edu/~will/rt/rtc_2015_med_quality_420p.mp4" type="video/mp4" controls
 	style="padding-top:16px;padding-bottom:16px;" preload="metadata" poster="http://i.imgur.com/ftJyrnA.jpg">
 Sorry your browser doesn't support HTML5 video, but don't worry you can download the video
 <a href="http://sci.utah.edu/~will/rt/rtc_2015_med_quality_420p.mp4">here</a> and watch it locally.

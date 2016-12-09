@@ -1,11 +1,8 @@
 body {
 	background-color: rgb(238, 238, 238);
 }
-body .content {
-	background-color: white;
-	border-radius: 0px 0px 6px 6px;
-	font-size: 17px;
-	line-height: 1.35em;
+.content {
+	background: white;
 }
 /* Chuck out bootstrap's syntax highlighting stuff */
 pre, pre code {

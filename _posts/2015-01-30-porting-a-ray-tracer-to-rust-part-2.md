@@ -159,7 +159,7 @@ integrator but will be worth pursuing once path tracing is implemented. The code
 [main.rs](https://github.com/Twinklebear/tray_rust/blob/master/src/main.rs).
 
 
-<img src="http://i.imgur.com/o7VKbBq.png" class="img-responsive">
+<img src="http://i.imgur.com/o7VKbBq.png" class="img-fluid">
 
 There are a few stray black/white pixels in the image but I think these are just sampling artifacts and should be cleaned up once we
 start taking more than one sample per pixel. Here we're just hitting an uncommon path where we get a black or white

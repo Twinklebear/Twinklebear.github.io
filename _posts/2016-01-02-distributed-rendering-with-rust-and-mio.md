@@ -48,7 +48,7 @@ block closer to what it and other threads are working on, giving a higher chance
 and other data for that region are already in cache.
 
 <div class="col-md-12">
-<div class="col-md-8 col-md-offset-2 text-center">
+<div class="col-md-8 offset-md-2 text-md-center">
 <pre class="diagram">
                 +----------+----------+
                 |          |          |
@@ -106,7 +106,7 @@ will instruct each node to render 380 of them. In the case that
 the number of nodes doesn't evenly divide the number of blocks the remainder are given to the
 last worker.
 
-<div class="col-md-12 text-center">
+<div class="col-md-12 text-md-center">
 <pre class="diagram">
        .-------------------------.      .---------.       .-------------------------.       
       | Scene: "cornell_box.json" |     |         |      | Scene: "cornell_box.json" |      
@@ -149,29 +149,29 @@ images below. Additionally, there may also be a bug causing the odd extra boxes 
 results, I need to look into this some more.
 
 <div class="row">
-<div class="col-md-6 text-center">
-<img class="img-responsive" src="http://i.imgur.com/9UfVGse.png" alt="Node 0's results">
+<div class="col-md-6 text-md-center">
+<img class="img-fluid" src="http://i.imgur.com/9UfVGse.png" alt="Node 0's results">
 <i>Worker 0's Results</i>
 </div>
-<div class="col-md-6 text-center">
-<img class="img-responsive" src="http://i.imgur.com/1PrdC7N.png" alt="node 1's results">
+<div class="col-md-6 text-md-center">
+<img class="img-fluid" src="http://i.imgur.com/1PrdC7N.png" alt="node 1's results">
 <i>Worker 1's Results</i>
 </div>
 </div>
 
 <div class="row">
-<div class="col-md-4 text-center">
-<img class="img-responsive" src="http://i.imgur.com/NKXW7ap.png" alt="node 2's results">
+<div class="col-md-4 text-md-center">
+<img class="img-fluid" src="http://i.imgur.com/NKXW7ap.png" alt="node 2's results">
 <i>Worker 2's Results</i>
 </div>
 
-<div class="col-md-4 text-center">
-<img class="img-responsive" src="http://i.imgur.com/lF8jwRE.png" alt="node 3's results">
+<div class="col-md-4 text-md-center">
+<img class="img-fluid" src="http://i.imgur.com/lF8jwRE.png" alt="node 3's results">
 <i>Worker 3's Results</i>
 </div>
 
-<div class="col-md-4 text-center">
-<img class="img-responsive" src="http://i.imgur.com/Qz7yIyL.png" alt="node 4's results">
+<div class="col-md-4 text-md-center">
+<img class="img-fluid" src="http://i.imgur.com/Qz7yIyL.png" alt="node 4's results">
 <i>Worker 4's Results</i>
 </div>
 </div>
@@ -202,7 +202,7 @@ We do still add some additional communication as we add more nodes since the reg
 send back to the master overlap some based on the size of the reconstruction filter. We'll discuss
 one idea for potentially reducing this overhead further in the scalability section.
 
-<div class="col-md-12 text-center">
+<div class="col-md-12 text-md-center">
 <pre class="diagram">
         .--------.      .--------.      .--------.      .--------.      .--------.      
        /        /|     /        /|     /        /|     /        /|     /        /|      
@@ -239,8 +239,8 @@ Once the master has collected results from all the workers it can do the final f
 division for each pixel and conversion to sRGB to save the frame out as a PNG. Here's the result
 for our 400x304 Cornell box example with 256 samples per pixel that we've been following along.
 
-<div class="col-md-12 text-center">
-<img class="img-responsive" src="http://i.imgur.com/YEhp254.png" alt="Rendered result">
+<div class="col-md-12 text-md-center">
+<img class="img-fluid" src="http://i.imgur.com/YEhp254.png" alt="Rendered result">
 <i>Rendered Image</i>
 </div>
 
@@ -561,11 +561,11 @@ path tracing it's likely that paths traced which initially hit a wall will bounc
 and intersect the Buddha but the pixels that see it directly will still have more work
 vs. those that hit it indirectly.
 
-<div class="col-md-12 text-center">
-<img class="img-responsive" src="http://i.imgur.com/usuLnIj.png" alt="Cornell Box">
+<div class="col-md-12 text-md-center">
+<img class="img-fluid" src="http://i.imgur.com/usuLnIj.png" alt="Cornell Box">
 <i>Cornell Box test scene</i>
 
-<img class="img-responsive" src="http://i.imgur.com/hOZmzlB.png" alt="Buddha Box">
+<img class="img-fluid" src="http://i.imgur.com/hOZmzlB.png" alt="Buddha Box">
 <i>Buddha Box test scene</i>
 </div>
 
@@ -588,12 +588,12 @@ strong scaling. In the case of perfect strong scaling we'd expect that if 1 node
 should run at 20x the speed, however this is quite hard to achieve.
 
 <div class="col-md-12">
-<div class="col-md-10 col-md-offset-1 text-center">
-<img class="img-responsive" src="/assets/img/distrib_rendering_scaling/old_scaling.svg">
+<div class="col-md-10 offset-md-1 text-md-center">
+<img class="img-fluid" src="/assets/img/distrib_rendering_scaling/old_scaling.svg">
 <i>Old cluster strong scaling, 16 threads/node</i>
 </div>
-<div class="col-md-10 col-md-offset-1 text-center">
-<img class="img-responsive" src="/assets/img/distrib_rendering_scaling/new_scaling.svg">
+<div class="col-md-10 offset-md-1 text-md-center">
+<img class="img-fluid" src="/assets/img/distrib_rendering_scaling/new_scaling.svg">
 <i>New cluster strong scaling, 30 threads/node</i>
 </div>
 </div>
@@ -684,7 +684,7 @@ of the models in the scene make use of measured material data from the
 [MERL BRDF database](http://www.merl.com/brdf/). The animation was rendered with 28 nodes on *new*
 using the distributed renderer with 1024 samples per pixel and took 03:44:02 to render.
 
-<video class="img-responsive" src="http://sci.utah.edu/~will/rt/rust_logos.mp4" type="video/mp4" controls
+<video class="img-fluid" src="http://sci.utah.edu/~will/rt/rust_logos.mp4" type="video/mp4" controls
 	style="padding-top:16px;padding-bottom:16px;" preload="metadata" poster="http://i.imgur.com/KFRqLAo.png">
 Sorry your browser doesn't support HTML5 video, but don't worry you can download the video
 <a href="http://sci.utah.edu/~will/rt/rust_logos.mp4">here</a> and watch it locally.
