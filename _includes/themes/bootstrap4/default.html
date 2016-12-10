@@ -26,10 +26,11 @@
 <body>
 	<nav class="navbar navbar-dark bg-inverse navbar-static-top">
 		<a class="navbar-brand" href="{{HOME_PATH}}">{{ site.title }}</a>
-		<button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse"
+		<button class="navbar-toggler hidden-lg-up float-xs-right float-sm-right float-md-right"
+			type="button" data-toggle="collapse"
 			data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
 			aria-label="Toggle navigation"></button>
-		<div class="collapse navbar-toggleable-md" id="navbarResponsive">
+		<div class="collapse navbar-toggleable-md col-xs-12 col-sm-12 col-md-10" id="navbarResponsive">
 			<ul class="nav navbar-nav">
 			{% assign pages_list = site.nav_pages %}
 			{% assign group = 'navigation' %}
