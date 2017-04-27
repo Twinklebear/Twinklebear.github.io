@@ -24,7 +24,7 @@ title: Selected Projects
 		{% if project.gh_user and project.gh_repo %}
 		<a aria-label="Star {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
 			data-count-aria-label="# stargazers on GitHub"
-			data-count-api="/repos/{{ project.gh_user }}/{{ project.gh_repo }}#stargazers_count"
+			data-show-count="true"
 			data-count-href="/{{ project.gh_user }}/{{ project.gh_repo }}/stargazers"
 			data-style="mega"
 			data-icon="octicon-star"
@@ -32,7 +32,7 @@ title: Selected Projects
 			class="github-button">Star</a>
 		<a aria-label="Fork {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
 			data-count-aria-label="# forks on GitHub"
-			data-count-api="/repos/{{ project.gh_user }}/{{ project.gh_repo }}#forks_count"
+			data-show-count="true"
 			data-count-href="/{{ project.gh_user }}/{{ project.gh_repo }}/network"
 			data-style="mega"
 			data-icon="octicon-git-branch"
