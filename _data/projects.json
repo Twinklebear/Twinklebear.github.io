@@ -112,6 +112,16 @@
 			of my ray tracing work is now going on there."
 	},
 	{
+		"title": "Spline Viewer",
+		"image": "http://i.imgur.com/EzAQZyM.png",
+		"gh_user": "Twinklebear",
+		"gh_repo": "spline-viewer",
+		"description": "A viewer for B-spline curves and surfaces, initially written for a course on
+			computer aided geometric design. You can edit and create 2D B-splines
+			and tweak some properties of loaded 3D curves and surfaces. Useful for learning
+			about and playing with B-splines."
+	},
+	{
 		"title": "lfwatch",
 		"gh_user": "Twinklebear",
 		"gh_repo": "lfwatch",
