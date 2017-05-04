@@ -39,6 +39,21 @@
 			good use of the CPU's SIMD units."
 	},
 	{
+		"title": "topo-vol",
+		"image": "http://i.imgur.com/0geW8ma.png",
+		"gh_user": "Twinklebear",
+		"gh_repo": "topo-vol",
+		"description": "topo-vol is a topology guided volume exploration and analysis tool, written for
+			the final project in [Bei Wang's Computational Topology Course](http://www.sci.utah.edu/~beiwang/teaching/cs6170-spring-2017/schedule.html).
+			It is built on top of the [Topology ToolKit](https://topology-tool-kit.github.io/) and
+			[VTK](http://www.vtk.org/) for computation, and uses [ImGui](https://github.com/ocornut/imgui)
+			and a custom rendering system for the UI and volume rendering. By computing relevant topological
+			structures (e.g. the contour tree) and classifying segments of data corresponding to the
+			branches in this tree we can avoid occlusion issues with global transfer functions and
+			create more useful, detailed renderings.
+			See the [report](https://github.com/Twinklebear/topo-vol/blob/master/report.pdf) for more details."
+	},
+	{
 		"title": "tobj",
 		"image": "http://i.imgur.com/wImyNG4.png",
 		"gh_user": "Twinklebear",
@@ -110,6 +125,16 @@
 			[MERL BRDF Database](http://www.merl.com/brdf/).\n\n
 			This is the project tray_rust is based on and as such may not see much more development since most
 			of my ray tracing work is now going on there."
+	},
+	{
+		"title": "Spline Viewer",
+		"image": "http://i.imgur.com/EzAQZyM.png",
+		"gh_user": "Twinklebear",
+		"gh_repo": "spline-viewer",
+		"description": "A viewer for B-spline curves and surfaces, initially written for a course on
+			computer aided geometric design. You can edit and create 2D B-splines
+			and tweak some properties of loaded 3D curves and surfaces. Useful for learning
+			about and playing with B-splines."
 	},
 	{
 		"title": "lfwatch",

@@ -5,6 +5,7 @@ title: "Porting a Ray Tracer to Rust, part 3"
 description: "Path Tracing the Rust Logo!"
 category:
 tags: ["Rust", "ray tracing", "graphics"]
+mathjax: true
 ---
 {% include JB/setup %}
 
@@ -355,6 +356,4 @@ list and will be addressed in the future.
 If you have comments, suggestions for improvements or just want to say "hi" feel free to comment below, [tweet at me](https://twitter.com/_wusher)
 or ping me on IRC (I'm Twinklebear on freenode and moznet).
 The code for the Rust ray tracer is MIT licensed and available on [GitHub](https://github.com/Twinklebear/tray_rust).
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
