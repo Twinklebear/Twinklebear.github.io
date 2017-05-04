@@ -179,7 +179,7 @@ const std::string resPath = getResourcePath("Lesson2");
 SDL_Texture *background = loadTexture(resPath + "background.bmp", renderer);
 SDL_Texture *image = loadTexture(resPath + "image.bmp", renderer);
 if (background == nullptr || image == nullptr){
-	cleanup(background, image, render, window);
+	cleanup(background, image, renderer, window);
 	SDL_Quit();
 	return 1;
 }
@@ -247,7 +247,7 @@ Cleaning Up
 Before we exit we've got to free our textures, renderer and window and quit SDL.
 
 {% highlight c++ %}
-cleanup(background, image, render, window);
+cleanup(background, image, renderer, window);
 SDL_Quit();
 {% endhighlight %}
 <br />
