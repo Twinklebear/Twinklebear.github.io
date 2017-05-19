@@ -1,5 +1,14 @@
 [
 	{
+		"title": "Progressive CPU Volume Rendering with Sample Accumulation",
+		"authors": "Will Usher, Jefferson Amstutz, Carson Brownlee, Aaron Knoll, Ingo Wald",
+		"venue": "EGPGV (To Appear)",
+		"url": "http://sci.utah.edu/~will/papers/savr/savr.pdf",
+		"image": "http://sci.utah.edu/~will/papers/savr/teaser.png",
+		"thumb": "http://sci.utah.edu/~will/papers/savr/thumbnail.png",
+		"year": 2017
+	},
+	{
 		"title": "In Situ Exploration of Particle Simulations with CPU Ray Tracing",
 		"authors": "Will Usher, Ingo Wald, Aaron Knoll, Michael Papka, Valerio Pascucci",
 		"venue": "Supercomputing Frontiers and Innovations",
