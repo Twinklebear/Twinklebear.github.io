@@ -8,7 +8,7 @@ title: Selected Projects
 <a href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}">
 	<h1>{{ project.title }}</h1>
 </a>
-<div class="row">
+<div class="row justify-content-md-center">
 	{% if project.image %}
 	<div class="col-md-6 col-sm-12">
 	{% else %}
@@ -39,9 +39,25 @@ title: Selected Projects
 	{% if project.image %}
 	<div class="col-md-6 col-sm-12">
 		<a href="{{ project.image }}">
-			<img class="img-fluid" src="{{ project.image }}"
-			style="padding-bottom:8px;padding-left:8px;padding-right:8px;"/>
+			<img class="img-fluid" src="{{ project.image }}"/>
 		</a>
+	</div>
+	{% endif %}
+	{% if project.image_list %}
+	<div class="row col-md-12">
+		{% for i in project.image_list %}
+		<div class="col-md-{{ 12 | divided_by: forloop.length }} col-sm-12">
+			{% if i.type == "img" %}
+			<a href="{{ i.src }}">
+				<img class="img-fluid" src="{{ i.src }}"/>
+			</a>
+			{% elsif i.type == "video" %}
+			<video class="img-fluid" src="{{ i.src }}" type="video/mp4" controls
+				preload="metadata" poster="{{ i.poster }}">
+			</video>
+			{% endif %}
+		</div>
+		{% endfor %}
 	</div>
 	{% endif %}
 </div>
