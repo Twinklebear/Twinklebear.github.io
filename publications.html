@@ -5,47 +5,28 @@ title: Publications
 {% include JB/setup %}
 
 {% for pub in site.data.publications %}
-<div class="col-lg-6 col-md-12 col-s-12 col-xs-12"
-	style="border-bottom:1px solid #EEE;padding-bottom:8px;">
-
-	<a href="{{ pub.url }}"><h3>{{ pub.title }}</h3></a>
+<a href="{{ pub.url }}"><h2>{{ pub.title }}</h2></a>
+<div class="row">
 	{% if pub.image and pub.thumb %}
-	<a href="{{ pub.image }}">
-		<img class="img-fluid" src="{{ pub.thumb }}"
-			style="padding-bottom:8px;padding-left:8px;padding-right:8px;"/>
-	</a>
+	<div class="col-md-6">
+	{% else %}
+	<div class="col-md-12">
 	{% endif %}
-	<p>
-	{{ pub.authors | markdownify }}
-	</p>
-	<p><i>
-	{{ pub.venue }}, {{ pub.year }}
-	</i></p>
+		<h5>{{ pub.authors | markdownify }}</h5>
+		<p>
+		<i>{{ pub.venue }}, {{ pub.year }}</i>
+		{% if pub.doi %}
+		DOI: <a href="https://dx.doi.org/{{ pub.doi }}">{{ pub.doi }}</a>
+		{% endif %}
+		</p>
 
-	{% if pub.doi %}
-	<p>
-	DOI: <a href="https://dx.doi.org/{{ pub.doi }}">{{ pub.doi }}</a>
-	</p>
-	{% endif %}
-
-	{% if pub.bibtex %}
-	<button type="button" class="btn btn-secondary" data-toggle="collapse"
-		data-target="#bibtex{{ forloop.index }}">Show BibTeX</button>
-	<div class="col-lg-12 col-md-12 col-s-12 col-xs-12">
-		<code id="bibtex{{ forloop.index }}" class="collapse"
-			style="font-size:10pt;">
-			{{ pub.bibtex | replace: ',',', <br>'}}
-		</code>
-	</div>
-	{% endif %}
-
-	{% if pub.gh_user and pub.gh_repo %}
-	<div class="col-lg-12 col-md-12 col-s-12 col-xs-12" style="text-align:right;">
+		{% if pub.gh_user and pub.gh_repo %}
+		<p>
 		<a aria-label="Star {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
 			data-count-aria-label="# stargazers on GitHub"
 			data-show-count="true"
 			data-count-href="/{{ pub.gh_user }}/{{ pub.gh_repo }}/stargazers"
-			data-style="mega"
+			data-size="large"
 			data-icon="octicon-star"
 			href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}"
 			class="github-button">Star</a>
@@ -53,16 +34,24 @@ title: Publications
 			data-count-aria-label="# forks on GitHub"
 			data-show-count="true"
 			data-count-href="/{{ pub.gh_user }}/{{ pub.gh_repo }}/network"
-			data-style="mega"
+			data-size="large"
 			data-icon="octicon-git-branch"
 			href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}/fork"
 			class="github-button">Fork</a>
+		</p>
+		{% endif %}
+	</div>
+	{% if pub.image and pub.thumb %}
+	<div class="col-md-6">
+		<a href="{{ pub.image }}">
+			<img class="img-fluid" src="{{ pub.thumb }}"
+				style="padding-bottom:8px;padding-left:8px;padding-right:8px;"/>
+		</a>
 	</div>
 	{% endif %}
 </div>
+<hr>
 {% endfor %}
 
-<div class="col-lg-12 col-md-12 col-s-12 col-xs-12" style="padding:16px;">
-</div>
 <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
 

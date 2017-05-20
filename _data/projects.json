@@ -1,5 +1,4 @@
 [
-	[
 	{
 		"title": "tray_rust",
 		"image": "http://i.imgur.com/E1ylrZW.jpg",
@@ -81,10 +80,7 @@
 			up available on [my classpage](http://www.willusher.io/courses/cs6610/) since this was initially
 			implemented as a class project.\n\n
 			The image shows just the ambient occlusion value for a view of the Crytek Sponza scene."
-	}
-	],
-
-	[
+	},
 	{
 		"title": "μPacket",
 		"image": "http://i.imgur.com/WcM6Rcl.png",
@@ -145,6 +141,5 @@
 			about the file change event. This was written to do hot reloading of GLSL shaders but could be
 			useful for some other applications."
 	}
-	]
 ]
 

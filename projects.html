@@ -4,29 +4,24 @@ title: Selected Projects
 ---
 {% include JB/setup %}
 
-{% for col in site.data.projects %}
-<div class="col-lg-6 col-md-12 col-s-12 col-xs-12">
-	{% for project in col %}
-	<div class="col-lg-12 col-md-12 col-s-12 col-xs-12">
-		<a href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}">
-			<h3>{{ project.title }}</h3>
-		</a>
-		{% if project.image %}
-		<a href="{{ project.image }}">
-			<img class="img-fluid" src="{{ project.image }}"
-				style="padding-bottom:8px;padding-left:8px;padding-right:8px;"/>
-		</a>
-		{% endif %}
+{% for project in site.data.projects %}
+<a href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}">
+	<h1>{{ project.title }}</h1>
+</a>
+<div class="row">
+	{% if project.image %}
+	<div class="col-md-6">
+	{% else %}
+	<div class="col-md-12">
+	{% endif %}
 		<p>
 		{{ project.description | markdownify}}
-		</p>
-		<p style="border-bottom:1px solid #EEE;padding-bottom:8px;text-align:right;">
 		{% if project.gh_user and project.gh_repo %}
 		<a aria-label="Star {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
 			data-count-aria-label="# stargazers on GitHub"
 			data-show-count="true"
 			data-count-href="/{{ project.gh_user }}/{{ project.gh_repo }}/stargazers"
-			data-style="mega"
+			data-size="large"
 			data-icon="octicon-star"
 			href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}"
 			class="github-button">Star</a>
@@ -34,18 +29,24 @@ title: Selected Projects
 			data-count-aria-label="# forks on GitHub"
 			data-show-count="true"
 			data-count-href="/{{ project.gh_user }}/{{ project.gh_repo }}/network"
-			data-style="mega"
+			data-size="large"
 			data-icon="octicon-git-branch"
 			href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}/fork"
 			class="github-button">Fork</a>
 		{% endif %}
 		</p>
 	</div>
-	{% endfor %}
+	{% if project.image %}
+	<div class="col-md-6">
+		<a href="{{ project.image }}">
+			<img class="img-fluid" src="{{ project.image }}"
+			style="padding-bottom:8px;padding-left:8px;padding-right:8px;"/>
+		</a>
+	</div>
+	{% endif %}
 </div>
+<hr>
 {% endfor %}
 
-<div class="col-lg-12 col-md-12 col-s-12 col-xs-12" style="padding:16px;">
-</div>
 <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
 
