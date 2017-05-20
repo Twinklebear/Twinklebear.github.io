@@ -62,13 +62,6 @@ div.comments {
 	vertical-align: super;
 	font-size: 0.8em;
 }
-/* Extra styling for the post excerpt list */
-div.post_excerpt {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	border-bottom: 1px solid #EEE;
-	padding-bottom: 16px;
-}
 /* Don't apply link coloring to icons */
 a.icon {
 	color: #9a9a9a;

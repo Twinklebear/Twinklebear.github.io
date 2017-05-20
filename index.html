@@ -4,13 +4,20 @@ title: Programs on the Internet
 ---
 {% include JB/setup %}
 
-{% for post in site.posts %}
-<div class="post_excerpt">
+{% for post in site.posts limit:4 %}
+<div class="col-md-12">
 	<a href="{{ post.url }}"><h3>{{ post.title }}</h3></a>
 	<b>{{ post.date | date_to_string }}</b>
 	{{ post.excerpt }}
 
 	<a href="{{ post.url }}">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 </div>
+<hr>
 {% endfor %}
+
+{% if site.posts.size > 4 %}
+<div class="col-md-12" style="padding-bottom:16px">
+	<h5>Find older posts in the <a href="/archive">Archive</a></h5>
+</div>
+{% endif %}
 
