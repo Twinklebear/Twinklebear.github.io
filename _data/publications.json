@@ -6,6 +6,8 @@
 		"url": "http://sci.utah.edu/~will/papers/savr/savr.pdf",
 		"image": "http://sci.utah.edu/~will/papers/savr/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/savr/thumbnail.png",
+		"gh_user": "ospray",
+		"gh_repo": "module_savr",
 		"year": 2017
 	},
 	{
