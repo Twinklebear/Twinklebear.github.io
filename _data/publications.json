@@ -7,6 +7,8 @@
 		"image": "http://sci.utah.edu/~will/papers/savr/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/savr/thumbnail.png",
 		"doi": "10.2312/pgv.20171090",
+		"gh_user": "ospray",
+		"gh_repo": "module_savr",
 		"year": 2017,
 		"bibtex": "@inproceedings {pgv.20171090,
 			booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},
