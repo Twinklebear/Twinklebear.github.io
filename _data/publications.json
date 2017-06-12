@@ -2,11 +2,22 @@
 	{
 		"title": "Progressive CPU Volume Rendering with Sample Accumulation",
 		"authors": "Will Usher, Jefferson Amstutz, Carson Brownlee, Aaron Knoll, Ingo Wald",
-		"venue": "EGPGV (To Appear)",
+		"venue": "Eurographics Symposium on Parallel Graphics and Visualization",
 		"url": "http://sci.utah.edu/~will/papers/savr/savr.pdf",
 		"image": "http://sci.utah.edu/~will/papers/savr/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/savr/thumbnail.png",
-		"year": 2017
+		"doi": "10.2312/pgv.20171090",
+		"year": 2017,
+		"bibtex": "@inproceedings {pgv.20171090,
+			booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},
+			editor = {Alexandru Telea and Janine Bennett},
+			title = {{Progressive CPU Volume Rendering with Sample Accumulation}},
+			author = {Usher, Will and Amstutz, Jefferson and Brownlee, Carson and Knoll, Aaron and Wald, Ingo},
+			year = {2017},
+			publisher = {The Eurographics Association},
+			ISSN = {1727-348X},
+			ISBN = {978-3-03868-034-5},
+			DOI = {10.2312/pgv.20171090},}"
 	},
 	{
 		"title": "In Situ Exploration of Particle Simulations with CPU Ray Tracing",
