@@ -150,6 +150,7 @@ A comparison of linear interpolation with cubic B-Spline interpolation of the sa
 produced by changing the degree and knots of the [plot2d example](https://github.com/Twinklebear/bspline/blob/master/examples/plot2d.rs)
 included with the library.
 
+<div class="row">
 <div class="col-xs-12 col-md-6">
 <figure class="img-fluid">
 	<img class="img-fluid" src="http://i.imgur.com/LL5vG3z.png" alt="Linear Interpolation" />
@@ -161,6 +162,7 @@ included with the library.
 	<img class="img-fluid" src="http://i.imgur.com/kk5rtXK.png" alt="Cubic B-Spline Interpolation" />
 	<figcaption><i>Cubic B-Spline Interpolation</i></figcaption>
 </figure>
+</div>
 </div>
 
 Although the B-Spline curve provides us with a much smoother and more desirable animation path it also doesn't pass
