@@ -41,6 +41,11 @@ title: Publications
 			class="github-button">Fork</a>
 		</p>
 		{% endif %}
+		{% if pub.bibtex %}
+		<button class="bib btn btn-default" data-clipboard-text="{{ pub.bibtex  }}">
+			<span class="fa fa-clipboard" aria-hidden="true"></span> Copy Bibtex
+		</button>
+		{% endif %}
 	</div>
 	{% if pub.image and pub.thumb %}
 	<div class="col-md-6 col-sm-12">
@@ -56,4 +61,10 @@ title: Publications
 </div>
 
 <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script async defer src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
+<script type="text/javascript">
+window.onload = function() {
+	var clip = new Clipboard(".bib");
+}
+</script>
 

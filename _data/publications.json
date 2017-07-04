@@ -10,16 +10,16 @@
 		"gh_user": "ospray",
 		"gh_repo": "module_savr",
 		"year": 2017,
-		"bibtex": "@inproceedings {pgv.20171090,
-			booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},
-			editor = {Alexandru Telea and Janine Bennett},
-			title = {{Progressive CPU Volume Rendering with Sample Accumulation}},
-			author = {Usher, Will and Amstutz, Jefferson and Brownlee, Carson and Knoll, Aaron and Wald, Ingo},
-			year = {2017},
-			publisher = {The Eurographics Association},
-			ISSN = {1727-348X},
-			ISBN = {978-3-03868-034-5},
-			DOI = {10.2312/pgv.20171090},}"
+		"bibtex": "@inproceedings {pgv.20171090,\n
+			booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},\n
+			editor = {Alexandru Telea and Janine Bennett},\n
+			title = {{Progressive CPU Volume Rendering with Sample Accumulation}},\n
+			author = {Usher, Will and Amstutz, Jefferson and Brownlee, Carson and Knoll, Aaron and Wald, Ingo},\n
+			year = {2017},\n
+			publisher = {The Eurographics Association},\n
+			ISSN = {1727-348X},\n
+			ISBN = {978-3-03868-034-5},\n
+			DOI = {10.2312/pgv.20171090},\n}"
 	},
 	{
 		"title": "In Situ Exploration of Particle Simulations with CPU Ray Tracing",
@@ -32,12 +32,12 @@
 		"gh_user": "Twinklebear",
 		"gh_repo": "in-situ-particles",
 		"year": 2016,
-		"bibtex": "@article{Usher_InSituParticles_2016,
-				   author={Will Usher and Ingo Wald and Aaron Knoll and Michael Papka and Valerio Pascucci},
-				   title={In Situ Exploration of Particle Simulations with {CPU} Ray Tracing},
-				   journal={Supercomputing frontiers and innovations},
-				   year={2016},
-				   doi={10.14529/jsfi160401},}"
+		"bibtex": "@article{Usher_InSituParticles_2016,\n
+				   author={Will Usher and Ingo Wald and Aaron Knoll and Michael Papka and Valerio Pascucci},\n
+				   title={In Situ Exploration of Particle Simulations with {CPU} Ray Tracing},\n
+				   journal={Supercomputing frontiers and innovations},\n
+				   year={2016},\n
+				   doi={10.14529/jsfi160401},\n}"
 	},
 	{
 		"title": "VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures",
@@ -48,12 +48,12 @@
 		"url": "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7466740",
 		"doi": "10.1109/MCG.2016.48",
 		"year": 2016,
-		"bibtex": "@article{Moreland_VTKm_2016,
-				   author={K. Moreland and C. Sewell and W. Usher and L. t. Lo and J. Meredith and D. Pugmire and J. Kress and H. Schroots and K. L. Ma and H. Childs and M. Larsen and C. M. Chen and R. Maynard and B. Geveci},
-				   journal={IEEE Computer Graphics and Applications},
-				   title={VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures},
-				   year={2016},
-				   doi={10.1109/MCG.2016.48},}"
+		"bibtex": "@article{Moreland_VTKm_2016,\n
+				   author={K. Moreland and C. Sewell and W. Usher and L. t. Lo and J. Meredith and D. Pugmire and J. Kress and H. Schroots and K. L. Ma and H. Childs and M. Larsen and C. M. Chen and R. Maynard and B. Geveci},\n
+				   journal={IEEE Computer Graphics and Applications},\n
+				   title={VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures},\n
+				   year={2016},\n
+				   doi={10.1109/MCG.2016.48},\n}"
 	},
 	{
 		"title": "CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees",
@@ -66,13 +66,13 @@
 		"gh_user": "ingowald",
 		"gh_repo": "ospray-module-pkd",
 		"year": 2015,
-		"bibtex": "@inproceedings{Wald_PKD_2015,
-				  author={I. Wald and A. Knoll and G. P. Johnson and W. Usher and V. Pascucci and M. E. Papka},
-			      booktitle={2015 IEEE Scientific Visualization Conference (SciVis)},
-			      title={CPU ray tracing large particle data with balanced {P-k-d} trees},
-				  year={2015},
-				  pages={57-64},
-				  doi={10.1109/SciVis.2015.7429492},}"
+		"bibtex": "@inproceedings{Wald_PKD_2015,\n
+				  author={I. Wald and A. Knoll and G. P. Johnson and W. Usher and V. Pascucci and M. E. Papka},\n
+			      booktitle={2015 IEEE Scientific Visualization Conference (SciVis)},\n
+			      title={CPU ray tracing large particle data with balanced {P-k-d} trees},\n
+				  year={2015},\n
+				  pages={57-64},\n
+				  doi={10.1109/SciVis.2015.7429492},\n}"
 	}
 ]
 
