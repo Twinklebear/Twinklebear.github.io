@@ -202,13 +202,13 @@ impl<'a, T> InPlace<T> for Bar<'a, T> {
 With all these pieces we can now implement a toy example memory arena which simply
 allocates from a fixed 512 byte buffer. Our struct `ToyArena` will be the memory arena
 holding the actual buffer we use to allocate objects in, while `ToyPlace` will
-be `Place` type returned to satisfy the allocation. To keep things simple we'll overwrite
+be the `Place` type returned to satisfy the allocation. To keep things simple we'll overwrite
 the buffer with the latest allocation each time, instead of tracking capacities and usage
 of the buffer. `ToyPlace` will borrow the `ToyArena` to get access to the buffer to
 allocate into and will track the type `T` being allocated with a `PhantomData`.
 Here we also apply the restriction that `T` is `Copy`, meaning it's Plain-Old-Data,
-since we won't be calling any `Drop` methods and as a result would leak allocations
-or resources held by `T`.
+since we won't be calling `Drop` when clearing or overwriting, and as a result would
+leak allocations or resources held by `T` which was not `Copy`.
 
 {% highlight rust %}
 struct ToyArena {
@@ -220,16 +220,33 @@ struct ToyPlace<'a, T: Copy> {
 }
 {% endhighlight %}
 
+We implement `Placer` for `&mut ToyArena` instead of `ToyArena` directly since
+`make_place` takes `self` by value, and we don't want to actually consume the
+arena when making an allocation (this would defeat the whole point of re-using!).
+Note the lifetime `'a` for the borrowed arena in `ToyPlace` is tied to the lifetime
+of the `ToyArena` that `make_place` is being called on.
+
 {% highlight rust %}
 impl<'a, T: 'a + Copy> Placer<T> for &'a mut ToyArena {
     type Place = ToyPlace<'a, T>;
-    
+
     fn make_place(self) -> ToyPlace<'a, T> {
         println!("Placer::make_place");
         ToyPlace { toy_arena: self, phantom: PhantomData }
     }
 }
 {% endhighlight %}
+
+Our `Place` implementation for `ToyPlace` can then just return a pointer to
+the front of the array in the arena, implicitly overwriting any previous allocation.
+The `InPlace` implementation then takes the pointer to the array, now pointing
+to our `T` instance, and returns it as `&mut T` so the caller can assign the
+reference to a local variable and operate on the object. Here we bound the
+lifetime of the returned borrow to the same lifetime that `ToyPlace` is
+parameterized on, the lifetime of the containing `ToyArena`. This ensures
+that the Rust compiler will be able to reason about validity of lifetimes
+of objects in the arena, specifically, no reference to an object created
+in the arena can outlive the arena itself.
 
 {% highlight rust %}
 impl<'a, T: Copy> Place<T> for ToyPlace<'a, T> {
@@ -247,6 +264,11 @@ impl<'a, T: 'a + Copy> InPlace<T> for ToyPlace<'a, T> {
 }
 {% endhighlight %}
 
+To use our arena we can create one, and using the placement in syntax
+allocate a new float object in place in the arena. The code is
+available on the [Rust playground](https://play.rust-lang.org/?gist=37ddbf013b7da6cc61df3f6ed9a439bc&version=nightly&backtrace=0), try returning a reference to the allocated object outside of the scope
+the arena lives in.
+
 {% highlight rust %}
 fn main() {
     let mut toy_arena = ToyArena { buffer: [0u8; 512] };
@@ -257,15 +279,37 @@ fn main() {
 }
 {% endhighlight %}
 
-[ToyArena on playground](https://play.rust-lang.org/?gist=37ddbf013b7da6cc61df3f6ed9a439bc&version=nightly&backtrace=0)
 
 # 3. The light\_arena Library
 
-Go through description of the impl.
+The final implementation of light\_arena follows directly from what we
+saw above with the `ToyArena`, with a minor modification to allow us to
+safely allocate multiple objects in an arena and mark the space free
+only when it's safe to do so.
 
 ## 3.1. Memory Blocks
 
-this is pretty standard stuff, go quick
+Instead of allocating from a fixed size buffer like the `ToyArena`,
+light\_arena works off of fixed size blocks of memory and will allocate
+new blocks if it runs out of room. These blocks are allocated using `Vec<u8>`
+and stored in the `Block` struct.
+
+{% highlight rust %}
+struct Block {
+    buffer: Vec<u8>,
+    size: usize,
+}
+{% endhighlight %}
+
+The `MemoryArena` then stores a list of these blocks and tracks the size it should
+use when allocating new ones.
+
+{% highlight rust %}
+pub struct MemoryArena {
+    blocks: Vec<Block>,
+    block_size: usize,
+}
+{% endhighlight %}
 
 ## 3.2. Ensuring Single Access
 
