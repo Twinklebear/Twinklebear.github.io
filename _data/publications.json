@@ -1,11 +1,33 @@
 [
 	{
+		"title": "A Virtual Reality Visualization Tool for Neuron Tracing",
+		"authors": "Will Usher, Pavol Klacansky, Frederick Federer, Peer-Timo Bremer,
+				Aaron Knoll, Alessandra Angelucci, and Valerio Pascucci",
+		"venue": "IEEE Vis (to appear)",
+		"url": "http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf",
+		"image": "http://sci.utah.edu/~will/papers/vrnt/teaser.png",
+		"thumb": "http://sci.utah.edu/~will/papers/vrnt/teaser.png",
+		"year": 2017,
+		"short_title": "vrnt",
+		"supplemental": [
+		{
+			"type": "video",
+			"src": "https://www.youtube.com/embed/k8PsDvVsRaA"
+		},
+		{
+			"type": "video",
+			"src": "https://www.youtube.com/embed/XZZ7fWjhO6E"
+		}
+		]
+	},
+	{
 		"title": "Progressive CPU Volume Rendering with Sample Accumulation",
 		"authors": "Will Usher, Jefferson Amstutz, Carson Brownlee, Aaron Knoll, Ingo Wald",
 		"venue": "Eurographics Symposium on Parallel Graphics and Visualization",
 		"url": "http://sci.utah.edu/~will/papers/savr/savr.pdf",
 		"image": "http://sci.utah.edu/~will/papers/savr/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/savr/thumbnail.png",
+		"short_title": "savr",
 		"doi": "10.2312/pgv.20171090",
 		"gh_user": "ospray",
 		"gh_repo": "module_savr",
@@ -28,6 +50,7 @@
 		"url": "http://sci.utah.edu/~will/papers/in_situ_particles/in_situ_particles.pdf",
 		"image": "http://sci.utah.edu/~will/papers/in_situ_particles/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/in_situ_particles/thumbnail.png",
+		"short_title": "isp-jsfi",
 		"doi": "10.14529/jsfi160401",
 		"gh_user": "Twinklebear",
 		"gh_repo": "in-situ-particles",
@@ -51,6 +74,7 @@
 		"url": "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7466740",
 		"doi": "10.1109/MCG.2016.48",
 		"year": 2016,
+		"short_title": "vtkm",
 		"bibtex": "@article{Moreland_VTKm_2016,\n
 			author={K. Moreland and C. Sewell and W. Usher and L. t. Lo and J. Meredith and D. Pugmire and J. Kress and H. Schroots and K. L. Ma and H. Childs and M. Larsen and C. M. Chen and R. Maynard and B. Geveci},\n
 			journal={IEEE Computer Graphics and Applications},\n
@@ -73,6 +97,7 @@
 		"thumb": "http://sci.utah.edu/~will/papers/pkd/thumbnail.jpg",
 		"gh_user": "ingowald",
 		"gh_repo": "ospray-module-pkd",
+		"short_title": "pkd",
 		"year": 2015,
 		"bibtex": "@inproceedings{Wald_PKD_2015,\n
 			author={I. Wald and A. Knoll and G. P. Johnson and W. Usher and V. Pascucci and M. E. Papka},\n
