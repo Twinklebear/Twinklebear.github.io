@@ -13,11 +13,11 @@
 		"supplemental": [
 		{
 			"type": "video",
-			"src": "https://youtu.be/lTNef_kbLKg"
+			"src": "https://www.youtube.com/embed/lTNef_kbLKg"
 		},
 		{
 			"type": "video",
-			"src": "https://youtu.be/L5tsU8TtgkU"
+			"src": "https://www.youtube.com/embed/L5tsU8TtgkU"
 		}
 		],
 		"bibtex": "@article{Usher_VRNT_2017,\n
