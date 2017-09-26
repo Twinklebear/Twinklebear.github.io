@@ -2,7 +2,7 @@
 	{
 		"title": "A Virtual Reality Visualization Tool for Neuron Tracing",
 		"authors": "Will Usher, Pavol Klacansky, Frederick Federer, Peer-Timo Bremer,
-				Aaron Knoll, Alessandra Angelucci, and Valerio Pascucci",
+				Aaron Knoll, Jeff Yarch, Alessandra Angelucci, and Valerio Pascucci",
 		"venue": "IEEE Vis (to appear)",
 		"url": "http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf",
 		"image": "http://sci.utah.edu/~will/papers/vrnt/teaser.png",
@@ -10,18 +10,8 @@
 		"year": 2017,
 		"short_title": "vrnt",
 		"doi": "10.1109/TVCG.2017.2744079",
-		"supplemental": [
-		{
-			"type": "video",
-			"src": "https://www.youtube.com/embed/k8PsDvVsRaA"
-		},
-		{
-			"type": "video",
-			"src": "https://www.youtube.com/embed/XZZ7fWjhO6E"
-		}
-		],
 		"bibtex": "@article{Usher_VRNT_2017,\n
-			author={W. Usher and P. Klacansky and F. Federer and P. T. Bremer and A. Knoll and A. Angelucci and V. Pascucci},\n
+			author={W. Usher and P. Klacansky and F. Federer and P. T. Bremer and A. Knoll and J. Yarch and A. Angelucci and V. Pascucci},\n
 			journal={IEEE Transactions on Visualization and Computer Graphics},\n
 			title={A {Virtual} {Reality} {Visualization} {Tool} for {Neuron} {Tracing}},\n
 			year={2017},\n
