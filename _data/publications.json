@@ -10,6 +10,16 @@
 		"year": 2017,
 		"short_title": "vrnt",
 		"doi": "10.1109/TVCG.2017.2744079",
+		"supplemental": [
+		{
+			"type": "video",
+			"src": "https://youtu.be/lTNef_kbLKg"
+		},
+		{
+			"type": "video",
+			"src": "https://youtu.be/L5tsU8TtgkU"
+		}
+		],
 		"bibtex": "@article{Usher_VRNT_2017,\n
 			author={W. Usher and P. Klacansky and F. Federer and P. T. Bremer and A. Knoll and J. Yarch and A. Angelucci and V. Pascucci},\n
 			journal={IEEE Transactions on Visualization and Computer Graphics},\n
