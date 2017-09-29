@@ -21,8 +21,22 @@ title: Publications
 		{% endif %}
 		</p>
 
+		{% if pub.bibtex %}
+		<div class="col-md-12" style="padding-bottom:0.5em">
+		<button class="bib btn btn-default" data-clipboard-text="{{ pub.bibtex  }}">
+			<span class="fa fa-clipboard" aria-hidden="true"></span> Copy Bibtex
+		</button>
+		</div>
+		{% endif %}
+
 		{% if pub.gh_user and pub.gh_repo %}
-		<p>
+		<div class="col-md-12">
+		<a class="github-button"
+			href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}/subscription"
+			data-icon="octicon-eye"
+			data-show-count="true"
+			data-size="large"
+			aria-label="Watch {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub">Watch</a>
 		<a aria-label="Star {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
 			data-count-aria-label="# stargazers on GitHub"
 			data-show-count="true"
@@ -30,6 +44,7 @@ title: Publications
 			data-size="large"
 			data-icon="octicon-star"
 			href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}"
+			aria-label="Star {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
 			class="github-button">Star</a>
 		<a aria-label="Fork {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
 			data-count-aria-label="# forks on GitHub"
@@ -38,13 +53,9 @@ title: Publications
 			data-size="large"
 			data-icon="octicon-git-branch"
 			href="https://github.com/{{ pub.gh_user }}/{{ pub.gh_repo }}/fork"
+			aria-label="Fork {{ pub.gh_user }}/{{ pub.gh_repo }} on GitHub"
 			class="github-button">Fork</a>
-		</p>
-		{% endif %}
-		{% if pub.bibtex %}
-		<button class="bib btn btn-default" data-clipboard-text="{{ pub.bibtex  }}">
-			<span class="fa fa-clipboard" aria-hidden="true"></span> Copy Bibtex
-		</button>
+		</div>
 		{% endif %}
 	</div>
 	{% if pub.image and pub.thumb %}

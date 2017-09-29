@@ -18,6 +18,12 @@ title: Selected Projects
 		<p>
 		{{ project.description | markdownify}}
 		{% if project.gh_user and project.gh_repo %}
+		<a class="github-button"
+			href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}/subscription"
+			data-icon="octicon-eye"
+			data-show-count="true"
+			data-size="large"
+			aria-label="Watch {{ project.gh_user }}/{{ project.gh_repo }} on GitHub">Watch</a>
 		<a aria-label="Star {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
 			data-count-aria-label="# stargazers on GitHub"
 			data-show-count="true"
@@ -25,6 +31,7 @@ title: Selected Projects
 			data-size="large"
 			data-icon="octicon-star"
 			href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}"
+			aria-label="Star {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
 			class="github-button">Star</a>
 		<a aria-label="Fork {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
 			data-count-aria-label="# forks on GitHub"
@@ -33,6 +40,7 @@ title: Selected Projects
 			data-size="large"
 			data-icon="octicon-git-branch"
 			href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}/fork"
+			aria-label="Fork {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
 			class="github-button">Fork</a>
 		{% endif %}
 		</p>
