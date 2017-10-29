@@ -67,7 +67,7 @@ title: Publications
 	</div>
 	{% endif %}
 	{% if pub.supplemental %}
-	<div class="row col-md-12">
+	<div class="row col-md-12 justify-content-center text-ceenter">
 		{% for i in pub.supplemental %}
 			<div class="col-md-{{ 12 | divided_by: forloop.length }} col-sm-12">
 			{% if i.type == "img" %}
