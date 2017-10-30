@@ -4,21 +4,23 @@
 	<div class="col-md-10">
 		{{content}}
 		<hr>
-		<div class="col-md-4">
+		<div class="col-md-12">
 			<p>Published: {{page.date | date_to_long_string}}</p>
 		</div>
-		{% if page.previous %}
-		<div class="col-md-2 col-xs-6">
-			<a href="{{BASE_PATH}}{{page.previous.url}}" title="{{page.previous.title}}">
-				<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
+		<div class="col-md-12 row">
+			{% if page.previous %}
+			<div class="col-md-6 justify-content-left">
+				<a href="{{BASE_PATH}}{{page.previous.url}}" title="{{page.previous.title}}">
+					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
+			</div>
+			{% endif %}
+			{% if page.next %}
+			<div class="col-md-6 text-right">
+				<a href="{{BASE_PATH}}{{page.next.url}}" title="{{page.next.title}}">
+					Next &nbsp<span class="fa fa-chevron-right" aria-hidden="true"></span></a>
+			</div>
+			{% endif %}
 		</div>
-		{% endif %}
-		{% if page.next %}
-		<div class="col-md-2 col-xs-6">
-			<a href="{{BASE_PATH}}{{page.next.url}}" title="{{page.next.title}}">
-				Next &nbsp<span class="fa fa-chevron-right" aria-hidden="true"></span></a>
-		</div>
-		{% endif %}
 
 		<div class="comments">
 			{% include JB/comments %}
