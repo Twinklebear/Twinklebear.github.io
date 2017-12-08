@@ -3,7 +3,7 @@
 		"title": "A Virtual Reality Visualization Tool for Neuron Tracing",
 		"authors": "Will Usher, Pavol Klacansky, Frederick Federer, Peer-Timo Bremer,
 				Aaron Knoll, Jeff Yarch, Alessandra Angelucci, and Valerio Pascucci",
-		"venue": "IEEE TVCG (to appear)",
+		"venue": "IEEE Transactions on Visualization and Computer Graphics",
 		"url": "http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf",
 		"image": "http://sci.utah.edu/~will/papers/vrnt/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/vrnt/teaser.png",
@@ -24,17 +24,17 @@
 			"src": "https://www.youtube.com/embed/XzmYdl9rFs0"
 		}
 		],
-		"bibtex": "@article{Usher_VRNT_2017,\n
+		"bibtex": "@article{Usher_VRNT_2018,\n
 			author={W. Usher and P. Klacansky and F. Federer and P. T. Bremer and A. Knoll and J. Yarch and A. Angelucci and V. Pascucci},\n
 			journal={IEEE Transactions on Visualization and Computer Graphics},\n
 			title={A {Virtual} {Reality} {Visualization} {Tool} for {Neuron} {Tracing}},\n
-			year={2017},\n
-			volume={PP},\n
-			number={99},\n
-			pages={1-1},\n
+			year={2018},\n
+			volume={24},\n
+			number={1},\n
+			pages={994-1003},\n
 			doi={10.1109/TVCG.2017.2744079},\n
 			ISSN={1077-2626},\n
-			month={},\n}"
+			month={Jan},\n}"
 	},
 	{
 		"title": "Progressive CPU Volume Rendering with Sample Accumulation",
