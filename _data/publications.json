@@ -73,7 +73,7 @@
 		"year": 2016,
 		"bibtex": "@article{Usher_InSituParticles_2016,\n
 			author={Will Usher and Ingo Wald and Aaron Knoll and Michael Papka and Valerio Pascucci},\n
-			title={In Situ Exploration of Particle Simulations with {CPU} Ray Tracing},\n
+			title={In {Situ} {Exploration} of {Particle} {Simulations} with {CPU} {Ray} {Tracing}},\n
 			journal={Supercomputing Frontiers and Innovations},\n
 			volume={3},\n
 			number={4},\n
@@ -94,7 +94,7 @@
 		"bibtex": "@article{Moreland_VTKm_2016,\n
 			author={K. Moreland and C. Sewell and W. Usher and L. t. Lo and J. Meredith and D. Pugmire and J. Kress and H. Schroots and K. L. Ma and H. Childs and M. Larsen and C. M. Chen and R. Maynard and B. Geveci},\n
 			journal={IEEE Computer Graphics and Applications},\n
-			title={VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures},\n
+			title={{VTK-m}: {Accelerating} the {Visualization} {Toolkit} for {Massively} {Threaded} {Architectures}},\n
 			year={2016},\n
 			volume={36},\n
 			number={3},\n
@@ -118,7 +118,7 @@
 		"bibtex": "@inproceedings{Wald_PKD_2015,\n
 			author={I. Wald and A. Knoll and G. P. Johnson and W. Usher and V. Pascucci and M. E. Papka},\n
 			booktitle={2015 IEEE Scientific Visualization Conference (SciVis)},\n
-			title={CPU ray tracing large particle data with balanced P-k-d trees},\n
+			title={{CPU} ray tracing large particle data with balanced {P-k-d} trees},\n
 			year={2015},\n
 			pages={57-64},\n
 			doi={10.1109/SciVis.2015.7429492},\n
