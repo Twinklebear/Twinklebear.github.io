@@ -22,6 +22,10 @@
 		{
 			"type": "video",
 			"src": "https://www.youtube.com/embed/XzmYdl9rFs0"
+		},
+		{
+			"type": "video",
+			"src": "https://www.youtube.com/embed/t6rPU6hy5tk"
 		}
 		],
 		"bibtex": "@article{Usher_VRNT_2018,\n
