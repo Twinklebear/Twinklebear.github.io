@@ -1,23 +1,71 @@
 ---
-layout: home_page
+layout: default
 title: Will Usher
 ---
 {% include JB/setup %}
 
-{% for post in site.posts limit:4 %}
-<div class="col-md-12">
-	<a href="{{ post.url }}"><h3>{{ post.title }}</h3></a>
-	<b>{{ post.date | date_to_string }}</b>
-	{{ post.excerpt }}
-
-	<a href="{{ post.url }}">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+<div class="row col-md-12 mt-4">
+	<div class="col-md-12 float-left col-lg-5">
+		<img class="rounded img-fluid" src="http://via.placeholder.com/400x300">
+	</div>
+	<div class="col-md-12 col-lg-4">
+		contact
+	</div>
+	<div class="col-md-12">
+		<!-- I'm torn whether or not I like the display class -->
+		<h2 class="border-bottom border-secondary">Bio</h2>
+		<div class="col-md-12">
+			Some short bio??
+		</div>
+	</div>
+	<div class="col-md-12">
+		<h2 class="border-bottom border-secondary">Publications</h2>
+		{% for pub in site.data.publications %}
+		<div class="row col-md-12 mb-3 float-left">
+			<div class="float-left col-md-2 col-sm-12">
+				<!-- I'm debating if I prefer with or without the thumbnail border -->
+				<img class="img-thumbnail img-responsive" src="http://via.placeholder.com/100x100">
+			</div>
+			<div class="col-md-10 col-sm-12 text-sm-center text-md-left">
+				<h5>{{pub.title}}</h5>
+				{{pub.authors}}. <i>{{pub.venue}}</i>, {{pub.year}}.
+				<br/>
+				<a class="mr-2" href="/publications/{{pub.short_title}}"><i class="far fa-file-alt"></i> Project Page</a>
+				<a class="mr-2" href="{{pub.url}}"><i class="far fa-file-pdf"></i> PDF</a>
+				{% if pub.bibtex %}
+				<a class="bib mr-2" href="javascript:void(0);"
+					data-clipboard-text="{{pub.bibtex}}" data-toggle="popover" data-content="Copied!"
+					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+					<i class="fas fa-quote-left"></i> Copy Bibtex</a>
+				{% endif %}
+				{% if pub.doi %}
+				<a class="mr-2" href="{{pub.doi}}"><i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+				{% endif %}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="col-md-12">
+		<h2 class="border-bottom border-secondary">Projects</h2>
+		{% for prj in site.data.projects %}
+		<div class="row col-md-12 mb-2">
+			<img class="float-left img-fluid" src="http://via.placeholder.com/100x100">
+			TODO: Copy this from the pubs layout
+			<div class="col-md-10 text-sm-center text-md-left">
+				<a href="/projects/{{prj.short_title}}"><h5>{{prj.title}}</h5></a>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
 </div>
-<hr>
-{% endfor %}
 
-{% if site.posts.size > 4 %}
-<div class="col-md-12" style="padding-bottom:16px">
-	<h5>Find older posts in the <a href="/archive">Archive</a></h5>
-</div>
-{% endif %}
+<script async defer src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
+<script type="text/javascript">
+window.onload = function() {
+	var clip = new Clipboard(".bib");
+	$(function () {
+		$('[data-toggle="popover"]').popover()
+	})
+}
+</script>
 

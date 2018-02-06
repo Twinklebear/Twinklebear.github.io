@@ -1,9 +1,6 @@
 .content {
 	background: white;
 }
-body {
-	font-size: 1.1rem
-}
 /* Chuck out bootstrap's syntax highlighting stuff */
 pre, pre code {
 	display: block;

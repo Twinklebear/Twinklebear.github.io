@@ -38,7 +38,8 @@
 			pages={994-1003},\n
 			doi={10.1109/TVCG.2017.2744079},\n
 			ISSN={1077-2626},\n
-			month={Jan},\n}"
+			month={Jan},\n}",
+		"abstract": "Tracing neurons in large-scale microscopy data is crucial to establishing a wiring diagram of the brain, which is needed to understand how neural circuits in the brain process information and generate behavior. Automatic techniques often fail for large and complex datasets, and connectomics researchers may spend weeks or months manually tracing neurons using 2D image stacks. We present a design study of a new virtual reality (VR) system, developed in collaboration with trained neuroanatomists, to trace neurons in microscope scans of the visual cortex of primates. We hypothesize that using consumer-grade VR technology to interact with neurons directly in 3D will help neuroscientists better resolve complex cases and enable them to trace neurons faster and with less physical and mental strain. We discuss both the design process and technical challenges in developing an interactive system to navigate and manipulate terabyte-sized image volumes in VR. Using a number of different datasets, we demonstrate that, compared to widely used commercial software, consumer-grade VR presents a promising alternative for scientists."
 	},
 	{
 		"title": "Progressive CPU Volume Rendering with Sample Accumulation",

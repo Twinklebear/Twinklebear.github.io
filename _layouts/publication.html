@@ -1,0 +1,24 @@
+---
+layout: default
+---
+{% include JB/setup %}
+
+<div class="row col-md-12 mt-4">
+	<div class="col-md-12 text-center">
+		<h1>{{page.title}}</h1>
+
+		<h5 class="font-italic">{{page.authors}}</h5>
+		<p>In <i>{{page.venue}}</i>, {{page.year}}</p>
+		{% if page.image %}
+		<img class="img-fluid" src="{{page.image}}"/>
+		{% endif %}
+	</div>
+	<div class="col-md-12 text-center">
+		<b>Fig. 1: </b>Maybe include the caption for the teaser?
+	</div>
+	<div class="col-md-12 mt-2">
+		<b>Abstract:</b>
+		<p>{{page.abstract}}</p>
+	</div>
+</div>
+

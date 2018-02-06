@@ -33,6 +33,13 @@ nav_pages:
     - {title: SDL2 Tutorials, group: navigation, url: /pages/sdl2}
     - {title: Archive, group: navigation, url: /archive}
 
+page_gen:
+    - index_files: false
+      data: publications
+      template: publication
+      name: short_title
+      dir: publications
+
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
 JB :

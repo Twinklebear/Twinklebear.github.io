@@ -12,7 +12,10 @@
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">-->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+	<!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/fa-v4-shim.js"></script>-->
 
 	<link href="/assets/syntax.css" rel="stylesheet">
 	<link href="/assets/custom.css" rel="stylesheet">
@@ -21,31 +24,33 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
-		<a class="navbar-brand" href="{{HOME_PATH}}">{{ site.title }}</a>
-		<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-			data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
-			aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbar_responsive">
-			<ul class="navbar-nav mr-auto">
-			{% assign pages_list = site.nav_pages %}
-			{% assign group = 'navigation' %}
-			  {% for node in pages_list %}
-				{% if node.title != null %}
-				  {% if group == null or group == node.group %}
-				  {% if page.url contains node.url %}
-					<li class="nav-item active"><a href="{{ BASE_PATH }}{{node.url}}" class="nav-link">
-						{{node.title}}</a></li>
-					{% else %}
-					<li class="nav-item"><a href="{{ BASE_PATH }}{{node.url}}" class="nav-link">
-						{{node.title}}</a></li>
+		<div class="container">
+			<a class="navbar-brand" href="{{HOME_PATH}}">{{ site.title }}</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				{% assign pages_list = site.nav_pages %}
+				{% assign group = 'navigation' %}
+				  {% for node in pages_list %}
+					{% if node.title != null %}
+					  {% if group == null or group == node.group %}
+					  {% if page.url contains node.url %}
+						<li class="nav-item active"><a href="{{ BASE_PATH }}{{node.url}}" class="nav-link">
+							{{node.title}}</a></li>
+						{% else %}
+						<li class="nav-item"><a href="{{ BASE_PATH }}{{node.url}}" class="nav-link">
+							{{node.title}}</a></li>
+						{% endif %}
+					  {% endif %}
 					{% endif %}
-				  {% endif %}
-				{% endif %}
-			  {% endfor %}
-			</ul>
-		</div><!-- nav.collaps -->
+				  {% endfor %}
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
 	</nav>
 
 	<div class="container content">
