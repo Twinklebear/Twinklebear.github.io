@@ -28,8 +28,7 @@ author :
 production_url : www.willusher.io
 
 nav_pages:
-    - {title: Projects, group: navigation, url: /projects}
-    - {title: Publications, group: navigation, url: /publications}
+    - {title: Blog, group: navigation, url: /blog}
     - {title: SDL2 Tutorials, group: navigation, url: /pages/sdl2}
     - {title: Archive, group: navigation, url: /archive}
 
