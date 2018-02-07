@@ -27,7 +27,7 @@ title: Will Usher
 				<img class="img-thumbnail img-responsive" src="http://via.placeholder.com/100x100">
 			</div>
 			<div class="col-md-10 col-sm-12 text-sm-center text-md-left">
-				<h5>{{pub.title}}</h5>
+				<h5><b>{{pub.title}}</b></h5>
 				{{pub.authors}}. <i>{{pub.venue}}</i>, {{pub.year}}.
 				<br/>
 				<a class="mr-2" href="/publications/{{pub.short_title}}"><i class="far fa-file-alt"></i> Project Page</a>
@@ -39,7 +39,8 @@ title: Will Usher
 					<i class="fas fa-quote-left"></i> Copy Bibtex</a>
 				{% endif %}
 				{% if pub.doi %}
-				<a class="mr-2" href="{{pub.doi}}"><i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+				<a class="mr-2" href="https://dx.doi.org/{{pub.doi}}">
+					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
 				{% endif %}
 			</div>
 		</div>
