@@ -34,15 +34,15 @@ title: Will Usher
 			Some short bio??
 		</div>
 	</div>
-	<div class="col-md-12">
+	<div class="col-12">
 		<h2 class="border-bottom border-secondary">Publications</h2>
 		{% for pub in site.data.publications %}
 		<div class="row col-md-12 mb-3 float-left">
 			<div class="float-left col-md-2 col-sm-12">
 				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="img-thumbnail img-responsive" src="http://via.placeholder.com/100x100">
+				<img class="img-thumbnail" src="http://via.placeholder.com/100x100">
 			</div>
-			<div class="col-md-10 col-sm-12 text-sm-center text-md-left">
+			<div class="col-md-10 col-sm-12 text-center text-md-left">
 				<h5><b>{{pub.title}}</b></h5>
 				{{pub.authors}}. <i>{{pub.venue}}</i>, {{pub.year}}.
 				<br/>
@@ -63,33 +63,28 @@ title: Will Usher
 		</div>
 		{% endfor %}
 	</div>
-	<div class="col-md-12">
-		<h2 class="border-bottom border-secondary">Projects</h2>
-		{% for prj in site.data.projects %}
-		<div class="row col-md-12 mb-3 float-left">
-			<div class="float-left col-md-2 col-sm-12">
+	<div class="col-12">
+		<h2 class="border-bottom border-secondary">Selected Projects</h2>
+		<div class="col-12 justify-content-center row">
+		{% for prj in site.data.projects limit:6 %}
+		<div class="row col-sm-12 col-md-6 col-lg-4 mb-3">
+			<div class="col-12">
 				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="img-thumbnail img-responsive" src="http://via.placeholder.com/100x100">
+				<img class="rounded img-fluid" src="http://via.placeholder.com/300x200">
 			</div>
-			<div class="col-md-10 col-sm-12 text-sm-center text-md-left">
+			<div class="col-12 text-center text-md-left">
 				<h5><b>{{prj.title}}</b></h5>
-				{{prj.description | markdownify}}
-				<!--<a class="mr-2" href="/publications/{{pub.short_title}}">
-				<i class="far fa-file-alt"></i> Project Page</a>-->
+				<a class="mr-2" href="/projects/#{{prj.title}}">
+					<i class="far fa-file-alt"></i> Project Page</a>
 				<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
 					<i class="fab fa-github"></i> Code</a>
 			</div>
 		</div>
-		<!--
-		<div class="row col-md-12 mb-2">
-			<img class="float-left img-fluid" src="http://via.placeholder.com/100x100">
-			TODO: Copy this from the pubs layout
-			<div class="col-md-10 text-sm-center text-md-left">
-				<a href="/projects/{{prj.short_title}}"><h5>{{prj.title}}</h5></a>
-			</div>
-		</div>
-		-->
 		{% endfor %}
+		<div>
+		<div class="col-12">
+			<h5>More projects can be found on my <a href="/projects">projects page</a>.</h5>
+		</div>
 	</div>
 </div>
 
