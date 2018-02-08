@@ -3,22 +3,82 @@ layout: default
 ---
 {% include JB/setup %}
 
-<div class="row col-md-12 mt-4">
-	<div class="col-md-12 text-center">
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
 		<h1>{{page.title}}</h1>
-
 		<h5 class="font-italic">{{page.authors}}</h5>
-		<p>In <i>{{page.venue}}</i>, {{page.year}}</p>
-		{% if page.image %}
-		<img class="img-fluid" src="{{page.image}}"/>
+		<h5>In <i>{{page.venue}}</i>, {{page.year}}</h5>
+		{% if page.teaser %}
+		<figure>
+			<img class="img-fluid" src="{{page.teaser}}"/>
+			<figcaption class="text-left mt-2">
+				<b>Fig. 1: </b><i>{{page.teaser_caption}}</i>
+			</figcaption>
+		</figure>
 		{% endif %}
 	</div>
-	<div class="col-md-12 text-center">
-		<b>Fig. 1: </b>Maybe include the caption for the teaser?
-	</div>
-	<div class="col-md-12 mt-2">
-		<b>Abstract:</b>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
 		<p>{{page.abstract}}</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="{{page.paper_pdf}}"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			{% if page.doi %}
+			<dd><a href="https://dx.doi.org/{{page.doi}}">
+				<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+			</dd>
+			{% endif %}
+			{% for download in page.downloads %}
+			<dt>{{download.title}}</dt>
+				{% for link in download.list %}
+				<dd><a href="{{link.link}}">
+					{% if link.link contains "youtu.be" %}
+					<i class="fab fa-youtube"></i>
+					{% else %}
+					<i class="fas fa-external-link-alt"></i>
+					{% endif %}
+					 {{link.title}}</a></dd>
+				{% endfor %}
+			</dt>
+			{% endfor %}
+			{% if page.gh_repo %}
+			<dt>Code</dt>
+			<dd>
+			<a href="https://github.com/{{ page.gh_user }}/{{ page.gh_repo }}">
+				<i class="fab fa-github"></i> GitHub</a>
+			</dd>
+			{% endif %}
+		</dl>
+	</div>
+	{% if page.supplemental_video %}
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Supplemental Video</h2>
+		<div class="embed-responsive embed-responsive-16by9">
+			<iframe class="embed-responsive-item" allowfullscreen src="{{page.supplemental_video}}">
+			</iframe>
+		</div>
+	</div>
+	{% endif %}
+	{% if page.presentation_video %}
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Presentation Video</h2>
+		<div class="embed-responsive embed-responsive-16by9">
+			<iframe class="embed-responsive-item" allowfullscreen src="{{page.presentation_video}}">
+			</iframe>
+		</div>
+	</div>
+	{% endif %}
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>{{page.bibtex | newline_to_br}}</code>
 	</div>
 </div>
 

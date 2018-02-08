@@ -4,29 +4,28 @@
 		"authors": "Will Usher, Pavol Klacansky, Frederick Federer, Peer-Timo Bremer,
 				Aaron Knoll, Jeff Yarch, Alessandra Angelucci, and Valerio Pascucci",
 		"venue": "IEEE Transactions on Visualization and Computer Graphics",
-		"url": "http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf",
-		"image": "http://sci.utah.edu/~will/papers/vrnt/teaser.png",
+		"paper_pdf": "http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf",
+		"teaser": "http://sci.utah.edu/~will/papers/vrnt/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/vrnt/teaser.png",
 		"year": 2018,
 		"short_title": "vrnt",
 		"doi": "10.1109/TVCG.2017.2744079",
-		"supplemental": [
-		{
-			"type": "video",
-			"src": "https://www.youtube.com/embed/lTNef_kbLKg"
-		},
-		{
-			"type": "video",
-			"src": "https://www.youtube.com/embed/L5tsU8TtgkU"
-		},
-		{
-			"type": "video",
-			"src": "https://www.youtube.com/embed/XzmYdl9rFs0"
-		},
-		{
-			"type": "video",
-			"src": "https://www.youtube.com/embed/t6rPU6hy5tk"
-		}
+		"supplemental_video": "https://www.youtube.com/embed/lTNef_kbLKg",
+		"presentation_video": "https://www.youtube.com/embed/XzmYdl9rFs0",
+		"downloads": [
+			{
+				"title": "Videos",
+				"list": [
+					{
+						"title": "Analyzing an Expert Session ",
+						"link": "https://youtu.be/L5tsU8TtgkU"
+					},
+					{
+						"title": "ZED Mixed Reality Prototype",
+						"link": "https://youtu.be/t6rPU6hy5tk"
+					}
+				]
+			}
 		],
 		"bibtex": "@article{Usher_VRNT_2018,\n
 			author={W. Usher and P. Klacansky and F. Federer and P. T. Bremer and A. Knoll and J. Yarch and A. Angelucci and V. Pascucci},\n
@@ -39,14 +38,15 @@
 			doi={10.1109/TVCG.2017.2744079},\n
 			ISSN={1077-2626},\n
 			month={Jan},\n}",
-		"abstract": "Tracing neurons in large-scale microscopy data is crucial to establishing a wiring diagram of the brain, which is needed to understand how neural circuits in the brain process information and generate behavior. Automatic techniques often fail for large and complex datasets, and connectomics researchers may spend weeks or months manually tracing neurons using 2D image stacks. We present a design study of a new virtual reality (VR) system, developed in collaboration with trained neuroanatomists, to trace neurons in microscope scans of the visual cortex of primates. We hypothesize that using consumer-grade VR technology to interact with neurons directly in 3D will help neuroscientists better resolve complex cases and enable them to trace neurons faster and with less physical and mental strain. We discuss both the design process and technical challenges in developing an interactive system to navigate and manipulate terabyte-sized image volumes in VR. Using a number of different datasets, we demonstrate that, compared to widely used commercial software, consumer-grade VR presents a promising alternative for scientists."
+		"abstract": "Tracing neurons in large-scale microscopy data is crucial to establishing a wiring diagram of the brain, which is needed to understand how neural circuits in the brain process information and generate behavior. Automatic techniques often fail for large and complex datasets, and connectomics researchers may spend weeks or months manually tracing neurons using 2D image stacks. We present a design study of a new virtual reality (VR) system, developed in collaboration with trained neuroanatomists, to trace neurons in microscope scans of the visual cortex of primates. We hypothesize that using consumer-grade VR technology to interact with neurons directly in 3D will help neuroscientists better resolve complex cases and enable them to trace neurons faster and with less physical and mental strain. We discuss both the design process and technical challenges in developing an interactive system to navigate and manipulate terabyte-sized image volumes in VR. Using a number of different datasets, we demonstrate that, compared to widely used commercial software, consumer-grade VR presents a promising alternative for scientists.",
+		"teaser_caption": "A screenshot of our VR neuron tracing tool using the isosurface rendering mode. The dark gray floor represents the extent of the tracked space. Users can orient themselves in the dataset via the minimap (right), which shows the world extent in blue, the current focus region in orange, and the previously traced neuronal structures. The focus region is displayed in the center of the space. The 3D interaction and visualization provides an intuitive environment for exploring the data and a natural interface for neuron tracing, resulting in faster, high-quality traces with less fatigue reported by users compared to existing 2D tools."
 	},
 	{
 		"title": "Progressive CPU Volume Rendering with Sample Accumulation",
 		"authors": "Will Usher, Jefferson Amstutz, Carson Brownlee, Aaron Knoll, Ingo Wald",
 		"venue": "Eurographics Symposium on Parallel Graphics and Visualization",
-		"url": "http://sci.utah.edu/~will/papers/savr/savr.pdf",
-		"image": "http://sci.utah.edu/~will/papers/savr/teaser.png",
+		"paper_pdf": "http://sci.utah.edu/~will/papers/savr/savr.pdf",
+		"teaser": "http://sci.utah.edu/~will/papers/savr/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/savr/thumbnail.png",
 		"short_title": "savr",
 		"doi": "10.2312/pgv.20171090",
@@ -62,14 +62,16 @@
 			publisher={The Eurographics Association},\n
 			issn={1727-348X},\n
 			isbn={978-3-03868-034-5},\n
-			doi={10.2312/pgv.20171090},\n}"
+			doi={10.2312/pgv.20171090},\n}",
+		"abstract": "We present a new method for progressive volume rendering by accumulating object-space samples over successively rendered frames. Existing methods for progressive refinement either use image space methods or average pixels over frames, which can blur features or integrate incorrectly with respect to depth. Our approach stores samples along each ray, accumulates new samples each frame into a buffer, and progressively interleaves and integrates these samples. Though this process requires additional memory, it ensures interactivity and is well suited for CPU architectures with large memory and cache. This approach also extends well to distributed rendering in cluster environments. We implement this technique in Intel’s open source OSPRay CPU ray tracing framework and demonstrate that it is particularly useful for rendering volumetric data with costly sampling functions.",
+		"teaser_caption": "(a-c) Progressive refinement with Sample-Accumulation Volume Rendering (SAVR) on the 40GB Landing Gear AMR dataset using a prototype AMR sampler. The SAVR algorithm correctly accumulates frames to progressively refine the image. After 16 frames of accumulation the volume is sampled at the Nyquist limit, with some small noise, by 32 frames the noise has been removed. SAVR extends to distributed data, in (d) we show the 1TB DNS dataset, a 10240×7680×1536 uniform grid, rendered interactively across 64 second-generation Intel Xeon Phi \"Knights Landing\" (KNL) processor nodes on Stampede 1.5 at a 6144×1024 resolution. While interacting, our method achieves around 5.73 FPS."
 	},
 	{
 		"title": "In Situ Exploration of Particle Simulations with CPU Ray Tracing",
 		"authors": "Will Usher, Ingo Wald, Aaron Knoll, Michael Papka, Valerio Pascucci",
 		"venue": "Supercomputing Frontiers and Innovations",
-		"url": "http://sci.utah.edu/~will/papers/in_situ_particles/in_situ_particles.pdf",
-		"image": "http://sci.utah.edu/~will/papers/in_situ_particles/teaser.png",
+		"paper_pdf": "http://sci.utah.edu/~will/papers/in_situ_particles/in_situ_particles.pdf",
+		"teaser": "http://sci.utah.edu/~will/papers/in_situ_particles/teaser.png",
 		"thumb": "http://sci.utah.edu/~will/papers/in_situ_particles/thumbnail.png",
 		"short_title": "isp-jsfi",
 		"doi": "10.14529/jsfi160401",
@@ -84,7 +86,9 @@
 			number={4},\n
 			year={2016},\n
 			issn={2313-8734},\n
-			doi={10.14529/jsfi160401},\n}"
+			doi={10.14529/jsfi160401},\n}",
+		"abstract": "We present a system for interactive in situ visualization of large particle simulations, suitable for general CPU-based HPC architectures. As simulations grow in scale, in situ methods are needed to alleviate IO bottlenecks and visualize data at full spatio-temporal resolution. We use a lightweight loosely-coupled layer serving distributed data from the simulation to a data-parallel renderer running in separate processes. Leveraging the OSPRay ray tracing framework for visualization and balanced P-k-d trees, we can render simulation data in real-time, as they arrive, with negligible memory overhead. This flexible solution allows users to perform exploratory in situ visualization on the same computational resources as the simulation code, on dedicated visualization clusters or remote workstations, via a standalone rendering client that can be connected or disconnected as needed. We evaluate this system on simulations with up to 227M particles in the LAMMPS and Uintah computational frameworks, and show that our approach provides many of the advantages of tightly-coupled systems, with the flexibility to render on a wide variety of remote and co-processing resources.",
+		"teaser_caption": "A coal particle combustion simulation in Uintah at three different timesteps with (left to right): 34.61M, 48.46M and 55.39M particles, with attribute based culling showing the full jet (top) and the front in detail (bottom). Using our in situ library to query and send data to our rendering client in OSPRay these images are rendered interactively with ambient occlusion, averaging around 13 FPS at 1920×1080. The renderer is run on 12 nodes of the Stampede supercomputer and pulls data from a Uintah simulation running on 64 processes (4 nodes). Our loosely-coupled in situ approach allows for live exploration at the full temporal fidelity of the simulation, without prohibitive IO cost."
 	},
 	{
 		"title": "VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures",
@@ -92,7 +96,7 @@
 				David Pugmire, James Kress, Hendrik Schroots, Kwan-Liu Ma, Hank Childs, Matthew Larsen,
 				Chun-Ming Chen, Robert Maynard, Berk Geveci",
 		"venue": "IEEE Computer Graphics and Applications",
-		"url": "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7466740",
+		"paper_pdf": "http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7466740",
 		"doi": "10.1109/MCG.2016.48",
 		"year": 2016,
 		"short_title": "vtkm",
@@ -106,15 +110,16 @@
 			pages={48-58},\n
 			doi={10.1109/MCG.2016.48},\n
 			ISSN={0272-1716},\n
-			month={May},\n}"
+			month={May},\n}",
+		"abstract": "One of the most critical challenges for high-performance computing (HPC) scientific visualization is execution on massively threaded processors. Of the many fundamental changes we are seeing in HPC systems, one of the most profound is a reliance on new processor types optimized for execution bandwidth over latency hiding. Our current production scientific visualization software is not designed for these new types of architectures. To address this issue, the VTK-m framework serves as a container for algorithms, provides flexible data representation, and simplifies the design of visualization algorithms on new and future computer architecture."
 	},
 	{
 		"title": "CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees",
 		"authors": "Ingo Wald, Aaron Knoll, Gregory P. Johnson, Will Usher, Valerio Pasucci, Michael E. Papka",
 		"venue": "IEEE Vis (conference)",
-		"url": "http://sci.utah.edu/~will/papers/pkd/pkd_tree.pdf",
+		"paper_pdf": "http://sci.utah.edu/~will/papers/pkd/pkd_tree.pdf",
 		"doi": "10.1109/SciVis.2015.7429492",
-		"image": "http://sci.utah.edu/~will/papers/pkd/header.png",
+		"teaser": "http://sci.utah.edu/~will/papers/pkd/header.png",
 		"thumb": "http://sci.utah.edu/~will/papers/pkd/thumbnail.jpg",
 		"gh_user": "ingowald",
 		"gh_repo": "ospray-module-pkd",
@@ -127,7 +132,9 @@
 			year={2015},\n
 			pages={57-64},\n
 			doi={10.1109/SciVis.2015.7429492},\n
-			month={Oct},\n}"
+			month={Oct},\n}",
+		"abstract": "We present a novel approach to rendering large particle data sets from molecular dynamics, astrophysics and other sources. We employ a new data structure adapted from the original balanced k-d tree, which allows for representation of data with trivial or no overhead. In the OSPRay visualization framework, we have developed an efficient CPU algorithm for traversing, classifying and ray tracing these data. Our approach is able to render up to billions of particles on a typical workstation, purely on the CPU, without any approximations or level-of-detail techniques, and optionally with attribute-based color mapping, dynamic range query, and advanced lighting models such as ambient occlusion and path tracing.",
+		"teaser_caption": "Full-detail ray tracing of giga-particle data sets. From left to right: CosmicWeb early universe data set from a P3D simulation with 29 billion particles; a 100 million atom molecular dynamics Al<sub>2</sub>O<sub>3</sub>−SiC materials fracture simulation; and a 1.3 billion particle Uintah MPM detonation simulation. Using a quad-socket, 72-core 2.5GHz Intel Xeon E7-8890 v3 Processor with 3TB RAM and path-tracing with progressive refinement at 1 sample per pixel, these far and close images (above and below) are rendered at 1.6 (far) / 1.0 (close) FPS (left), 2.0 / 1.2 FPS (center), and 1.0 / 0.9 FPS (right), respectively, at 4K (3840×2160) resolution. All examples use our balanced P-k-d tree, an acceleration structure which requires little or no memory cost beyond the original data."
 	}
 ]
 

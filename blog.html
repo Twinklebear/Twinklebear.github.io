@@ -6,7 +6,7 @@ title: Will Usher
 
 <div class="row mt-4">
 	{% for post in site.posts limit:4 %}
-	<div class="col-8 offset-2">
+	<div class="col-md-8 offset-md-2 col-sm-12">
 		<a href="{{ post.url }}"><h3>{{ post.title }}</h3></a>
 		<b>{{ post.date | date_to_string }}</b>
 		{{ post.excerpt }}
@@ -17,7 +17,7 @@ title: Will Usher
 	{% endfor %}
 
 	{% if site.posts.size > 4 %}
-	<div class="col-md-12" style="padding-bottom:16px">
+	<div class="col-md-8 offset-md-2 col-sm-12" style="mb-2">
 		<h5>Find older posts in the <a href="/archive">Archive</a></h5>
 	</div>
 	{% endif %}
