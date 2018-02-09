@@ -4,182 +4,116 @@ title: Projects
 ---
 {% include JB/setup %}
 
-<div class="col-12 row pb-4 mt-4 border-bottom border-light">
+<div class="col-12 row pb-2 pt-2 mt-1 bg-light rounded">
 	<div class="col-12">
-		<h3>Layout 1: Single Square Image on Right</h3>
+		<h4>Table of Contents:</h4>
 	</div>
-	<div class="col-8">
-		tray_rust is a toy physically based ray tracer built off of the techniques
-			discussed in [Physically Based Rendering](http://pbrt.org/). It began life as a port of
-			[tray](https://github.com/Twinklebear/tray) to [Rust](http://www.rust-lang.org)
-			to check out the language.
-			The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon),
-			and various physically based material models (including measured data from the
-			[MERL BRDF Database](http://www.merl.com/brdf/)) along with rigid body animation
-			and image-parallel distributed rendering. More
-			details on rendering performance and other features can be found in the readme
-			[README](https://github.com/Twinklebear/tray_rust/blob/master/README.md).\n\n
-			<br />
-			<br />
-			tray_rust can also render animations, and is the renderer I've used for the University of Utah's
-			[teapot rendering competition](http://graphics.cs.utah.edu/trc/) after the first year.
-			The video is my submission from 2016. To simplify making scenes
-			for tray_rust I also wrote a [Blender plugin](https://github.com/Twinklebear/tray_rust_blender)
-			which I used to make the animation
-			shown, and is the easiest way to create scenes for the renderer though some features
-			are still needed.
-			<br />
-			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
-				<i class="fab fa-github"></i> GitHub</a>
-	</div>
-	<div class="col-4">
-		<img class="img-fluid" src="http://via.placeholder.com/400x400">
+	<div class="col-12 row">
+		{% assign alphabetical = site.data.projects | sort: "title" %}
+		{% for prj in alphabetical %}
+		<div class="col-3">
+			<a href="/projects/#{{prj.title}}">{{prj.title}}</a>
+		</div>
+		{% endfor %}
 	</div>
 </div>
-<div class="col-12 row pb-4 mt-4 border-bottom border-light">
-	<div class="col-12">
-		<h3>Layout 2: Three Images Along Bottom</h3>
-	</div>
-	<div class="col-12">
-		tray_rust is a toy physically based ray tracer built off of the techniques
-			discussed in [Physically Based Rendering](http://pbrt.org/). It began life as a port of
-			[tray](https://github.com/Twinklebear/tray) to [Rust](http://www.rust-lang.org)
-			to check out the language.
-			The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon),
-			and various physically based material models (including measured data from the
-			[MERL BRDF Database](http://www.merl.com/brdf/)) along with rigid body animation
-			and image-parallel distributed rendering. More
-			details on rendering performance and other features can be found in the readme
-			[README](https://github.com/Twinklebear/tray_rust/blob/master/README.md).\n\n
-			<br />
-			<br />
-			tray_rust can also render animations, and is the renderer I've used for the University of Utah's
-			[teapot rendering competition](http://graphics.cs.utah.edu/trc/) after the first year.
-			The video is my submission from 2016. To simplify making scenes
-			for tray_rust I also wrote a [Blender plugin](https://github.com/Twinklebear/tray_rust_blender)
-			which I used to make the animation
-			shown, and is the easiest way to create scenes for the renderer though some features
-			are still needed.
-			<br />
+{% for prj in site.data.projects %}
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="{{prj.title}}">
+		<div class="col-12">
+			<h2><b>{{prj.title}}</b></h2>
+		</div>
+{% if prj.layout == 1 %}
+		<div class="col-8">
+			{{prj.description | markdownify}}
 			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
 				<i class="fab fa-github"></i> GitHub</a>
-	</div>
-	<div class="row mt-3 justify-content-center col-12">
-		<div class="col-4">
-			<img class="img-fluid" src="http://via.placeholder.com/300x300">
 		</div>
 		<div class="col-4">
-			<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			<img class="img-fluid" src="http://via.placeholder.com/400x400">
 		</div>
-		<div class="col-4">
-			<img class="img-fluid" src="http://via.placeholder.com/300x300">
-		</div>
-	</div>
-</div>
-<div class="col-12 row pb-4 mt-4 border-bottom border-light">
-	<div class="col-12">
-		<h3>Layout 3: Four Images Along Bottom</h3>
-	</div>
-	<div class="col-12">
-		tray_rust is a toy physically based ray tracer built off of the techniques
-			discussed in [Physically Based Rendering](http://pbrt.org/). It began life as a port of
-			[tray](https://github.com/Twinklebear/tray) to [Rust](http://www.rust-lang.org)
-			to check out the language.
-			The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon),
-			and various physically based material models (including measured data from the
-			[MERL BRDF Database](http://www.merl.com/brdf/)) along with rigid body animation
-			and image-parallel distributed rendering. More
-			details on rendering performance and other features can be found in the readme
-			[README](https://github.com/Twinklebear/tray_rust/blob/master/README.md).\n\n
-			<br />
-			<br />
-			tray_rust can also render animations, and is the renderer I've used for the University of Utah's
-			[teapot rendering competition](http://graphics.cs.utah.edu/trc/) after the first year.
-			The video is my submission from 2016. To simplify making scenes
-			for tray_rust I also wrote a [Blender plugin](https://github.com/Twinklebear/tray_rust_blender)
-			which I used to make the animation
-			shown, and is the easiest way to create scenes for the renderer though some features
-			are still needed.
-			<br />
+{% elsif prj.layout == 2 %}
+		<div class="col-12">
+			{{prj.description | markdownify}}
 			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
 				<i class="fab fa-github"></i> GitHub</a>
-	</div>
-	<div class="row mt-3 justify-content-center text-center col-12">
-		<div class="col-3">
-			<img class="img-fluid" src="http://via.placeholder.com/300x300">
 		</div>
-		<div class="col-3">
-			<img class="img-fluid" src="http://via.placeholder.com/300x300">
+		<div class="row mt-3 justify-content-center col-12">
+			<div class="col-4">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+			<div class="col-4">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+			<div class="col-4">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
 		</div>
-		<div class="col-3">
-			<img class="img-fluid" src="http://via.placeholder.com/300x300">
-		</div>
-		<div class="col-3">
-			<img class="img-fluid" src="http://via.placeholder.com/300x300">
-		</div>
-	</div>
-</div>
-<div class="col-12 row pb-4 mt-4 border-bottom border-light">
-	<div class="col-12">
-		<h3>Layout 4: Single Wide Image on Bottom</h3>
-	</div>
-	<div class="col-12">
-		tray_rust is a toy physically based ray tracer built off of the techniques
-			discussed in [Physically Based Rendering](http://pbrt.org/). It began life as a port of
-			[tray](https://github.com/Twinklebear/tray) to [Rust](http://www.rust-lang.org)
-			to check out the language.
-			The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon),
-			and various physically based material models (including measured data from the
-			[MERL BRDF Database](http://www.merl.com/brdf/)) along with rigid body animation
-			and image-parallel distributed rendering. More
-			details on rendering performance and other features can be found in the readme
-			[README](https://github.com/Twinklebear/tray_rust/blob/master/README.md).\n\n
-			<br />
-			<br />
-			tray_rust can also render animations, and is the renderer I've used for the University of Utah's
-			[teapot rendering competition](http://graphics.cs.utah.edu/trc/) after the first year.
-			The video is my submission from 2016. To simplify making scenes
-			for tray_rust I also wrote a [Blender plugin](https://github.com/Twinklebear/tray_rust_blender)
-			which I used to make the animation
-			shown, and is the easiest way to create scenes for the renderer though some features
-			are still needed.
-			<br />
+{% elsif prj.layout == 3 %}
+		<div class="col-12">
+			{{prj.description | markdownify}}
 			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
 				<i class="fab fa-github"></i> GitHub</a>
-	</div>
-	<div class="row mt-3 col-12">
-		<img class="img-fluid" src="http://via.placeholder.com/1000x450">
-	</div>
-</div>
-<div class="col-12 row pb-4 mt-4 border-bottom border-light">
-	<div class="col-12">
-		<h3>Layout 5: No Image</h3>
-	</div>
-	<div class="col-12">
-		tray_rust is a toy physically based ray tracer built off of the techniques
-			discussed in [Physically Based Rendering](http://pbrt.org/). It began life as a port of
-			[tray](https://github.com/Twinklebear/tray) to [Rust](http://www.rust-lang.org)
-			to check out the language.
-			The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon),
-			and various physically based material models (including measured data from the
-			[MERL BRDF Database](http://www.merl.com/brdf/)) along with rigid body animation
-			and image-parallel distributed rendering. More
-			details on rendering performance and other features can be found in the readme
-			[README](https://github.com/Twinklebear/tray_rust/blob/master/README.md).\n\n
-			<br />
-			<br />
-			tray_rust can also render animations, and is the renderer I've used for the University of Utah's
-			[teapot rendering competition](http://graphics.cs.utah.edu/trc/) after the first year.
-			The video is my submission from 2016. To simplify making scenes
-			for tray_rust I also wrote a [Blender plugin](https://github.com/Twinklebear/tray_rust_blender)
-			which I used to make the animation
-			shown, and is the easiest way to create scenes for the renderer though some features
-			are still needed.
-			<br />
+		</div>
+		<div class="row mt-3 justify-content-center text-center col-12">
+			<div class="col-3">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+			<div class="col-3">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+			<div class="col-3">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+			<div class="col-3">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+		</div>
+{% elsif prj.layout == 4 %}
+		<div class="col-12">
+			{{prj.description | markdownify}}
 			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
 				<i class="fab fa-github"></i> GitHub</a>
+		</div>
+		<div class="row mt-3 col-12">
+			<img class="img-fluid" src="http://via.placeholder.com/1280x720">
+		</div>
+{% elsif prj.layout == 5 %}
+		<div class="col-12">
+			{{prj.description | markdownify}}
+			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
+				<i class="fab fa-github"></i> GitHub</a>
+		</div>
+{% elsif prj.layout == 6 %}
+		<div class="col-6">
+			{{prj.description | markdownify}}
+			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
+				<i class="fab fa-github"></i> GitHub</a>
+		</div>
+		<div class="col-6">
+			<img class="img-fluid" src="http://via.placeholder.com/1280x720">
+		</div>
+		<div class="row mt-3 justify-content-center text-center col-12">
+			<div class="col-3">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+			<div class="col-3">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+			<div class="col-3">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+			<div class="col-3">
+				<img class="img-fluid" src="http://via.placeholder.com/300x300">
+			</div>
+		</div>
+{% else %}
+		<div class="col-12">
+			<h1 class="bg-danger text-white">Invalid Layout!</h1>
+		</div>
+{% endif %}
 	</div>
-</div>
+{% endfor %}
 	<!--
 {% for project in site.data.projects %}
 <a href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}">

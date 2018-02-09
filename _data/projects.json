@@ -1,17 +1,7 @@
 [
 	{
 		"title": "tray_rust",
-		"image_list": [
-		{
-			"type": "img",
-			"src": "http://i.imgur.com/E1ylrZW.jpg"
-		},
-		{
-			"type": "video",
-			"src": "http://sci.utah.edu/~will/rt/rtc_2016_discovery_yuv420p.mp4",
-			"poster": "http://imgur.com/5jlxoJI.png"
-		}
-		],
+		"layout": 6,
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray_rust",
 		"description": "tray_rust is a toy physically based ray tracer built off of the techniques
@@ -35,6 +25,7 @@
 	},
 	{
 		"title": "ispc-rs",
+		"layout": 1,
 		"image": "http://i.imgur.com/ACzYqAm.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "ispc-rs",
@@ -55,6 +46,7 @@
 	},
 	{
 		"title": "μPacket",
+		"layout": 1,
 		"image": "http://i.imgur.com/WcM6Rcl.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "micro-packet",
@@ -71,6 +63,7 @@
 	},
 	{
 		"title": "topo-vol",
+		"layout": 4,
 		"image": "http://i.imgur.com/0geW8ma.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "topo-vol",
@@ -86,6 +79,7 @@
 	},
 	{
 		"title": "tray",
+		"layout": 2,
 		"image": "http://i.imgur.com/zPpNVDs.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray",
@@ -99,6 +93,7 @@
 	},
 	{
 		"title": "bspline",
+		"layout": 1,
 		"image": "http://i.imgur.com/JvVlYKf.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "bspline",
@@ -111,6 +106,7 @@
 	},
 	{
 		"title": "Spline Viewer",
+		"layout": 1,
 		"image": "http://i.imgur.com/EzAQZyM.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "spline-viewer",
@@ -121,6 +117,7 @@
 	},
 	{
 		"title": "tobj",
+		"layout": 1,
 		"image": "http://i.imgur.com/wImyNG4.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "tobj",
@@ -136,6 +133,7 @@
 	},
 	{
 		"title": "ssao",
+		"layout": 3,
 		"image": "http://i.imgur.com/byM8iNh.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "ssao",
@@ -150,6 +148,7 @@
 	},
 	{
 		"title": "lfwatch",
+		"layout": 5,
 		"gh_user": "Twinklebear",
 		"gh_repo": "lfwatch",
 		"description": "lfwatch is a lightweight file watcher for Windows, Linux and OS X. It monitors some
