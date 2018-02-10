@@ -26,8 +26,15 @@ title: Projects
 {% if prj.layout == 1 %}
 		<div class="col-8">
 			{{prj.description | markdownify}}
-			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
-				<i class="fab fa-github"></i> GitHub</a>
+			<a aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/{{ prj.gh_user }}/{{ prj.gh_repo }}/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}"
+				aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				class="github-button">Star</a>
 		</div>
 		<div class="col-4">
 			<img class="img-fluid" src="{{prj.img}}">
@@ -35,8 +42,15 @@ title: Projects
 {% elsif prj.layout == 2 %}
 		<div class="col-12">
 			{{prj.description | markdownify}}
-			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
-				<i class="fab fa-github"></i> GitHub</a>
+			<a aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/{{ prj.gh_user }}/{{ prj.gh_repo }}/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}"
+				aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				class="github-button">Star</a>
 		</div>
 		<div class="row mt-3 justify-content-center col-12">
 			<div class="col-4">
@@ -52,8 +66,15 @@ title: Projects
 {% elsif prj.layout == 3 %}
 		<div class="col-12">
 			{{prj.description | markdownify}}
-			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
-				<i class="fab fa-github"></i> GitHub</a>
+			<a aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/{{ prj.gh_user }}/{{ prj.gh_repo }}/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}"
+				aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				class="github-button">Star</a>
 		</div>
 		<div class="row mt-3 justify-content-center text-center col-12">
 			<div class="col-3">
@@ -72,8 +93,15 @@ title: Projects
 {% elsif prj.layout == 4 %}
 		<div class="col-12">
 			{{prj.description | markdownify}}
-			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
-				<i class="fab fa-github"></i> GitHub</a>
+			<a aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/{{ prj.gh_user }}/{{ prj.gh_repo }}/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}"
+				aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				class="github-button">Star</a>
 		</div>
 		<div class="row mt-3 col-12">
 			<img class="img-fluid" src="{{prj.img}}">
@@ -81,14 +109,28 @@ title: Projects
 {% elsif prj.layout == 5 %}
 		<div class="col-12">
 			{{prj.description | markdownify}}
-			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
-				<i class="fab fa-github"></i> GitHub</a>
+			<a aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/{{ prj.gh_user }}/{{ prj.gh_repo }}/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}"
+				aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				class="github-button">Star</a>
 		</div>
 {% elsif prj.layout == 6 %}
 		<div class="col-6">
 			{{prj.description | markdownify}}
-			<a href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}">
-				<i class="fab fa-github"></i> GitHub</a>
+			<a aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/{{ prj.gh_user }}/{{ prj.gh_repo }}/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}"
+				aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				class="github-button">Star</a>
 		</div>
 		<div class="col-6">
 			<img class="img-fluid" src="{{prj.wide_img}}">
@@ -107,6 +149,27 @@ title: Projects
 				<img class="img-fluid" src="{{prj.img[3]}}">
 			</div>
 		</div>
+{% elsif prj.layout == 7 %}
+		<div class="col-12">
+			{{prj.description | markdownify}}
+			<a aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/{{ prj.gh_user }}/{{ prj.gh_repo }}/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/{{ prj.gh_user }}/{{ prj.gh_repo }}"
+				aria-label="Star {{ prj.gh_user }}/{{ prj.gh_repo }} on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="row mt-3 justify-content-center text-center col-12">
+			<div class="col-6">
+				<img class="img-fluid" src="{{prj.img[0]}}">
+			</div>
+			<div class="col-6">
+				<img class="img-fluid" src="{{prj.img[1]}}">
+			</div>
+		</div>
 {% else %}
 		<div class="col-12">
 			<h1 class="bg-danger text-white">Invalid Layout!</h1>
@@ -114,76 +177,6 @@ title: Projects
 {% endif %}
 	</div>
 {% endfor %}
-	<!--
-{% for project in site.data.projects %}
-<a href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}">
-	<h1>{{ project.title }}</h1>
-</a>
-<div class="row justify-content-md-center">
-	{% if project.image %}
-	<div class="col-md-6 col-sm-12">
-	{% else %}
-	<div class="col-md-12">
-	{% endif %}
-		<p>
-		{{ project.description | markdownify}}
-		{% if project.gh_user and project.gh_repo %}
-		<a class="github-button"
-			href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}/subscription"
-			data-icon="octicon-eye"
-			data-show-count="true"
-			data-size="large"
-			aria-label="Watch {{ project.gh_user }}/{{ project.gh_repo }} on GitHub">Watch</a>
-		<a aria-label="Star {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
-			data-count-aria-label="# stargazers on GitHub"
-			data-show-count="true"
-			data-count-href="/{{ project.gh_user }}/{{ project.gh_repo }}/stargazers"
-			data-size="large"
-			data-icon="octicon-star"
-			href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}"
-			aria-label="Star {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
-			class="github-button">Star</a>
-		<a aria-label="Fork {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
-			data-count-aria-label="# forks on GitHub"
-			data-show-count="true"
-			data-count-href="/{{ project.gh_user }}/{{ project.gh_repo }}/network"
-			data-size="large"
-			data-icon="octicon-git-branch"
-			href="https://github.com/{{ project.gh_user }}/{{ project.gh_repo }}/fork"
-			aria-label="Fork {{ project.gh_user }}/{{ project.gh_repo }} on GitHub"
-			class="github-button">Fork</a>
-		{% endif %}
-		</p>
-	</div>
-	{% if project.image %}
-	<div class="col-md-6 col-sm-12">
-		<a href="{{ project.image }}">
-			<img class="img-fluid" src="{{ project.image }}"/>
-		</a>
-	</div>
-	{% endif %}
-	{% if project.image_list %}
-	<div class="row col-md-12 justify-content-center text-center">
-		{% for i in project.image_list %}
-		<div class="col-lg-{{ 12 | divided_by: forloop.length }} col-md-12 mb-3">
-			{% if i.type == "img" %}
-			<a href="{{ i.src }}">
-				<img class="img-fluid" src="{{ i.src }}"/>
-			</a>
-			{% elsif i.type == "video" %}
-			<video class="img-fluid" src="{{ i.src }}" type="video/mp4" controls
-				preload="metadata" poster="{{ i.poster }}">
-			</video>
-			{% endif %}
-		</div>
-		{% endfor %}
-	</div>
-	{% endif %}
-</div>
-<hr>
-{% endfor %}
-</div>
 
 <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
--->
 
