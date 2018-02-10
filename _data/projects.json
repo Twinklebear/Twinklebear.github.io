@@ -4,6 +4,13 @@
 		"layout": 6,
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray_rust",
+		"wide_img": "http://via.placeholder.com/1280x720",
+		"img": [
+			"http://via.placeholder.com/300x300",
+			"http://via.placeholder.com/300x300",
+			"http://via.placeholder.com/300x300",
+			"http://via.placeholder.com/300x300"
+		],
 		"description": "tray_rust is a toy physically based ray tracer built off of the techniques
 			discussed in [Physically Based Rendering](http://pbrt.org/). It began life as a port of
 			[tray](https://github.com/Twinklebear/tray) to [Rust](http://www.rust-lang.org)
@@ -29,6 +36,7 @@
 		"image": "http://i.imgur.com/ACzYqAm.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "ispc-rs",
+		"img": "http://via.placeholder.com/400x400",
 		"description": "ispc-rs is a small Rust library meant to be used as a compile time dependency
 			for Rust projects to allow them to build and link with code written in
 			[ISPC](https://ispc.github.io/). ISPC is a language that makes it possible to take advantage
@@ -50,6 +58,7 @@
 		"image": "http://i.imgur.com/WcM6Rcl.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "micro-packet",
+		"img": "http://via.placeholder.com/400x400",
 		"description": "μPacket is an extremely simple packet based ray tracer that uses the AVX/AVX2 instruction
 			set to trace eight rays at once through the scene. Currently it only supports spheres and planes
 			with Lambertian BRDFs illuminated by a single point light. Illumination is computed with Whitted ray
@@ -67,6 +76,7 @@
 		"image": "http://i.imgur.com/0geW8ma.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "topo-vol",
+		"img": "http://via.placeholder.com/1280x720",
 		"description": "topo-vol is a topology guided volume exploration and analysis tool, written for
 			the final project in [Bei Wang's Computational Topology Course](http://www.sci.utah.edu/~beiwang/teaching/cs6170-spring-2017/schedule.html).
 			It is built on top of the [Topology ToolKit](https://topology-tool-kit.github.io/) and
@@ -83,6 +93,11 @@
 		"image": "http://i.imgur.com/zPpNVDs.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray",
+		"img": [
+			"http://via.placeholder.com/400x400",
+			"http://via.placeholder.com/400x400",
+			"http://via.placeholder.com/400x400"
+		],
 		"description": "tray is a toy physically based ray tracer built off of the techniques discussed in
 			[Physically Based Rendering](http://pbrt.org/). It currently has support for path tracing,
 			bidirectional path tracing and photon mapping. tray also supports physically materials such as
@@ -97,6 +112,7 @@
 		"image": "http://i.imgur.com/JvVlYKf.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "bspline",
+		"img": "http://via.placeholder.com/400x400",
 		"description": "A Rust library for computing B-spline interpolating curves on generic control points.
 			bspline can be used to evaluate B-splines of varying orders on any type that can be linearly
 			interpolated, ranging from floats, positions, RGB colors to transformation matrices and so on.
@@ -110,6 +126,7 @@
 		"image": "http://i.imgur.com/EzAQZyM.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "spline-viewer",
+		"img": "http://via.placeholder.com/400x400",
 		"description": "A viewer for B-spline curves and surfaces, initially written for a course on
 			computer aided geometric design. You can edit and create 2D B-splines
 			and tweak some properties of loaded 3D curves and surfaces. Useful for learning
@@ -121,6 +138,7 @@
 		"image": "http://i.imgur.com/wImyNG4.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "tobj",
+		"img": "http://via.placeholder.com/400x400",
 		"description": "tobj is a tiny OBJ loader in Rust that draws inspiration for its API and design from
 			Syoyo's excellent library, [tinyobjloader](https://github.com/syoyo/tinyobjloader).
 			The crate aims to be a simple, fast and
@@ -137,6 +155,12 @@
 		"image": "http://i.imgur.com/byM8iNh.png",
 		"gh_user": "Twinklebear",
 		"gh_repo": "ssao",
+		"img": [
+			"http://via.placeholder.com/400x400",
+			"http://via.placeholder.com/400x400",
+			"http://via.placeholder.com/400x400",
+			"http://via.placeholder.com/400x400"
+		],
 		"description": "This is sort of an implementation of
 			[Scalable Ambient Obscurance by McGuire et al.](http://graphics.cs.williams.edu/papers/SAOHPG12/)
 			however I make a few simplifying shortcuts in my implementation and don't achieve as good performance
