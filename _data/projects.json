@@ -4,10 +4,10 @@
 		"layout": 6,
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray_rust",
-		"wide_img": "http://via.placeholder.com/1280x720",
+		"wide_img": "https://www.youtube.com/embed/5XY8ua4ysvM",
 		"img": [
-			"http://via.placeholder.com/300x300",
-			"http://via.placeholder.com/300x300",
+			"https://i.imgur.com/ywNdfGD.png",
+			"https://i.imgur.com/yiH8xsI.png",
 			"http://via.placeholder.com/300x300",
 			"http://via.placeholder.com/300x300"
 		],
@@ -90,9 +90,9 @@
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray",
 		"img": [
-			"http://i.imgur.com/zPpNVDs.png",
-			"http://via.placeholder.com/400x400",
-			"http://via.placeholder.com/400x400"
+			"https://i.imgur.com/MALPsD8.png",
+			"https://i.imgur.com/Ns3ZYsE.png",
+			"https://i.imgur.com/ApHMuex.png"
 		],
 		"description": "tray is a toy physically based ray tracer built off of the techniques discussed in
 			[Physically Based Rendering](http://pbrt.org/). It currently has support for path tracing,
@@ -149,7 +149,7 @@
 		"gh_repo": "ssao",
 		"img": [
 			"http://i.imgur.com/byM8iNh.png",
-			"http://via.placeholder.com/1280x720"
+			"http://i.imgur.com/v7wWg9O.png"
 		],
 		"description": "This is sort of an implementation of
 			[Scalable Ambient Obscurance by McGuire et al.](http://graphics.cs.williams.edu/papers/SAOHPG12/)
