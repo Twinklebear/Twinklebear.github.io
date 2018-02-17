@@ -6,7 +6,7 @@ title: Will Usher
 
 <div class="row col-md-12 mt-4">
 	<div class="col-md-12 float-left col-lg-5">
-		<img class="rounded img-fluid" src="http://via.placeholder.com/400x300">
+		<img class="rounded img-fluid" src="https://i.imgur.com/HZO90XJ.jpg">
 	</div>
 	<div class="col-md-12 col-lg-4 text-sm-center text-md-left">
 		<h2 class="display-4">Will Usher</h2>
@@ -39,8 +39,11 @@ title: Will Usher
 		{% for pub in site.data.publications %}
 		<div class="row col-md-12 mb-3 float-left">
 			<div class="float-left col-md-2 col-sm-12">
+				{% if pub.thumb %}
 				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="img-thumbnail" src="http://via.placeholder.com/100x100">
+				<img class="img-thumbnail" src="{{pub.thumb}}">
+				{% endif %}
+				<!-- todo: something for pubss wihtout thumbs? -->
 			</div>
 			<div class="col-md-10 col-sm-12 text-center text-md-left">
 				<h5><b>{{pub.title}}</b></h5>
