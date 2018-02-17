@@ -31,7 +31,7 @@ title: Will Usher
 		<!-- I'm torn whether or not I like the display class -->
 		<h2 class="border-bottom border-secondary">Bio</h2>
 		<div class="col-md-12">
-			Some short bio??
+			TODO: Short Bio
 		</div>
 	</div>
 	<div class="col-12">
@@ -72,8 +72,7 @@ title: Will Usher
 		{% for prj in site.data.projects limit:6 %}
 		<div class="row col-sm-12 col-md-6 col-lg-4 mb-3">
 			<div class="col-12">
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="rounded img-fluid" src="http://via.placeholder.com/300x200">
+				<img class="rounded img-fluid" src="{{prj.thumb}}">
 			</div>
 			<div class="col-12 text-center text-md-left">
 				<h5><b>{{prj.title}}</b></h5>

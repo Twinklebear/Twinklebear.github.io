@@ -4,6 +4,7 @@
 		"layout": 6,
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray_rust",
+		"thumb": "http://via.placeholder.com/600x400",
 		"wide_img": "https://www.youtube.com/embed/5XY8ua4ysvM",
 		"img": [
 			"https://i.imgur.com/ywNdfGD.png",
@@ -35,6 +36,7 @@
 		"layout": 1,
 		"gh_user": "Twinklebear",
 		"gh_repo": "ispc-rs",
+		"thumb": "https://i.imgur.com/sbZCnq6.png",
 		"img": "http://i.imgur.com/ACzYqAm.png",
 		"description": "ispc-rs is a small Rust library meant to be used as a compile time dependency
 			for Rust projects to allow them to build and link with code written in
@@ -56,6 +58,7 @@
 		"layout": 1,
 		"gh_user": "Twinklebear",
 		"gh_repo": "micro-packet",
+		"thumb": "https://i.imgur.com/Z4qlp42.png",
 		"img": "http://i.imgur.com/WcM6Rcl.png",
 		"description": "μPacket is an extremely simple packet based ray tracer that uses the AVX/AVX2 instruction
 			set to trace eight rays at once through the scene. Currently it only supports spheres and planes
@@ -73,6 +76,7 @@
 		"layout": 4,
 		"gh_user": "Twinklebear",
 		"gh_repo": "topo-vol",
+		"thumb": "https://i.imgur.com/Lb1UAZM.png",
 		"img": "http://i.imgur.com/0geW8ma.png",
 		"description": "topo-vol is a topology guided volume exploration and analysis tool, written for
 			the final project in [Bei Wang's Computational Topology Course](http://www.sci.utah.edu/~beiwang/teaching/cs6170-spring-2017/schedule.html).
@@ -89,6 +93,7 @@
 		"layout": 2,
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray",
+		"thumb": "https://i.imgur.com/rF58b9c.png",
 		"img": [
 			"https://i.imgur.com/MALPsD8.png",
 			"https://i.imgur.com/Ns3ZYsE.png",
@@ -107,6 +112,7 @@
 		"layout": 1,
 		"gh_user": "Twinklebear",
 		"gh_repo": "bspline",
+		"thumb": "https://i.imgur.com/T66iVg0.png",
 		"img": "http://i.imgur.com/JvVlYKf.png",
 		"description": "A Rust library for computing B-spline interpolating curves on generic control points.
 			bspline can be used to evaluate B-splines of varying orders on any type that can be linearly
