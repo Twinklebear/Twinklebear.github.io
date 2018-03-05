@@ -1,23 +1,22 @@
 ---
 layout: default
-title: Will Usher
+title: Blog
 ---
 {% include JB/setup %}
 
-<div class="row mt-4">
+<div class="row mt-4 justify-content-center">
 	{% for post in site.posts limit:4 %}
-	<div class="col-md-8 offset-md-2 col-sm-12">
+	<div class="col-9 mb-4">
 		<a href="{{ post.url }}"><h3>{{ post.title }}</h3></a>
 		<b>{{ post.date | date_to_string }}</b>
 		{{ post.excerpt }}
 
 		<a href="{{ post.url }}">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 	</div>
-	<hr>
 	{% endfor %}
 
 	{% if site.posts.size > 4 %}
-	<div class="col-md-8 offset-md-2 col-sm-12" style="mb-2">
+	<div class="col-12 text-center mb-2">
 		<h5>Find older posts in the <a href="/archive">Archive</a></h5>
 	</div>
 	{% endif %}

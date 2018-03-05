@@ -4,13 +4,13 @@
 		"layout": 6,
 		"gh_user": "Twinklebear",
 		"gh_repo": "tray_rust",
-		"thumb": "http://via.placeholder.com/600x400",
+		"thumb": "https://i.imgur.com/SHCFQ5C.png",
 		"wide_img": "https://www.youtube.com/embed/5XY8ua4ysvM",
 		"img": [
 			"https://i.imgur.com/ywNdfGD.png",
 			"https://i.imgur.com/yiH8xsI.png",
-			"http://via.placeholder.com/300x300",
-			"http://via.placeholder.com/300x300"
+			"https://i.imgur.com/iOU7Xys.png",
+			"https://i.imgur.com/Dzg3Fxr.png"
 		],
 		"description": "tray_rust is a toy physically based ray tracer built off of the techniques
 			discussed in [Physically Based Rendering](http://pbrt.org/). It began life as a port of

@@ -1,13 +1,13 @@
 <h1 class="display-4">{{page.title}}</h1>
 
 <div class="row justify-content-center">
-	<div class="col-8 col-offset-2">
+	<div class="col-9">
 		{{content}}
 		<hr>
-		<div class="col-md-12">
+		<div class="col-12">
 			<p>Published: {{page.date | date_to_long_string}}</p>
 		</div>
-		<div class="col-md-12 row">
+		<div class="col-12 row">
 			{% if page.previous %}
 			<div class="col-md-6 justify-content-left">
 				<a href="{{BASE_PATH}}{{page.previous.url}}" title="{{page.previous.title}}">
@@ -15,7 +15,7 @@
 			</div>
 			{% endif %}
 			{% if page.next %}
-			<div class="col-md-6 text-right">
+			<div class="col-6 text-right">
 				<a href="{{BASE_PATH}}{{page.next.url}}" title="{{page.next.title}}">
 					Next &nbsp<span class="fa fa-chevron-right" aria-hidden="true"></span></a>
 			</div>
