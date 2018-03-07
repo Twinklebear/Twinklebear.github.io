@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>CPU Volume Rendering of Adaptive Mesh Refinement Data</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
+		<h1>CPU Volume Rendering of Adaptive Mesh Refinement Data</h1>
+		<h5 class="font-italic">Ingo Wald, Carson Brownlee, Will Usher, Aaron Knoll</h5>
+		<h5>In <i>SIGGRAPH Asia 2017 Symposium on Visualization</i>, 2017</h5>
+		
+		<figure>
+			<img class="img-fluid" src="https://i.imgur.com/CqZc3VJ.png"/>
+			<figcaption class="text-left mt-2">
+				<b>Fig. 1: </b><i>Two examples of our method (integrated within the OSPRay ray tracer): Left: 1.8GB Cosmos AMR data, rendered in ParaView. Right: a 57GB NASA Chombo simulation, rendered with ambient occlusion and shadows alongside mesh geometry.</i>
+			</figcaption>
+		</figure>
+		
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
+		<p>Adaptive Mesh Refinement (AMR) methods are widespread in scientific computing, and visualizing the resulting data with efficient and accurate rendering methods can be vital for enabling interactive data exploration. In this work, we detail a comprehensive solution for directly volume rendering block-structured (Berger-Colella) AMR data in the OSPRay interactive CPU ray tracing framework. In particular, we contribute a general method for representing and traversing AMR data using a kd-tree structure, and four different reconstruction options, one of which in particular (the basis function approach) is novel compared to existing methods. We demonstrate our system on two types of block-structured AMR data and compressed scalar field data, and show how it can be easily used in existing production-ready applications through a prototypical integration in the widely used visualization program ParaView.</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="http://sci.utah.edu/~will/papers/cvamr/cvamr.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			
+			<dd><a href="https://dx.doi.org/10.1145/3139295.3139305">
+				<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+			</dd>
+			
+			
+		</dl>
+	</div>
+	
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>@inproceedings{Wald_CVAMR_2017,<br />
+ author = {Wald, Ingo and Brownlee, Carson and Usher, Will and Knoll, Aaron},<br />
+ title = {CPU Volume Rendering of Adaptive Mesh Refinement Data},<br />
+ booktitle = {SIGGRAPH Asia 2017 Symposium on Visualization},<br />
+ series = {SA '17},<br />
+ year = {2017},<br />
+ isbn = {978-1-4503-5411-0},<br />
+ location = {Bangkok, Thailand},<br />
+ pages = {9:1--9:8},<br />
+ articleno = {9},<br />
+ numpages = {8},<br />
+ url = {http://doi.acm.org/10.1145/3139295.3139305},<br />
+ doi = {10.1145/3139295.3139305},<br />
+ acmid = {3139305},<br />
+ publisher = {ACM},<br />
+ address = {New York, NY, USA},<br />
+ }</code>
+	</div>
+</div>
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Volume Rendering with WebGL</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">Volume Rendering with WebGL</h1>
+
+<div class="row justify-content-center">
+	<div class="col-9">
+		
+<figure>
+	<img class="img-fluid" src="https://i.imgur.com/YqdyKCj.png" />
+	<figcaption><i>Fig. 1: Sample volumes CAP TODO</i></figcaption>
+</figure>
+
+<p>In scientific visualization, volume rendering is used to visualize
+3D scalar fields. These scalar fields are often
+uniform grids of values, representing,
+e.g., charge density around a molecule,
+an MRI scan, air pressure around an airplane, etc.
+Volume rendering is a conceptually straightforward method
+for turning such data into an image: by sampling the data
+along rays from the eye and picking
+a color and transparency value for each sample, we can
+produce useful and beautiful images of such scalar fields
+(see e.g., Figure 1).
+In a GPU renderer, these 3D scalar fields are stored
+as 3D textures; however, in WebGL1 3D textures were
+not supported. WebGL2 added support for 3D textures,
+allowing for an elegant and fast volume renderer to be
+implemented entirely in the browser.
+In this post we’ll discuss the mathematical background
+for volume rendering, and how it can be implemented using
+WebGL2 to create an
+<a href="https://www.willusher.io/webgl-volume-raycaster/">interactive volume renderer</a>,
+entirely in the browser!</p>
+
+<!--more-->
+
+<h1 id="introduction">1. Introduction</h1>
+<p>To produce an image from volumetric data we need to model how light rays
+are absorbed, scattered, and emitted by the medium. However,
+a complete physically based model with scattering is typically too expensive for
+interactive rendering. Instead, interactive scientific visualization applications
+employ a simplified emission-absorption model, and ignore more expensive
+effects such as scattering. In the emission-absorption model light
+rays entering the eye from the volume pick up color emitted by the
+medium, and are attenuated as they traverse it due to absorption. If we trace
+rays from the eye through the volume, we can compute the color
+returning back along the ray to the pixel with the following integral.</p>
+
+<script type="math/tex; mode=display">C(r) = \int_0^L C(s) \mu(s) e^{-\int_0^s \mu(t) dt} ds</script>
+
+<p>At each point <script type="math/tex">s</script> along the ray we sample the volume, and
+accumulate the color <script type="math/tex">C(s)</script> and absorption <script type="math/tex">\mu(s)</script>,
+attenuated by the absorption along the ray between <script type="math/tex">s</script>
+and the entry point of the volume (<script type="math/tex">e^{-\int_0^s \mu(t) dt}</script>).
+In general this integral cannot be computed analytically, and
+we must use a numeric approximation. To do so we take a set of <script type="math/tex">N</script>
+samples along the ray, each a distance <script type="math/tex">\Delta s</script> apart.</p>
+
+<script type="math/tex; mode=display">C(r) = \sum_{i=0}^N C(i \Delta s) \mu (i \Delta s) \Delta s
+			\prod_{j=0}^{i-1} e^{-\mu(j \Delta s) \Delta s}</script>
+
+<p>We can apply a further simplification, and approximate the
+attenuation term for each sample (the product of <script type="math/tex">e^{-\mu(j \Delta s) \Delta s}</script> terms)
+by it’s Taylor series. This yields the well known front-to-back alpha
+compositing algorithm.</p>
+
+<script type="math/tex; mode=display">C(r) = \sum_{i=0}^N C(i \Delta s) \alpha (i \Delta s)
+			\prod_{j=0}^{i-1} (1 - \alpha(j \Delta s))</script>
+
+<p>In scientific visualization both the color, <script type="math/tex">C(s)</script>,
+and opacity, <script type="math/tex">\alpha(s)</script>, of each sample are set by a
+user-specified transfer function. The transfer function is
+used to hide or accent areas of interest in the data,
+for example to hide noise or background.
+Our final volume raytracer then can iteratively step a ray front-to-back
+through the volume, accumulating the color and opacity terms as
+we go.</p>
+
+<script type="math/tex; mode=display">\hat{C}_i = \hat{C}_{i-1} + (1 - \alpha_{i-1}) \hat{C}(i \Delta s)</script>
+
+<script type="math/tex; mode=display">\alpha_i = \alpha_{i - 1} + (1 - \alpha_{i-1}) \alpha(i \Delta s)</script>
+
+<p>Note that in these final equations we use pre-multiplied opacity for
+correct interpolation, <script type="math/tex">\hat{C}(i\Delta s) = C(i\Delta s) \alpha(i \Delta s)</script>.</p>
+
+<p>These equations amount to a for loop, where we step along the ray
+for each pixel, and accumulate the color and opacity as we go.
+This loop continues until the ray either leaves the volume,
+or the accumulated color has become opaque (<script type="math/tex">\alpha = 1</script>).
+Each pixel we process is independent, and needs read-only
+access to our shared state (i.e., the volume). If we want
+to compute the image quickly, we just need a way to process
+a large amount of pixels executing the same instruction
+on some different inputs. This is where the GPU comes in.
+By implementing the above equation in a fragment shader,
+we can implement a very fast volume renderer!</p>
+
+<h1 id="gpu-implementation-with-webgl2">2. GPU Implementation with WebGL2</h1>
+
+<p>We’ll begin by briefly reviewing the basic OpenGL rendering pipeline,
+then discuss how we can implement the above volume rendering equation
+in this context.
+The simplest OpenGL pipeline consists of two shader stages:
+the vertex shader, responsible for transforming input triangle
+vertices into the camera space <em>or is it NDC?</em>, and the fragment shader, responsible
+for shading each pixel covered by the transformed triangle.</p>
+
+<p><em>Insert here a diagram of the pipeline</em></p>
+
+<p>However, in the case of volume rendering we have a volume,
+not a set of triangles. To get our volume data rendered we
+have to either create some geometric representation of it,
+or follow an approach like <a href="">Shader Toy</a> where we use
+some dummy geometry to spawn fragment processing. The former
+option is known as slice-based rendering, and was used widely
+before the growth of programmable GPUs. Our approach will
+bear more resemblence to that of Shader Toy; however, to save
+on some compute work we’ll just rasterize the volume’s bounding
+box, instead of two full screen triangles. Rasterizing only
+the bounding box will allow us to restrict the compute work
+to just the pixels where the volume is visible. Then,
+in the fragment shader we perform the volume ray marching
+step described above.</p>
+
+<p><em>Maybe here have a figure showing that we raster
+the faces to spawn work, then in the frag shader
+run the ray marching</em></p>
+
+<p>To allow users to zoom fully in to the volume, we’ll rasterize just
+the back-faces of the box, by setting OpenGL’s face culling to cull
+front faces instead of back faces. We can also use the
+vertex shader to compute the ray direction at each vertex
+and let the GPU interpolate it for us, then in the fragment
+shader we can normalize it and begin ray marching.
+To illustrate the first step of our rendering process, the back
+faces of the volume bounding box
+are shown below, shaded by the ray direction.</p>
+
+<p><em>Insert the interactive rendering of the back faces shaded
+by ray direction here</em></p>
+
+<p>Here is the vertex shader for rendering our bounding box:</p>
+
+<p>and the fragment shader:</p>
+
+<p>Now that we can run the fragment shader for pixels the volume
+projects to and compute the eye</p>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="cp">#version 300 es
+</span><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec3</span> <span class="n">pos</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">mat4</span> <span class="n">proj_view</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">eye_pos</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">volume_scale</span><span class="p">;</span>
+<span class="k">out</span> <span class="kt">vec3</span> <span class="n">vray_dir</span><span class="p">;</span>
+<span class="k">flat</span> <span class="k">out</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">transformed_eye</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">volume_translation</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="n">volume_scale</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">;</span>
+	<span class="n">transformed_eye</span> <span class="o">=</span> <span class="p">(</span><span class="n">eye_pos</span> <span class="o">-</span> <span class="n">volume_translation</span><span class="p">)</span> <span class="o">/</span> <span class="n">volume_scale</span><span class="p">;</span>
+	<span class="c1">// TODO: For non-uniform size volumes we need to transform them differently as well
+</span>	<span class="c1">// to center them properly
+</span>	<span class="n">vray_dir</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">-</span> <span class="n">transformed_eye</span><span class="p">;</span>
+	<span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">proj_view</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="n">volume_scale</span> <span class="o">+</span> <span class="n">volume_translation</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">};</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="cp">#version 300 es
+</span><span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">sampler3D</span> <span class="n">volume</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">sampler2D</span> <span class="n">colormap</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">ivec3</span> <span class="n">volume_dims</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">eye_pos</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">float</span> <span class="n">dt_scale</span><span class="p">;</span>
+<span class="k">in</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">vray_dir</span><span class="p">;</span>
+<span class="k">flat</span> <span class="k">in</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">transformed_eye</span><span class="p">;</span>
+<span class="k">out</span> <span class="kt">highp</span> <span class="kt">vec4</span> <span class="n">color</span><span class="p">;</span>
+
+<span class="kt">highp</span> <span class="kt">vec2</span> <span class="nf">intersectBox</span><span class="p">(</span><span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">orig</span><span class="p">,</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">dir</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">box_min</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+	<span class="k">const</span> <span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">box_max</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">inv_dir</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">/</span> <span class="n">dir</span><span class="p">;</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">tmin_tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">box_min</span> <span class="o">-</span> <span class="n">orig</span><span class="p">)</span> <span class="o">*</span> <span class="n">inv_dir</span><span class="p">;</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">tmax_tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">box_max</span> <span class="o">-</span> <span class="n">orig</span><span class="p">)</span> <span class="o">*</span> <span class="n">inv_dir</span><span class="p">;</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">tmin</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">tmin_tmp</span><span class="p">,</span> <span class="n">tmax_tmp</span><span class="p">);</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">tmax</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin_tmp</span><span class="p">,</span> <span class="n">tmax_tmp</span><span class="p">);</span>
+	<span class="kt">highp</span> <span class="kt">float</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tmin</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+	<span class="kt">highp</span> <span class="kt">float</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">tmax</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">tmax</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tmax</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+	<span class="k">return</span> <span class="kt">vec2</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// TODO: This thing I think we should cut and discuss later in
+// a subsection. Then show the final result?
+// Pseudo-random number gen from
+// http://www.reedbeta.com/blog/quick-and-easy-gpu-random-numbers-in-d3d11/
+// with some tweaks for the range of values
+</span><span class="kt">highp</span> <span class="kt">float</span> <span class="nf">wang_hash</span><span class="p">(</span><span class="kt">highp</span> <span class="kt">int</span> <span class="n">seed</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">seed</span> <span class="o">^</span> <span class="mi">61</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">);</span>
+	<span class="n">seed</span> <span class="o">*=</span> <span class="mi">9</span><span class="p">;</span>
+	<span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span> <span class="o">^</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="p">);</span>
+	<span class="n">seed</span> <span class="o">*=</span> <span class="mh">0x27d4eb2d</span><span class="p">;</span>
+	<span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span> <span class="o">^</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&gt;&gt;</span> <span class="mi">15</span><span class="p">);</span>
+	<span class="k">return</span> <span class="kt">float</span><span class="p">(</span><span class="n">seed</span> <span class="o">%</span> <span class="mi">2147483647</span><span class="p">)</span> <span class="o">/</span> <span class="kt">float</span><span class="p">(</span><span class="mi">2147483647</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">ray_dir</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">vray_dir</span><span class="p">);</span>
+	<span class="kt">highp</span> <span class="kt">vec2</span> <span class="n">t_hit</span> <span class="o">=</span> <span class="n">intersectBox</span><span class="p">(</span><span class="n">transformed_eye</span><span class="p">,</span> <span class="n">ray_dir</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">discard</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">t_hit</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">dt_vec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">/</span> <span class="p">(</span><span class="kt">vec3</span><span class="p">(</span><span class="n">volume_dims</span><span class="p">)</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">ray_dir</span><span class="p">));</span>
+	<span class="kt">highp</span> <span class="kt">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">dt_scale</span> <span class="o">*</span> <span class="n">min</span><span class="p">(</span><span class="n">dt_vec</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">dt_vec</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dt_vec</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+	<span class="kt">highp</span> <span class="kt">float</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">wang_hash</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="nb">gl_FragCoord</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">640</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="nb">gl_FragCoord</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
+	<span class="kt">highp</span> <span class="kt">vec3</span> <span class="n">p</span> <span class="o">=</span> <span class="n">transformed_eye</span> <span class="o">+</span> <span class="p">(</span><span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span> <span class="o">*</span> <span class="n">ray_dir</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">highp</span> <span class="kt">float</span> <span class="n">t</span> <span class="o">=</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">x</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">y</span><span class="p">;</span> <span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kt">highp</span> <span class="kt">float</span> <span class="n">val</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">p</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+		<span class="kt">highp</span> <span class="kt">vec4</span> <span class="n">val_color</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">texture</span><span class="p">(</span><span class="n">colormap</span><span class="p">,</span> <span class="kt">vec2</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)).</span><span class="n">rgb</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span><span class="o">+</span>
+		<span class="n">color</span><span class="p">.</span><span class="n">rgb</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">color</span><span class="p">.</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">val_color</span><span class="p">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">val_color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
+		<span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">color</span><span class="p">.</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">val_color</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">95</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="n">p</span> <span class="o">+=</span> <span class="n">ray_dir</span> <span class="o">*</span> <span class="n">dt</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">};</span></code></pre></figure>
+
+
+		<hr>
+		<div class="col-12">
+			<p>Published: 10 August 2018</p>
+		</div>
+		<div class="col-12 row">
+			
+			<div class="col-md-6 justify-content-left">
+				<a href="/latex/2018/07/10/comments-in-latex" title="Comments in LaTeX">
+					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
+			</div>
+			
+			
+		</div>
+
+		<div class="comments">
+			
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'twinklebeargithub'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+		<script type="text/javascript" async
+			src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>
+	
+</body>
+</html>
+
+
+

@@ -64,6 +64,15 @@
 					
 					  
 					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
 						<li class="nav-item"><a href="/archive" class="nav-link">
 							Archive</a></li>
 						
@@ -81,7 +90,34 @@
 
 <div class="row mt-4 justify-content-center">
 	
-	<div class="col-9 mb-4">
+	<div class="col-9 mb-2">
+		<a href="/latex/2018/07/10/comments-in-latex"><h3>Comments in LaTeX</h3></a>
+		<b>10 Jul 2018</b>
+		
+<p>When writing a paper in LaTeX, it’s common to leave
+notes and comments in the text, either to yourself
+or your co-authors. I used to write these
+as just different colored text using <code class="highlighter-rouge">\textcolor{...}</code>,
+with each author assigned a color, or all with the same color.
+However, with more authors
+it can get hard to keep picking legible font colors.
+Futhermore, sometimes just a different color font doesn’t
+stand out quite as much as I’d like from the rest of the text.
+More recently I’ve switched to using highlights for
+the comments, which works well with multiple authors,
+and helps the comments stand out from the rest of
+the text. This is easy to do with the
+<a href="https://ctan.org/pkg/soul?lang=en">soul</a> and
+<a href="https://ctan.org/pkg/xcolor?lang=en">xcolor</a> packages.</p>
+
+
+
+		<a href="/latex/2018/07/10/comments-in-latex">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/2016/01/02/distributed-rendering-with-rust-and-mio"><h3>Distributed Rendering with Rust and Mio</h3></a>
 		<b>02 Jan 2016</b>
 		
@@ -103,9 +139,11 @@ if you want to try out the distributed rendering yourself.</p>
 
 
 		<a href="/2016/01/02/distributed-rendering-with-rust-and-mio">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
 	</div>
 	
-	<div class="col-9 mb-4">
+	<div class="col-9 mb-2">
 		<a href="/2015/12/16/rendering-an-animation-in-rust"><h3>Rendering an Animation in Rust</h3></a>
 		<b>16 Dec 2015</b>
 		
@@ -118,9 +156,11 @@ machines spread across two clusters at my lab.</p>
 
 
 		<a href="/2015/12/16/rendering-an-animation-in-rust">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
 	</div>
 	
-	<div class="col-9 mb-4">
+	<div class="col-9 mb-2">
 		<a href="/2015/05/15/porting-a-ray-tracer-to-rust-part-3"><h3>Porting a Ray Tracer to Rust, part 3</h3></a>
 		<b>15 May 2015</b>
 		
@@ -140,31 +180,8 @@ coincidence, since Rust 1.0.0 is being released <a href="http://blog.rust-lang.o
 
 
 		<a href="/2015/05/15/porting-a-ray-tracer-to-rust-part-3">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-	</div>
-	
-	<div class="col-9 mb-4">
-		<a href="/2015/01/30/porting-a-ray-tracer-to-rust-part-2"><h3>Porting a Ray Tracer to Rust, part 2</h3></a>
-		<b>30 Jan 2015</b>
-		
-<p>As mentioned in my <a href="/2014/12/30/porting-a-ray-tracer-to-rust-part-1">previous post</a> I spent the past month-ish
-working on improving both the rendering capabilities and performance of <a href="https://github.com/Twinklebear/tray_rust">tray_rust</a>.
-While it’s not yet capable of path tracing we can at least have light and shadow and shade our objects with diffuse or specularly
-reflective and/or transmissive materials. Along with this I’ve improved performance by parallelizing
-the rendering process using Rust’s multithreading capabilities. Although ray tracing is a trivially parallel task there are
-two pieces of state that must be shared and modified between threads: the pixel/block counter and the framebuffer.
-With Rust’s strong focus on safety I was worried that I would have to resort to unsafe blocks to share these
-small pieces of mutable state but I found that the <a href="http://doc.rust-lang.org/std/sync/index.html">std::sync module</a>
-provided safe methods for everything I needed and performs quite well. While it’s difficult to compare against
-<a href="https://github.com/Twinklebear/tray">tray</a> (my initial C++ version) as the design of tray_rust has diverged quite 
-a bit I’ll put some performance numbers in the multithreading section.</p>
-
-<p>During the past month <a href="http://www.rust-lang.org/">Rust</a> has also seen some pretty large changes and is currently
-in its 1.0 alpha release with the <a href="http://blog.rust-lang.org/2014/12/12/1.0-Timeline.html">first beta</a>
-fast approaching.</p>
-
-
-
-		<a href="/2015/01/30/porting-a-ray-tracer-to-rust-part-2">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
 	</div>
 	
 
