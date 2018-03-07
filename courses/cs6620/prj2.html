@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>CS 6620 Fall 2014 - Project 2</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">CS 6620 Fall 2014 - Project 2</h1>
+
+<div class="row justify-content-md-center">
+	
+
+
+<div class="col-md-12">
+<link href="/courses/cs6620/c3.css" rel="stylesheet" type="text/css">
+
+<h3 style="text-align:center">Rendered Image</h3>
+<img src="/courses/cs6620/prj2_color.png">
+
+<br />
+
+<h3>Hardware Used and Render Times</h3>
+<p>
+The plot below shows the render times for one sample per pixel averaged over 10 runs, measured from a build compiled with
+<code>-O3 -mfpmath=sse -march=native -flto</code>. Measurements were taken using <code>std::chrono::high_resolution_clock</code>
+and only include time to render, ie. time to load the scene and write the images to disk is ignored. Now that the renderer
+has a bit more work to do we can start to see thread contention hurting the render time when running on significantly
+more threads than the number of hardware threads.
+</p>
+
+<p><b>Desktop</b><br />
+CPU: Intel i5-2500K @ 4.0GHz, 4 hardware threads <br />
+RAM: 8GB 1600MHz DDR3 <br />
+Compiler: gcc 4.8.0 (MinGW on Windows) </p>
+
+<br />
+
+<div id="chart"></div>
+
+<br />
+<p style="text-align:center">Chart made using <a href="http://c3js.org/">C3.js</a></p>
+<br />
+
+<h3>Multithreading Tweaks</h3>
+I also tweaked my multithreading implementation based on what was mentioned in class since the original implementation was
+pretty braindead, eg. split the image into <code>num_threads</code> blocks, hand them off and relax. This new method
+chops the image up into a specified number of blocks, shuffles them and then hands them off to the threads as they render.
+This does a bit better job of distributing the workload over the threads and is also more fun to watch. Below is a recording
+of the rendering slowed down significantly by inserting some short sleeps into the worker threads.
+
+<br />
+<div style="text-align:center">
+<h4>8 Threads 128 Blocks</h4>
+<iframe src="http://gfycat.com/ifr/FickleMisguidedImago" frameborder="0" scrolling="no" width="576" height="450" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe>
+</div>
+
+<br />
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="/courses/cs6620/c3.min.js"></script>
+<script src="/courses/cs6620/prj2_time.js"></script>
+</div>
+
+
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

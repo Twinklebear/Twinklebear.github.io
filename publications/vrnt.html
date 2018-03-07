@@ -1,0 +1,182 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>A Virtual Reality Visualization Tool for Neuron Tracing</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
+		<h1>A Virtual Reality Visualization Tool for Neuron Tracing</h1>
+		<h5 class="font-italic">Will Usher, Pavol Klacansky, Frederick Federer, Peer-Timo Bremer, Aaron Knoll, Jeff Yarch, Alessandra Angelucci, and Valerio Pascucci</h5>
+		<h5>In <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2018</h5>
+		
+		<figure>
+			<img class="img-fluid" src="https://i.imgur.com/2rmTeh2.png"/>
+			<figcaption class="text-left mt-2">
+				<b>Fig. 1: </b><i>A screenshot of our VR neuron tracing tool using the isosurface rendering mode. The dark gray floor represents the extent of the tracked space. Users can orient themselves in the dataset via the minimap (right), which shows the world extent in blue, the current focus region in orange, and the previously traced neuronal structures. The focus region is displayed in the center of the space. The 3D interaction and visualization provides an intuitive environment for exploring the data and a natural interface for neuron tracing, resulting in faster, high-quality traces with less fatigue reported by users compared to existing 2D tools.</i>
+			</figcaption>
+		</figure>
+		
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
+		<p>Tracing neurons in large-scale microscopy data is crucial to establishing a wiring diagram of the brain, which is needed to understand how neural circuits in the brain process information and generate behavior. Automatic techniques often fail for large and complex datasets, and connectomics researchers may spend weeks or months manually tracing neurons using 2D image stacks. We present a design study of a new virtual reality (VR) system, developed in collaboration with trained neuroanatomists, to trace neurons in microscope scans of the visual cortex of primates. We hypothesize that using consumer-grade VR technology to interact with neurons directly in 3D will help neuroscientists better resolve complex cases and enable them to trace neurons faster and with less physical and mental strain. We discuss both the design process and technical challenges in developing an interactive system to navigate and manipulate terabyte-sized image volumes in VR. Using a number of different datasets, we demonstrate that, compared to widely used commercial software, consumer-grade VR presents a promising alternative for scientists.</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			
+			<dd><a href="https://dx.doi.org/10.1109/TVCG.2017.2744079">
+				<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+			</dd>
+			
+			
+			<dt>Videos</dt>
+				
+				<dd><a href="https://youtu.be/L5tsU8TtgkU">
+					
+					<i class="fab fa-youtube"></i>
+					
+					 Analyzing an Expert Session </a></dd>
+				
+				<dd><a href="https://youtu.be/t6rPU6hy5tk">
+					
+					<i class="fab fa-youtube"></i>
+					
+					 ZED Mixed Reality Prototype</a></dd>
+				
+			</dt>
+			
+			
+		</dl>
+	</div>
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Supplemental Video</h2>
+		<div class="embed-responsive embed-responsive-16by9">
+			<iframe class="embed-responsive-item" allowfullscreen src="https://www.youtube.com/embed/lTNef_kbLKg">
+			</iframe>
+		</div>
+	</div>
+	
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Presentation Video</h2>
+		<div class="embed-responsive embed-responsive-16by9">
+			<iframe class="embed-responsive-item" allowfullscreen src="https://www.youtube.com/embed/XzmYdl9rFs0">
+			</iframe>
+		</div>
+	</div>
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>@article{Usher_VRNT_2018,<br />
+ author={W. Usher and P. Klacansky and F. Federer and P. T. Bremer and A. Knoll and J. Yarch and A. Angelucci and V. Pascucci},<br />
+ journal={IEEE Transactions on Visualization and Computer Graphics},<br />
+ title={A {Virtual} {Reality} {Visualization} {Tool} for {Neuron} {Tracing}},<br />
+ year={2018},<br />
+ volume={24},<br />
+ number={1},<br />
+ pages={994-1003},<br />
+ doi={10.1109/TVCG.2017.2744079},<br />
+ ISSN={1077-2626},<br />
+ month={Jan},<br />
+}</code>
+	</div>
+</div>
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

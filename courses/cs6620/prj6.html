@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>CS 6620 Fall 2014 - Project 6</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">CS 6620 Fall 2014 - Project 6</h1>
+
+<div class="row justify-content-md-center">
+	
+
+
+<link href="/courses/cs6620/c3.css" rel="stylesheet" type="text/css">
+
+<div class="col-md-10">
+	<h3>Model Madness Scene</h3>
+	<p>Nodes and meshes in BVH: 62.078s<br />
+	Only meshes in BVH: 81.887s<br />
+	1280x960 resolution (click for full size) with 16 low-discrepancy samples per pixel</p>
+	<a href="/courses/cs6620/prj6_model_madness.png">
+		<img src="/courses/cs6620/prj6_model_madness.png" width="800" height="600">
+	</a>
+	<br />
+	<p>The model madness scene makes use of the Stanford Dragon (1,132,830 tris), Happy Buddha (1,087,716 tris),
+	Armadillo (345,944 tris) and Bunny (69,451 tris) from the
+	<a href="https://graphics.stanford.edu/data/3Dscanrep/">Stanford 3D Scanning Repository</a>,
+	the smoothed version of the
+	<a href="http://dcgi.felk.cvut.cz/cgg/eg07/index.php?page=dragon">EuroGraphics 2007 Phlegmatic Dragon</a>
+	(960,152 tris), the ordered polymesh version of <a href="http://www.headus.com.au/samples/killeroo/">Killeroo</a> (46,000 tris),
+	<a href="http://en.wikipedia.org/wiki/Blender_%28software%29#Suzanne">Blender's Suzanne</a> (1000 tris) and the high res Utah
+	teapot (6,320 tris).
+	</p>
+
+	<h3>Cornell Box Scene</h3>
+	<p>Nodes and meshes in BVH: 191ms<br />
+	Only meshes in BVH: 228ms<br />
+	With only bounding box tests (ie. no BVH): 13.066s<br />
+	Rendered with 1 sample per pixel</p>
+	<img src="/courses/cs6620/prj6_reference.png">
+</div>
+
+<br />
+
+<div class="row">
+	<div class="col-md-4 col-lg-4">
+		<h3>Loading Models Faster</h3>
+		<p>
+		My old obj loading code is really awful and was unbearably slow when I started working with large models like those
+		in the model madness scene. Instead of spending time optimizing the text parser (since even really good text parsing
+		isn't crazy fast) I put together a brain-dead simple binary format that I can read directly into my mesh object without
+		any parsing or other overhead (eg. lots of small memory allocations). These binary objs are generated once by a mesh
+		pre-processor included in the ray tracer and searched for automatically when looking for an obj file, saving tons of time.
+		The plot shows the loading times of my terrible obj loader compared to the binary format. The binary obj times are really
+		low so you'll probably need to mouse over the bars to see the times. Note that times of 0ms were below measurement precision.
+		</p>
+	</div>
+	<div class="col-md-8 col-lg-8">
+		<br />
+		<br />
+		<div id="bobj_loading_chart"></div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12 col-lg-12">
+	<h3>Profiling Different BVH Split Methods</h3>
+	<p>
+	I tried out the three different BVH split methods discussed in class on the model madness scene and measured both time to build
+	and overall render time of each method when used for creating the mesh BVHs. In all 3 tests the nodes were in a BVH built using
+	SAH so the comparison is only on the different methods effects on the mesh BVH build time and quality.
+	</p>
+	</div>
+	<br />
+	<div class="col-md-8 col-lg-8">
+		<div id="bvh_split_chart"></div>
+	</div>
+	<br />
+	<div class="col-md-4 col-lg-4">
+		<div id="bvh_render_chart"></div>
+	</div>
+</div>
+
+<h3>Hardware Used and Other Details</h3>
+<p>
+Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
+ie. time to load the scene and write the images to disk is ignored. Both images were rendered using 8 threads with
+work divided into 8x8 blocks and worked on in Z-order. The BVHs used in both scenes were built using SAH to choose
+splitting planes.
+</p>
+
+CPU: Intel i5-2500K @ 4.0GHz, 4 hardware threads <br />
+RAM: 8GB 1600MHz DDR3 <br />
+Compiler: gcc 4.9.1 x86_64 (on Windows, built by MinGW-W64 project)<br />
+Compilation Flags: -m64 -O3 -march=native -flto
+</p>
+
+<br />
+<p style="text-align:center">Charts made using <a href="http://c3js.org/">C3.js</a></p>
+<br />
+<br />
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="/courses/cs6620/c3.min.js"></script>
+<script src="/courses/cs6620/prj6_time.js"></script>
+
+
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

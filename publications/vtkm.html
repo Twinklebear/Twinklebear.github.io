@@ -1,0 +1,143 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
+		<h1>VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures</h1>
+		<h5 class="font-italic">Kenneth Moreland, Christopher Sewell, William Usher, Li-ta Lo, Jeremy Meredith, David Pugmire, James Kress, Hendrik Schroots, Kwan-Liu Ma, Hank Childs, Matthew Larsen, Chun-Ming Chen, Robert Maynard, Berk Geveci</h5>
+		<h5>In <i>IEEE Computer Graphics and Applications</i>, 2016</h5>
+		
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
+		<p>One of the most critical challenges for high-performance computing (HPC) scientific visualization is execution on massively threaded processors. Of the many fundamental changes we are seeing in HPC systems, one of the most profound is a reliance on new processor types optimized for execution bandwidth over latency hiding. Our current production scientific visualization software is not designed for these new types of architectures. To address this issue, the VTK-m framework serves as a container for algorithms, provides flexible data representation, and simplifies the design of visualization algorithms on new and future computer architecture.</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7466740"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			
+			<dd><a href="https://dx.doi.org/10.1109/MCG.2016.48">
+				<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+			</dd>
+			
+			
+			
+		</dl>
+	</div>
+	
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>@article{Moreland_VTKm_2016,<br />
+ author={K. Moreland and C. Sewell and W. Usher and L. t. Lo and J. Meredith and D. Pugmire and J. Kress and H. Schroots and K. L. Ma and H. Childs and M. Larsen and C. M. Chen and R. Maynard and B. Geveci},<br />
+ journal={IEEE Computer Graphics and Applications},<br />
+ title={{VTK-m}: {Accelerating} the {Visualization} {Toolkit} for {Massively} {Threaded} {Architectures}},<br />
+ year={2016},<br />
+ volume={36},<br />
+ number={3},<br />
+ pages={48-58},<br />
+ doi={10.1109/MCG.2016.48},<br />
+ ISSN={0272-1716},<br />
+ month={May},<br />
+}</code>
+	</div>
+</div>
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

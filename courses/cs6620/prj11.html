@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>CS 6620 Fall 2014 - Project 11</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">CS 6620 Fall 2014 - Project 11</h1>
+
+<div class="row justify-content-md-center">
+	
+
+
+<div class="col-lg-12 col-md-12">
+	<h4>Comparison of gamma corrected and uncorrected images: 00:41:54</h4>
+	<p>
+	I ended up playing with gamma correction and having it implemented before it got bumped
+	to the next project so I put together a comparison. The gamma correction is done by
+	converting the linear RGB values the
+	render is computed with to sRGB values, since the sRGB color space includes a gamma correction
+	term and is a common and well supported color space. The left (brighter) is the corrected image, the right
+	is uncorrected. Both images were rendered with path tracing and adaptive sampling with a min 128
+	and max of 1024 samples per pixel.
+	<br />
+	The scene uses the ordered polymesh version of
+	<a href="http://www.headus.com.au/samples/killeroo/">Killeroo</a> and the high res
+	Utah teapot. The Killeroo model is using a measured brass material from the
+	<a href="http://www.merl.com/brdf/">MERL BRDF Database</a> and the sphere uses a measured gold material
+	from <a href="https://github.com/mmp/pbrt-v2">PBRT's material spd files</a>.
+	</p>
+	<div class="row">
+		<div class="col-lg-6 col-md-6" style="text-align:center">
+			<a href="/courses/cs6620/prj11_killeroo_correct.png">
+				<img src="/courses/cs6620/prj11_killeroo_correct.png" class="img-fluid">
+			</a>
+		</div>
+		<div class="col-lg-6 col-md-6" style="text-align:center">
+			<a href="/courses/cs6620/prj11_killeroo_incorrect.png">
+				<img src="/courses/cs6620/prj11_killeroo_incorrect.png" class="img-fluid">
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-12 col-md-12">
+		<h4>SmallPT Cornell Box w/ MERL BRDFS: 00:52:35</h4>
+		<p>
+		Adaptive sampling: min 128, max 1024
+		</p>
+		<a href="/courses/cs6620/prj11_merl_scene.png">
+			<img src="/courses/cs6620/prj11_merl_scene.png" class="img-fluid">
+		</a>
+		<br />
+		<p>
+		The MERL scene makes use of the Stanford Dragon and Happy Buddha from the
+		<a href="https://graphics.stanford.edu/data/3Dscanrep/">Stanford 3D Scanning Repository</a>. The material
+		BRDFS are from the <a href="http://www.merl.com/brdf/">MERL BRDF Database</a> introduced in the paper
+		"A Data-Driven Reflectance Model" by Wojciech Matusik, Hanspeter Pfister, Matt Brand and Leonard McMillan.
+		The dragon uses the blue acrylic BRDF, the buddha uses the gold metallic paint1 BRDF and the sphere uses
+		the red fabric BRDF.
+		</p>
+	</div>
+	<div class="col-lg-12 col-md-12">
+		<h4>Fabric SmallPT Cornell Box: 00:45:52</h4>
+		<p>
+		Adaptive sampling: min 128, max 1024
+		</p>
+		<a href="/courses/cs6620/prj11_fabric_box.png">
+			<img src="/courses/cs6620/prj11_fabric_box.png" class="img-fluid">
+		</a>
+		<br />
+		<p>
+		The fabric box scene makes use of the Stanford Bunny from the 
+		<a href="https://graphics.stanford.edu/data/3Dscanrep/">Stanford 3D Scanning Repository</a> and the
+		high res Utah teapot. The material BRDFS are from the <a href="http://www.merl.com/brdf/">MERL BRDF Database</a>.
+		The walls are using the red/white/blue fabric BRDFS, the teapot is using red metallic paint and the bunny is
+		using color changing paint2.
+		</p>
+	</div>
+</div>
+<div class="col-lg-12 col-md-12">
+	<h3>Hardware Used and Other Details</h3>
+	<p>
+	Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
+	ie. time to load the scene and write the images to disk is ignored. Images were rendered with path tracing
+	using 32 threads with work divided up in 8x8 blocks. A different machine was used to render the images
+	since my computer at home was out of commission when rendering the scenes.
+	</p>
+
+	CPU: Intel i7 870 @ 2.93 Ghz<br />
+	RAM: Forgot to check <br />
+	Compiler: gcc 4.9.1 x86_64 (on OpenSUSE)<br />
+	Compilation Flags: -m64 -O3 -march=native -flto
+	</p>
+</div>
+</div>
+
+
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>In Situ Exploration of Particle Simulations with CPU Ray Tracing</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
+		<h1>In Situ Exploration of Particle Simulations with CPU Ray Tracing</h1>
+		<h5 class="font-italic">Will Usher, Ingo Wald, Aaron Knoll, Michael Papka, Valerio Pascucci</h5>
+		<h5>In <i>Supercomputing Frontiers and Innovations</i>, 2016</h5>
+		
+		<figure>
+			<img class="img-fluid" src="https://i.imgur.com/DO3JqOb.png"/>
+			<figcaption class="text-left mt-2">
+				<b>Fig. 1: </b><i>A coal particle combustion simulation in Uintah at three different timesteps with (left to right): 34.61M, 48.46M and 55.39M particles, with attribute based culling showing the full jet (top) and the front in detail (bottom). Using our in situ library to query and send data to our rendering client in OSPRay these images are rendered interactively with ambient occlusion, averaging around 13 FPS at 1920×1080. The renderer is run on 12 nodes of the Stampede supercomputer and pulls data from a Uintah simulation running on 64 processes (4 nodes). Our loosely-coupled in situ approach allows for live exploration at the full temporal fidelity of the simulation, without prohibitive IO cost.</i>
+			</figcaption>
+		</figure>
+		
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
+		<p>We present a system for interactive in situ visualization of large particle simulations, suitable for general CPU-based HPC architectures. As simulations grow in scale, in situ methods are needed to alleviate IO bottlenecks and visualize data at full spatio-temporal resolution. We use a lightweight loosely-coupled layer serving distributed data from the simulation to a data-parallel renderer running in separate processes. Leveraging the OSPRay ray tracing framework for visualization and balanced P-k-d trees, we can render simulation data in real-time, as they arrive, with negligible memory overhead. This flexible solution allows users to perform exploratory in situ visualization on the same computational resources as the simulation code, on dedicated visualization clusters or remote workstations, via a standalone rendering client that can be connected or disconnected as needed. We evaluate this system on simulations with up to 227M particles in the LAMMPS and Uintah computational frameworks, and show that our approach provides many of the advantages of tightly-coupled systems, with the flexibility to render on a wide variety of remote and co-processing resources.</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="http://sci.utah.edu/~will/papers/in_situ_particles/in_situ_particles.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			
+			<dd><a href="https://dx.doi.org/10.14529/jsfi160401">
+				<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+			</dd>
+			
+			
+			
+			<dt>Code</dt>
+			<dd>
+			<a href="https://github.com/Twinklebear/in-situ-particles">
+				<i class="fab fa-github"></i> GitHub</a>
+			</dd>
+			
+		</dl>
+	</div>
+	
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>@article{Usher_InSituParticles_2016,<br />
+ author={Will Usher and Ingo Wald and Aaron Knoll and Michael Papka and Valerio Pascucci},<br />
+ title={In {Situ} {Exploration} of {Particle} {Simulations} with {CPU} {Ray} {Tracing}},<br />
+ journal={Supercomputing Frontiers and Innovations},<br />
+ volume={3},<br />
+ number={4},<br />
+ year={2016},<br />
+ issn={2313-8734},<br />
+ doi={10.14529/jsfi160401},<br />
+}</code>
+	</div>
+</div>
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

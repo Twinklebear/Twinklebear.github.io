@@ -1,0 +1,432 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Safe Memory Arenas in Rust</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">Safe Memory Arenas in Rust</h1>
+
+<div class="row justify-content-center">
+	<div class="col-9">
+		
+<p>I recently wrote a memory arena in Rust for use in my ray tracer, and in
+the process learned and took advantage of some interesting and powerful
+features of the language. At its core a memory arena is a block of bytes
+which we construct objects into, using placement new. In my C++ version this
+system is very easy to misuse. For example, questions like “How long is something
+I allocate valid? For the arena’s lifetime? How do I know that lifetime?”, “What if
+the arena is cleared and something else created where I was pointing?”, and
+“Is the destructor of my object going to be called?” are hard to answer.
+By leveraging Rust’s borrow checker, type system and convenience types
+like <code class="highlighter-rouge">PhantomData</code>, we can tackle all of these questions and arrive at a
+performant and easy to use solution.</p>
+
+<!--more-->
+
+<h1 id="introduction">1. Introduction</h1>
+
+<p>The crate built using the concepts described in this post is
+light_arena which is available on <a href="https://crates.io/crates/light_arena">crates.io</a>
+and <a href="https://github.com/Twinklebear/light_arena">Github</a>. Unfortunately
+the placement in syntax and placement new features in Rust are still
+experimental, meaning this crate requires nightly Rust. In the following
+sections we’ll briefly review some key general and Rust-specific concepts
+needed to describe the implementation of light_arena.</p>
+
+<h2 id="memory-arenas">1.1. Memory Arenas</h2>
+
+<p>In programs where frequent dynamic allocation is required, the performance impact
+of making these frequent allocations can be unacceptable. For example, in tray_rust
+in order to allow textures to change material properties at each surface point,
+the textures are sampled when getting material properties for a point, and new BRDFs
+are created with the resulting parameters. Surface shading is one of the most frequent
+operations performed in a ray tracer, and the resulting memory churn of these frequent
+allocations and deallocations can introduce a serious performance penalty. To resolve
+this, <a href="http://pbrt.org/">PBRT</a> suggests to use a memory arena to serve these allocation
+requests.</p>
+
+<p>A memory arena (or sometimes, <a href="https://en.wikipedia.org/wiki/Memory_pool">memory pool</a>),
+is a pre-allocated buffer we can use as the backing memory store for dynamic allocations.
+Since the memory is allocated up front there’s no to make new allocation requests (e.g. malloc)
+when allocating. Instead, we mark a region of bytes in the arena as occupied and construct
+the object in place. When releasing objects there are a few options. If the stored objects
+potentially perform dynamic allocation themselves, we would need to step through the
+region and destroy the objects. However, if the objects are Plain-Old-Data we can just release
+the containing buffer. light_arena only supports storing POD types for simplicity, since
+it’s all I needed for tray_rust, other crates like <a href="https://github.com/pczarn/any-arena">any-arena</a>
+are available which can store non-POD types.</p>
+
+<h2 id="placement-syntax">1.2. Placement Syntax</h2>
+
+<p><a href="https://en.wikipedia.org/wiki/Placement_syntax">Placement syntax</a> is a
+language feature which allows us to construct objects in place in some block of memory.
+Rather than creating an object on the stack and copying it into the memory arena’s
+buffer, we want to directly construct the object in the space reserved for it
+in the arena. In C++ this is done by passing the pointer to the memory to
+construct the object in when calling <code class="highlighter-rouge">new</code>.</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">buffer</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="kt">int</span> <span class="o">*</span><span class="n">my_int</span> <span class="o">=</span> <span class="k">new</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">data</span><span class="p">())</span> <span class="kt">int</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span></code></pre></figure>
+
+<p>In nightly Rust placement syntax is implemented via the combination of three traits,
+behind the feature gate <code class="highlighter-rouge">placement_new_protocol</code> while the arrow syntax used to
+invoke it is behind the <code class="highlighter-rouge">placement_in_syntax</code> feature gate.</p>
+
+<p>The <a href="https://doc.rust-lang.org/std/ops/trait.Placer.html"><code class="highlighter-rouge">Placer</code></a> trait
+is conceptually the manager of the backing data being used
+to serve allocations. It requires the implementation of the <code class="highlighter-rouge">make_place</code> function,
+which will return a type implementing <a href="https://doc.rust-lang.org/std/ops/trait.InPlace.html"><code class="highlighter-rouge">InPlace</code></a>
+and <a href="https://doc.rust-lang.org/std/ops/trait.Place.html"><code class="highlighter-rouge">Place</code></a> traits.
+The <code class="highlighter-rouge">Place</code> type represents a location of memory where the object can be constructed,
+and <code class="highlighter-rouge">InPlace</code> provides a method to return the result of the in place construction
+so the caller can assign it to a local variable.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">trait</span> <span class="n">Placer</span><span class="o">&lt;</span><span class="n">Data</span><span class="p">:</span> <span class="err">?</span><span class="n">Sized</span><span class="o">&gt;</span> <span class="p">{</span>
+	<span class="k">type</span> <span class="n">Place</span><span class="p">:</span> <span class="n">InPlace</span><span class="o">&lt;</span><span class="n">Data</span><span class="o">&gt;</span><span class="p">;</span>
+	<span class="k">fn</span> <span class="nf">make_place</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">Self</span><span class="p">::</span><span class="n">Place</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">pub</span> <span class="k">trait</span> <span class="n">Place</span><span class="o">&lt;</span><span class="n">Data</span><span class="p">:</span> <span class="err">?</span><span class="n">Sized</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">*</span><span class="k">mut</span> <span class="n">Data</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">pub</span> <span class="k">trait</span> <span class="n">InPlace</span><span class="o">&lt;</span><span class="n">Data</span><span class="p">:</span> <span class="err">?</span><span class="n">Sized</span><span class="o">&gt;</span><span class="p">:</span> <span class="n">Place</span><span class="o">&lt;</span><span class="n">Data</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">type</span> <span class="n">Owner</span><span class="p">;</span>
+    <span class="k">unsafe</span> <span class="k">fn</span> <span class="nf">finalize</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">Self</span><span class="p">::</span><span class="n">Owner</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>By implementing these traits we can eventually write code like:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">let</span> <span class="k">mut</span> <span class="n">arena</span> <span class="o">=</span> <span class="c">// some T: Placer</span>
+<span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="n">arena</span> <span class="o">&lt;-</span> <span class="mf">14.0f32</span><span class="p">;</span>
+<span class="nd">println!</span><span class="p">(</span><span class="s">"x = {}"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span></code></pre></figure>
+
+<p>The left arrow syntax is the placement in syntax in Rust, and is the syntactic sugar
+for invoking the the traits and compiler features to perform the actual allocation
+of the object (the float32) in place using the arena.</p>
+
+<h2 id="rust-lifetimes">1.3. Rust Lifetimes</h2>
+
+<p>In Rust, the validity of references to objects are tracked at compile time using
+lifetimes.
+A full coverage of Rust’s ownership, borrowing and lifetime system is beyond the scope
+of this short post, for a full coverage or answers to questions lingering after
+this section see chapters
+<a href="https://doc.rust-lang.org/book/second-edition/ch04-00-understanding-ownership.html">4</a>
+and <a href="https://doc.rust-lang.org/book/second-edition/ch10-00-generics.html">10</a> of
+the <a href="https://doc.rust-lang.org/book/second-edition/">Rust book</a>.</p>
+
+<p>Each object in Rust has an implicit lifetime, however in some
+cases where the compiler can’t deduce the lifetime we need to be explicit, e.g.
+when storing a reference as a member of a struct. Then in the struct’s implementation
+we can tie this lifetime associated with it to an actual lifetime of an object. Lifetime
+variables are written as <code class="highlighter-rouge">'name</code>, e.g. <code class="highlighter-rouge">'a</code> is commonly used. In the following code,
+the struct <code class="highlighter-rouge">Foo</code> stores a reference to a float, since the lifetime can’t be deduced
+in the struct declaration we provide a lifetime variable <code class="highlighter-rouge">'a</code>. To tie this lifetime
+to the object borrowed by <code class="highlighter-rouge">Foo</code> when it’s created in our implementation we associate
+the lifetime variable with the borrow of the variable <code class="highlighter-rouge">y</code> in <code class="highlighter-rouge">Foo::new</code>. Try
+playing with the code in the <a href="https://play.rust-lang.org/?gist=8e30ff2742c92797a741a6288723dfed&amp;version=stable&amp;backtrace=0">playground</a>! Try taking the <code class="highlighter-rouge">'a</code> off the <code class="highlighter-rouge">y</code> parameter.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">{</span>
+	<span class="n">x</span><span class="p">:</span> <span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="nb">f32</span>
+<span class="p">}</span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">{</span>
+	<span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">{</span>
+		<span class="n">Foo</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="n">y</span> <span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">10.5</span><span class="p">;</span>
+	<span class="k">let</span> <span class="n">f</span> <span class="o">=</span> <span class="nn">Foo</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+	<span class="nd">println!</span><span class="p">(</span><span class="s">"f.x = {}"</span><span class="p">,</span> <span class="n">f</span><span class="py">.x</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The lifetimes are then used at compile time to validate that references to objects
+don’t outlive the objects being referred to. For example, the following main function
+attempts to return a <code class="highlighter-rouge">Foo</code> instance outside of the scope that the object it refers to
+lives for, and will fail compile.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">let</span> <span class="n">f2</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">10.5</span><span class="p">;</span>
+		<span class="k">let</span> <span class="n">f</span> <span class="o">=</span> <span class="nn">Foo</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+		<span class="nd">println!</span><span class="p">(</span><span class="s">"f.x = {}"</span><span class="p">,</span> <span class="n">f</span><span class="py">.x</span><span class="p">);</span>
+		<span class="n">f</span>
+	<span class="p">};</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="phantom-data">1.4. Phantom Data</h2>
+
+<p>Occasionally in Rust, typically when working with unsafe code, we want to constrain
+a type on some type or lifetime parameters but have no members of the type which
+need these parameters. For example, in our memory arena we’ll want to tie the lifetime
+of the object allocated in the <code class="highlighter-rouge">Place</code> to the lifetime of the <code class="highlighter-rouge">Placer</code>. We’ll also
+want toparameterize the struct on the type of object being allocated so this type
+information is available for deducing the type of <code class="highlighter-rouge">Data</code> when we implement <code class="highlighter-rouge">Place&lt;Data&gt;</code>
+and <code class="highlighter-rouge">InPlace&lt;Data&gt;</code>. To this end, we can use the
+<a href="https://doc.rust-lang.org/std/marker/struct.PhantomData.html"><code class="highlighter-rouge">PhantomData&lt;T&gt;</code></a>
+type in Rust, which is a zero-sized type that acts like it stores a <code class="highlighter-rouge">T</code>. See
+the <a href="https://doc.rust-lang.org/nomicon/phantom-data.html">Nomicon</a> for more details,
+but in short this allows us to track the type being allocated without needing to store
+a copy of a <code class="highlighter-rouge">T</code> in our <code class="highlighter-rouge">Place</code>. We can also store the lifetime to associate with the
+returned object in the <code class="highlighter-rouge">PhantomData</code> as well, this can allow us to pass valid lifetimes
+back to safe code and keep compile time safety guarantees when dealing with
+unsafely created references.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">Bar</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+	<span class="n">phantom</span><span class="p">:</span> <span class="n">PhantomData</span><span class="o">&lt;&amp;</span><span class="err">'</span><span class="n">a</span> <span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+	<span class="err">...</span>
+<span class="p">}</span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">Place</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">Bar</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+	<span class="err">...</span>
+<span class="p">}</span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">InPlace</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">Bar</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+	<span class="k">type</span> <span class="n">Owner</span> <span class="o">=</span> <span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="n">T</span><span class="p">;</span>
+	<span class="err">...</span>
+<span class="p">}</span></code></pre></figure>
+
+<h1 id="a-toy-arena-example">2. A Toy Arena Example</h1>
+
+<p>With all these pieces we can now implement a toy example memory arena which simply
+allocates from a fixed 512 byte buffer. Our struct <code class="highlighter-rouge">ToyArena</code> will be the memory arena
+holding the actual buffer we use to allocate objects in, while <code class="highlighter-rouge">ToyPlace</code> will
+be the <code class="highlighter-rouge">Place</code> type returned to satisfy the allocation. To keep things simple we’ll overwrite
+the buffer with the latest allocation each time, instead of tracking capacities and usage
+of the buffer. <code class="highlighter-rouge">ToyPlace</code> will borrow the <code class="highlighter-rouge">ToyArena</code> to get access to the buffer to
+allocate into and will track the type <code class="highlighter-rouge">T</code> being allocated with a <code class="highlighter-rouge">PhantomData</code>.
+Here we also apply the restriction that <code class="highlighter-rouge">T</code> is <code class="highlighter-rouge">Copy</code>, meaning it’s Plain-Old-Data,
+since we won’t be calling <code class="highlighter-rouge">Drop</code> when clearing or overwriting, and as a result would
+leak allocations or resources held by <code class="highlighter-rouge">T</code> which was not <code class="highlighter-rouge">Copy</code>.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">ToyArena</span> <span class="p">{</span>
+    <span class="n">buffer</span><span class="p">:</span> <span class="p">[</span><span class="nb">u8</span><span class="p">;</span> <span class="mi">512</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="k">struct</span> <span class="n">ToyPlace</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">Copy</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">toy_arena</span><span class="p">:</span> <span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="k">mut</span> <span class="n">ToyArena</span><span class="p">,</span>
+    <span class="n">phantom</span><span class="p">:</span> <span class="n">PhantomData</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>We implement <code class="highlighter-rouge">Placer</code> for <code class="highlighter-rouge">&amp;mut ToyArena</code> instead of <code class="highlighter-rouge">ToyArena</code> directly since
+<code class="highlighter-rouge">make_place</code> takes <code class="highlighter-rouge">self</code> by value, and we don’t want to actually consume the
+arena when making an allocation (this would defeat the whole point of re-using!).
+Note the lifetime <code class="highlighter-rouge">'a</code> for the borrowed arena in <code class="highlighter-rouge">ToyPlace</code> is tied to the lifetime
+of the <code class="highlighter-rouge">ToyArena</code> that <code class="highlighter-rouge">make_place</code> is being called on.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">impl</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="err">'</span><span class="n">a</span> <span class="o">+</span> <span class="nb">Copy</span><span class="o">&gt;</span> <span class="n">Placer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">for</span> <span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="k">mut</span> <span class="n">ToyArena</span> <span class="p">{</span>
+    <span class="k">type</span> <span class="n">Place</span> <span class="o">=</span> <span class="n">ToyPlace</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="k">fn</span> <span class="nf">make_place</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">ToyPlace</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="nd">println!</span><span class="p">(</span><span class="s">"Placer::make_place"</span><span class="p">);</span>
+        <span class="n">ToyPlace</span> <span class="p">{</span> <span class="n">toy_arena</span><span class="p">:</span> <span class="k">self</span><span class="p">,</span> <span class="n">phantom</span><span class="p">:</span> <span class="n">PhantomData</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Our <code class="highlighter-rouge">Place</code> implementation for <code class="highlighter-rouge">ToyPlace</code> can then just return a pointer to
+the front of the array in the arena, implicitly overwriting any previous allocation.
+The <code class="highlighter-rouge">InPlace</code> implementation then takes the pointer to the array, now pointing
+to our <code class="highlighter-rouge">T</code> instance, and returns it as <code class="highlighter-rouge">&amp;mut T</code> so the caller can assign the
+reference to a local variable and operate on the object. Here we bound the
+lifetime of the returned borrow to the same lifetime that <code class="highlighter-rouge">ToyPlace</code> is
+parameterized on, the lifetime of the containing <code class="highlighter-rouge">ToyArena</code>. This ensures
+that the Rust compiler will be able to reason about validity of lifetimes
+of objects in the arena, specifically, no reference to an object created
+in the arena can outlive the arena itself.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">impl</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">Copy</span><span class="o">&gt;</span> <span class="n">Place</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">ToyPlace</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">*</span><span class="k">mut</span> <span class="n">T</span> <span class="p">{</span>
+        <span class="nd">println!</span><span class="p">(</span><span class="s">"Place::pointer"</span><span class="p">);</span>
+        <span class="k">self</span><span class="py">.toy_arena.buffer</span><span class="nf">.as_mut_ptr</span><span class="p">()</span> <span class="k">as</span> <span class="o">*</span><span class="k">mut</span> <span class="n">T</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="err">'</span><span class="n">a</span> <span class="o">+</span> <span class="nb">Copy</span><span class="o">&gt;</span> <span class="n">InPlace</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">ToyPlace</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">type</span> <span class="n">Owner</span> <span class="o">=</span> <span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="k">mut</span> <span class="n">T</span><span class="p">;</span>
+    <span class="k">unsafe</span> <span class="k">fn</span> <span class="nf">finalize</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="k">mut</span> <span class="n">T</span> <span class="p">{</span>
+        <span class="nd">println!</span><span class="p">(</span><span class="s">"InPlace::finalize"</span><span class="p">);</span>
+        <span class="p">(</span><span class="k">self</span><span class="py">.toy_arena.buffer</span><span class="nf">.as_mut_ptr</span><span class="p">()</span> <span class="k">as</span> <span class="o">*</span><span class="k">mut</span> <span class="n">T</span><span class="p">)</span><span class="nf">.as_mut</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>To use our arena we can create one, and using the placement in syntax
+allocate a new float object in place in the arena. The code is
+available on the <a href="https://play.rust-lang.org/?gist=37ddbf013b7da6cc61df3f6ed9a439bc&amp;version=nightly&amp;backtrace=0">Rust playground</a>, try returning a reference to the allocated object outside of the scope
+the arena lives in.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">toy_arena</span> <span class="o">=</span> <span class="n">ToyArena</span> <span class="p">{</span> <span class="n">buffer</span><span class="p">:</span> <span class="p">[</span><span class="mi">0u8</span><span class="p">;</span> <span class="mi">512</span><span class="p">]</span> <span class="p">};</span>
+    <span class="k">let</span> <span class="n">x</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nb">f32</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">toy_arena</span> <span class="o">&lt;-</span> <span class="mf">10.0f32</span><span class="p">;</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"x = {}"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="o">*</span><span class="n">x</span> <span class="o">=</span> <span class="mf">15.0</span><span class="p">;</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"x = {}"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<h1 id="the-lightarena-library">3. The light_arena Library</h1>
+
+<p>The final implementation of light_arena follows directly from what we
+saw above with the <code class="highlighter-rouge">ToyArena</code>, with a minor modification to allow us to
+safely allocate multiple objects in an arena and mark the space free
+only when it’s safe to do so.</p>
+
+<h2 id="memory-blocks">3.1. Memory Blocks</h2>
+
+<p>Instead of allocating from a fixed size buffer like the <code class="highlighter-rouge">ToyArena</code>,
+light_arena works off of fixed size blocks of memory and will allocate
+new blocks if it runs out of room. These blocks are allocated using <code class="highlighter-rouge">Vec&lt;u8&gt;</code>
+and stored in the <code class="highlighter-rouge">Block</code> struct.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">Block</span> <span class="p">{</span>
+    <span class="n">buffer</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">u8</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="n">usize</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">MemoryArena</code> then stores a list of these blocks and tracks the size it should
+use when allocating new ones.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">MemoryArena</span> <span class="p">{</span>
+    <span class="n">blocks</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Block</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">block_size</span><span class="p">:</span> <span class="n">usize</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="ensuring-single-access">3.2. Ensuring Single Access</h2>
+
+<p>Talk about the mut borrow the allocator takes of the arena, this lets
+us ensure at compile time only one user of the arena for allocations at a time.
+Also talk about the Drop impl for the allocator.</p>
+
+<h2 id="validating-allocation-lifetimes">3.3. Validating Allocation Lifetimes</h2>
+
+<p>The key part, how do we combine Rust’s lifetimes and PhantomData in our
+memory arena to ensure the lifetimes of objects and the arena are respected.</p>
+
+
+		<hr>
+		<div class="col-12">
+			<p>Published: 26 June 2017</p>
+		</div>
+		<div class="col-12 row">
+			
+			<div class="col-md-6 justify-content-left">
+				<a href="/2016/01/02/distributed-rendering-with-rust-and-mio" title="Distributed Rendering with Rust and Mio">
+					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
+			</div>
+			
+			
+		</div>
+
+		<div class="comments">
+			
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'twinklebeargithub'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+
+
+	</div>
+
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

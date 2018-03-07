@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Lesson 0: Visual Studio</title>
+	
+		<meta name="description" content="Setting Up SDL">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">Lesson 0: Visual Studio</h1>
+
+<div class="row justify-content-md-center">
+	<div class="col-md-10">
+		
+<p>Now that we’ve got the libraries installed we’ll want to create a new project to include and
+link against SDL. At the end we’ll save this as a template project so in the future we can just
+load our template and get to work. First we need a new empty C++ project.</p>
+
+<!--more-->
+
+<p><br />
+<a href="/assets/img/lesson_0_vs/new_empty_project.png">
+<img class="centered" width="600" height="auto" src="/assets/img/lesson_0_vs/new_empty_project.png" />
+</a>
+<br /></p>
+
+<h2 id="setting-the-include-path">Setting the Include Path</h2>
+<p>We’ll need to add the SDL include directory so that the compiler can find the SDL headers.
+Since we also want these configurations to be the same for Debug and Release modes, be sure to 
+select <strong>All Configurations</strong> on the <strong>Configuration</strong> menu.
+To set the path open up the project properties window and open the <strong>C/C++</strong> section. In the <strong>General</strong>
+page you’ll find an entry titled <strong>Additional Include Directories</strong>, click this box and open the
+edit panel through the down arrow at the right side of the box.</p>
+
+<p><br />
+<a href="/assets/img/lesson_0_vs/setting_include_dir.png">
+<img class="centered" width="600" height="auto" src="/assets/img/lesson_0_vs/setting_include_dir.png" />
+</a>
+<br /></p>
+
+<p>Add a new folder to this window and navigate to your SDL include directory. If you put
+your SDL development files under <code class="highlighter-rouge">C:\</code> your include directories panel will look like this
+after you’ve selected the include directory correctly.</p>
+
+<p><br />
+<a href="/assets/img/lesson_0_vs/include_dir_set.png">
+<img class="centered" width="420" height="auto" src="/assets/img/lesson_0_vs/include_dir_set.png" />
+</a>
+<br /></p>
+
+<h2 id="setting-the-library-path">Setting the Library Path</h2>
+<p>To add the library paths and the linker dependencies head to the <strong>Linker</strong> settings section
+and open the <strong>General</strong> page. To add the library path select <strong>Additional Library Directories</strong>
+and add the lib path, selecting either the 32bit (x86) or 64bit (x64) version of the library.
+I’ve chosen to use the 32bit version for this tutorial series. After setting the
+path your entry should look like this if SDL is under <code class="highlighter-rouge">C:\</code> and you chose the 32bit libraries.</p>
+
+<p><br />
+<a href="/assets/img/lesson_0_vs/library_path_set.png">
+<img class="centered" width="600" height="auto" src="/assets/img/lesson_0_vs/library_path_set.png" />
+</a>
+<br /></p>
+
+<h2 id="adding-the-library-dependencies">Adding the Library Dependencies</h2>
+<p>Now we’ll add the libraries themselves as dependencies. Switch to the <strong>Input</strong> page and open
+the <strong>Additional Dependencies</strong> entry’s edit panel and add <code class="highlighter-rouge">SDL2.lib; SDL2main.lib</code>.
+Once you’ve done this your Input page should look like so:</p>
+
+<p><br />
+<a href="/assets/img/lesson_0_vs/library_dependencies_set.png">
+<img class="centered" width="600" height="auto" src="/assets/img/lesson_0_vs/library_dependencies_set.png" />
+</a>
+<br /></p>
+
+<h2 id="selecting-the-subsystem">Selecting the SubSystem</h2>
+<p>The final step is to select the <strong>SubSystem</strong> target. To do this open up the <strong>System</strong> page
+and choose either Console or Windows from the drop down. If you choose Windows you won’t get
+a console window that opens up with stdout, if you choose Console you will. Since I’ll be
+writing debug messages and error information to stdout for quicker/lazier feedback in
+these tutorials I’ve selected Console. If you have some other file logging you want to
+use and don’t want a console to open up you should pick Windows. When distributing your
+applications be sure to select Windows so your users don’t have a console window pop up on them!</p>
+
+<p><br />
+<a href="/assets/img/lesson_0_vs/subsystem_set.png">
+<img class="centered" width="600" height="auto" src="/assets/img/lesson_0_vs/subsystem_set.png" />
+</a>
+<br /></p>
+
+<h2 id="the-test-program">The Test Program</h2>
+<p>The program we’re building for this lesson is a simple sanity check for SDL. It will 
+<a href="https://wiki.libsdl.org/SDL_Init">initialize</a> the SDL video subsystem, check for any
+<a href="https://wiki.libsdl.org/SDL_GetError">errors</a> and then <a href="https://wiki.libsdl.org/SDL_Quit">quit</a>.
+Before we can run this program we’ll need to copy the
+SDL binary into our executable’s directory. <code class="highlighter-rouge">SDL2.dll</code> can be found in the lib directory
+of your SDL folder under lib/(x86/x64), use the one for the architecture you linked against.</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;
+#include &lt;SDL.h&gt;
+</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_Init Error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">SDL_Quit</span><span class="p">();</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>The program should run successfully but nothing should appear to happen if you’ve configured everything
+properly. If an error occurs make sure you’ve followed all the steps properly.</p>
+
+<h2 id="exporting-a-template-project">Exporting a Template Project</h2>
+<p>To avoid having to go through this setup every time we want to make an SDL project we
+can save this one as a template and then simply select it from the new project menu.
+To do this select <strong>Export Template</strong> from the <strong>File</strong> menu and configure the template
+as desired. Once you’ve done this the project template will be available under the Visual C++
+project selection page.</p>
+
+<p><br />
+<a href="/assets/img/lesson_0_vs/selecting_a_template.png">
+<img class="centered" width="600" height="auto" src="/assets/img/lesson_0_vs/selecting_a_template.png" />
+</a>
+<br /></p>
+
+<h2 id="end-of-lesson-0">End of Lesson 0</h2>
+<p>If you’re having any trouble setting up SDL please leave a comment below.</p>
+
+<p>I’ll see you again soon in <a href="/sdl2%20tutorials/2014/06/16/postscript-0-properly-finding-resource-paths">Postscript 0: Properly Finding Resource Paths!</a></p>
+
+
+	</div>
+	<div class="col-md-2">
+		<h4><a href="/pages/sdl2/">Tutorial Index</a></h4>
+		<h4>Helpful Links</h4>
+		<a href="http://wiki.libsdl.org/moin.fcg/FrontPage">SDL Documentation</a>
+		<br />
+		<a href="http://forums.libsdl.org/">SDL Forums</a>
+		<br />
+		<a href="irc://irc.freenode.net/SDL">IRC: #SDL on freenode</a>
+		<br />
+		<a href="http://en.cppreference.com/w/">C++ Reference</a>
+		<br />
+		<a href="https://github.com/Twinklebear/TwinklebearDev-Lessons">Code on Github</a>
+		<p>Published: 15 August 2013
+	</div>
+</div>
+<div class="col-md-12 comments">
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'twinklebeargithub'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+</div>
+
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

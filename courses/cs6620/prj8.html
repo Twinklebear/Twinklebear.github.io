@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>CS 6620 Fall 2014 - Project 8</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">CS 6620 Fall 2014 - Project 8</h1>
+
+<div class="row justify-content-md-center">
+	
+
+
+<div class="row">
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<h4>Test Scene with texture filtering: 4.717s</h4>
+		<a href="/courses/cs6620/prj8_filtered.png">
+			<img src="/courses/cs6620/prj8_filtered.png" class="img-fluid">
+		</a>
+		<br />
+		<a href="/courses/cs6620/prj8_filtered_heat.png">
+			<img src="/courses/cs6620/prj8_filtered_heat.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<h4>Test Scene without texture filtering: 4.707s</h4>
+		<a href="/courses/cs6620/prj8_unfiltered.png">
+			<img src="/courses/cs6620/prj8_unfiltered.png" class="img-fluid">
+		</a>
+		<br />
+		<a href="/courses/cs6620/prj8_unfiltered_heat.png">
+			<img src="/courses/cs6620/prj8_unfiltered_heat.png" class="img-fluid">
+		</a>
+	</div>
+</div>
+<div class="col-lg-12 col-md-12">
+	<br />
+	<p>
+	The above images show the benefits of texture filtering: without texture filtering we spend a lot of time
+	supersampling the scene to anti-alias the textures (and don't even do such a good job at it!),
+	while in the scene with filtering we need to supersample in far fewer locations and have nicely filtered textures.
+	Although the difference in render time for these scenes is pretty negligable a lack of texture filtering
+	would probably be a bigger performance hit for more complicated scenes and we'd need to take more samples
+	to have comparable filtering with the scene that does have texture filtering. Both images were rendered
+	using a minimum of 8 samples per pixel and a max of 64 samples per pixel when supersampling.
+	</p><p>
+	I did also get my checkerboard anti-aliasing working by scaling my ray differentials to behave
+	properly when taking multiple samples per pixel.
+	</p>
+</div>
+<div class="col-lg-12 col-md-12">
+	<h3>Filters and Bugs</h3>
+	<p>
+	I implemented a few reconstruction filters but am having an issue with filters besides Mitchell-Netravali
+	when using adaptive sampling resulting in rough artifacts on areas where it's determined
+	that supersampling is needed. These artifacts don't appear when using the same
+	sampling pattern non-adaptively (eg. just take max spp always) so I think there's something
+	related to the varying sampling rate that causes this, but at the moment I don't know what/why/how. Each filter
+	covers a 3x3 pixel area on the image and when writing a sample we center the filter at each pixel and
+	write the sample color multiplied by the filter weight to each pixel covered by the filter.
+	I also track the sum of the weights of all samples added to each pixel and when finding the final color divide
+	the color by the total weight.
+	Below are some comparisons of the different filters so you can check out the issue and jaggies,
+	let me know if you've got any ideas!
+	<div class="row">
+		<div class="col-lg-6 col-md-6" style="text-align:center">
+			<h4>Non-adaptive Sampling with 64spp</h4>
+			<b>No filter</b>
+			<a href="/courses/cs6620/prj8_ld_no_filter.png">
+				<img src="/courses/cs6620/prj8_ld_no_filter.png" class="img-fluid">
+			</a>
+			<br />
+			<b>Box filter</b>
+			<a href="/courses/cs6620/prj8_ld_box_filter.png">
+				<img src="/courses/cs6620/prj8_ld_box_filter.png" class="img-fluid">
+			</a>
+			<br />
+			<b>Triangle filter</b>
+			<a href="/courses/cs6620/prj8_ld_tri_filter.png">
+				<img src="/courses/cs6620/prj8_ld_tri_filter.png" class="img-fluid">
+			</a>
+			<br />
+			<b>Gaussian filter with alpha = 2</b>
+			<a href="/courses/cs6620/prj8_ld_gaus_filter.png">
+				<img src="/courses/cs6620/prj8_ld_gaus_filter.png" class="img-fluid">
+			</a>
+			<br />
+			<b>Lanczos filter with a = 3</b>
+			<a href="/courses/cs6620/prj8_ld_lanc_filter.png">
+				<img src="/courses/cs6620/prj8_ld_lanc_filter.png" class="img-fluid">
+			</a>
+			<br />
+			<b>Mitchell-Netravali filter with b = 0.33, c = 0.33</b>
+			<a href="/courses/cs6620/prj8_ld_mitch_filter.png">
+				<img src="/courses/cs6620/prj8_ld_mitch_filter.png" class="img-fluid">
+			</a>
+		</div>
+		<div class="col-lg-6 col-md-6" style="text-align:center">
+			<h4>Adaptive Sampling: min 8spp, max 64spp</h4>
+			<b>No filter</b>
+			<a href="/courses/cs6620/prj8_ad_no_filter.png">
+				<img src="/courses/cs6620/prj8_ad_no_filter.png" class="img-fluid"
+				onmouseover="this.src='/courses/cs6620/prj8_ad_cornell_heat.png'"
+				onmouseout="this.src='/courses/cs6620/prj8_ad_no_filter.png'">
+			</a>
+			<br />
+			<b>Box filter</b>
+			<a href="/courses/cs6620/prj8_ad_box_filter.png">
+				<img src="/courses/cs6620/prj8_ad_box_filter.png" class="img-fluid"
+				onmouseover="this.src='/courses/cs6620/prj8_ad_cornell_heat.png'"
+				onmouseout="this.src='/courses/cs6620/prj8_ad_box_filter.png'">
+			</a>
+			<br />
+			<b>Triangle filter</b>
+			<a href="/courses/cs6620/prj8_ad_tri_filter.png">
+				<img src="/courses/cs6620/prj8_ad_tri_filter.png" class="img-fluid"
+				onmouseover="this.src='/courses/cs6620/prj8_ad_cornell_heat.png'"
+				onmouseout="this.src='/courses/cs6620/prj8_ad_tri_filter.png'">
+			</a>
+			<br />
+			<b>Gaussian filter with alpha = 2</b>
+			<a href="/courses/cs6620/prj8_ad_gaus_filter.png">
+				<img src="/courses/cs6620/prj8_ad_gaus_filter.png" class="img-fluid"
+				onmouseover="this.src='/courses/cs6620/prj8_ad_cornell_heat.png'"
+				onmouseout="this.src='/courses/cs6620/prj8_ad_gaus_filter.png'">
+			</a>
+			<br />
+			<b>Lanczos filter with a = 3</b>
+			<a href="/courses/cs6620/prj8_ad_lanc_filter.png">
+				<img src="/courses/cs6620/prj8_ad_lanc_filter.png" class="img-fluid"
+				onmouseover="this.src='/courses/cs6620/prj8_ad_cornell_heat.png'"
+				onmouseout="this.src='/courses/cs6620/prj8_ad_lanc_filter.png'">
+			</a>
+			<br />
+			<b>Mitchell-Netravali filter with b = 0.33, c = 0.33</b>
+			<a href="/courses/cs6620/prj8_ad_mitch_filter.png">
+				<img src="/courses/cs6620/prj8_ad_mitch_filter.png" class="img-fluid"
+				onmouseover="this.src='/courses/cs6620/prj8_ad_cornell_heat.png'"
+				onmouseout="this.src='/courses/cs6620/prj8_ad_mitch_filter.png'">
+			</a>
+		</div>
+	</div>
+</div>
+<div class="col-lg-12 col-md-12">
+	<h3>Hardware Used and Other Details</h3>
+	<p>
+	Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
+	ie. time to load the scene and write the images to disk is ignored. The images were rendered with adaptive
+	anti-aliasing performed by taking 8 samples and using the contrast of their luminance to decide whether we need
+	additional sampling, taking at most 64 samples per pixel for those that need super sampling.
+	</p>
+
+	CPU: Intel i5-2500K @ 4.0GHz, 4 hardware threads <br />
+	RAM: 8GB 1600MHz DDR3 <br />
+	Compiler: gcc 4.9.1 x86_64 (on Windows, built by MinGW-W64 project)<br />
+	Compilation Flags: -m64 -O3 -march=native -flto
+	</p>
+</div>
+
+
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

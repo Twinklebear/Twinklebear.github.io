@@ -1,0 +1,74 @@
+.content {
+	background: white;
+}
+/* Chuck out bootstrap's syntax highlighting stuff */
+pre, pre code {
+	display: block;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	margin: 0px 0px 0px;
+	font-size: 14px;
+	color: white;
+	line-height: 1.42857;
+	color: white;
+	word-break: break-all;
+	word-wrap: break-word;
+	background-color: transparent;
+	border: none;
+	border-radius: 0px;
+}
+pre.diagram {
+	color: black;
+}
+/* Don't set code formatted links to black */
+a code {
+	color: rgb(42, 100, 150);
+}
+code {
+	padding: 0px 0px;
+	color: rgb(51, 51, 51);
+	background-color: transparent;
+	border: none;
+}
+img {
+	display: block;
+	margin: 0 auto;
+}
+figcaption {
+	text-align: center;
+}
+div.comments {
+	margin: 50px 0px 16px 0px;
+	padding: 10px;
+}
+/* Make the tag list a list of comma-separated tags */
+.tag_list {
+	display: inline;
+	list-style: none;
+}
+.tag_list li {
+	display: inline;
+}
+.tag_list li:after {
+	content: ", ";
+}
+.tag_list li:last-child:after {
+	content: ""
+}
+/* Apply some special styling to the tags */
+.tag_list a span {
+	vertical-align: super;
+	font-size: 0.8em;
+}
+/* Don't apply link coloring to icons */
+a.icon {
+	color: #9a9a9a;
+	letter-spacing: 0.3em;
+	text-decoration: none;
+}
+a.icon:hover {
+	color: black;
+}
+

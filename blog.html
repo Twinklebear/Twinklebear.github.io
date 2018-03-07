@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Blog</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item active"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+
+<div class="row mt-4 justify-content-center">
+	
+	<div class="col-9 mb-4">
+		<a href="/2016/01/02/distributed-rendering-with-rust-and-mio"><h3>Distributed Rendering with Rust and Mio</h3></a>
+		<b>02 Jan 2016</b>
+		
+<p>In this post we’ll take a look at adding distributed rendering to
+<a href="https://github.com/Twinklebear/tray_rust">tray_rust</a> which will let us take advantage of multiple
+machines when rendering an image, like a compute cluster.
+To do this we’ll look at options for how to distribute the rendering job across multiple nodes
+and what sort of communication is needed synchronize their work. We’ll also look into how we
+can use <a href="https://github.com/carllerche/mio">mio</a> to write an efficient master process that
+can manage multiple workers effectively.</p>
+
+<p>After implementing a simple technique to distribute the job we’ll discuss
+the scalability of this approach and possible paths forward to improve it. I’ve
+also recently written a <a href="https://github.com/Twinklebear/tray_rust_blender">plugin for Blender</a> so you can
+easily create your own scenes and
+will mention a bit on how to run the ray tracer on Google Compute Engine (or AWS EC2)
+if you want to try out the distributed rendering yourself.</p>
+
+
+
+		<a href="/2016/01/02/distributed-rendering-with-rust-and-mio">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+	</div>
+	
+	<div class="col-9 mb-4">
+		<a href="/2015/12/16/rendering-an-animation-in-rust"><h3>Rendering an Animation in Rust</h3></a>
+		<b>16 Dec 2015</b>
+		
+<p>In this post we’ll look at adding a pretty awesome new feature to <a href="https://github.com/Twinklebear/tray_rust">tray_rust</a>,
+something I’ve never implemented before: animation! We’ll take a look at a simple way for sampling time in our scene, how
+we can associate time points with transformations of objects to make them move and how to compute smooth animation
+paths with B-Splines. Then we’ll wrap up with rendering a really cool animation by using 60 different
+machines spread across two clusters at my lab.</p>
+
+
+
+		<a href="/2015/12/16/rendering-an-animation-in-rust">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+	</div>
+	
+	<div class="col-9 mb-4">
+		<a href="/2015/05/15/porting-a-ray-tracer-to-rust-part-3"><h3>Porting a Ray Tracer to Rust, part 3</h3></a>
+		<b>15 May 2015</b>
+		
+<p>It’s been a little while since my last post on tray_rust as I’ve been a busy with classes, but I’ve
+had a bit of free time to implement some extremely cool features. In this post we’ll look at porting over
+the path tracing code and adding a bounding volume hierarchy, along with adding support for triangle meshes and measured material data from the
+<a href="http://www.merl.com/brdf/">MERL BRDF Database</a> introduced by Matusik et al. in 2003 in
+<a href="http://dl.acm.org/citation.cfm?id=882343">A Data-Driven Reflectance Model</a>. In the process of implementing the BVH we’ll get a taste
+of Rust’s generic programming facilities and use them to write a flexible BVH capable of storing any type that can
+report its bounds. In the spirit of fogleman’s gorgeous <a href="https://github.com/fogleman/pt">Go Gopher in Go</a> we’ll wrap up
+by rendering the Rust logo in Rust using a model made by
+<a href="http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo">Nylithius on BlenderArtists</a>.</p>
+
+<p>If you’ve been following Rust’s development a bit you have probably noticed that the timing of this post is not a
+coincidence, since Rust 1.0.0 is being released <a href="http://blog.rust-lang.org/2015/05/15/Rust-1.0.html">today</a>!</p>
+
+
+
+		<a href="/2015/05/15/porting-a-ray-tracer-to-rust-part-3">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+	</div>
+	
+	<div class="col-9 mb-4">
+		<a href="/2015/01/30/porting-a-ray-tracer-to-rust-part-2"><h3>Porting a Ray Tracer to Rust, part 2</h3></a>
+		<b>30 Jan 2015</b>
+		
+<p>As mentioned in my <a href="/2014/12/30/porting-a-ray-tracer-to-rust-part-1">previous post</a> I spent the past month-ish
+working on improving both the rendering capabilities and performance of <a href="https://github.com/Twinklebear/tray_rust">tray_rust</a>.
+While it’s not yet capable of path tracing we can at least have light and shadow and shade our objects with diffuse or specularly
+reflective and/or transmissive materials. Along with this I’ve improved performance by parallelizing
+the rendering process using Rust’s multithreading capabilities. Although ray tracing is a trivially parallel task there are
+two pieces of state that must be shared and modified between threads: the pixel/block counter and the framebuffer.
+With Rust’s strong focus on safety I was worried that I would have to resort to unsafe blocks to share these
+small pieces of mutable state but I found that the <a href="http://doc.rust-lang.org/std/sync/index.html">std::sync module</a>
+provided safe methods for everything I needed and performs quite well. While it’s difficult to compare against
+<a href="https://github.com/Twinklebear/tray">tray</a> (my initial C++ version) as the design of tray_rust has diverged quite 
+a bit I’ll put some performance numbers in the multithreading section.</p>
+
+<p>During the past month <a href="http://www.rust-lang.org/">Rust</a> has also seen some pretty large changes and is currently
+in its 1.0 alpha release with the <a href="http://blog.rust-lang.org/2014/12/12/1.0-Timeline.html">first beta</a>
+fast approaching.</p>
+
+
+
+		<a href="/2015/01/30/porting-a-ray-tracer-to-rust-part-2">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+	</div>
+	
+
+	
+	<div class="col-12 text-center mb-2">
+		<h5>Find older posts in the <a href="/archive">Archive</a></h5>
+	</div>
+	
+</div>
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

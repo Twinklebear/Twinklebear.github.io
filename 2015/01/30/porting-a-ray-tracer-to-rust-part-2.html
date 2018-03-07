@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Porting a Ray Tracer to Rust, part 2</title>
+	
+		<meta name="description" content="Shading and parallelism">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">Porting a Ray Tracer to Rust, part 2</h1>
+
+<div class="row justify-content-center">
+	<div class="col-9">
+		
+<p>As mentioned in my <a href="/2014/12/30/porting-a-ray-tracer-to-rust-part-1">previous post</a> I spent the past month-ish
+working on improving both the rendering capabilities and performance of <a href="https://github.com/Twinklebear/tray_rust">tray_rust</a>.
+While it’s not yet capable of path tracing we can at least have light and shadow and shade our objects with diffuse or specularly
+reflective and/or transmissive materials. Along with this I’ve improved performance by parallelizing
+the rendering process using Rust’s multithreading capabilities. Although ray tracing is a trivially parallel task there are
+two pieces of state that must be shared and modified between threads: the pixel/block counter and the framebuffer.
+With Rust’s strong focus on safety I was worried that I would have to resort to unsafe blocks to share these
+small pieces of mutable state but I found that the <a href="http://doc.rust-lang.org/std/sync/index.html">std::sync module</a>
+provided safe methods for everything I needed and performs quite well. While it’s difficult to compare against
+<a href="https://github.com/Twinklebear/tray">tray</a> (my initial C++ version) as the design of tray_rust has diverged quite 
+a bit I’ll put some performance numbers in the multithreading section.</p>
+
+<p>During the past month <a href="http://www.rust-lang.org/">Rust</a> has also seen some pretty large changes and is currently
+in its 1.0 alpha release with the <a href="http://blog.rust-lang.org/2014/12/12/1.0-Timeline.html">first beta</a>
+fast approaching.</p>
+
+<!--more-->
+
+<h2 id="the-material-system">The Material System</h2>
+<p>The material system used in <a href="http://pbrt.org/">PBRT</a> makes heavy use of memory arenas to avoid making lots of small allocations of
+the various BxDFs that the <a href="http://en.wikipedia.org/wiki/Bidirectional_scattering_distribution_function">BSDF</a> for the surface is
+composed of during rendering. Instead large blocks of memory are allocated up front
+and the small allocations needed during rendering are made by marking sections in these regions as used. The memory is re-used by
+marking everything free again once we’ve finished tracing an eye ray since we don’t need to preserve any of this information across
+primary rays. From some discussion in the <a href="https://news.ycombinator.com/item?id=8818611">Hacker News</a> thread for part 1 it sounds like it isn’t
+currently possible to implement a memory pool in Rust although it is being worked on. There is the
+<a href="http://doc.rust-lang.org/arena/index.html">std::arena</a> module but I’m not sure if it meets my
+needs. It may be possible now to write something similar to the <a href="https://github.com/Twinklebear/tray/blob/master/include/memory_pool.h">memory pool</a>
+I used in tray based off the implementation of the generic Arena allocator in std::arena,
+I’ll have to investigate further. Do let me know if you have any thoughts in this area!</p>
+
+<p>To get around this for now without introducing a lot of allocations during rendering I chose to have the materials allocate a Vec of
+their BxDFs when they’re created and then return BSDFs that just refer to these BxDFs. We do still need to allocate a BSDF
+on the stack each time and return it (via moving) when getting the surface properties for an object but this isn’t too
+expensive.</p>
+
+<h4 id="working-with-bxdfs-using-iterators">Working with BxDFs using Iterators</h4>
+
+<p>Since a surface’s properties can be defined through a combination of BxDFs we need to consider contributions from all of them
+to determine the color of the surface when shading some intersection. Additionally we need to filter them
+to only consider those that are relevant to the current lighting calculation, eg. if we’re computing reflected light we wouldn’t want to
+waste time evaluating transmissive BxDFs. Using the <a href="http://doc.rust-lang.org/std/iter/index.html">std::iter</a> module we can perform these
+operations cleanly and safely without running into any bounds checking overhead that we would have when accessing a Vec
+by index. As a simple example the following snippet returns the number of BxDFs that match some set of BxDF type flags.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">num_matching</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="n">EnumSet</span><span class="o">&lt;</span><span class="n">BxDFType</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">usize</span> <span class="p">{</span>
+    <span class="k">self</span><span class="py">.bxdfs</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.filter</span><span class="p">(|</span><span class="k">ref</span> <span class="n">x</span><span class="p">|</span> <span class="n">x</span><span class="nf">.matches</span><span class="p">(</span><span class="n">flags</span><span class="p">))</span><span class="nf">.count</span><span class="p">()</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>A more interesting example is taken from the <code class="highlighter-rouge">BSDF::eval</code> method. This method computes the contribution of all BxDFs
+for some pair of incident and outgoing light directions and returns the total color.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">self</span><span class="py">.bxdfs</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.filter_map</span><span class="p">(|</span><span class="k">ref</span> <span class="n">x</span><span class="p">|</span> <span class="k">if</span> <span class="n">x</span><span class="nf">.matches</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="p">{</span> <span class="nf">Some</span><span class="p">(</span><span class="n">x</span><span class="nf">.eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">w_o</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">w_i</span><span class="p">))</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="nb">None</span> <span class="p">})</span>
+    <span class="nf">.fold</span><span class="p">(</span><span class="nn">Colorf</span><span class="p">::</span><span class="nf">broadcast</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="p">|</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">|</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span></code></pre></figure>
+
+<p>It’s worth mentioning that the current BSDF implementation is incredibly naive, since the only currently supported materials are
+either diffuse, specularly reflective or specularly reflective and transmissive they only have a single component
+per light interaction (reflection or transmission) and we can get away without doing any random sampling of
+the BSDF components. When path tracing is implemented and more complex materials are added this will have to be fixed, however
+it won’t change the above code listing by much.</p>
+
+<p>Iterators combined with lambdas and closures make for some very powerful functionality. Similar expressions
+can of course be written in C++11/14 using lambdas and the corresponding methods from the
+<a href="http://en.cppreference.com/w/cpp/algorithm">algorithms library</a>, although I’m not sure if there’s similar functionality
+to filter and filter_map provided by the C++ standard library.</p>
+
+<p>If we take a slight tangent away from materials for a moment, we find that we can even express the operation of checking
+a ray for intersection with all the instances of geometry in the scene
+as a fold operation! By capturing the ray as a mutable borrow in the closure and modifying its max_t member after each
+intersection we can use the following to find the nearest intersection and return it, or None if nothing was hit.</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">/// Test the ray for intersections against the objects in the scene.
+</span>
+<span class="c">/// Returns Some(Intersection) if an intersection was found and None if not.
+</span>
+<span class="k">pub</span> <span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Intersection</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c">// We can always return the next hit found since the ray's max_t value is updated
+</span>
+    <span class="c">// after an intersection is found. Thus if we find another hit we know that one
+</span>
+    <span class="c">// occured before any previous ones.
+</span>
+    <span class="k">self</span><span class="py">.instances</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.fold</span><span class="p">(</span><span class="nb">None</span><span class="p">,</span> <span class="p">|</span><span class="n">p</span><span class="p">,</span> <span class="k">ref</span> <span class="n">i</span><span class="p">|</span>
+                                <span class="k">match</span> <span class="n">i</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">ray</span><span class="p">)</span> <span class="p">{</span>
+                                    <span class="nf">Some</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nf">Some</span><span class="p">(</span><span class="n">h</span><span class="p">),</span>
+                                    <span class="nb">None</span> <span class="k">=&gt;</span> <span class="n">p</span><span class="p">,</span>
+                                <span class="p">})</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><strong>Edit 1/31/15</strong>: <a href="https://www.reddit.com/r/rust/comments/2u8jtd/porting_a_ray_tracer_to_rust_part_2/co6onlx">/u/Veedrac</a> pointed
+out that we could make the intersection code even clearer using the <a href="http://doc.rust-lang.org/std/option/enum.Option.html#method.or">or</a> method
+of Option, I’ve updated the code to now be:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">self</span><span class="py">.instances</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.fold</span><span class="p">(</span><span class="nb">None</span><span class="p">,</span> <span class="p">|</span><span class="n">p</span><span class="p">,</span> <span class="k">ref</span> <span class="n">i</span><span class="p">|</span> <span class="n">i</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">ray</span><span class="p">)</span><span class="nf">.or</span><span class="p">(</span><span class="n">p</span><span class="p">))</span></code></pre></figure>
+
+<p>Using this method I’ve also chosen a fix for the <a href="/2014/12/30/porting-a-ray-tracer-to-rust-part-1/#a-poor-design-choice">poor design decision</a>
+I made last time. Following from some helpful discussion in the comments
+on part 1, Reddit, Hacker News and IRC I’ve made the Geometry trait and Instance struct return different types from their intersect methods
+and will instead implement the BVH to take types that implement a Boundable trait. Traversal will then be done by
+returning an iterator that traverses the BVH and iterates over all potentially intersected
+objects. The caller can then perform whatever operations it likes over the objects returned by the iterator, be it intersection testing on
+Geometry or Instances or anything really.</p>
+
+<h2 id="parallelism">Parallelism</h2>
+<p>While ray tracing is an extremely easy problem to parallelize there’s still room for some interesting implementations, and I think
+the one I’ve gone with is pretty neat and leaves the door open for even more fun. It’s possible to
+write a ray tracer that doesn’t do any synchronization by assigning threads their work up front and having them only write to disjoint regions
+of the framebuffer, but this design doesn’t do a very good job of load balancing (what if one thread gets all the hard pixels?)
+and makes it very difficult to implement <a href="http://www.luxrender.net/wiki/LuxRender_Render_settings#Filter">reconstruction filtering</a>
+(now samples affect adjacent pixels as well, and the regions are no longer disjoint). To have a robust and high quality
+renderer it’s worth it to support this minimal level of synchronization between threads, to avoid hurting performance too much
+this synchronization should be kept as lightweight as possible, ideally using only atomics.</p>
+
+<p>In tray I followed PBRT and implemented the framebuffer using atomic floats with C++’s <code class="highlighter-rouge">std::atomic&lt;float&gt;</code> type, updating pixel values
+using compare exchange loops. This same method is also possible to implement in Rust by either directly using the LLVM intrinsics
+or working through the <a href="http://doc.rust-lang.org/std/sync/atomic/struct.AtomicUsize.html"><code class="highlighter-rouge">AtomicUsize</code></a> type to create an atomic float
+identical to <code class="highlighter-rouge">std::atomic&lt;float&gt;</code>. To implement the atomic float method I would still need to write some minor bits of unsafe code to
+transmute the bits of the float to a usize to go through AtomicUsize, so I decided to try Rust’s safe lock-free multi-producer
+single-consumer channel in <a href="http://doc.rust-lang.org/std/sync/mpsc/">std::sync::mpsc</a> first,
+as this wouldn’t require any unsafe code on my end. I still chose to divide up work in the same way I did previously with an array
+of block start positions which are indexed by an atomic uint (AtomicUsize in Rust), each thread just does a fetch add to find
+the next block to work on and returns when there are none left.</p>
+
+<p>To render the scene I spawn a number of worker threads and hand each of them a send end of the mpsc channel where they will write
+their sample results, sending the x, y position and color of the sample. The receive end of the channel is held onto by the
+main thread which reads samples from the channel and writes them to the framebuffer until all send ends have closed. This implementation
+provides some interesting trade-offs with the atomic float framebuffer method, instead of conflicting on every channel of the
+pixel (RGB and weight) threads will only conflict on the two atomics in the channel when trying to send their samples.
+However if we aren’t doing reconstruction filtering then the threads in the atomic float method never conflict and just pay the cost
+of a few atomic operations while in the channel implementation threads will conflict since they’re all still writing
+to the same channel. Another option I didn’t look into yet is to give each thread their own channel to write to and use select to
+read samples as they come in from each channel. If this would also be lock-free from the sender side then it’s possible this is
+an even better implementation since the worker threads don’t actually need to care about each others samples since they
+aren’t writing them to the framebuffer. I’d be interested to hear other people’s thoughts on this implementation.</p>
+
+<p>The mpsc channel implementation does perform quite nicely, using 8 worker threads on my desktop with an i7-4790K @ 4GHz we
+can render the <a href="http://www.kevinbeason.com/smallpt/">smallpt scene</a> with one sample per pixel in 144ms! What’s even more exciting about the channel
+implementation is that it easily extends to support rendering across multiple machines on a network.
+Each thread on the worker machines would send their samples to a network thread which would batch up samples and send them to the master machine
+instead of directly to a framebuffer thread. These samples would then be received either by the master’s framebuffer thread directly or
+picked up on a network thread and sent through the same mpsc channel used by the worker threads. The overhead of setting up the network
+and communicating samples would probably take much more time than rendering our scene with a simple Whitted
+integrator but will be worth pursuing once path tracing is implemented. The code for the worker and framebuffer threads is located in
+<a href="https://github.com/Twinklebear/tray_rust/blob/master/src/main.rs">main.rs</a>.</p>
+
+<p><img src="http://i.imgur.com/o7VKbBq.png" class="img-fluid" /></p>
+
+<p>There are a few stray black/white pixels in the image but I think these are just sampling artifacts and should be cleaned up once we
+start taking more than one sample per pixel. Here we’re just hitting an uncommon path where we get a black or white
+result, at least that’s what I hope is the case.</p>
+
+<p>This version is also run without any architecture specific optimizations (to my knowledge) such as taking advantage of any available
+SIMD instructions like you would get when compiling C or C++ with <code class="highlighter-rouge">-march=native</code>. There is a flag to pass to rustc to
+enable these optimizations however I’m not sure how to pass it to rustc through Cargo.
+It looks to currently be an open issue, <a href="https://github.com/rust-lang/cargo/issues/544">#544</a> and
+<a href="https://github.com/rust-lang/cargo/issues/1137">#1137</a>, if it is possible now please do let me know.
+I’d expect at least some performance gain with the use of auto-vectorization and SSE/AVX instructions.</p>
+
+<h4 id="sharing-immutable-data-between-threads">Sharing Immutable Data Between Threads</h4>
+<p>In a ray tracer we also need to share some immutable data between threads so that they all know what scene they’re rendering.
+In Rust this is done with atomic reference counted pointers using the <a href="http://doc.rust-lang.org/std/sync/struct.Arc.html">Arc</a>
+struct. This works pretty nicely although I ran into some minor annoyances. Currently if you want to put a trait in an Arc
+it must be in a Box as well, even though the Arc has it’s own box (this may have changed with unsized types, see below).
+That is to say if we had a trait Geometry and we wanted to share some instance between threads we can’t currently write:</p>
+
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// This doesn't work!
+</span>
+<span class="k">let</span> <span class="n">geom</span> <span class="o">=</span> <span class="nn">Arc</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Sphere</span><span class="p">::</span><span class="nf">new</span><span class="p">())</span> <span class="k">as</span> <span class="nb">Arc</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="c">// Instead we must box the sphere first
+</span>
+<span class="k">let</span> <span class="n">geom_correct</span> <span class="o">=</span> <span class="nn">Arc</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Box</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Sphere</span><span class="p">::</span><span class="nf">new</span><span class="p">())</span> <span class="k">as</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span><span class="p">);</span></code></pre></figure>
+
+<p>Additionally it’s not possible to immutably borrow an object across multiple threads even if it can be proven that the object
+being borrowed outlives all the threads. From what I’ve been told both of these issues are being worked on, the Arc&lt;Trait&gt;
+type might actually be possible now with unsized types but I’ve had some difficulty finding reading material on how to use these.
+If anyone has a link to a good write-up on unsized types it’d be much appreciated, or I’ll bug folks in IRC for info about it.
+As for sharing Arcs vs. immutable borrows (what I did in the C++ version) I think I prefer using Arcs even though both
+methods should be valid to write in the language eventually. Note that we don’t have any overhead from updating the reference
+count during rendering since we can immutably borrow within the thread to refer to hit geometry and instances.</p>
+
+<h2 id="managing-dependencies-with-cargo">Managing Dependencies with Cargo</h2>
+<p>In addition to helping build your project, its docs, and run tests <a href="https://crates.io/">Cargo</a> is also a powerful dependency
+management tool. During some of the updates to Rust the more experimental and niche modules such as EnumSet got moved
+out into <a href="https://github.com/Gankro/collect-rs">collect-rs</a>, getting this crate and linking my project was really easy to do
+by adding the <a href="https://crates.io/crates/collect">package</a> as a dependency with Cargo. It’s also possible to depend on git repositories
+as I’ve done with <a href="https://github.com/PistonDevelopers/image">image</a> by specifying a git dependency, so now tray_rust can output
+PNG and JPEG images!</p>
+
+<p>For executables Cargo also locks the versions of your dependencies so others trying to build your project will build with the same versions
+of the libraries you’re building with, making it smoother to build other people’s packages and programs. It even works well on
+Windows which is always a bit of a hassle when trying to manage C or C++ dependencies. Rust is still quite young and the
+ecosystem is very small compared to C and C++ so the comparison isn’t really fair but I’m hopeful that Cargo will
+keep dependency management painless even as the ecosystem grows.</p>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>After working with Rust for longer I’m pretty happy with how the language is shaping up. To name a few features I
+had fun with over the past month, match expressions and the powerful iterator module are really nice to work with.
+The community is also very friendly and helpful, the Rust IRC and subreddit have been great resources over
+the past month and <a href="http://this-week-in-rust.org/">This Week in Rust</a> is invaluable when keeping up with
+changes in the nightlies or just finding cool Rust related write-ups and discussion.</p>
+
+<h4 id="until-next-time">Until Next Time</h4>
+<p>For part 3 I’ll work on getting a proper path tracing implementation running and fix some lingering bugs in the current
+code that I’ve worked around to render the scene for this post. I’ll also take a look at the performance of giving
+each thread its own channel vs. a shared mpsc and possibilities for rendering across multiple machines.
+Path tracing will need much more compute power to render the scene quickly and networked rendering should be really fun to play with.</p>
+
+<p>If you have comments, suggestions for improvements or just want to say “hi” feel free to comment below, <a href="https://twitter.com/_wusher">tweet at me</a>
+or ping me on IRC (I’m Twinklebear on freenode and moznet).
+The code for the Rust ray tracer is MIT licensed and available on <a href="https://github.com/Twinklebear/tray_rust">Github</a>.</p>
+
+
+		<hr>
+		<div class="col-12">
+			<p>Published: 30 January 2015</p>
+		</div>
+		<div class="col-12 row">
+			
+			<div class="col-md-6 justify-content-left">
+				<a href="/2014/12/30/porting-a-ray-tracer-to-rust-part-1" title="Porting a Ray Tracer to Rust, part 1">
+					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
+			</div>
+			
+			
+			<div class="col-6 text-right">
+				<a href="/2015/05/15/porting-a-ray-tracer-to-rust-part-3" title="Porting a Ray Tracer to Rust, part 3">
+					Next &nbsp<span class="fa fa-chevron-right" aria-hidden="true"></span></a>
+			</div>
+			
+		</div>
+
+		<div class="comments">
+			
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'twinklebeargithub'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Postscript 0: Properly Finding Resource Paths</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">Postscript 0: Properly Finding Resource Paths</h1>
+
+<div class="row justify-content-md-center">
+	<div class="col-md-10">
+		
+<p>In this short postscript we’ll learn how to make use of <a href="https://wiki.libsdl.org/SDL_GetBasePath"><code class="highlighter-rouge">SDL_GetBasePath</code></a> to
+properly resolve the path to our resource directory where we’ll be storing all the assets needed for each lesson.
+This approach lets us avoid issues with relative paths since it doesn’t depend on where the program working
+directory is set when it’s run. This functionality was introduced in SDL 2.0.1 so if you haven’t updated to the latest SDL
+be sure to grab that before getting started.</p>
+
+<!--more-->
+
+<h2 id="lesson-directory-structure">Lesson Directory Structure</h2>
+<p><code class="highlighter-rouge">SDL_GetBasePath</code> will return the path to the directory where the application executable is, so to properly find the resource
+directory we’ll have to know how to change this path to get the resource directory path. For the lessons I’ll be using
+the directory structure below, if you’re using a different directory structure you’ll likely need to make some
+modifications to how the resource path is set.</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">Lessons/
+    bin/
+        executables in here
+    res/
+        Lesson1/
+            Lesson 1's assets are stored here
+    Lesson1/
+        src/
+            Lesson 1's source code
+    include/
+        Headers shared between lessons</code></pre></figure>
+
+<h2 id="getting-the-resource-path">Getting the Resource Path</h2>
+<p>We’ll now write a convenient utility header containing the <code class="highlighter-rouge">getResourcePath</code> function which will be used to resolve
+the resource path based on the folder structure above. The function will also take a subdirectory name to be
+appended to the path so we can then get the Lesson1 resource directory with <code class="highlighter-rouge">getResourcePath("Lesson1")</code>. The code
+below is placed into the shared include directory and named res_path.h in my code. The comments throughout the code
+provide more detail on what’s going on so be sure to read through them.</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#ifndef RES_PATH_H
+#define RES_PATH_H
+</span>
+<span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;SDL.h&gt;
+</span>
+<span class="cm">/*
+ * Get the resource path for resources located in res/subDir
+ * It's assumed the project directory is structured like:
+ * bin/
+ *  the executable
+ * res/
+ *  Lesson1/
+ *  Lesson2/
+ *
+ * Paths returned will be Lessons/res/subDir
+ */</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getResourcePath</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">subDir</span> <span class="o">=</span> <span class="s">""</span><span class="p">){</span>
+	<span class="c1">//We need to choose the path separator properly based on which
+</span>	<span class="c1">//platform we're running on, since Windows uses a different
+</span>	<span class="c1">//separator than most systems
+</span><span class="cp">#ifdef _WIN32
+</span>	<span class="k">const</span> <span class="kt">char</span> <span class="n">PATH_SEP</span> <span class="o">=</span> <span class="sc">'\\'</span><span class="p">;</span>
+<span class="cp">#else
+</span>	<span class="k">const</span> <span class="kt">char</span> <span class="n">PATH_SEP</span> <span class="o">=</span> <span class="sc">'/'</span><span class="p">;</span>
+<span class="cp">#endif
+</span>	<span class="c1">//This will hold the base resource path: Lessons/res/
+</span>	<span class="c1">//We give it static lifetime so that we'll only need to call
+</span>	<span class="c1">//SDL_GetBasePath once to get the executable path
+</span>	<span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">baseRes</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">baseRes</span><span class="p">.</span><span class="n">empty</span><span class="p">()){</span>
+		<span class="c1">//SDL_GetBasePath will return NULL if something went wrong in retrieving the path
+</span>		<span class="kt">char</span> <span class="o">*</span><span class="n">basePath</span> <span class="o">=</span> <span class="n">SDL_GetBasePath</span><span class="p">();</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">basePath</span><span class="p">){</span>
+			<span class="n">baseRes</span> <span class="o">=</span> <span class="n">basePath</span><span class="p">;</span>
+			<span class="n">SDL_free</span><span class="p">(</span><span class="n">basePath</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="p">{</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error getting resource path: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+			<span class="k">return</span> <span class="s">""</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="c1">//We replace the last bin/ with res/ to get the the resource path
+</span>		<span class="kt">size_t</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">baseRes</span><span class="p">.</span><span class="n">rfind</span><span class="p">(</span><span class="s">"bin"</span><span class="p">);</span>
+		<span class="n">baseRes</span> <span class="o">=</span> <span class="n">baseRes</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span> <span class="o">+</span> <span class="s">"res"</span> <span class="o">+</span> <span class="n">PATH_SEP</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="c1">//If we want a specific subdirectory path in the resource directory
+</span>	<span class="c1">//append it to the base path. This would be something like Lessons/res/Lesson0
+</span>	<span class="k">return</span> <span class="n">subDir</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">?</span> <span class="n">baseRes</span> <span class="o">:</span> <span class="n">baseRes</span> <span class="o">+</span> <span class="n">subDir</span> <span class="o">+</span> <span class="n">PATH_SEP</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cp">#endif</span></code></pre></figure>
+
+<p><br /></p>
+
+<h2 id="using-the-resource-path-lookup">Using the Resource Path Lookup</h2>
+<p>With our new utility function we can easily construct the resource path for our programs and no longer need to rely
+on relative paths and the various hassles that come with them. To get access to this new header in our shared include
+directory we’ll need to add the directory <code class="highlighter-rouge">include</code> to our include path.</p>
+
+<ul>
+  <li><strong>CMake</strong>: In your top level CMakeLists file add <code class="highlighter-rouge">include_directories(include)</code>.</li>
+  <li><strong>Visual Studio</strong>: Add the include directory through your project preferences, similar to how you set the SDL2
+include directories.</li>
+  <li><strong>GCC and Clang</strong>: Use the <code class="highlighter-rouge">-I</code> flag to add the directory to your include path, eg. <code class="highlighter-rouge">-Iinclude</code>.</li>
+</ul>
+
+<p>We’ll now write a simple program that will print out the resource directory path to make sure everything is working correctly.</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;SDL.h&gt;
+#include "res_path.h"
+</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_EVERYTHING</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_Init error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Resource path is: "</span> <span class="o">&lt;&lt;</span> <span class="n">getResourcePath</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+	<span class="n">SDL_Quit</span><span class="p">();</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="end-of-postscript">End of Postscript</h2>
+<p>You’ll want to double check that the path output by the test program is correct as we’ll be using <code class="highlighter-rouge">getResourcePath</code> extensively
+throughout the lessons to reliably find the various images and other assets we need for our programs. A related function
+provided by SDL is <a href="https://wiki.libsdl.org/SDL_GetPrefPath"><code class="highlighter-rouge">SDL_GetPrefPath</code></a> which returns the path where your application
+can write personal files (save games, etc.).</p>
+
+<p>I’ll see you again soon in <a href="/sdl2%20tutorials/2013/08/17/lesson-1-hello-world">Lesson 1: Hello World!</a></p>
+
+
+	</div>
+	<div class="col-md-2">
+		<h4><a href="/pages/sdl2/">Tutorial Index</a></h4>
+		<h4>Helpful Links</h4>
+		<a href="http://wiki.libsdl.org/moin.fcg/FrontPage">SDL Documentation</a>
+		<br />
+		<a href="http://forums.libsdl.org/">SDL Forums</a>
+		<br />
+		<a href="irc://irc.freenode.net/SDL">IRC: #SDL on freenode</a>
+		<br />
+		<a href="http://en.cppreference.com/w/">C++ Reference</a>
+		<br />
+		<a href="https://github.com/Twinklebear/TwinklebearDev-Lessons">Code on Github</a>
+		<p>Published: 16 June 2014
+	</div>
+</div>
+<div class="col-md-12 comments">
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'twinklebeargithub'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+</div>
+
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Progressive CPU Volume Rendering with Sample Accumulation</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
+		<h1>Progressive CPU Volume Rendering with Sample Accumulation</h1>
+		<h5 class="font-italic">Will Usher, Jefferson Amstutz, Carson Brownlee, Aaron Knoll, Ingo Wald</h5>
+		<h5>In <i>Eurographics Symposium on Parallel Graphics and Visualization</i>, 2017</h5>
+		
+		<figure>
+			<img class="img-fluid" src="https://i.imgur.com/15y1f8I.png"/>
+			<figcaption class="text-left mt-2">
+				<b>Fig. 1: </b><i>(a-c) Progressive refinement with Sample-Accumulation Volume Rendering (SAVR) on the 40GB Landing Gear AMR dataset using a prototype AMR sampler. The SAVR algorithm correctly accumulates frames to progressively refine the image. After 16 frames of accumulation the volume is sampled at the Nyquist limit, with some small noise, by 32 frames the noise has been removed. SAVR extends to distributed data, in (d) we show the 1TB DNS dataset, a 10240×7680×1536 uniform grid, rendered interactively across 64 second-generation Intel Xeon Phi "Knights Landing" (KNL) processor nodes on Stampede 1.5 at a 6144×1024 resolution. While interacting, our method achieves around 5.73 FPS.</i>
+			</figcaption>
+		</figure>
+		
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
+		<p>We present a new method for progressive volume rendering by accumulating object-space samples over successively rendered frames. Existing methods for progressive refinement either use image space methods or average pixels over frames, which can blur features or integrate incorrectly with respect to depth. Our approach stores samples along each ray, accumulates new samples each frame into a buffer, and progressively interleaves and integrates these samples. Though this process requires additional memory, it ensures interactivity and is well suited for CPU architectures with large memory and cache. This approach also extends well to distributed rendering in cluster environments. We implement this technique in Intel’s open source OSPRay CPU ray tracing framework and demonstrate that it is particularly useful for rendering volumetric data with costly sampling functions.</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="http://sci.utah.edu/~will/papers/savr/savr.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			
+			<dd><a href="https://dx.doi.org/10.2312/pgv.20171090">
+				<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+			</dd>
+			
+			
+			
+			<dt>Code</dt>
+			<dd>
+			<a href="https://github.com/ospray/module_savr">
+				<i class="fab fa-github"></i> GitHub</a>
+			</dd>
+			
+		</dl>
+	</div>
+	
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>@inproceedings{Usher_SAVR_2017,<br />
+ booktitle={Eurographics Symposium on Parallel Graphics and Visualization},<br />
+ editor={Alexandru Telea and Janine Bennett},<br />
+ title={{Progressive CPU Volume Rendering with Sample Accumulation}},<br />
+ author={Usher, Will and Amstutz, Jefferson and Brownlee, Carson and Knoll, Aaron and Wald, Ingo},<br />
+ year={2017},<br />
+ publisher={The Eurographics Association},<br />
+ issn={1727-348X},<br />
+ isbn={978-3-03868-034-5},<br />
+ doi={10.2312/pgv.20171090},<br />
+}</code>
+	</div>
+</div>
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

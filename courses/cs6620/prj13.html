@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>CS 6620 Fall 2014 - Project 13</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">CS 6620 Fall 2014 - Project 13</h1>
+
+<div class="row justify-content-md-center">
+	
+
+
+<div class="col-lg-12 col-md-12">
+	<h4>Comparison of Final Gathering Results</h4>
+	<p>
+	Both scenes were rendered with 16/32 adaptive sampling, shooting 1M caustic
+	and 2M indirect photons. The scenes using final gathering were rendered with approximately
+	1M radiance photons and used 40 final gather samples. The photon map lookups were done
+	for a search radius of 0.1 to query 50 photons. For all renders unless otherwise mentioned
+	the photon map is only used for indirect and caustic lighting effects, direct lighting is
+	sampled explicitly as usual.
+	</p>
+	<div class="row">
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>Cornell Box Gallery with gathering</b>
+		<p>
+		Pre-process: 16.861s. Rendering: 00:06:31
+		</p>
+		<a href="/courses/cs6620/prj13/cornell_spotlights.png">
+			<img src="/courses/cs6620/prj13/cornell_spotlights.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>Cornell Box Gallery without gathering</b>
+		<p>
+		Pre-process: 8.27s. Rendering: 00:01:03
+		</p>
+		<a href="/courses/cs6620/prj13/cornell_spotlights_no_gather.png">
+			<img src="/courses/cs6620/prj13/cornell_spotlights_no_gather.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>SmallPT Cornell Box with gathering</b>
+		<p>
+		Pre-process: 26.885s. Rendering: 00:12:19
+		</p>
+		<a href="/courses/cs6620/prj13/smallpt_cornell.png">
+			<img src="/courses/cs6620/prj13/smallpt_cornell.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>SmallPT Cornell Box without gathering</b>
+		<p>
+		Pre-process: 11.417s. Rendering: 00:01:08
+		</p>
+		<a href="/courses/cs6620/prj13/smallpt_cornell_no_gather.png">
+			<img src="/courses/cs6620/prj13/smallpt_cornell_no_gather.png" class="img-fluid">
+		</a>
+	</div>
+	</div>
+</div>
+
+<div class="col-lg-12 col-md-12">
+	<h4>Boatloads of Photons!</h4>
+	<p>
+	The scenes below compare the results of shooting a huge number of photons vs. those achieved
+	with final gathering for significantly fewer (above). Both scenes below shot 15M caustic and 40M
+	indirect photons. The photon map lookups were done for a search radius of 1 to query 300 photons.
+	</p>
+	<div class="row">
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>Cornell Box Gallery with tons of photons, no gathering</b>
+		<p>
+		Pre-process: 00:03:07. Rendering: 00:05:11
+		</p>
+		<a href="/courses/cs6620/prj13/cornell_spotlights_no_gather_big.png">
+			<img src="/courses/cs6620/prj13/cornell_spotlights_no_gather_big.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>SmallPT Cornell Box with tons of photons, no gathering</b>
+		<p>
+		Pre-process: 00:04:50. Rendering: 00:07:10
+		</p>
+		<a href="/courses/cs6620/prj13/smallpt_cornell_no_gather_big.png">
+			<img src="/courses/cs6620/prj13/smallpt_cornell_no_gather_big.png" class="img-fluid">
+		</a>
+	</div>
+	</div>
+</div>
+
+<div class="col-lg-12 col-md-12">
+	<h4>Assorted Caustic Playgrounds</h4>
+	<p>
+	All of the caustic playground scenes were rendered with 32/64 adaptive sampling,
+	40 final gather samples and 4M caustic, 2M indirect and approximately 1M radiance photons.
+	The dragon, bunny and Buddha are from the 
+	<a href="https://graphics.stanford.edu/data/3Dscanrep/">Stanford 3D Scanning Repository</a>,
+	the monkey head is a higher poly version of <a href="http://en.wikipedia.org/wiki/Blender_%28software%29#Suzanne">Blender's Suzanne</a>
+	created by taking the original Suzanne model and running it through a few rounds of subdivision and smoothing in Blender.
+	The teapot is the high res version of the Utah teapot.
+	The photon map lookups were done for a search radius of 0.65 to query 300 photons.
+	</p>
+	<div class="row">
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>Stanford Dragon</b>
+		<p>
+		Pre-process: 14.003s. Rendering: 00:15:55
+		</p>
+		<a href="/courses/cs6620/prj13/caustic_dragon.png">
+			<img src="/courses/cs6620/prj13/caustic_dragon.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>Stanford Buddha</b>
+		<p>
+		Pre-process: 14.249s. Rendering: 00:11:13
+		</p>
+		<a href="/courses/cs6620/prj13/caustic_buddha.png">
+			<img src="/courses/cs6620/prj13/caustic_buddha.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>Stanford Bunny</b>
+		<p>
+		Pre-process: 14.251s. Rendering: 00:11:29
+		</p>
+		<a href="/courses/cs6620/prj13/caustic_bunny.png">
+			<img src="/courses/cs6620/prj13/caustic_bunny.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-6 col-md-6" style="text-align:center">
+		<b>Suzanne</b>
+		<p>
+		Pre-process: 14.333s. Rendering: 00:10:01
+		</p>
+		<a href="/courses/cs6620/prj13/caustic_suzanne.png">
+			<img src="/courses/cs6620/prj13/caustic_suzanne.png" class="img-fluid">
+		</a>
+	</div>
+	<div class="col-lg-12 col-md-12" style="text-align:center">
+		<b>Utah Teapot</b>
+		<p>
+		Pre-process: 13.631s. Rendering: 00:11:04
+		</p>
+		<a href="/courses/cs6620/prj13/caustic_teapot.png">
+			<img src="/courses/cs6620/prj13/caustic_teapot.png" class="img-fluid">
+		</a>
+	</div>
+	</div>
+</div>
+
+<div class="col-lg-12 col-md-12">
+	<h4>A Neat Bug</h4>
+	<p>
+	This bug was the result of using a sequence to compute the ray origins and directions for photons leaving the light
+	producing an interesting pattern in the lighting. The image below was rendered with
+    just the direct photons to easily showcase the issue.
+	</p>
+	<a href="/courses/cs6620/prj13/bad_direct_lighting.png">
+		<img src="/courses/cs6620/prj13/bad_direct_lighting.png" class="img-fluid">
+	</a>
+</div>
+
+<div class="col-lg-12 col-md-12">
+	<h3>Hardware Used and Other Details</h3>
+	<p>
+	Render times were measured using <code>std::chrono::high_resolution_clock</code> and only include time to render,
+	ie. time to load the scene and write the images to disk is ignored.
+	</p>
+	CPU: Intel i7-4790k @ 4.0Ghz<br />
+	RAM: 16GB 1600Mhz DDR3<br />
+	Compiler: gcc 4.9.2 x86_64 (on Windows, built by MinGW-W64 project)<br />
+	Compilation Flags: -m64 -O3 -march=native -flto -fno-exceptions -DNDEBUG
+	</p>
+</div>
+
+
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

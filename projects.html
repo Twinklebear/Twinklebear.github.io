@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Projects</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item active"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">Projects</h1>
+
+<div class="row justify-content-md-center">
+	
+
+
+<div class="col-12 row pb-2 pt-2 mt-1 bg-light rounded">
+	<div class="col-12">
+		<h4>Table of Contents:</h4>
+	</div>
+	<div class="col-12 row">
+		
+		
+		<div class="col-3">
+			<a href="/projects#Spline Viewer">Spline Viewer</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#bspline">bspline</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#ispc-rs">ispc-rs</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#lfwatch">lfwatch</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#ssao">ssao</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#tobj">tobj</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#topo-vol">topo-vol</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#tray">tray</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#tray_rust">tray_rust</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="/projects#μPacket">μPacket</a>
+		</div>
+		
+	</div>
+</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="tray_rust">
+		<div class="col-12">
+			<h2><b>tray_rust</b></h2>
+		</div>
+
+		<div class="col-12 col-sm-6">
+			<p>tray_rust is a toy physically based ray tracer built off of the techniques discussed in <a href="http://pbrt.org/">Physically Based Rendering</a>. It began life as a port of <a href="https://github.com/Twinklebear/tray">tray</a> to <a href="http://www.rust-lang.org">Rust</a> to check out the language. The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon), and various physically based material models (including measured data from the <a href="http://www.merl.com/brdf/">MERL BRDF Database</a>) along with rigid body animation and image-parallel distributed rendering. More details on rendering performance and other features can be found in the readme <a href="https://github.com/Twinklebear/tray_rust/blob/master/README.md">README</a>.</p>
+
+<p>tray_rust can also render animations, and is the renderer I’ve used for the University of Utah’s <a href="http://graphics.cs.utah.edu/trc/">teapot rendering competition</a> after the first year. The video is my submission from 2016. To simplify making scenes for tray_rust I also wrote a <a href="https://github.com/Twinklebear/tray_rust_blender">Blender plugin</a> which I used to make the animation shown, and is the easiest way to create scenes for the renderer though some features are still needed.</p>
+
+			<a aria-label="Star Twinklebear/tray_rust on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/tray_rust/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/tray_rust"
+				aria-label="Star Twinklebear/tray_rust on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="col-12 col-sm-6 mt-2 mt-sm-0 mx-auto">
+			
+			<div class="embed-responsive embed-responsive-16by9">
+				<iframe class="embed-responsive-item" allowfullscreen src="https://www.youtube.com/embed/5XY8ua4ysvM">
+				</iframe>
+			</div>
+			
+		</div>
+		<div class="row mt-0 mt-sm-0 justify-content-center text-center col-12 mx-auto">
+			
+			<div class="col-6 mt-2 mt-sm-0 col-sm-3">
+				<img class="img-fluid" src="https://i.imgur.com/ywNdfGD.png">
+			</div>
+			
+			<div class="col-6 mt-2 mt-sm-0 col-sm-3">
+				<img class="img-fluid" src="https://i.imgur.com/yiH8xsI.png">
+			</div>
+			
+			<div class="col-6 mt-2 mt-sm-0 col-sm-3">
+				<img class="img-fluid" src="https://i.imgur.com/iOU7Xys.png">
+			</div>
+			
+			<div class="col-6 mt-2 mt-sm-0 col-sm-3">
+				<img class="img-fluid" src="https://i.imgur.com/Dzg3Fxr.png">
+			</div>
+			
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="ispc-rs">
+		<div class="col-12">
+			<h2><b>ispc-rs</b></h2>
+		</div>
+
+	<div class="col-12 col-sm-8">
+			<p>ispc-rs is a small Rust library meant to be used as a compile time dependency for Rust projects to allow them to build and link with code written in <a href="https://ispc.github.io/">ISPC</a>. ISPC is a language that makes it possible to take advantage the CPU’s vector units without needing hand-written intrinsics. Through this library it’s easy to write very fast vector code in ISPC and link it with (still quick!) higher-level code in Rust to get a good balance of high performance and ease of use.</p>
+
+<p>The images shown above are from the <a href="https://github.com/Twinklebear/ispc-rs/tree/master/examples/rt">rt example</a> (top row) which demonstrates a simple fast and parallel path tracer and the <a href="https://github.com/Twinklebear/ispc-rs/tree/master/examples/ddvol">ddvol example</a> (bottom row) which is a scientific visualization volume renderer. Both use higher level Rust code to read in a scene file and setup the objects in the scene and then call into ISPC to render in parallel, making good use of the CPU’s SIMD units.</p>
+
+			<a aria-label="Star Twinklebear/ispc-rs on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/ispc-rs/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/ispc-rs"
+				aria-label="Star Twinklebear/ispc-rs on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
+			<img class="img-fluid" src="http://i.imgur.com/ACzYqAm.png">
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="μPacket">
+		<div class="col-12">
+			<h2><b>μPacket</b></h2>
+		</div>
+
+	<div class="col-12 col-sm-8">
+			<p>μPacket is an extremely simple packet based ray tracer that uses the AVX/AVX2 instruction set to trace eight rays at once through the scene. Currently it only supports spheres and planes with Lambertian BRDFs illuminated by a single point light. Illumination is computed with Whitted ray tracing, although recursion only goes as far as computing shadows since there are no reflective or transmissive materials at the moment.</p>
+
+<p>Ray packets were first introduced by <a href="http://www.sci.utah.edu/~wald/Publications/2001/CRT/CRT.pdf">Wald et al., 2001</a> and are now widely used in high performance ray tracers like <a href="http://embree.github.io/">Embree</a> due to the performance gain achieved with good packet (and now stream) tracing techniques.</p>
+
+<p>Current plans for this project are to switch to trace ray streams and add support for a path tracing integrator for higher quality images.</p>
+
+			<a aria-label="Star Twinklebear/micro-packet on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/micro-packet/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/micro-packet"
+				aria-label="Star Twinklebear/micro-packet on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
+			<img class="img-fluid" src="http://i.imgur.com/WcM6Rcl.png">
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="topo-vol">
+		<div class="col-12">
+			<h2><b>topo-vol</b></h2>
+		</div>
+
+		<div class="col-12">
+			<p>topo-vol is a topology guided volume exploration and analysis tool, written for the final project in <a href="http://www.sci.utah.edu/~beiwang/teaching/cs6170-spring-2017/schedule.html">Bei Wang’s Computational Topology Course</a>. It is built on top of the <a href="https://topology-tool-kit.github.io/">Topology ToolKit</a> and <a href="http://www.vtk.org/">VTK</a> for computation, and uses <a href="https://github.com/ocornut/imgui">ImGui</a> and a custom rendering system for the UI and volume rendering. By computing relevant topological structures (e.g. the contour tree) and classifying segments of data corresponding to the branches in this tree we can avoid occlusion issues with global transfer functions and create more useful, detailed renderings. See the <a href="https://github.com/Twinklebear/topo-vol/blob/master/report.pdf">report</a> for more details.</p>
+
+			<a aria-label="Star Twinklebear/topo-vol on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/topo-vol/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/topo-vol"
+				aria-label="Star Twinklebear/topo-vol on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="row mt-3 col-12 mx-auto">
+			
+			<img class="img-fluid" src="http://i.imgur.com/0geW8ma.png">
+			
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="tray">
+		<div class="col-12">
+			<h2><b>tray</b></h2>
+		</div>
+
+		<div class="col-12">
+			<p>tray is a toy physically based ray tracer built off of the techniques discussed in <a href="http://pbrt.org/">Physically Based Rendering</a>. It currently has support for path tracing, bidirectional path tracing and photon mapping. tray also supports physically materials such as microfacet models like Torrance-Sparrow and measured data from the <a href="http://www.merl.com/brdf/">MERL BRDF Database</a>.</p>
+
+<p>This is the project tray_rust is based on and as such may not see much more development since most of my ray tracing work is now going on there.</p>
+
+			<a aria-label="Star Twinklebear/tray on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/tray/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/tray"
+				aria-label="Star Twinklebear/tray on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/MALPsD8.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/Ns3ZYsE.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/ApHMuex.png">
+			</div>
+			
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="bspline">
+		<div class="col-12">
+			<h2><b>bspline</b></h2>
+		</div>
+
+	<div class="col-12 col-sm-8">
+			<p>A Rust library for computing B-spline interpolating curves on generic control points. bspline can be used to evaluate B-splines of varying orders on any type that can be linearly interpolated, ranging from floats, positions, RGB colors to transformation matrices and so on.
+The bspline logo (above) was generated using this library with a cubic B-spline in 2D for the positioning of the curve and a quadratic B-spline in RGB space to color it.</p>
+
+			<a aria-label="Star Twinklebear/bspline on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/bspline/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/bspline"
+				aria-label="Star Twinklebear/bspline on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
+			<img class="img-fluid" src="http://i.imgur.com/JvVlYKf.png">
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="Spline Viewer">
+		<div class="col-12">
+			<h2><b>Spline Viewer</b></h2>
+		</div>
+
+		<div class="col-12">
+			<p>A viewer for B-spline curves and surfaces, initially written for a course on computer aided geometric design. You can edit and create 2D B-splines and tweak some properties of loaded 3D curves and surfaces. Useful for learning about and playing with B-splines.</p>
+
+			<a aria-label="Star Twinklebear/spline-viewer on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/spline-viewer/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/spline-viewer"
+				aria-label="Star Twinklebear/spline-viewer on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="row mt-3 col-12 mx-auto">
+			
+			<img class="img-fluid" src="http://i.imgur.com/EzAQZyM.png">
+			
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="tobj">
+		<div class="col-12">
+			<h2><b>tobj</b></h2>
+		</div>
+
+	<div class="col-12 col-sm-8">
+			<p>tobj is a tiny OBJ loader in Rust that draws inspiration for its API and design from Syoyo’s excellent library, <a href="https://github.com/syoyo/tinyobjloader">tinyobjloader</a>. The crate aims to be a simple, fast and lightweight option for loading OBJ and MTL files for easy integration with realtime and offline renderers, or really any other project where you need to load OBJ files!</p>
+
+<p>The image shown is from a demo viewer written to test tobj named <a href="https://github.com/Twinklebear/tobj_viewer">tobj_viewer</a> displaying the <a href="http://graphics.cs.williams.edu/data/meshes.xml">Rungholt</a> model. The model can be found on Morgan McGuire’s meshes page and was originally built by kescha.</p>
+
+			<a aria-label="Star Twinklebear/tobj on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/tobj/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/tobj"
+				aria-label="Star Twinklebear/tobj on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
+			<img class="img-fluid" src="http://i.imgur.com/wImyNG4.png">
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="ssao">
+		<div class="col-12">
+			<h2><b>ssao</b></h2>
+		</div>
+
+		<div class="col-12">
+			<p>This is sort of an implementation of <a href="http://graphics.cs.williams.edu/papers/SAOHPG12/">Scalable Ambient Obscurance by McGuire et al.</a> however I make a few simplifying shortcuts in my implementation and don’t achieve as good performance or quality. I was also unable to get their new recommended estimator to behave so this implementation still uses the Alchemy AO estimator initially recommended in the paper. There’s a somewhat longer write up available on <a href="http://www.willusher.io/courses/cs6610/">my classpage</a> since this was initially implemented as a class project.</p>
+
+<p>The image shows just the ambient occlusion value for a view of the Crytek Sponza scene.</p>
+
+			<a aria-label="Star Twinklebear/ssao on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/ssao/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/ssao"
+				aria-label="Star Twinklebear/ssao on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center text-center col-12 mx-auto">
+			
+			<div class="col-12 col-sm-6 mt-2 mt-sm-0">
+				
+				<img class="img-fluid" src="http://i.imgur.com/byM8iNh.png">
+				
+			</div>
+			
+			<div class="col-12 col-sm-6 mt-2 mt-sm-0">
+				
+				<img class="img-fluid" src="http://i.imgur.com/v7wWg9O.png">
+				
+			</div>
+			
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="lfwatch">
+		<div class="col-12">
+			<h2><b>lfwatch</b></h2>
+		</div>
+
+		<div class="col-12">
+			<p>lfwatch is a lightweight file watcher for Windows, Linux and OS X. It monitors some desired directories for file changes and calls the callback set for the directory with information about the file change event. This was written to do hot reloading of GLSL shaders but could be useful for some other applications.</p>
+
+			<a aria-label="Star Twinklebear/lfwatch on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/lfwatch/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/lfwatch"
+				aria-label="Star Twinklebear/lfwatch on GitHub"
+				class="github-button">Star</a>
+		</div>
+
+	</div>
+
+
+<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+
