@@ -45,16 +45,22 @@ var vertShader =
 "void main(void) {" +
 	"mat3 rot_mat = mat3(1.0);" +
 	"vec3 quad_normal = vec3(0, 0, 1);" +
-	"vec3 splat_normal = normalize(splat_normal.xyz);" +
+	"float scaled_radius = splat_pos_radius.w * radius_scale * scaling;" +
+	"normal = normalize(splat_normal.xyz);" +
+	// Make the normal face forward, we sort of need this if we're extracting
+	// normals from some datasets, b/c they may be flipped
+	/*
+	"if (dot(normal, (scaled_radius * pos + splat_pos_radius.xyz * scaling) - eye_pos) < 0.0) {" +
+		"normal = -normal;" +
+	"}" +
+	*/
 	"splat_color = splat_color_in.xyz;" +
-	"if (abs(splat_normal) != quad_normal) {" +
-		"vec3 rot_axis = normalize(cross(quad_normal, splat_normal));" +
-		"float rot_angle = acos(dot(quad_normal, splat_normal));" +
+	"if (abs(normal) != quad_normal) {" +
+		"vec3 rot_axis = normalize(cross(quad_normal, normal));" +
+		"float rot_angle = acos(dot(quad_normal, normal));" +
 		"rot_mat = rotation_matrix(rot_axis, rot_angle);" +
 	"}" +
 	"uv = 2.0 * pos.xy;" +
-	"normal = splat_normal;" +
-	"float scaled_radius = splat_pos_radius.w * radius_scale * scaling;" +
 	"vec3 sp = rot_mat * scaled_radius * pos + splat_pos_radius.xyz * scaling;" +
 	"eye_dir = normalize(sp - eye_pos);" +
 	"if (depth_prepass) {" +
@@ -183,6 +189,15 @@ var pointClouds = {
 		size: 2697312,
 		zoom_start: -30,
 	},
+	/*
+	"Test": {
+		url: "painted_santa.rsf",
+		scale: 1.0/30.0,
+		size: 100,
+		zoom_start: -50,
+		testing: true,
+	},
+	*/
 	"Man": {
 		url: "yfk9l8rweuk2m51/male.rsf",
 		scale: 1.0/30.0,
@@ -190,7 +205,7 @@ var pointClouds = {
 		zoom_start: -40,
 	},
 	"Santa": {
-		url: "ifj04gazg7o8f5d/santa.rsf",
+		url: "m6yri2u10qs31pm/painted_santa.rsf",
 		scale: 1.0/30.0,
 		size: 3637488,
 		zoom_start: -30,
@@ -211,6 +226,9 @@ var pointClouds = {
 
 var loadPointCloud = function(dataset, onload) {
 	var url = "https://www.dl.dropboxusercontent.com/s/" + dataset.url + "?dl=1";
+	if (dataset.testing) {
+		url = dataset.url;
+	}
 	var req = new XMLHttpRequest();
 	var loadingProgressText = document.getElementById("loadingText");
 	var loadingProgressBar = document.getElementById("loadingProgressBar");
@@ -245,6 +263,7 @@ var loadPointCloud = function(dataset, onload) {
 
 var selectPointCloud = function() {
 	var selection = document.getElementById("datasets").value;
+	window.location.hash = "#" + selection;
 
 	loadPointCloud(pointClouds[selection], function(dataset, dataBuffer) {
 		gl.bindVertexArray(vao);
@@ -364,7 +383,7 @@ window.onload = function(){
 	HEIGHT = canvas.getAttribute("height");
 
 	proj = mat4.perspective(mat4.create(), 60 * Math.PI / 180.0,
-		WIDTH / HEIGHT, 1, 50);
+		WIDTH / HEIGHT, 1, 500);
 
 	camera = new ArcballCamera(center, 2, [WIDTH, HEIGHT]);
 
@@ -422,6 +441,13 @@ window.onload = function(){
 	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
 		gl.TEXTURE_2D, splatDepthTex, 0);
 
+	// See if we were linked to a datset
+	if (window.location.hash) {
+		var linkedDataset = decodeURI(window.location.hash.substr(1));
+		if (linkedDataset in pointClouds) {
+			document.getElementById("datasets").value = linkedDataset;
+		}
+	}
 	selectPointCloud();
 }
 
