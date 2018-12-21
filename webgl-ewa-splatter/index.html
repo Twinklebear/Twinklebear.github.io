@@ -17,27 +17,68 @@
 				<canvas id="glcanvas" class="img-fluid" width="640" height="480"></canvas>
 			</div>
 			<div class="mx-auto col-12 col-lg-8 row">
-				<div class="col-12 col-lg-6 mb-lg-0 mb-2">
-					Dataset: <select id="datasets" onchange="selectPointCloud()"></select>
+				<div class="col-12 row">
+					<div class="col-12">
+						Dataset: <select id="datasets" onchange="selectPointCloud()"></select>
+					</div>
+					<div class="col-12">
+						Number of splats: <span id="numSplats"></span>
+					</div>
+					<div class="col-12" id="loadingInfo">
+						<p id="loadingText"></p>
+						<div class="progress mb-2">
+							<div id="loadingProgressBar" class="progress-bar" role="progressbar"
+								aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
 				</div>
 				<div class="col-12 mt-lg-2 mt-0">
 					<h4>Controls</h4>
-					<p>Mouse Controls: Left-click + drag to rotate, scroll to zoom, right-click + drag to pan.
+					<p>Desktop: Left-click + drag to rotate, scroll to zoom,
+					right-click + drag to pan. Hold Ctrl or use the checkbox to
+					toggle brushing, and left-click + drag to paint while brushing.
 					<br/>
-					Touch Controls: One finger drag to rotate, pinch to zoom, two finger drag to pan.
+					Touch: One finger drag to rotate, pinch to zoom, two finger drag to pan.
+					Check the brushing mode checkbox to enable brushing.
 					<br/>
-					Number of splats: <span id="numSplats"></span>
-					<div class="form-group">
-						<label for="splatRadiusSlider">Splat Radius</label>
-						<input type="range" class="form-control-range" id="splatRadiusSlider"
-							min="0.1" max="6.0" step="0.1">
+					<div class="form-group col-12 row">
+						<div class="col-12">
+							<input type="checkbox" class="form-check-input" value="" id="brushMode">
+							<label class="form-check-label" for="brushMode">Toggle Brushing Mode</label>
+						</div>
+						<div class="col-12">
+							<label for="splatRadiusSlider">Splat Radius</label>
+							<input type="range" class="form-control-range" id="splatRadiusSlider"
+								min="0.1" max="6.0" step="0.1">
+						</div>
+						<div class="col-12">
+							<label for="brushRadiusSlider">Brush Size</label>
+							<input type="range" class="form-control-range" id="brushRadiusSlider"
+								min="0.05" max="1.0" step="0.01">
+						</div>
+						<div class="form-row col-12 align-items-center">
+							<div class="col-8">
+							<label for="brushColorPicker">Brush Color</label>
+							<input type="color" class="form-control" value="#0000ff" id="brushColorPicker">
+							</div>
+							<div class="col-4">
+								<button type="button" class="btn btn-primary"
+									onclick="fillColor();">Fill Color</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 row">
+						<div class="col-6">
+							<button type="button" class="btn btn-primary"
+								onclick="saveModel();">Save Model</button>
+						</div>
+						<div class="col-6">
+							<input type="file" class="custom-file-input" id="uploadModel" accept="*.rsf"
+								onchange="uploadModel(this.files);">
+							<label class="custom-file-label" for="uploadModel">Upload Model</label>
+						</div>
 					</div>
 					</p>
-					<p id="loadingText"></p>
-					<div class="progress mb-2">
-						<div id="loadingProgressBar" class="progress-bar" role="progressbar"
-							aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-					</div>
 
 					<h4>Description</h4>
 					<p>
@@ -70,6 +111,8 @@
 	<script src="js/gl-matrix-min.js"></script>
 	<script src="js/webgl-util.js"></script>
 	<script src="js/shader-srcs.js"></script>
+	<script src="js/FileSaver.js"></script>
+	<script src="js/kd-tree.js"></script>
 	<script src="js/ewa-splatter.js"></script>
 </body>
 </html>

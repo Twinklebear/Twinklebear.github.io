@@ -16,6 +16,7 @@ var projView = null;
 
 var vao = null;
 var splatAttribVbo = null;
+var colorsChanged = false;
 
 var tabFocused = true;
 var newPointCloudUpload = true;
@@ -23,11 +24,23 @@ var splatShader = null;
 var splatRenderTargets = null;
 var splatAccumFbo = null
 var normalizationPassShader = null;
+var brushShader = null;
 
+const sizeofSurfel = 32;
+const sizeofKdNode = 8;
+var numSurfels = null;
 var surfelBuffer = null;
 var surfelDataset = null;
+var surfelPositions = null;
+var surfelColors = null;
+
+var kdTree = null;
 
 var splatRadiusSlider = null;
+var brushRadiusSlider = null;
+var brushColorPicker = null;
+var brushingMode = null;
+var mousePos = null;
 
 // For the render time targetting we could do progressive
 // rendering of the splats, or render at a lower resolution
@@ -38,100 +51,119 @@ const center = vec3.set(vec3.create(), 0.0, 0.0, 0.0);
 
 var pointClouds = {
 	"Dinosaur": {
-		url: "erx9893x0olqbfq/dinosaur.rsf",
-		scale: 1.0/30.0,
-		size: 2697312,
-		zoom_start: -40,
+		url: "e4l0qdy43ttvb87/dinosaur_kd.rsf",
+		size: 2448388,
 	},
 	"Leo": {
-		url: "h4kradxo3lbtar8/leo.rsf",
-		scale: 50,
-		size: 2708256,
-		zoom_start: -8,
+		url: "k78e3vzl97tir7y/leo_kd.rsf",
+		size: 2501144,
 	},
 	"Santa": {
-		url: "m6yri2u10qs31pm/painted_santa.rsf",
-		scale: 1.0/30.0,
-		size: 3637488,
-		zoom_start: -30,
+		url: "8ktn1ac8v2dxhui/painted_santa_kd.rsf",
+		size: 3265940,
 	},
 	"Igea": {
-		url: "v0xl67jgo4x5pxd/igea.rsf",
-		scale: 1.0/40.0,
-		size: 6448560,
-		zoom_start: -70,
+		url: "f7h4m35crhs4lnj/igea_kd.rsf",
+		size: 5805644,
 	},
 	"Man": {
-		url: "yfk9l8rweuk2m51/male.rsf",
-		scale: 1.0/30.0,
-		size: 7110624,
-		zoom_start: -40,
+		url: "bwbhyri4iexxrvm/man_kd.rsf",
+		size: 6345236,
 	},
 	"Sankt Johann": {
-		url: "7db4xlbhnl2muzv/Sankt_Johann_B2.rsf",
-		scale: 1.0/200.0,
-		size: 11576112,
-		zoom_start: -40,
+		url: "af12ofenxidqa67/Sankt_Johann_B2_kd.rsf",
+		size: 10568784,
 	},
 	"Warnock Engineering Building": {
-		url: "xxkw3lp3m3rnn9g/utah_cs_bldg.rsf",
-		scale: 1.0/10.0,
-		size: 13677168,
-		zoom_start: -50,
+		url: "cd7trfzevc1s9js/utah_cs_bldg_kd.rsf",
+		size: 12437888,
 	}
 };
 
 var loadPointCloud = function(dataset, onload) {
-	var url = "https://www.dl.dropboxusercontent.com/s/" + dataset.url + "?dl=1";
-	if (dataset.testing) {
-		url = dataset.url;
-	}
-	var req = new XMLHttpRequest();
 	var loadingProgressText = document.getElementById("loadingText");
 	var loadingProgressBar = document.getElementById("loadingProgressBar");
-
 	loadingProgressText.innerHTML = "Loading Dataset";
 	loadingProgressBar.setAttribute("style", "width: 0%");
 
-	req.open("GET", url, true);
-	req.responseType = "arraybuffer";
-	req.onprogress = function(evt) {
-		var percent = evt.loaded / dataset.size * 100;
-		loadingProgressBar.setAttribute("style", "width: " + percent.toFixed(2) + "%");
-	};
-	req.onerror = function(evt) {
+	var errFcn = function() {
 		loadingProgressText.innerHTML = "Error Loading Dataset";
 		loadingProgressBar.setAttribute("style", "width: 0%");
 	};
-	req.onload = function(evt) {
-		loadingProgressText.innerHTML = "Loaded Dataset";
-		loadingProgressBar.setAttribute("style", "width: 100%");
-		var dataBuffer = req.response;
-		if (dataBuffer) {
-			dataBuffer = new Uint8Array(dataBuffer);
-			onload(dataset, dataBuffer);
-		} else {
-			alert("Unable to load buffer properly from volume?");
-			console.log("no buffer?");
+
+	if (!dataset.file) {
+		var url = "https://www.dl.dropboxusercontent.com/s/" + dataset.url + "?dl=1";
+		if (dataset.testing) {
+			url = dataset.url;
 		}
-	};
-	req.send();
+		var req = new XMLHttpRequest();
+
+		req.open("GET", url, true);
+		req.responseType = "arraybuffer";
+		req.onprogress = function(evt) {
+			var percent = evt.loaded / dataset.size * 100;
+			loadingProgressBar.setAttribute("style", "width: " + percent.toFixed(2) + "%");
+		};
+		req.onerror = errFcn;
+		req.onload = function(evt) {
+			loadingProgressText.innerHTML = "Loaded Dataset";
+			loadingProgressBar.setAttribute("style", "width: 100%");
+			var buffer = req.response;
+			if (buffer) {
+				onload(dataset, buffer);
+			} else {
+				alert("Unable to load buffer properly from volume?");
+				console.log("no buffer?");
+			}
+		};
+		req.send();
+	} else {
+		var reader = new FileReader();
+		reader.onerror = errFcn;
+		reader.onload = function(evt) {
+			loadingProgressText.innerHTML = "Loaded Dataset";
+			loadingProgressBar.setAttribute("style", "width: 100%");
+			var buffer = reader.result;
+			if (buffer) {
+				onload(dataset, buffer);
+			} else {
+				alert("Unable to load buffer properly from volume?");
+				console.log("no buffer?");
+			}
+		};
+		reader.readAsArrayBuffer(dataset.file);
+	}
 }
 
 var selectPointCloud = function() {
 	var selection = document.getElementById("datasets").value;
 	history.replaceState(history.state, "#" + selection, "#" + selection);
+	var loadingInfo = document.getElementById("loadingInfo");
+	loadingInfo.style.display = "block";
 
 	loadPointCloud(pointClouds[selection], function(dataset, dataBuffer) {
-		gl.bindVertexArray(vao);
+		loadingInfo.style.display = "none";
+		var header = new Uint32Array(dataBuffer, 0, 4);
+		var bounds = new Float32Array(dataBuffer, 16, 6);
+
+		numSurfels = header[0];
+		surfelPositions = new Float32Array(dataBuffer, header[1], numSurfels * (sizeofSurfel / 4));
+		surfelColors = new Uint8Array(dataBuffer, header[1] + numSurfels * sizeofSurfel);
+
+		var numKdNodes = header[2];
+		var kdNodes = new Uint32Array(dataBuffer, 40, numKdNodes * 2);
+		var kdPrimIndices = new Uint32Array(dataBuffer, 40 + numKdNodes * sizeofKdNode, header[3]);
+		kdTree = new KdTree(numKdNodes, kdNodes, kdPrimIndices, bounds, surfelPositions);
+
 		var firstUpload = !splatAttribVbo;
 		if (firstUpload) {
-			splatAttribVbo = gl.createBuffer();
+			splatAttribVbo = [gl.createBuffer(), gl.createBuffer()]; 
 		}
-		gl.bindBuffer(gl.ARRAY_BUFFER, splatAttribVbo);
-		gl.bufferData(gl.ARRAY_BUFFER, dataBuffer, gl.STATIC_DRAW);
 
-		var sizeofSurfel = 48;
+		gl.bindVertexArray(vao);
+		gl.bindBuffer(gl.ARRAY_BUFFER, splatAttribVbo[0]);
+		gl.bufferData(gl.ARRAY_BUFFER, surfelPositions, gl.STATIC_DRAW);
+
 		gl.enableVertexAttribArray(1);
 		gl.vertexAttribPointer(1, 4, gl.FLOAT, false, sizeofSurfel, 0);
 		gl.vertexAttribDivisor(1, 1);
@@ -140,13 +172,14 @@ var selectPointCloud = function() {
 		gl.vertexAttribPointer(2, 4, gl.FLOAT, false, sizeofSurfel, 16);
 		gl.vertexAttribDivisor(2, 1);
 
+		gl.bindBuffer(gl.ARRAY_BUFFER, splatAttribVbo[1]);
+		gl.bufferData(gl.ARRAY_BUFFER, surfelColors, gl.DYNAMIC_DRAW);
 		gl.enableVertexAttribArray(3);
-		gl.vertexAttribPointer(3, 4, gl.FLOAT, false, sizeofSurfel, 32);
+		gl.vertexAttribPointer(3, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 		gl.vertexAttribDivisor(3, 1);
-
 		
-		document.getElementById("numSplats").innerHTML = dataBuffer.length / sizeofSurfel;
 		newPointCloudUpload = true;
+		document.getElementById("numSplats").innerHTML = numSurfels;
 		surfelBuffer = dataBuffer;
 		surfelDataset = dataset;
 
@@ -168,16 +201,20 @@ var selectPointCloud = function() {
 				// Reset the sampling rate and camera for new volumes
 				if (newPointCloudUpload) {
 					camera = new ArcballCamera(center, 100, [WIDTH, HEIGHT]);
-					camera.zoom(surfelDataset.zoom_start);
+					camera.zoom(-30);
 					// Pan the man down some
 					if (surfelDataset.url == pointClouds["Man"].url) {
 						camera.pan([0, -HEIGHT/2]);
 					}
 				}
+				if (colorsChanged) {
+					colorsChanged = false;
+					gl.bindBuffer(gl.ARRAY_BUFFER, splatAttribVbo[1]);
+					gl.bufferSubData(gl.ARRAY_BUFFER, 0, surfelColors);
+				}
 				projView = mat4.mul(projView, proj, camera.camera);
 
 				splatShader.use();
-				gl.uniform1f(splatShader.uniforms["scaling"], surfelDataset.scale);
 				gl.uniformMatrix4fv(splatShader.uniforms["proj_view"], false, projView);
 				gl.uniform3fv(splatShader.uniforms["eye_pos"], camera.eyePos());
 				gl.uniform1f(splatShader.uniforms["radius_scale"], splatRadiusSlider.value);
@@ -188,15 +225,13 @@ var selectPointCloud = function() {
 				gl.depthMask(true);
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 				gl.colorMask(false, false, false, false);
-				gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0,
-					splatVerts.length / 3, surfelBuffer.length / sizeofSurfel);
+				gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, splatVerts.length / 3, numSurfels);
 
 				// Render splat pass to accumulate splats for each pixel
 				gl.uniform1i(splatShader.uniforms["depth_prepass"], 0);
 				gl.colorMask(true, true, true, true);
 				gl.depthMask(false);
-				gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0,
-					splatVerts.length / 3, surfelBuffer.length / sizeofSurfel);
+				gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, splatVerts.length / 3, numSurfels);
 
 				// Render normalization full screen shader pass to produce final image
 				gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -206,6 +241,41 @@ var selectPointCloud = function() {
 				var eyeDir = camera.eyeDir();
 				gl.uniform3fv(normalizationPassShader.uniforms["eye_dir"], eyeDir);
 				gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+				// Draw the brush on top of the mesh, if we're brushing
+				if (brushingMode.checked && mousePos != null && kdTree != null) {
+					var screen = [(mousePos[0] / WIDTH) * 2.0 - 1, 1.0 - 2.0 * (mousePos[1] / HEIGHT)];
+					var screenP = vec4.set(vec4.create(), screen[0], screen[1], 1.0, 1.0);
+					var invProjView = mat4.invert(mat4.create(), projView);
+					var worldPos = vec4.transformMat4(vec4.create(), screenP, invProjView);
+					var dir = vec3.set(vec3.create(), worldPos[0], worldPos[1], worldPos[2]);
+					dir = vec3.normalize(dir, dir);
+
+					var orig = camera.eyePos();
+					orig = vec3.set(vec3.create(), orig[0], orig[1], orig[2]);
+
+					var hit = kdTree.intersect(orig, dir);
+					if (hit != null) {
+						hitP = hit[0];
+						hitPrim = hit[1];
+						var brushColor = hexToRGB(brushColorPicker.value);
+						gl.disable(gl.DEPTH_TEST);
+
+						brushShader.use();
+						gl.uniformMatrix4fv(brushShader.uniforms["proj_view"], false, projView);
+						gl.uniform3f(brushShader.uniforms["brush_pos"], hitP[0], hitP[1], hitP[2]);
+						gl.uniform3f(brushShader.uniforms["brush_normal"],
+							surfelPositions[8 * hitPrim + 4],
+							surfelPositions[8 * hitPrim + 5],
+							surfelPositions[8 * hitPrim + 6]);
+						gl.uniform3f(brushShader.uniforms["brush_color"],
+							brushColor[0] / 255.0, brushColor[1] / 255.0, brushColor[2] / 255.0);
+						gl.uniform1f(brushShader.uniforms["brush_radius"], brushRadiusSlider.value * 2);
+						gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, splatVerts.length / 3, 1);
+
+						gl.enable(gl.DEPTH_TEST);
+					}
+				}
 
 				// Wait for rendering to actually finish so we can time it
 				gl.finish();
@@ -224,8 +294,69 @@ var selectPointCloud = function() {
 	});
 }
 
-window.onload = function(){
+var hexToRGB = function(hex) {
+	var val = parseInt(hex.substr(1), 16);
+	var r = (val >> 16) & 255;
+	var g = (val >> 8) & 255;
+	var b = val & 255;
+	return [r, g, b];
+}
+
+var fillColor = function() {
+	var brushColor = hexToRGB(brushColorPicker.value);
+	for (var i = 0; i < numSurfels; ++i) {
+		surfelColors[4 * i] = brushColor[0];
+		surfelColors[4 * i + 1] = brushColor[1];
+		surfelColors[4 * i + 2] = brushColor[2];
+	}
+	colorsChanged = true;
+}
+
+var saveModel = function() {
+	var blob = new Blob([surfelBuffer], {type: "application/byte-stream"});
+	var name = surfelDataset.url;
+	var fnd = surfelDataset.url.indexOf("/");
+	if (fnd != -1) {
+		name = surfelDataset.url.substr(fnd + 1);
+	}
+	saveAs(blob, name);
+}
+
+var uploadModel = function(files) {
+	var file = files[0];
+	pointClouds["uploaded_" + file.name] = {
+		file: file,
+		url: file.name,
+		size: file.size,
+	}
+	var selector = document.getElementById("datasets");
+	var opt = document.createElement("option");
+	opt.value = "uploaded_" + file.name;
+	opt.innerHTML = "Uploaded: " + file.name;
+	selector.appendChild(opt);
+	selector.value = opt.value;
+	selectPointCloud();
+}
+
+window.onload = function() {
 	fillDatasetSelector();
+
+	brushRadiusSlider = document.getElementById("brushRadiusSlider");
+	brushColorPicker = document.getElementById("brushColorPicker");
+	brushingMode = document.getElementById("brushMode");
+
+	document.addEventListener("keydown", function(evt) {
+		if (evt.key == "Control") {
+			brushingMode.checked = true;
+		}
+	});
+
+	document.addEventListener("keyup", function(evt) {
+		if (evt.key == "Control") {
+			brushingMode.checked = false;
+			mousePos = null;
+		}
+	});
 
 	splatRadiusSlider = document.getElementById("splatRadiusSlider");
 	splatRadiusSlider.value = 2.5;
@@ -250,12 +381,52 @@ window.onload = function(){
 
 	camera = new ArcballCamera(center, 2, [WIDTH, HEIGHT]);
 
+	var paintSurface = function(mouse, evt) {
+		if (numSurfels == null || !brushingMode.checked) {
+			return;
+
+		}
+
+		var screen = [(mouse[0] / WIDTH) * 2.0 - 1, 1.0 - 2.0 * (mouse[1] / HEIGHT)];
+		var screenP = vec4.set(vec4.create(), screen[0], screen[1], 1.0, 1.0);
+		var invProjView = mat4.mul(mat4.create(), proj, camera.camera);
+		mat4.invert(invProjView, invProjView);
+		var worldPos = vec4.transformMat4(vec4.create(), screenP, invProjView);
+		var dir = vec3.set(vec3.create(), worldPos[0], worldPos[1], worldPos[2]);
+		dir = vec3.normalize(dir, dir);
+
+		var orig = camera.eyePos();
+		orig = vec3.set(vec3.create(), orig[0], orig[1], orig[2]);
+
+		var hit = kdTree.intersect(orig, dir);
+		if (hit != null) {
+			hitP = hit[0];
+			hitPrim = hit[1];
+			var brushColor = hexToRGB(brushColorPicker.value);
+			var brushedSplats = kdTree.queryNeighbors(hitP, brushRadiusSlider.value,
+				function(primID) {
+					surfelColors[4 * primID] = brushColor[0];
+					surfelColors[4 * primID + 1] = brushColor[1];
+					surfelColors[4 * primID + 2] = brushColor[2];
+			});
+			colorsChanged = true;
+			gl.bindBuffer(gl.ARRAY_BUFFER, splatAttribVbo[1]);
+			gl.bufferSubData(gl.ARRAY_BUFFER, 0, surfelColors);
+		}
+	};
+
 	// Register mouse and touch listeners
 	var controller = new Controller();
-	controller.mousemove = function(prev, cur, evt) {
-		if (evt.buttons == 1) {
-			camera.rotate(prev, cur);
+	controller.press = paintSurface;
 
+	controller.mousemove = function(prev, cur, evt) {
+		mousePos = cur;
+		if (evt.buttons == 1) {
+			if (!brushingMode.checked) {
+				camera.rotate(prev, cur);
+			} else {
+				paintSurface(cur, evt);
+			}
 		} else if (evt.buttons == 2) {
 			camera.pan([cur[0] - prev[0], prev[1] - cur[1]]);
 		}
@@ -283,6 +454,8 @@ window.onload = function(){
 	normalizationPassShader.use();
 	gl.uniform1i(normalizationPassShader.uniforms["splat_colors"], 0)
 	gl.uniform1i(normalizationPassShader.uniforms["splat_normals"], 1)
+
+	brushShader = new Shader(brushVertShader, brushFragShader);
 
 	// Setup the render targets for the splat rendering pass
 	splatRenderTargets = [gl.createTexture(), gl.createTexture(), gl.createTexture()];

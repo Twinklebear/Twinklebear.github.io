@@ -414,7 +414,9 @@
 		</div>
 
 		<div class="col-12">
-			<p>An elliptical weighted average (EWA) surface splatter, implemented in WebGL. This implements the papers: <em>Object Space EWA Surface Splatting: A Hardware Accelerated Approach to High Quality Point Rendering</em> by Ren, Pfister and Zwicker, and <em>High-Quality Point-Based Rendering on Modern GPUs</em> by Botsch and Kobbelt, with a few shortcuts. Similar to the volume raycaster, the renderer uses an arcball camera which supports mouse or touch input, and downloads datasets via XMLHttpRequest from Dropbox when selected. <a href="https://www.willusher.io/webgl-ewa-splatter/">Try it out online!</a></p>
+			<p>An elliptical weighted average (EWA) surface splatter renderer, implemented in WebGL, which also supports painting on the surfaces. <a href="https://www.willusher.io/webgl-ewa-splatter/">Try it out online!</a> This implements the papers: <em>Object Space EWA Surface Splatting: A Hardware Accelerated Approach to High Quality Point Rendering</em> by Ren, Pfister and Zwicker, and <em>High-Quality Point-Based Rendering on Modern GPUs</em> by Botsch and Kobbelt, with a few shortcuts. It also uses the deferred shading for splatting approach described in <em>High-quality surface splatting on today’s GPUs</em> by Botsch, Hornung, Zwicker and Kobbelt.
+The renderer uses an arcball camera which supports mouse or touch input, and downloads datasets via XMLHttpRequest from Dropbox when selected.
+Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</a> for some WebGL utilities, <a href="http://glmatrix.net/">glMatrix</a> for matrix/vector operations, and <a href="https://github.com/eligrey/FileSaver.js/">FileSaver.js</a> for saving models.</p>
 
 			<a aria-label="View Twinklebear/webgl-ewa-splatter on GitHub"
 				data-show-count="false"
