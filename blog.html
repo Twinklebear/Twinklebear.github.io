@@ -91,6 +91,56 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/webgl/2019/01/13/volume-rendering-with-webgl"><h3>Volume Rendering with WebGL</h3></a>
+		<b>13 Jan 2019</b>
+		
+<figure>
+	<img class="img-fluid" src="https://i.imgur.com/YqdyKCj.png" />
+	
+	<figcaption><i>Figure 1:
+	Example volume renderings, using the WebGL volume renderer described in this post.
+	Left: A simulation of the spatial probability distribution
+	of electrons in a high potential protein molecule.
+	Right: A CT scan of a Bonsai Tree.
+	Both datasets are from the
+	<a href="https://klacansky.com/open-scivis-datasets/">Open SciVis Datasets</a>
+	repository.
+	</i></figcaption>
+</figure>
+
+<p>In scientific visualization, volume rendering is widely used to visualize
+3D scalar fields. These scalar fields are often
+uniform grids of values, representing,
+for example, charge density around a molecule,
+an MRI or CT scan, air flow around an airplane, etc.
+Volume rendering is a conceptually straightforward method
+for turning such data into an image: by sampling the data
+along rays from the eye and assigning
+a color and transparency to each sample, we can
+produce useful and beautiful images of such scalar fields
+(see Figure 1).
+In a GPU renderer, these 3D scalar fields are stored
+as 3D textures; however, in WebGL1 3D textures were
+not supported, requiring additional hacks to emulate them
+for volume rendering.
+Recently, WebGL2 added support for 3D textures,
+allowing for an elegant and fast volume renderer to be
+implemented entirely in the browser.
+In this post we’ll discuss the mathematical background
+for volume rendering, and how it can be implemented in
+WebGL2 to create an interactive volume renderer
+entirely in the browser!
+Before we start, you can try out the volume renderer
+described in this post <a href="https://www.willusher.io/webgl-volume-raycaster/">online</a>.</p>
+
+
+
+		<a href="/webgl/2019/01/13/volume-rendering-with-webgl">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/latex/2018/07/10/comments-in-latex"><h3>Comments in LaTeX</h3></a>
 		<b>10 Jul 2018</b>
 		
@@ -156,30 +206,6 @@ machines spread across two clusters at my lab.</p>
 
 
 		<a href="/2015/12/16/rendering-an-animation-in-rust">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/2015/05/15/porting-a-ray-tracer-to-rust-part-3"><h3>Porting a Ray Tracer to Rust, part 3</h3></a>
-		<b>15 May 2015</b>
-		
-<p>It’s been a little while since my last post on tray_rust as I’ve been a busy with classes, but I’ve
-had a bit of free time to implement some extremely cool features. In this post we’ll look at porting over
-the path tracing code and adding a bounding volume hierarchy, along with adding support for triangle meshes and measured material data from the
-<a href="http://www.merl.com/brdf/">MERL BRDF Database</a> introduced by Matusik et al. in 2003 in
-<a href="http://dl.acm.org/citation.cfm?id=882343">A Data-Driven Reflectance Model</a>. In the process of implementing the BVH we’ll get a taste
-of Rust’s generic programming facilities and use them to write a flexible BVH capable of storing any type that can
-report its bounds. In the spirit of fogleman’s gorgeous <a href="https://github.com/fogleman/pt">Go Gopher in Go</a> we’ll wrap up
-by rendering the Rust logo in Rust using a model made by
-<a href="http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo">Nylithius on BlenderArtists</a>.</p>
-
-<p>If you’ve been following Rust’s development a bit you have probably noticed that the timing of this post is not a
-coincidence, since Rust 1.0.0 is being released <a href="http://blog.rust-lang.org/2015/05/15/Rust-1.0.html">today</a>!</p>
-
-
-
-		<a href="/2015/05/15/porting-a-ray-tracer-to-rust-part-3">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
 		</div>
 	</div>

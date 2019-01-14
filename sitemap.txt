@@ -37,6 +37,7 @@ www.willusher.io/publications/isp-jsfi
 www.willusher.io/publications/vtkm
 www.willusher.io/publications/pkd
 
+www.willusher.io/webgl/2019/01/13/volume-rendering-with-webgl
 www.willusher.io/latex/2018/07/10/comments-in-latex
 www.willusher.io/2016/01/02/distributed-rendering-with-rust-and-mio
 www.willusher.io/2015/12/16/rendering-an-animation-in-rust
