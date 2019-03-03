@@ -112,10 +112,10 @@ of <code class="highlighter-rouge">sdl2-config</code> with the <code class="high
 <span class="c"># Update these paths to match your installation
 # You may also need to update the linker option rpath, which sets where to look for
 # the SDL2 libraries at runtime to match your install
-</span><span class="nv">SDL_LIB</span> <span class="o">=</span> -L/usr/local/lib -lSDL2 -Wl,-rpath<span class="o">=</span>/usr/local/lib
-<span class="nv">SDL_INCLUDE</span> <span class="o">=</span> -I/usr/local/include
+</span><span class="nv">SDL_LIB</span> <span class="o">=</span> <span class="nt">-L</span>/usr/local/lib <span class="nt">-lSDL2</span> <span class="nt">-Wl</span>,-rpath<span class="o">=</span>/usr/local/lib
+<span class="nv">SDL_INCLUDE</span> <span class="o">=</span> <span class="nt">-I</span>/usr/local/include
 <span class="c"># You may need to change -std=c++11 to -std=c++0x if your compiler is a bit older
-</span><span class="nv">CXXFLAGS</span> <span class="o">=</span> -Wall -c -std<span class="o">=</span>c++11 <span class="nv">$(SDL_INCLUDE)</span>
+</span><span class="nv">CXXFLAGS</span> <span class="o">=</span> <span class="nt">-Wall</span> <span class="nt">-c</span> <span class="nt">-std</span><span class="o">=</span>c++11 <span class="nv">$(SDL_INCLUDE)</span>
 <span class="nv">LDFLAGS</span> <span class="o">=</span> <span class="nv">$(SDL_LIB)</span>
 <span class="nv">EXE</span> <span class="o">=</span> SDL_Lesson0
 
@@ -124,11 +124,11 @@ of <code class="highlighter-rouge">sdl2-config</code> with the <code class="high
 
 <span class="nl">$(EXE)</span><span class="o">:</span> <span class="nf">main.o
 </span>
-	<span class="nv">$(CXX)</span> <span class="nv">$&lt;</span> <span class="nv">$(LDFLAGS)</span> -o <span class="nv">$@</span>
+	<span class="nv">$(CXX)</span> <span class="nv">$&lt;</span> <span class="nv">$(LDFLAGS)</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
 <span class="nl">main.o</span><span class="o">:</span> <span class="nf">main.cpp
 </span>
-	<span class="nv">$(CXX)</span> <span class="nv">$(CXXFLAGS)</span> <span class="nv">$&lt;</span> -o <span class="nv">$@</span>
+	<span class="nv">$(CXX)</span> <span class="nv">$(CXXFLAGS)</span> <span class="nv">$&lt;</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
 <span class="nl">clean</span><span class="o">:</span><span class="nf">
 </span>

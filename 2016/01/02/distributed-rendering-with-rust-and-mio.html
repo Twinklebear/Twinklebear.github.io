@@ -365,7 +365,7 @@ with a <code class="highlighter-rouge">usize</code>, we’ll just use the worker
 </span>
     <span class="c">// we should just abort so we use unwrap here.
 </span>
-    <span class="k">let</span> <span class="n">addr</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">host</span><span class="p">[</span><span class="err">..</span><span class="p">],</span> <span class="nn">worker</span><span class="p">::</span><span class="n">PORT</span><span class="p">)</span><span class="nf">.to_socket_addrs</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">()</span><span class="nf">.next</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="k">let</span> <span class="n">addr</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">host</span><span class="p">[</span><span class="o">..</span><span class="p">],</span> <span class="nn">worker</span><span class="p">::</span><span class="n">PORT</span><span class="p">)</span><span class="nf">.to_socket_addrs</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">()</span><span class="nf">.next</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
     <span class="c">// Use mio's TcpStream to connect to the worker, if we succeed in starting the
 </span>
     <span class="c">// connection add this stream to the event loop
@@ -439,8 +439,8 @@ gotten so far so we know where to continue writing to the buffer and when we’v
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">WorkerBuffer</span> <span class="p">{</span>
     <span class="k">pub</span> <span class="n">buf</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">u8</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="k">pub</span> <span class="n">expected_size</span><span class="p">:</span> <span class="n">usize</span><span class="p">,</span>
-    <span class="k">pub</span> <span class="n">currently_read</span><span class="p">:</span> <span class="n">usize</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">expected_size</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">currently_read</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="k">impl</span> <span class="n">WorkerBuffer</span> <span class="p">{</span>
     <span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">WorkerBuffer</span> <span class="p">{</span>
@@ -459,13 +459,13 @@ begins with an 8 byte header specifying how many bytes it is when encoded with b
     <span class="k">pub</span> <span class="n">encoded_size</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span>
     <span class="c">// Which frame the worker is sending its results for
 </span>
-    <span class="k">pub</span> <span class="n">frame</span><span class="p">:</span> <span class="n">usize</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
     <span class="c">// Block size of the blocks being sent
 </span>
-    <span class="k">pub</span> <span class="n">block_size</span><span class="p">:</span> <span class="p">(</span><span class="n">usize</span><span class="p">,</span> <span class="n">usize</span><span class="p">),</span>
+    <span class="k">pub</span> <span class="n">block_size</span><span class="p">:</span> <span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="nb">usize</span><span class="p">),</span>
     <span class="c">// Starting locations of each block
 </span>
-    <span class="k">pub</span> <span class="n">blocks</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="p">(</span><span class="n">usize</span><span class="p">,</span> <span class="n">usize</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">blocks</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="nb">usize</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="c">// Sample data for each block, RGBW
 </span>
     <span class="k">pub</span> <span class="n">pixels</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">f32</span><span class="o">&gt;</span><span class="p">,</span>
@@ -478,7 +478,7 @@ and checks if it’s read the entire <code class="highlighter-rouge">Frame</code
 true if we’ve got all the data the worker is sending and can decode the frame. This code is best
 explained inline with comments, so please see the snippet for details on how this works.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">read_worker_buffer</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">read_worker_buffer</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">buf</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="py">.worker_buffers</span><span class="p">[</span><span class="n">worker</span><span class="p">];</span>
     <span class="c">// If we haven't read the size of data being sent, read that now
 </span>
@@ -488,7 +488,7 @@ explained inline with comments, so please see the snippet for details on how thi
         <span class="c">// make sure we have room to store 8 bytes
 </span>
         <span class="n">buf</span><span class="py">.buf</span><span class="nf">.extend</span><span class="p">(</span><span class="nn">iter</span><span class="p">::</span><span class="nf">repeat</span><span class="p">(</span><span class="mi">0u8</span><span class="p">)</span><span class="nf">.take</span><span class="p">(</span><span class="mi">8</span><span class="p">));</span>
-        <span class="k">match</span> <span class="k">self</span><span class="py">.connections</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="nf">.read</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="n">buf</span><span class="py">.currently_read</span><span class="err">..</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">match</span> <span class="k">self</span><span class="py">.connections</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="nf">.read</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="n">buf</span><span class="py">.currently_read</span><span class="o">..</span><span class="p">])</span> <span class="p">{</span>
             <span class="nf">Ok</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">+=</span> <span class="n">n</span><span class="p">,</span>
             <span class="nf">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"Error reading results from worker {}: {}"</span><span class="p">,</span> <span class="k">self</span><span class="py">.workers</span><span class="p">[</span><span class="n">worker</span><span class="p">],</span> <span class="n">e</span><span class="p">),</span>
         <span class="p">}</span>
@@ -497,18 +497,18 @@ explained inline with comments, so please see the snippet for details on how thi
         <span class="c">// Once we've read this we can decode the header and get the real size of the data.
 </span>
         <span class="k">if</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">==</span> <span class="n">buf</span><span class="py">.expected_size</span> <span class="p">{</span>
-            <span class="n">buf</span><span class="py">.expected_size</span> <span class="o">=</span> <span class="nf">decode</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="err">..</span><span class="p">])</span><span class="nf">.unwrap</span><span class="p">();</span>
+            <span class="n">buf</span><span class="py">.expected_size</span> <span class="o">=</span> <span class="nf">decode</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="o">..</span><span class="p">])</span><span class="nf">.unwrap</span><span class="p">();</span>
             <span class="c">// Extend the Vec so we've got room for the remaning bytes, minus 8 for the
 </span>
             <span class="c">// size header we just read
 </span>
-            <span class="n">buf</span><span class="py">.buf</span><span class="nf">.extend</span><span class="p">(</span><span class="nn">iter</span><span class="p">::</span><span class="nf">repeat</span><span class="p">(</span><span class="mi">0u8</span><span class="p">)</span><span class="nf">.take</span><span class="p">(</span><span class="n">buf</span><span class="py">.expected_size</span> <span class="o">-</span> <span class="mi">8</span><span class="p">));</span>
+            <span class="n">buf</span><span class="py">.buf</span><span class="nf">.extend</span><span class="p">(</span><span class="nn">iter</span><span class="p">::</span><span class="nf">repeat</span><span class="p">(</span><span class="mi">0u8</span><span class="p">)</span><span class="nf">.take</span><span class="p">(</span><span class="n">buf</span><span class="py">.expected_size</span> <span class="err">-</span> <span class="mi">8</span><span class="p">));</span>
         <span class="p">}</span>
     <span class="p">}</span>
     <span class="c">// If we've finished reading the size header we can now start reading the frame data
 </span>
     <span class="k">if</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">&gt;=</span> <span class="mi">8</span> <span class="p">{</span>
-        <span class="k">match</span> <span class="k">self</span><span class="py">.connections</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="nf">.read</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="n">buf</span><span class="py">.currently_read</span><span class="err">..</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">match</span> <span class="k">self</span><span class="py">.connections</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="nf">.read</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="n">buf</span><span class="py">.currently_read</span><span class="o">..</span><span class="p">])</span> <span class="p">{</span>
             <span class="nf">Ok</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">+=</span> <span class="n">n</span><span class="p">,</span>
             <span class="nf">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"Error reading results from worker {}: {}"</span><span class="p">,</span> <span class="k">self</span><span class="py">.workers</span><span class="p">[</span><span class="n">worker</span><span class="p">],</span> <span class="n">e</span><span class="p">),</span>
         <span class="p">}</span>
@@ -529,7 +529,7 @@ reading the next frame.</p>
 <span class="c">// decode and accumulate the frame
 </span>
 <span class="k">if</span> <span class="k">self</span><span class="nf">.read_worker_buffer</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="n">frame</span> <span class="o">=</span> <span class="nf">decode</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.worker_buffers</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="py">.buf</span><span class="p">[</span><span class="err">..</span><span class="p">])</span><span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="k">let</span> <span class="n">frame</span> <span class="o">=</span> <span class="nf">decode</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.worker_buffers</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="py">.buf</span><span class="p">[</span><span class="o">..</span><span class="p">])</span><span class="nf">.unwrap</span><span class="p">();</span>
     <span class="k">self</span><span class="nf">.save_results</span><span class="p">(</span><span class="n">frame</span><span class="p">);</span>
     <span class="c">// Clear the worker buffer for the next frame
 </span>
@@ -554,7 +554,7 @@ or it’s completed and has been saved out.</p>
     <span class="n">InProgress</span> <span class="p">{</span>
         <span class="c">// The number of workers who have reported results for this frame so far
 </span>
-        <span class="n">num_reporting</span><span class="p">:</span> <span class="n">usize</span><span class="p">,</span>
+        <span class="n">num_reporting</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
         <span class="c">// Where we're combining worker's results to form the final image
 </span>
         <span class="n">render</span><span class="p">:</span> <span class="n">Image</span><span class="p">,</span>
@@ -565,7 +565,7 @@ or it’s completed and has been saved out.</p>
 <span class="k">impl</span> <span class="n">DistributedFrame</span> <span class="p">{</span>
     <span class="c">// Start accumulating results for a frame, we begin with no workers reporting
 </span>
-    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">start</span><span class="p">(</span><span class="n">img_dim</span><span class="p">:</span> <span class="p">(</span><span class="n">usize</span><span class="p">,</span> <span class="n">usize</span><span class="p">))</span> <span class="k">-&gt;</span> <span class="n">DistributedFrame</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">start</span><span class="p">(</span><span class="n">img_dim</span><span class="p">:</span> <span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="nb">usize</span><span class="p">))</span> <span class="k">-&gt;</span> <span class="n">DistributedFrame</span> <span class="p">{</span>
         <span class="nn">DistributedFrame</span><span class="p">::</span><span class="n">InProgress</span> <span class="p">{</span> <span class="n">num_reporting</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">render</span><span class="p">:</span> <span class="nn">Image</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">img_dim</span><span class="p">)</span> <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
@@ -770,7 +770,7 @@ I’m unsure if this is something I’ll implement, in the presence of work stea
 complex. For example we wouldn’t want to re-assign blocks that were stolen from the worker before it crashed,
 but determining which blocks were stolen might be tough.</p>
 
-<h1 id="try-trayrust-yourself">Try tray_rust Yourself!</h1>
+<h1 id="try-tray_rust-yourself">Try tray_rust Yourself!</h1>
 
 <p>Recently I’ve put together a simple <a href="https://github.com/Twinklebear/tray_rust_blender">Blender plugin</a>
 for tray_rust which will let you export static and keyframe animated scenes from Blender to a tray_rust

@@ -129,12 +129,13 @@ You’ll also need to copy the SDL2_image, zlib and any image format dlls (such 
 and add it to your CMake modules directory (<code class="highlighter-rouge">cmake/</code>). You can then look up the new extension library using the same
 <code class="highlighter-rouge">find_package</code> method used to find SDL2 and include <code class="highlighter-rouge">SDL_image.h</code> in your source file.</p>
 
-<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake">find_package(SDL2_image REQUIRED)
-include_directories(${SDL2_IMAGE_INCLUDE_DIR})
-# Link this lesson against SDL2 and SDL2_image
-add_executable(Lesson3 src/main.cpp)
-target_link_libraries(Lesson3 ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})
-# Install target is the same as before</code></pre></figure>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">find_package</span><span class="p">(</span>SDL2_image REQUIRED<span class="p">)</span>
+<span class="nb">include_directories</span><span class="p">(</span><span class="si">${</span><span class="nv">SDL2_IMAGE_INCLUDE_DIR</span><span class="si">}</span><span class="p">)</span>
+<span class="c1"># Link this lesson against SDL2 and SDL2_image
+</span>
+<span class="nb">add_executable</span><span class="p">(</span>Lesson3 src/main.cpp<span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span>Lesson3 <span class="si">${</span><span class="nv">SDL2_LIBRARY</span><span class="si">}</span> <span class="si">${</span><span class="nv">SDL2_IMAGE_LIBRARY</span><span class="si">}</span><span class="p">)</span>
+<span class="c1"># Install target is the same as before</span></code></pre></figure>
 
 <p><br /></p>
 
@@ -159,7 +160,7 @@ we’ll need to define a tile size constant, which we’ll add below our window 
 
 <p><br /></p>
 
-<h2 id="loading-textures-with-sdlimage">Loading Textures with SDL_image</h2>
+<h2 id="loading-textures-with-sdl_image">Loading Textures with SDL_image</h2>
 <p>SDL_image lets us load multiple types of images along with allowing us to load them directly to an SDL_Texture
 with <code class="highlighter-rouge">IMG_LoadTexture</code>. With this function almost all of our <code class="highlighter-rouge">loadTexture</code> code can be replaced and now
 we call <code class="highlighter-rouge">IMG_LoadTexture</code> to load the texture, check for errors and return. 
@@ -173,7 +174,7 @@ We can still use <code class="highlighter-rouge">logSDLError</code> to log error
 */</span>
 <span class="n">SDL_Texture</span><span class="o">*</span> <span class="n">loadTexture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">){</span>
 	<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">texture</span> <span class="o">=</span> <span class="n">IMG_LoadTexture</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">file</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-	<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"LoadTexture"</span><span class="p">);</span>
 	<span class="p">}</span>
 	<span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
@@ -233,7 +234,7 @@ function will just get the width and height from the texture then call our new <
 
 <p><br /></p>
 
-<h2 id="initialize-sdlimage-optional">Initialize SDL_image (Optional)</h2>
+<h2 id="initialize-sdl_image-optional">Initialize SDL_image (Optional)</h2>
 <p>When loading an image for the first time SDL_image will automatically initialize the necessary image loading
 subsystem, however this will cause some delay in loading the image since SDL_image will have to perform
 its initialization setup first. If you’d like to initialize SDL_image earlier
@@ -276,7 +277,7 @@ your project structure.</p>
 <span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">background</span> <span class="o">=</span> <span class="n">loadTexture</span><span class="p">(</span><span class="n">resPath</span> <span class="o">+</span> <span class="s">"background.png"</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
 <span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="n">loadTexture</span><span class="p">(</span><span class="n">resPath</span> <span class="o">+</span> <span class="s">"image.png"</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
 <span class="c1">//Make sure they both loaded ok
-</span><span class="k">if</span> <span class="p">(</span><span class="n">background</span> <span class="o">==</span> <span class="n">nullptr</span> <span class="o">||</span> <span class="n">image</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+</span><span class="k">if</span> <span class="p">(</span><span class="n">background</span> <span class="o">==</span> <span class="nb">nullptr</span> <span class="o">||</span> <span class="n">image</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">cleanup</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">window</span><span class="p">);</span>
 	<span class="n">IMG_Quit</span><span class="p">();</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>

@@ -238,11 +238,11 @@ called a lot in our rendering loop. Using Rust’s traits we can meet all these 
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">BVH</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Boundable</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">geometry</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="err">...</span>
+    <span class="o">...</span>
 <span class="p">}</span>
 
 <span class="k">impl</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Boundable</span><span class="o">&gt;</span> <span class="n">BVH</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="err">...</span>
+    <span class="o">...</span>
 <span class="p">}</span></code></pre></figure>
 
 <p>Finally we can put together our intersection function for the BVH. This function will take a mutably borrowed ray and traverse it through the BVH,
@@ -257,13 +257,13 @@ the caller’s function and we take it by value the compiler can even inline cal
 may be returning a reference to objects in the BVH in R and the compiler needs to know these references will be valid after
 the call. This actually turned out to be a tough error to work through and the Rust IRC channel was very helpful.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="n">intersect</span><span class="o">&lt;</span><span class="err">'</span><span class="n">a</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span>
-        <span class="n">where</span> <span class="n">F</span><span class="p">:</span> <span class="nf">Fn</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">,</span> <span class="o">&amp;</span><span class="err">'</span><span class="n">a</span> <span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="n">intersect</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">'a</span> <span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span>
+        <span class="n">where</span> <span class="n">F</span><span class="p">:</span> <span class="nf">Fn</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span></code></pre></figure>
 
 <p>Now to traverse geometry in the BVH and intersect the instances or triangles within is as simple as passing a closure! For example,
-here’s the intersect call of a <code class="highlighter-rouge">BVH&lt;Instance&gt;</code> in scene.rs. Here our Fn takes a &amp;mut Ray and &amp;Instance and returns an Option<intersection>
+here’s the intersect call of a <code class="highlighter-rouge">BVH&lt;Instance&gt;</code> in scene.rs. Here our Fn takes a &amp;mut Ray and &amp;Instance and returns an Option<Intersection>
 which represents the closest intersection with an instance found. The BVH will then traverse the hierarchy and call our function
-on the geometry in each leaf node that our ray enters.</intersection></p>
+on the geometry in each leaf node that our ray enters.</Intersection></p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Intersection</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="k">self</span><span class="py">.bvh</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span> <span class="p">|</span><span class="n">r</span><span class="p">,</span> <span class="n">i</span><span class="p">|</span> <span class="n">i</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>

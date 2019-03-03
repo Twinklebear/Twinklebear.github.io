@@ -146,15 +146,15 @@ a valid pointer, if not we’ll get back a <code class="highlighter-rouge">nullp
 */</span>
 <span class="n">SDL_Texture</span><span class="o">*</span> <span class="n">loadTexture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">){</span>
 	<span class="c1">//Initialize to nullptr to avoid dangling pointer issues
-</span>	<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">texture</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+</span>	<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">texture</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
 	<span class="c1">//Load the image
 </span>	<span class="n">SDL_Surface</span> <span class="o">*</span><span class="n">loadedImage</span> <span class="o">=</span> <span class="n">SDL_LoadBMP</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
 	<span class="c1">//If the loading went ok, convert to texture and return the texture
-</span>	<span class="k">if</span> <span class="p">(</span><span class="n">loadedImage</span> <span class="o">!=</span> <span class="n">nullptr</span><span class="p">){</span>
+</span>	<span class="k">if</span> <span class="p">(</span><span class="n">loadedImage</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">texture</span> <span class="o">=</span> <span class="n">SDL_CreateTextureFromSurface</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">loadedImage</span><span class="p">);</span>
 		<span class="n">SDL_FreeSurface</span><span class="p">(</span><span class="n">loadedImage</span><span class="p">);</span>
 		<span class="c1">//Make sure converting went ok too
-</span>		<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+</span>		<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 			<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"CreateTextureFromSurface"</span><span class="p">);</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
@@ -215,14 +215,14 @@ and height.</p>
 
 <span class="n">SDL_Window</span> <span class="o">*</span><span class="n">window</span> <span class="o">=</span> <span class="n">SDL_CreateWindow</span><span class="p">(</span><span class="s">"Lesson 2"</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">SCREEN_WIDTH</span><span class="p">,</span>
 	<span class="n">SCREEN_HEIGHT</span><span class="p">,</span> <span class="n">SDL_WINDOW_SHOWN</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">window</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">window</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"CreateWindow"</span><span class="p">);</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
 	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">renderer</span> <span class="o">=</span> <span class="n">SDL_CreateRenderer</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 	<span class="n">SDL_RENDERER_ACCELERATED</span> <span class="o">|</span> <span class="n">SDL_RENDERER_PRESENTVSYNC</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">renderer</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">renderer</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"CreateRenderer"</span><span class="p">);</span>
 	<span class="n">cleanup</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
@@ -255,7 +255,7 @@ the filepaths to match your project structure.</p>
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">resPath</span> <span class="o">=</span> <span class="n">getResourcePath</span><span class="p">(</span><span class="s">"Lesson2"</span><span class="p">);</span>
 <span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">background</span> <span class="o">=</span> <span class="n">loadTexture</span><span class="p">(</span><span class="n">resPath</span> <span class="o">+</span> <span class="s">"background.bmp"</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
 <span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="n">loadTexture</span><span class="p">(</span><span class="n">resPath</span> <span class="o">+</span> <span class="s">"image.bmp"</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">background</span> <span class="o">==</span> <span class="n">nullptr</span> <span class="o">||</span> <span class="n">image</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">background</span> <span class="o">==</span> <span class="nb">nullptr</span> <span class="o">||</span> <span class="n">image</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">cleanup</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">window</span><span class="p">);</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
 	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>

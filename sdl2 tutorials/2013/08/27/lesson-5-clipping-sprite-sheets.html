@@ -141,7 +141,7 @@ renderTexture functions. The new base rendering function becomes very simple.</p
 *		default of nullptr draws the entire texture
 */</span>
 <span class="kt">void</span> <span class="nf">renderTexture</span><span class="p">(</span><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">,</span> <span class="n">SDL_Rect</span> <span class="n">dst</span><span class="p">,</span>
-	<span class="n">SDL_Rect</span> <span class="o">*</span><span class="n">clip</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">)</span>
+	<span class="n">SDL_Rect</span> <span class="o">*</span><span class="n">clip</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="n">SDL_RenderCopy</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">tex</span><span class="p">,</span> <span class="n">clip</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dst</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
@@ -169,12 +169,12 @@ our original renderTexture function, and should look pretty similar.</p>
 *		default of nullptr draws the entire texture
 */</span>
 <span class="kt">void</span> <span class="nf">renderTexture</span><span class="p">(</span><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span>
-	<span class="n">SDL_Rect</span> <span class="o">*</span><span class="n">clip</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">)</span>
+	<span class="n">SDL_Rect</span> <span class="o">*</span><span class="n">clip</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="n">SDL_Rect</span> <span class="n">dst</span><span class="p">;</span>
 	<span class="n">dst</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
 	<span class="n">dst</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
-	<span class="k">if</span> <span class="p">(</span><span class="n">clip</span> <span class="o">!=</span> <span class="n">nullptr</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">clip</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">dst</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">clip</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
 		<span class="n">dst</span><span class="p">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">clip</span><span class="o">-&gt;</span><span class="n">h</span><span class="p">;</span>
 	<span class="p">}</span>

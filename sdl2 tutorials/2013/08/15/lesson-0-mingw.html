@@ -109,11 +109,11 @@ match your compiler (32/64bit) and the location of your SDL folder. To use makef
 
 <figure class="highlight"><pre><code class="language-makefile" data-lang="makefile"><span class="nv">CXX</span> <span class="o">=</span> g++
 <span class="c"># Update these paths as necessary to match your installation
-</span><span class="nv">SDL_LIB</span> <span class="o">=</span> -LC:/SDL2-2.0.0-mingw/i686-w64-mingw32/lib -lSDL2main -lSDL2
-<span class="nv">SDL_INCLUDE</span> <span class="o">=</span> -IC:/SDL2-2.0.0-mingw/i686-w64-mingw32/include
+</span><span class="nv">SDL_LIB</span> <span class="o">=</span> <span class="nt">-LC</span>:/SDL2-2.0.0-mingw/i686-w64-mingw32/lib <span class="nt">-lSDL2main</span> <span class="nt">-lSDL2</span>
+<span class="nv">SDL_INCLUDE</span> <span class="o">=</span> <span class="nt">-IC</span>:/SDL2-2.0.0-mingw/i686-w64-mingw32/include
 <span class="c"># If your compiler is a bit older you may need to change -std=c++11 to -std=c++0x
-</span><span class="nv">CXXFLAGS</span> <span class="o">=</span> -Wall -c -std<span class="o">=</span>c++11 <span class="nv">$(SDL_INCLUDE)</span>
-<span class="nv">LDFLAGS</span> <span class="o">=</span> -lmingw32 -mwindows -mconsole <span class="nv">$(SDL_LIB)</span>
+</span><span class="nv">CXXFLAGS</span> <span class="o">=</span> <span class="nt">-Wall</span> <span class="nt">-c</span> <span class="nt">-std</span><span class="o">=</span>c++11 <span class="nv">$(SDL_INCLUDE)</span>
+<span class="nv">LDFLAGS</span> <span class="o">=</span> <span class="nt">-lmingw32</span> <span class="nt">-mwindows</span> <span class="nt">-mconsole</span> <span class="nv">$(SDL_LIB)</span>
 <span class="nv">EXE</span> <span class="o">=</span> SDL_Lesson0.exe
 
 <span class="nl">all</span><span class="o">:</span> <span class="nf">$(EXE)
@@ -121,11 +121,11 @@ match your compiler (32/64bit) and the location of your SDL folder. To use makef
 
 <span class="nl">$(EXE)</span><span class="o">:</span> <span class="nf">main.o
 </span>
-	<span class="nv">$(CXX)</span> <span class="nv">$&lt;</span> <span class="nv">$(LDFLAGS)</span> -o <span class="nv">$@</span>
+	<span class="nv">$(CXX)</span> <span class="nv">$&lt;</span> <span class="nv">$(LDFLAGS)</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
 <span class="nl">main.o</span><span class="o">:</span> <span class="nf">main.cpp
 </span>
-	<span class="nv">$(CXX)</span> <span class="nv">$(CXXFLAGS)</span> <span class="nv">$&lt;</span> -o <span class="nv">$@</span>
+	<span class="nv">$(CXX)</span> <span class="nv">$(CXXFLAGS)</span> <span class="nv">$&lt;</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
 <span class="nl">clean</span><span class="o">:</span><span class="nf">
 </span>

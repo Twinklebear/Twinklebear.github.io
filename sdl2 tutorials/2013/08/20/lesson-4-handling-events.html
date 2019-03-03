@@ -166,7 +166,7 @@ that we can receive and I strongly recommend reading up about the other types in
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//Our event structure
 </span><span class="n">SDL_Event</span> <span class="n">e</span><span class="p">;</span>
-<span class="n">bool</span> <span class="n">quit</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">quit</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">quit</span><span class="p">){</span>
 	<span class="k">while</span> <span class="p">(</span><span class="n">SDL_PollEvent</span><span class="p">(</span><span class="o">&amp;</span><span class="n">e</span><span class="p">)){</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDL_QUIT</span><span class="p">){</span>

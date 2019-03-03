@@ -145,20 +145,20 @@ for error logging.</p>
 <span class="p">{</span>
 	<span class="c1">//Open the font
 </span>	<span class="n">TTF_Font</span> <span class="o">*</span><span class="n">font</span> <span class="o">=</span> <span class="n">TTF_OpenFont</span><span class="p">(</span><span class="n">fontFile</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">fontSize</span><span class="p">);</span>
-	<span class="k">if</span> <span class="p">(</span><span class="n">font</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">font</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"TTF_OpenFont"</span><span class="p">);</span>
-		<span class="k">return</span> <span class="n">nullptr</span><span class="p">;</span>
+		<span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
 	<span class="p">}</span>	
 	<span class="c1">//We need to first render to a surface as that's what TTF_RenderText
 </span>	<span class="c1">//returns, then load that surface into a texture
 </span>	<span class="n">SDL_Surface</span> <span class="o">*</span><span class="n">surf</span> <span class="o">=</span> <span class="n">TTF_RenderText_Blended</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">message</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">color</span><span class="p">);</span>
-	<span class="k">if</span> <span class="p">(</span><span class="n">surf</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">surf</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">TTF_CloseFont</span><span class="p">(</span><span class="n">font</span><span class="p">);</span>
 		<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"TTF_RenderText"</span><span class="p">);</span>
-		<span class="k">return</span> <span class="n">nullptr</span><span class="p">;</span>
+		<span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
 	<span class="p">}</span>
 	<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">texture</span> <span class="o">=</span> <span class="n">SDL_CreateTextureFromSurface</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">surf</span><span class="p">);</span>
-	<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"CreateTexture"</span><span class="p">);</span>
 	<span class="p">}</span>
 	<span class="c1">//Clean up the surface and font
@@ -176,7 +176,7 @@ and/or render text frequently it would be a much better idea to keep the font op
 Our version of <code class="highlighter-rouge">renderText</code> for this more common use case would take a <code class="highlighter-rouge">TTF_Font*</code> instead of the font file name,
 and wouldn’t open or close the font, as the font’s lifetime would be managed separately.</p>
 
-<h2 id="initializing-sdlttf">Initializing SDL_ttf</h2>
+<h2 id="initializing-sdl_ttf">Initializing SDL_ttf</h2>
 <p>As with SDL we need to initialize the library before we can use it. This is done via
 <a href="http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_8.html#SEC8"><code class="highlighter-rouge">TTF_Init</code></a> which will return 0 on success. To
 initialize SDL_ttf we just call this function after initializing SDL and check the return value to make sure it went ok.</p>
@@ -201,7 +201,7 @@ message centered in the window.</p>
 </span><span class="n">SDL_Color</span> <span class="n">color</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span> <span class="p">};</span>
 <span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="n">renderText</span><span class="p">(</span><span class="s">"TTF fonts are cool!"</span><span class="p">,</span> <span class="n">resPath</span> <span class="o">+</span> <span class="s">"sample.ttf"</span><span class="p">,</span>
 	<span class="n">color</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">image</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">image</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">cleanup</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="n">window</span><span class="p">);</span>
 	<span class="n">TTF_Quit</span><span class="p">();</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>

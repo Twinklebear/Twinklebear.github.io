@@ -127,7 +127,7 @@ the x and y position to create it at, the window width and height and some <a hr
 wrong when creating the window. If an error does occur we need to clean up SDL before exiting the program.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">SDL_Window</span> <span class="o">*</span><span class="n">win</span> <span class="o">=</span> <span class="n">SDL_CreateWindow</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">,</span> <span class="n">SDL_WINDOW_SHOWN</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">win</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">win</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_CreateWindow Error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
 	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
@@ -144,7 +144,7 @@ Here we’re requesting a hardware accelerated renderer with vsync enabled. We�
 SDL before exiting the program.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span> <span class="o">=</span> <span class="n">SDL_CreateRenderer</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">SDL_RENDERER_ACCELERATED</span> <span class="o">|</span> <span class="n">SDL_RENDERER_PRESENTVSYNC</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">ren</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">ren</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">SDL_DestroyWindow</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_CreateRenderer Error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
@@ -163,7 +163,7 @@ an <code class="highlighter-rouge">SDL_Surface*</code> or <code class="highlight
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">imagePath</span> <span class="o">=</span> <span class="n">getResourcePath</span><span class="p">(</span><span class="s">"Lesson1"</span><span class="p">)</span> <span class="o">+</span> <span class="s">"hello.bmp"</span><span class="p">;</span>
 <span class="n">SDL_Surface</span> <span class="o">*</span><span class="n">bmp</span> <span class="o">=</span> <span class="n">SDL_LoadBMP</span><span class="p">(</span><span class="n">imagePath</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">bmp</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">bmp</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">SDL_DestroyRenderer</span><span class="p">(</span><span class="n">ren</span><span class="p">);</span>
 	<span class="n">SDL_DestroyWindow</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_LoadBMP Error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
@@ -179,7 +179,7 @@ surface at this point so we’ll free it now.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span> <span class="o">=</span> <span class="n">SDL_CreateTextureFromSurface</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">bmp</span><span class="p">);</span>
 <span class="n">SDL_FreeSurface</span><span class="p">(</span><span class="n">bmp</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">tex</span> <span class="o">==</span> <span class="n">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">tex</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">SDL_DestroyRenderer</span><span class="p">(</span><span class="n">ren</span><span class="p">);</span>
 	<span class="n">SDL_DestroyWindow</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_CreateTextureFromSurface Error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>

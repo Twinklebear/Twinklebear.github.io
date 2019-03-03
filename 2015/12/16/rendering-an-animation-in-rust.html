@@ -211,7 +211,7 @@ in the case that their type needed some special handling (e.g. spherical linear 
 </span>
 <span class="k">impl</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="nb">Mul</span><span class="o">&lt;</span><span class="nb">f32</span><span class="p">,</span> <span class="n">Output</span> <span class="o">=</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">+</span> <span class="nb">Add</span><span class="o">&lt;</span><span class="n">Output</span> <span class="o">=</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">+</span> <span class="nb">Copy</span><span class="o">&gt;</span> <span class="n">Interpolate</span> <span class="k">for</span> <span class="n">T</span> <span class="p">{</span>
     <span class="k">fn</span> <span class="nf">interpolate</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
-        <span class="o">*</span><span class="k">self</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="o">*</span><span class="n">other</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="o">*</span><span class="k">self</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="err">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="o">*</span><span class="n">other</span> <span class="o">*</span> <span class="n">t</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
@@ -223,7 +223,7 @@ templated on the type being interpolated there’s no virtual function overhead 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">BSpline</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Interpolate</span> <span class="o">+</span> <span class="nb">Copy</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="c">// Degree of the polynomial that we use to make the curve segments
 </span>
-    <span class="n">degree</span><span class="p">:</span> <span class="n">usize</span><span class="p">,</span>
+    <span class="n">degree</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
     <span class="c">// Control points for the curve
 </span>
     <span class="n">control_points</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>

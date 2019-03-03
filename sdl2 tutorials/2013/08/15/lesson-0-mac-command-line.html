@@ -105,9 +105,9 @@ downloads page and now have it available as a framework.</p>
 <h2 id="the-makefile">The Makefile</h2>
 
 <figure class="highlight"><pre><code class="language-makefile" data-lang="makefile"><span class="nv">CXX</span> <span class="o">=</span> clang++
-<span class="nv">SDL</span> <span class="o">=</span> -framework SDL2
+<span class="nv">SDL</span> <span class="o">=</span> <span class="nt">-framework</span> SDL2
 <span class="c"># If your compiler is a bit older you may need to change -std=c++11 to -std=c++0x
-</span><span class="nv">CXXFLAGS</span> <span class="o">=</span> -Wall -c -std<span class="o">=</span>c++11
+</span><span class="nv">CXXFLAGS</span> <span class="o">=</span> <span class="nt">-Wall</span> <span class="nt">-c</span> <span class="nt">-std</span><span class="o">=</span>c++11
 <span class="nv">LDFLAGS</span> <span class="o">=</span> <span class="nv">$(SDL)</span>
 <span class="nv">EXE</span> <span class="o">=</span> SDL_Lesson0
 
@@ -116,11 +116,11 @@ downloads page and now have it available as a framework.</p>
 
 <span class="nl">$(EXE)</span><span class="o">:</span> <span class="nf">main.o
 </span>
-	<span class="nv">$(CXX)</span> <span class="nv">$(LDFLAGS)</span> <span class="nv">$&lt;</span> -o <span class="nv">$@</span>
+	<span class="nv">$(CXX)</span> <span class="nv">$(LDFLAGS)</span> <span class="nv">$&lt;</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
 <span class="nl">main.o</span><span class="o">:</span> <span class="nf">main.cpp
 </span>
-	<span class="nv">$(CXX)</span> <span class="nv">$(CXXFLAGS)</span> <span class="nv">$&lt;</span> -o <span class="nv">$@</span>
+	<span class="nv">$(CXX)</span> <span class="nv">$(CXXFLAGS)</span> <span class="nv">$&lt;</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
 <span class="nl">clean</span><span class="o">:</span><span class="nf">
 </span>
