@@ -31,7 +31,12 @@ var blitImageShader = null;
 
 var shader = null;
 var volumeTexture = null;
+var volumeLoaded = false;
 var volumeVao = null;
+var volDims = null;
+var volValueRange = null;
+var volumeIsInt = 0;
+
 var colormapTex = null;
 var fileRegex = /.*\/(\w+)_(\d+)x(\d+)x(\d+)_(\w+)\.*/;
 var proj = null;
@@ -59,9 +64,12 @@ var colormaps = {
 	"Samsel Linear YGB 1211G": "colormaps/samsel-linear-ygb-1211g.png",
 };
 
-var loadVolume = function(file, onload) {
+var loadRAWVolume = function(file, onload) {
+	// Only one raw volume here anyway
+	document.getElementById("volumeName").innerHTML = "Volume: DIADEM NC Layer 1 Axons";
+
 	var m = file.match(fileRegex);
-	var volDims = [parseInt(m[2]), parseInt(m[3]), parseInt(m[4])];
+	volDims = [parseInt(m[2]), parseInt(m[3]), parseInt(m[4])];
 	
 	var url = "https://www.dl.dropboxusercontent.com/s/" + file + "?dl=1";
 	var req = new XMLHttpRequest();
@@ -84,160 +92,155 @@ var loadVolume = function(file, onload) {
 	};
 	req.onload = function(evt) {
 		loadingProgressText.innerHTML = "Loaded Volume";
-		loadingProgressBar.setAttribute("style", "width: 100%");
+		loadingProgressBar.setAttribute("style", "width: 101%");
 		var dataBuffer = req.response;
 		if (dataBuffer) {
 			dataBuffer = new Uint8Array(dataBuffer);
-			onload(file, dataBuffer);
+			var m = file.match(fileRegex);
+
+			volumeIsInt = 0;
+			volumeLoaded = false;
+			if (volumeTexture) {
+				gl.deleteTexture(volumeTexture);
+			}
+			volumeTexture = gl.createTexture();
+			gl.activeTexture(gl.TEXTURE0);
+			gl.bindTexture(gl.TEXTURE_3D, volumeTexture);
+			gl.texStorage3D(gl.TEXTURE_3D, 1, gl.R8, volDims[0], volDims[1], volDims[2]);
+			gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+			gl.texSubImage3D(gl.TEXTURE_3D, 0, 0, 0, 0,
+				volDims[0], volDims[1], volDims[2],
+				gl.RED, gl.UNSIGNED_BYTE, dataBuffer);
+
+			volValueRange = [0, 1];
+			volumeLoaded = true;
+			newVolumeUpload = true;
+			document.getElementById("tiffUploadBox").style = "display:block";
 		} else {
 			alert("Unable to load buffer properly from volume?");
-			console.log("no buffer?");
 		}
 	};
 	req.send();
 }
 
-var selectVolume = function() {
-	var selection = document.getElementById("volumeList").value;
-	history.replaceState(history.state, "#" + selection, "#" + selection);
+var renderLoop = function() {
+	// Save them some battery if they're not viewing the tab
+	if (document.hidden) {
+		return;
+	}
 
-	loadVolume(volumes[selection], function(file, dataBuffer) {
-		var m = file.match(fileRegex);
-		var volDims = [parseInt(m[2]), parseInt(m[3]), parseInt(m[4])];
+	// Reset the sampling rate and camera for new volumes
+	if (newVolumeUpload) {
+		camera = new ArcballCamera(center, 2, [WIDTH, HEIGHT]);
+		samplingRate = 1.0;
+		shader.use();
+		gl.uniform1f(shader.uniforms["dt_scale"], samplingRate);
+	}
 
-		var tex = gl.createTexture();
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_3D, tex);
-		gl.texStorage3D(gl.TEXTURE_3D, 1, gl.R8, volDims[0], volDims[1], volDims[2]);
-		gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-		gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-		gl.texSubImage3D(gl.TEXTURE_3D, 0, 0, 0, 0,
-			volDims[0], volDims[1], volDims[2],
-			gl.RED, gl.UNSIGNED_BYTE, dataBuffer);
+	var startTime = new Date();
 
-		var longestAxis = Math.max(volDims[0], Math.max(volDims[1], volDims[2]));
-		var volScale = [volDims[0] / longestAxis, volDims[1] / longestAxis,
-			volDims[2] / longestAxis];
+	projView = mat4.mul(projView, proj, camera.camera);
+	var eye = [camera.invCamera[12], camera.invCamera[13], camera.invCamera[14]];
 
+	var longestAxis = Math.max(volDims[0], Math.max(volDims[1], volDims[2]));
+	var volScale = [volDims[0] / longestAxis, volDims[1] / longestAxis,
+		volDims[2] / longestAxis];
+
+	// Render any SWC files we have
+	gl.bindFramebuffer(gl.FRAMEBUFFER, depthColorFbo);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	gl.enable(gl.DEPTH_TEST);
+	if (neurons.length > 0) {
+		swcShader.use();
+		gl.uniform3iv(swcShader.uniforms["volume_dims"], volDims);
+		gl.uniform3fv(swcShader.uniforms["volume_scale"], volScale);
+		gl.uniformMatrix4fv(swcShader.uniforms["proj_view"], false, projView);
+
+		for (var i = 0; i < neurons.length; ++i) {
+			var swc = neurons[i];
+			if (!swc.visible.checked) {
+				continue;
+			}
+
+			// Upload new SWC files
+			if (swc.vao == null) {
+				swc.vao = gl.createVertexArray();
+				gl.bindVertexArray(swc.vao);
+
+				swc.vbo = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, swc.vbo);
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(swc.points), gl.STATIC_DRAW);
+				gl.enableVertexAttribArray(0);
+				gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
+
+				swc.ebo = gl.createBuffer();
+				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, swc.ebo);
+				gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(swc.indices), gl.STATIC_DRAW);
+			}
+
+			var color = hexToRGB(swc.color.value);
+			gl.uniform3fv(swcShader.uniforms["swc_color"], color);
+
+			// Draw the SWC file
+			gl.bindVertexArray(swc.vao);
+			for (var j = 0; j < swc.branches.length; ++j) {
+				var b = swc.branches[j];
+				gl.drawElements(gl.LINE_STRIP, b["count"], gl.UNSIGNED_SHORT, 2 * b["start"]);
+			}
+		}
+	}
+
+	gl.bindFramebuffer(gl.FRAMEBUFFER, colorFbo);
+	if (volumeLoaded && showVolume.checked) {
+		gl.activeTexture(gl.TEXTURE4);
+		gl.bindTexture(gl.TEXTURE_2D, renderTargets[1]);
+		shader.use();
+		gl.uniform2fv(shader.uniforms["value_range"], volValueRange);
 		gl.uniform3iv(shader.uniforms["volume_dims"], volDims);
 		gl.uniform3fv(shader.uniforms["volume_scale"], volScale);
+		gl.uniformMatrix4fv(shader.uniforms["proj_view"], false, projView);
+		gl.uniformMatrix4fv(shader.uniforms["inv_proj"], false, invProj);
+		gl.uniform1i(shader.uniforms["volume_is_int"], volumeIsInt);
 
-		newVolumeUpload = true;
-		if (!volumeTexture) {
-			volumeTexture = tex;
-			setInterval(function() {
-				// Save them some battery if they're not viewing the tab
-				if (document.hidden) {
-					return;
-				}
+		var invView = mat4.invert(mat4.create(), camera.camera);
+		gl.uniformMatrix4fv(shader.uniforms["inv_view"], false, invView);
+		gl.uniform3fv(shader.uniforms["eye_pos"], eye);
+		gl.uniform1i(shader.uniforms["highlight_trace"], highlightTrace.checked);
+		gl.uniform1f(shader.uniforms["threshold"], volumeThreshold.value);
 
-				// Reset the sampling rate and camera for new volumes
-				if (newVolumeUpload) {
-					camera = new ArcballCamera(center, 2, [WIDTH, HEIGHT]);
-					samplingRate = 1.0;
-					gl.uniform1f(shader.uniforms["dt_scale"], samplingRate);
-				}
+		gl.bindVertexArray(volumeVao);
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, cubeStrip.length / 3);
+	}
 
-				var startTime = new Date();
+	// Seems like we can't blit the framebuffer b/c the default draw fbo might be
+	// using multiple samples?
+	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	gl.disable(gl.BLEND);
+	gl.disable(gl.CULL_FACE);
+	blitImageShader.use();
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	gl.enable(gl.CULL_FACE);
+	gl.enable(gl.BLEND);
 
-				projView = mat4.mul(projView, proj, camera.camera);
-				var eye = [camera.invCamera[12], camera.invCamera[13], camera.invCamera[14]];
+	// Wait for rendering to actually finish
+	gl.finish();
+	var endTime = new Date();
+	var renderTime = endTime - startTime;
+	var targetSamplingRate = renderTime / targetFrameTime;
 
-				// Render any SWC files we have
-				gl.bindFramebuffer(gl.FRAMEBUFFER, depthColorFbo);
-				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				gl.enable(gl.DEPTH_TEST);
-				if (neurons.length > 0) {
-					swcShader.use();
-					gl.uniform3iv(swcShader.uniforms["volume_dims"], volDims);
-					gl.uniform3fv(swcShader.uniforms["volume_scale"], volScale);
-					gl.uniformMatrix4fv(swcShader.uniforms["proj_view"], false, projView);
-					
-					for (var i = 0; i < neurons.length; ++i) {
-						var swc = neurons[i];
-						if (!swc.visible.checked) {
-							continue;
-						}
-
-						// Upload new SWC files
-						if (swc.vao == null) {
-							swc.vao = gl.createVertexArray();
-							gl.bindVertexArray(swc.vao);
-
-							swc.vbo = gl.createBuffer();
-							gl.bindBuffer(gl.ARRAY_BUFFER, swc.vbo);
-							gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(swc.points), gl.STATIC_DRAW);
-							gl.enableVertexAttribArray(0);
-							gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
-
-							swc.ebo = gl.createBuffer();
-							gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, swc.ebo);
-							gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(swc.indices), gl.STATIC_DRAW);
-						}
-
-						var color = hexToRGB(swc.color.value);
-						gl.uniform3fv(swcShader.uniforms["swc_color"], color);
-
-						// Draw the SWC file
-						gl.bindVertexArray(swc.vao);
-						for (var j = 0; j < swc.branches.length; ++j) {
-							var b = swc.branches[j];
-							gl.drawElements(gl.LINE_STRIP, b["count"], gl.UNSIGNED_SHORT, 2 * b["start"]);
-						}
-					}
-				}
-
-				gl.bindFramebuffer(gl.FRAMEBUFFER, colorFbo);
-				if (showVolume.checked) {
-					gl.activeTexture(gl.TEXTURE4);
-					gl.bindTexture(gl.TEXTURE_2D, renderTargets[1]);
-					shader.use();
-					gl.uniformMatrix4fv(shader.uniforms["proj_view"], false, projView);
-					gl.uniformMatrix4fv(shader.uniforms["inv_proj"], false, invProj);
-
-					var invView = mat4.invert(mat4.create(), camera.camera);
-					gl.uniformMatrix4fv(shader.uniforms["inv_view"], false, invView);
-					gl.uniform3fv(shader.uniforms["eye_pos"], eye);
-					gl.uniform1i(shader.uniforms["highlight_trace"], highlightTrace.checked);
-					gl.uniform1f(shader.uniforms["threshold"], volumeThreshold.value);
-
-					gl.bindVertexArray(volumeVao);
-					gl.drawArrays(gl.TRIANGLE_STRIP, 0, cubeStrip.length / 3);
-				}
-
-				// Seems like we can't blit the framebuffer b/c the default draw fbo might be
-				// using multiple samples?
-				gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				gl.disable(gl.BLEND);
-				gl.disable(gl.CULL_FACE);
-				blitImageShader.use();
-				gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-				gl.enable(gl.CULL_FACE);
-				gl.enable(gl.BLEND);
-
-				// Wait for rendering to actually finish
-				gl.finish();
-				var endTime = new Date();
-				var renderTime = endTime - startTime;
-				var targetSamplingRate = renderTime / targetFrameTime;
-
-				// If we're dropping frames, decrease the sampling rate
-				if (!newVolumeUpload && targetSamplingRate > samplingRate) {
-					samplingRate = 0.5 * samplingRate + 0.5 * targetSamplingRate;
-					shader.use();
-					gl.uniform1f(shader.uniforms["dt_scale"], samplingRate);
-				}
-				newVolumeUpload = false;
-				startTime = endTime;
-			}, targetFrameTime);
-		} else {
-			gl.deleteTexture(volumeTexture);
-			volumeTexture = tex;
-		}
-	});
+	// If we're dropping frames, decrease the sampling rate
+	// TODO: If we're faster than we planned, try increasing it a bit
+	if (!newVolumeUpload && targetSamplingRate > samplingRate) {
+		samplingRate = 0.8 * samplingRate + 0.2 * targetSamplingRate;
+		shader.use();
+		gl.uniform1f(shader.uniforms["dt_scale"], samplingRate);
+	}
+	newVolumeUpload = false;
+	startTime = endTime;
 }
 
 var selectColormap = function() {
@@ -252,7 +255,6 @@ var selectColormap = function() {
 }
 
 window.onload = function(){
-	fillVolumeSelector();
 	fillcolormapSelector();
 
 	highlightTrace = document.getElementById("highlightTrace");
@@ -315,6 +317,7 @@ window.onload = function(){
 	shader.use();
 
 	gl.uniform1i(shader.uniforms["volume"], 0);
+	gl.uniform1i(shader.uniforms["ivolume"], 5);
 	gl.uniform1i(shader.uniforms["colormap"], 1);
 	gl.uniform1i(shader.uniforms["depth"], 4);
 	gl.uniform1f(shader.uniforms["dt_scale"], 1.0);
@@ -386,7 +389,8 @@ window.onload = function(){
 		gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 180, 1,
 			gl.RGBA, gl.UNSIGNED_BYTE, colormapImage);
 
-		selectVolume();
+		loadRAWVolume(volumes["DIADEM NC Layer 1 Axons"]);
+		setInterval(renderLoop, targetFrameTime);
 	};
 	colormapImage.src = "colormaps/grayscale.png";
 }
@@ -399,16 +403,6 @@ var hexToRGB = function(hex) {
 	return [r / 255.0, g / 255.0, b / 255.0];
 }
 
-var fillVolumeSelector = function() {
-	var selector = document.getElementById("volumeList");
-	for (v in volumes) {
-		var opt = document.createElement("option");
-		opt.value = v;
-		opt.innerHTML = v;
-		selector.appendChild(opt);
-	}
-}
-
 var fillcolormapSelector = function() {
 	var selector = document.getElementById("colormapList");
 	for (p in colormaps) {
@@ -417,6 +411,210 @@ var fillcolormapSelector = function() {
 		opt.innerHTML = p;
 		selector.appendChild(opt);
 	}
+}
+
+// Additional functions to read single channel images extending tiff.js
+var TIFFNumberOfStrips = function(tiff) {
+	return Tiff.Module.ccall("TIFFNumberOfStrips", "number", ["number"], [tiff._tiffPtr]);
+}
+
+var TIFFStripSize = function(tiff) {
+	return Tiff.Module.ccall("TIFFStripSize", "number", ["number"], [tiff._tiffPtr]);
+}
+
+var TIFFReadEncodedStrip = function(tiff, strip, buf) {
+	return Tiff.Module.ccall("TIFFReadEncodedStrip", "number",
+		["number", "number", "number", "number"],
+		[tiff._tiffPtr, strip, buf, -1]);
+}
+
+var TIFFMalloc = function(bytes) {
+	return Tiff.Module.ccall("_TIFFmalloc", "number", ["number"], [bytes]);
+}
+
+var TIFFFree = function(buf) {
+	return Tiff.Module.ccall("_TIFFfree", "number", ["number"], [buf]);
+}
+
+const TIFF_SAMPLEFORMAT_UINT = 1;
+const TIFF_SAMPLEFORMAT_INT = 2;
+const TIFF_SAMPLEFORMAT_IEEEFP = 3;
+const TIFF_SAMPLEFORMAT_VOID = 4;
+const TIFF_SAMPLEFORMAT_COMPLEXINT = 5;
+const TIFF_SAMPLEFORMAT_COMPLEXIEEEFP = 6;
+
+var TIFFGLFormat = function(sampleFormat, bytesPerSample) {
+	if (sampleFormat === TIFF_SAMPLEFORMAT_UINT) {
+		if (bytesPerSample == 1) {
+			return gl.R8;
+		} else if (bytesPerSample == 2) {
+			return gl.R16UI
+		}
+	}
+	alert("Unsupported TIFF Format, only 8 & 16 bit uint are supported");
+}
+
+var uploadTIFF = function(files) {
+	document.getElementById("volumeName").innerHTML =
+		"Volume: Stack '" + files[0].name + "', " + files.length + " slices";
+
+	var numLoaded = 0;
+	var loadingProgressText = document.getElementById("loadingText");
+	var loadingProgressBar = document.getElementById("loadingProgressBar");
+	loadingProgressText.innerHTML = "Loading Volume";
+	loadingProgressBar.setAttribute("style", "width: 0%");
+
+	var loadFile = function(i) {
+		var file = files[i];
+		var reader = new FileReader();
+		reader.onerror = function() {
+			alert("Error reading TIFF file " + file.name);
+		};
+		reader.onprogress = function(evt) {
+			var percent = numLoaded / files.length * 100;
+			loadingProgressBar.setAttribute("style", "width: " + percent.toFixed(2) + "%");
+		};
+		reader.onload = function(evt) {
+			var buf = reader.result;
+			if (buf) {
+				var tiff = new Tiff({buffer: buf});
+				var bps = Tiff.Module.ccall("GetField", "number", ["number", "number"],
+					[tiff._tiffPtr, Tiff.Tag.BITSPERSAMPLE]);
+
+				// We only support single channel images
+				if (tiff.getField(Tiff.Tag.SAMPLESPERPIXEL) != 1) {
+					alert("Only single channel images are supported");
+					return;
+				}
+
+				var imgFormat = tiff.getField(Tiff.Tag.SAMPLEFORMAT);
+
+				var width = tiff.width();
+				var height = tiff.height();
+
+				var numStrips = TIFFNumberOfStrips(tiff);
+				var rowsPerStrip = tiff.getField(Tiff.Tag.ROWSPERSTRIP);
+
+				var bytesPerSample = tiff.getField(Tiff.Tag.BITSPERSAMPLE) / 8;
+				var img = new Uint8Array(width * height * bytesPerSample);
+				var sbuf = TIFFMalloc(TIFFStripSize(tiff));
+				for (var s = 0; s < numStrips; ++s) {
+					var read = TIFFReadEncodedStrip(tiff, s, sbuf);
+					if (read == -1) {
+						alert("Error reading encoded strip from TIFF file " + file);
+					}
+					var stripData = new Uint8Array(Tiff.Module.HEAPU8.buffer.slice(sbuf, sbuf + read));
+					img.set(stripData, s * rowsPerStrip * width * bytesPerSample);
+				}
+				TIFFFree(sbuf);
+				tiff.close();
+
+				// Flip the image in Y, since TIFF y axis is downwards
+				for (var y = 0; y < height / 2; ++y) {
+					for (var x = 0; x < width; ++x) {
+						for (var b = 0; b < bytesPerSample; ++b) {
+							var tmp = img[(y * width + x) * bytesPerSample];
+							img[(y * width + x) * bytesPerSample] = img[((height - y - 1) * width + x) * bytesPerSample];
+							img[((height - y - 1) * width + x) * bytesPerSample] = tmp;
+						}
+					}
+				}
+
+				var glFormat = TIFFGLFormat(imgFormat, bytesPerSample);
+				if (glFormat == gl.R8) {
+					gl.activeTexture(gl.TEXTURE0);
+					gl.bindTexture(gl.TEXTURE_3D, volumeTexture);
+					gl.texSubImage3D(gl.TEXTURE_3D, 0, 0, 0, i,
+						width, height, 1, gl.RED, gl.UNSIGNED_BYTE, img);
+				} else {
+					gl.activeTexture(gl.TEXTURE5);
+					gl.bindTexture(gl.TEXTURE_3D, volumeTexture);
+					var u16arr = new Uint16Array(img.buffer);
+					for (var j = 0; j < u16arr.length; ++j) {
+						volValueRange[0] = Math.min(volValueRange[0], u16arr[j]);
+						volValueRange[1] = Math.max(volValueRange[1], u16arr[j]);
+					}
+					gl.texSubImage3D(gl.TEXTURE_3D, 0, 0, 0, i,
+						width, height, 1, gl.RED_INTEGER, gl.UNSIGNED_SHORT, u16arr);
+				}
+
+				numLoaded +=1;
+				if (numLoaded == files.length) {
+					volumeLoaded = true;
+					newVolumeUpload = true;
+				}
+			} else {
+				alert("Unable to load file " + file.name);
+			}
+		};
+		reader.readAsArrayBuffer(file);
+	};
+
+	// First we need to load the first file to get the width, height and color format info
+	var reader = new FileReader();
+	reader.onerror = function() {
+		alert("Error reading TIFF file " + files[0].name);
+	};
+	reader.onload = function(evt) {
+		var buf = reader.result;
+		if (buf) {
+			var tiff = new Tiff({buffer: buf});
+
+			// We only support single channel images
+			if (tiff.getField(Tiff.Tag.SAMPLESPERPIXEL) != 1) {
+				alert("Only single channel images are supported");
+				return;
+			}
+
+			var imgFormat = tiff.getField(Tiff.Tag.SAMPLEFORMAT);
+
+			volDims = [tiff.width(), tiff.height(), files.length]
+
+			var numStrips = TIFFNumberOfStrips(tiff);
+			var rowsPerStrip = tiff.getField(Tiff.Tag.ROWSPERSTRIP);
+			var bytesPerSample = tiff.getField(Tiff.Tag.BITSPERSAMPLE) / 8;
+			tiff.close();
+
+			var glFormat = TIFFGLFormat(imgFormat, bytesPerSample);
+			volumeLoaded = false;
+			if (volumeTexture) {
+				gl.deleteTexture(volumeTexture);
+			}
+			if (glFormat == gl.R8) {
+				gl.activeTexture(gl.TEXTURE0);
+			} else {
+				gl.activeTexture(gl.TEXTURE5);
+			}
+			volumeTexture = gl.createTexture();
+			gl.bindTexture(gl.TEXTURE_3D, volumeTexture);
+			gl.texStorage3D(gl.TEXTURE_3D, 1, glFormat, volDims[0], volDims[1], volDims[2]);
+			gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+			if (glFormat == gl.R8) {
+				volumeIsInt = 0;
+				volValueRange[0] = 0;
+				volValueRange[1] = 1;
+				gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+				gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			} else {
+				volumeIsInt = 1;
+				// R16 is not normalized/texture filterable so we need to normalize it
+				volValueRange[0] = Infinity;
+				volValueRange[1] = -Infinity;
+				gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+				gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+			}
+			
+			for (var i = 0; i < files.length; ++i) {
+				loadFile(i);
+			}
+		} else {
+			alert("Unable to load file " + file.name);
+		}
+	};
+	reader.readAsArrayBuffer(files[0]);
 }
 
 // Load up the SWC files the user gave us
@@ -491,7 +689,6 @@ var loadReference = function() {
 		var url = "https://www.dl.dropboxusercontent.com/s/" + file + "?dl=1";
 		var req = new XMLHttpRequest();
 
-		console.log(url);
 		req.open("GET", url, true);
 		req.responseType = "text";
 		req.onerror = function(evt) {
@@ -499,7 +696,6 @@ var loadReference = function() {
 		};
 		req.onload = function(evt) {
 			var text = req.response;
-			console.log(req.responseURL);
 			if (text) {
 				var m = req.responseURL.match(swcFileRegex);
 				var swc = new SWCTree(text, m[1]);
