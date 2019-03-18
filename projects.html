@@ -113,6 +113,10 @@
 		</div>
 		
 		<div class="col-3">
+			<a href="/projects#WebGL Neuron Visualizer">WebGL Neuron Visualizer</a>
+		</div>
+		
+		<div class="col-3">
 			<a href="/projects#WebGL Volume Raycaster">WebGL Volume Raycaster</a>
 		</div>
 		
@@ -370,7 +374,7 @@
 		</div>
 
 		<div class="col-12">
-			<p>A scientific visualization style volume raycaster written using WebGL2 and Javascript. The renderer uses an arcball camera which supports mouse or touch input, and dynamically adjusts the sampling rate to maintain a smooth framerate, even on mobile devices. The volumes are downloaded via XMLHttpRequest from Dropbox when selected. I’ve also written a <a href="https://www.willusher.io/webgl/2019/01/13/volume-rendering-with-webgl">post</a> about volume rendering for scientific visualziation, and how I’ve implemented in WebGL to write this renderer. <a href="https://www.willusher.io/webgl-volume-raycaster/">Try it out online!</a></p>
+			<p>A scientific visualization style volume raycaster written using WebGL2 and Javascript. The renderer uses an arcball camera which supports mouse or touch input, and dynamically adjusts the sampling rate to maintain a smooth framerate, even on mobile devices. The volumes are downloaded via XMLHttpRequest from Dropbox when selected. I’ve also written a <a href="https://www.willusher.io/webgl/2019/01/13/volume-rendering-with-webgl">post</a> about volume rendering for scientific visualization, and how I’ve implemented in WebGL to write this renderer. <a href="https://www.willusher.io/webgl-volume-raycaster/">Try it out online!</a></p>
 
 			<a aria-label="View Twinklebear/webgl-volume-raycaster on GitHub"
 				data-show-count="false"
@@ -447,6 +451,50 @@ Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</
 			
 			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
 				<img class="img-fluid" src="https://i.imgur.com/UBjFKRa.png">
+			</div>
+			
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="WebGL Neuron Visualizer">
+		<div class="col-12">
+			<h2><b>WebGL Neuron Visualizer</b></h2>
+		</div>
+
+		<div class="col-12">
+			<p>A neuron visualization system using WebGL2. The renderer uses my WebGL2 volume renderer to display the RAW volume or imported TIFF stack and renders the imported neuron traces as lines within the volume. It can import single-channel 8bit and 16bit TIFF image stacks, and can import neuron traces in the SWC file format. The neurons are composited within the volume by rendering out the depth buffer and using this to terminate rays early in the volume when they hit the geometry, roughly similar to shadow mapping. A default demo dataset is included which renders a stitched version of the DIADEM NC Layer 1 Axons from the <a href="http://diademchallenge.org/">DIADEM Challenge</a>. <a href="https://www.willusher.io/webgl-neuron/">Try it out online!</a></p>
+
+			<a aria-label="View Twinklebear/webgl-neuron on GitHub"
+				data-show-count="false"
+				data-size="large"
+				data-icon="octicon-mark-github"
+				href="https://github.com/Twinklebear/webgl-neuron"
+				aria-label="View Twinklebear/webgl-neuron on GitHub"
+				class="github-button">Repo</a>
+			<a aria-label="Star Twinklebear/webgl-neuron on GitHub"
+				data-count-aria-label="# stargazers on GitHub"
+				data-show-count="true"
+				data-count-href="/Twinklebear/webgl-neuron/stargazers"
+				data-size="large"
+				data-icon="octicon-star"
+				href="https://github.com/Twinklebear/webgl-neuron"
+				aria-label="Star Twinklebear/webgl-neuron on GitHub"
+				class="github-button">Star</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/SOBDrRD.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/lwlbLCw.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/bXMjno0.png">
 			</div>
 			
 		</div>
