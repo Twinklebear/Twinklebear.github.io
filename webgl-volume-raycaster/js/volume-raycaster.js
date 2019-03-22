@@ -15,6 +15,9 @@ var cubeStrip = [
 	0, 0, 0
 ];
 
+var takeScreenShot = false;
+var canvas = null;
+
 var gl = null;
 var shader = null;
 var volumeTexture = null;
@@ -29,7 +32,10 @@ var targetFrameTime = 32;
 var samplingRate = 1.0;
 var WIDTH = 640;
 var HEIGHT = 480;
+
+const defaultEye = vec3.set(vec3.create(), 0.5, 0.5, 1.5);
 const center = vec3.set(vec3.create(), 0.5, 0.5, 0.5);
+const up = vec3.set(vec3.create(), 0.0, 1.0, 0.0);
 
 var volumes = {
 	"Fuel": "7d87jcsh0qodk78/fuel_64x64x64_uint8.raw",
@@ -126,12 +132,12 @@ var selectVolume = function() {
 					return;
 				}
 				var startTime = new Date();
-				gl.clearColor(0.0, 0.0, 0.0, 0.0);
+				gl.clearColor(1.0, 1.0, 1.0, 1.0);
 				gl.clear(gl.COLOR_BUFFER_BIT);
 
 				// Reset the sampling rate and camera for new volumes
 				if (newVolumeUpload) {
-					camera = new ArcballCamera(center, 2, [WIDTH, HEIGHT]);
+					camera = new ArcballCamera(defaultEye, center, up, 2, [WIDTH, HEIGHT]);
 					samplingRate = 1.0;
 					gl.uniform1f(shader.uniforms["dt_scale"], samplingRate);
 				}
@@ -147,6 +153,11 @@ var selectVolume = function() {
 				var endTime = new Date();
 				var renderTime = endTime - startTime;
 				var targetSamplingRate = renderTime / targetFrameTime;
+
+				if (takeScreenShot) {
+					takeScreenShot = false;
+					canvas.toBlob(function(b) { saveAs(b, "screen.png"); }, "image/png");
+				}
 
 				// If we're dropping frames, decrease the sampling rate
 				if (!newVolumeUpload && targetSamplingRate > samplingRate) {
@@ -178,7 +189,7 @@ window.onload = function(){
 	fillVolumeSelector();
 	fillcolormapSelector();
 
-	var canvas = document.getElementById("glcanvas");
+	canvas = document.getElementById("glcanvas");
 	gl = canvas.getContext("webgl2");
 	if (!gl) {
 		alert("Unable to initialize WebGL2. Your browser may not support it");
@@ -190,7 +201,7 @@ window.onload = function(){
 	proj = mat4.perspective(mat4.create(), 60 * Math.PI / 180.0,
 		WIDTH / HEIGHT, 0.1, 100);
 
-	camera = new ArcballCamera(center, 2, [WIDTH, HEIGHT]);
+	camera = new ArcballCamera(defaultEye, center, up, 2, [WIDTH, HEIGHT]);
 	projView = mat4.create();
 
 	// Register mouse and touch listeners
@@ -206,6 +217,12 @@ window.onload = function(){
 	controller.wheel = function(amt) { camera.zoom(amt); };
 	controller.pinch = controller.wheel;
 	controller.twoFingerDrag = function(drag) { camera.pan(drag); };
+
+	document.addEventListener("keydown", function(evt) {
+		if (evt.key == "p") {
+			takeScreenShot = true;
+		}
+	});
 
 	controller.registerForCanvas(canvas);
 
