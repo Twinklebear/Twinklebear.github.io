@@ -165,27 +165,14 @@
 			<h2><b>tray_rust</b></h2>
 		</div>
 
-		<div class="col-12 col-sm-6">
+		<div class="col-12 col-sm-6 mb-2">
 			<p>tray_rust is a toy physically based ray tracer built off of the techniques discussed in <a href="http://pbrt.org/">Physically Based Rendering</a>. It began life as a port of <a href="https://github.com/Twinklebear/tray">tray</a> to <a href="http://www.rust-lang.org">Rust</a> to check out the language. The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon), and various physically based material models (including measured data from the <a href="http://www.merl.com/brdf/">MERL BRDF Database</a>) along with rigid body animation and image-parallel distributed rendering. More details on rendering performance and other features can be found in the readme <a href="https://github.com/Twinklebear/tray_rust/blob/master/README.md">README</a>.</p>
 
 <p>tray_rust can also render animations, and is the renderer I’ve used for the University of Utah’s <a href="http://graphics.cs.utah.edu/trc/">teapot rendering competition</a> after the first year. The video is my submission from 2016. To simplify making scenes for tray_rust I also wrote a <a href="https://github.com/Twinklebear/tray_rust_blender">Blender plugin</a> which I used to make the animation shown, and is the easiest way to create scenes for the renderer though some features are still needed.</p>
 
-			<a aria-label="View Twinklebear/tray_rust on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/tray_rust"
-				aria-label="View Twinklebear/tray_rust on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/tray_rust on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/tray_rust/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/tray_rust"
-				aria-label="Star Twinklebear/tray_rust on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/tray_rust">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/tray_rust.svg">
+			</a>
 		</div>
 		<div class="col-12 col-sm-6 mt-2 mt-sm-0 mx-auto">
 			
@@ -223,27 +210,14 @@
 			<h2><b>ispc-rs</b></h2>
 		</div>
 
-	<div class="col-12 col-sm-8">
+		<div class="col-12 col-sm-8">
 			<p>ispc-rs is a small Rust library meant to be used as a compile time dependency for Rust projects to allow them to build and link with code written in <a href="https://ispc.github.io/">ISPC</a>. ISPC is a language that makes it possible to take advantage the CPU’s vector units without needing hand-written intrinsics. Through this library it’s easy to write very fast vector code in ISPC and link it with (still quick!) higher-level code in Rust to get a good balance of high performance and ease of use.</p>
 
 <p>The images shown above are from the <a href="https://github.com/Twinklebear/ispc-rs/tree/master/examples/rt">rt example</a> (top row) which demonstrates a simple fast and parallel path tracer and the <a href="https://github.com/Twinklebear/ispc-rs/tree/master/examples/ddvol">ddvol example</a> (bottom row) which is a scientific visualization volume renderer. Both use higher level Rust code to read in a scene file and setup the objects in the scene and then call into ISPC to render in parallel, making good use of the CPU’s SIMD units.</p>
 
-			<a aria-label="View Twinklebear/ispc-rs on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/ispc-rs"
-				aria-label="View Twinklebear/ispc-rs on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/ispc-rs on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/ispc-rs/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/ispc-rs"
-				aria-label="Star Twinklebear/ispc-rs on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/ispc-rs">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/ispc-rs.svg">
+			</a>
 		</div>
 		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
 			<img class="img-fluid" src="http://i.imgur.com/ACzYqAm.png">
@@ -257,29 +231,16 @@
 			<h2><b>μPacket</b></h2>
 		</div>
 
-	<div class="col-12 col-sm-8">
+		<div class="col-12 col-sm-8">
 			<p>μPacket is an extremely simple packet based ray tracer that uses the AVX/AVX2 instruction set to trace eight rays at once through the scene. Currently it only supports spheres and planes with Lambertian BRDFs illuminated by a single point light. Illumination is computed with Whitted ray tracing, although recursion only goes as far as computing shadows since there are no reflective or transmissive materials at the moment.</p>
 
 <p>Ray packets were first introduced by <a href="http://www.sci.utah.edu/~wald/Publications/2001/CRT/CRT.pdf">Wald et al., 2001</a> and are now widely used in high performance ray tracers like <a href="http://embree.github.io/">Embree</a> due to the performance gain achieved with good packet (and now stream) tracing techniques.</p>
 
 <p>Current plans for this project are to switch to trace ray streams and add support for a path tracing integrator for higher quality images.</p>
 
-			<a aria-label="View Twinklebear/micro-packet on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/micro-packet"
-				aria-label="View Twinklebear/micro-packet on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/micro-packet on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/micro-packet/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/micro-packet"
-				aria-label="Star Twinklebear/micro-packet on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/micro-packet">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/micro-packet.svg">
+			</a>
 		</div>
 		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
 			<img class="img-fluid" src="http://i.imgur.com/WcM6Rcl.png">
@@ -296,22 +257,9 @@
 		<div class="col-12">
 			<p>topo-vol is a topology guided volume exploration and analysis tool, written for the final project in <a href="http://www.sci.utah.edu/~beiwang/teaching/cs6170-spring-2017/schedule.html">Bei Wang’s Computational Topology Course</a>. It is built on top of the <a href="https://topology-tool-kit.github.io/">Topology ToolKit</a> and <a href="http://www.vtk.org/">VTK</a> for computation, and uses <a href="https://github.com/ocornut/imgui">ImGui</a> and a custom rendering system for the UI and volume rendering. By computing relevant topological structures (e.g. the contour tree) and classifying segments of data corresponding to the branches in this tree we can avoid occlusion issues with global transfer functions and create more useful, detailed renderings. See the <a href="https://github.com/Twinklebear/topo-vol/blob/master/report.pdf">report</a> for more details.</p>
 
-			<a aria-label="View Twinklebear/topo-vol on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/topo-vol"
-				aria-label="View Twinklebear/topo-vol on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/topo-vol on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/topo-vol/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/topo-vol"
-				aria-label="Star Twinklebear/topo-vol on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/topo-vol">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/topo-vol.svg">
+			</a>
 		</div>
 		<div class="col-12 mt-3 mx-auto">
 			
@@ -332,22 +280,9 @@
 
 <p>This is the project tray_rust is based on and as such may not see much more development since most of my ray tracing work is now going on there.</p>
 
-			<a aria-label="View Twinklebear/tray on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/tray"
-				aria-label="View Twinklebear/tray on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/tray on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/tray/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/tray"
-				aria-label="Star Twinklebear/tray on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/tray">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/tray.svg">
+			</a>
 		</div>
 		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
 			
@@ -376,22 +311,9 @@
 		<div class="col-12">
 			<p>A scientific visualization style volume raycaster written using WebGL2 and Javascript. The renderer uses an arcball camera which supports mouse or touch input, and dynamically adjusts the sampling rate to maintain a smooth framerate, even on mobile devices. The volumes are downloaded via XMLHttpRequest from Dropbox when selected. I’ve also written a <a href="https://www.willusher.io/webgl/2019/01/13/volume-rendering-with-webgl">post</a> about volume rendering for scientific visualization, and how I’ve implemented in WebGL to write this renderer. <a href="https://www.willusher.io/webgl-volume-raycaster/">Try it out online!</a></p>
 
-			<a aria-label="View Twinklebear/webgl-volume-raycaster on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/webgl-volume-raycaster"
-				aria-label="View Twinklebear/webgl-volume-raycaster on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/webgl-volume-raycaster on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/webgl-volume-raycaster/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/webgl-volume-raycaster"
-				aria-label="Star Twinklebear/webgl-volume-raycaster on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/webgl-volume-raycaster">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/webgl-volume-raycaster.svg">
+			</a>
 		</div>
 		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
 			
@@ -422,22 +344,9 @@
 The renderer uses an arcball camera which supports mouse or touch input, and downloads datasets via XMLHttpRequest from Dropbox when selected.
 Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</a> for some WebGL utilities, <a href="http://glmatrix.net/">glMatrix</a> for matrix/vector operations, and <a href="https://github.com/eligrey/FileSaver.js/">FileSaver.js</a> for saving models.</p>
 
-			<a aria-label="View Twinklebear/webgl-ewa-splatter on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/webgl-ewa-splatter"
-				aria-label="View Twinklebear/webgl-ewa-splatter on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/webgl-ewa-splatter on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/webgl-ewa-splatter/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/webgl-ewa-splatter"
-				aria-label="Star Twinklebear/webgl-ewa-splatter on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/webgl-ewa-splatter">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/webgl-ewa-splatter.svg">
+			</a>
 		</div>
 		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
 			
@@ -466,22 +375,9 @@ Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</
 		<div class="col-12">
 			<p>A neuron visualization system using WebGL2. The renderer uses my WebGL2 volume renderer to display the RAW volume or imported TIFF stack and renders the imported neuron traces as lines within the volume. It can import single-channel 8bit and 16bit TIFF image stacks, and can import neuron traces in the SWC file format. The neurons are composited within the volume by rendering out the depth buffer and using this to terminate rays early in the volume when they hit the geometry, roughly similar to shadow mapping. A default demo dataset is included which renders a stitched version of the DIADEM NC Layer 1 Axons from the <a href="http://diademchallenge.org/">DIADEM Challenge</a>. <a href="https://www.willusher.io/webgl-neuron/">Try it out online!</a></p>
 
-			<a aria-label="View Twinklebear/webgl-neuron on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/webgl-neuron"
-				aria-label="View Twinklebear/webgl-neuron on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/webgl-neuron on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/webgl-neuron/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/webgl-neuron"
-				aria-label="Star Twinklebear/webgl-neuron on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/webgl-neuron">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/webgl-neuron.svg">
+			</a>
 		</div>
 		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
 			
@@ -507,25 +403,12 @@ Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</
 			<h2><b>Charm++ Experiments</b></h2>
 		</div>
 
-	<div class="col-12 col-sm-8">
+		<div class="col-12 col-sm-8">
 			<p>A set of different test applications to learn and try out <a href="http://charmplusplus.org/">Charm++</a> for distributed rendering applications. The image shown is from the <a href="https://github.com/Twinklebear/Charm-experiments/tree/master/pathtracer">pathtracing</a> test application, which renders distributed data with global illumination by routing rays around the network. There’s also a basic image-parallel and data-parallel scientific visualization <a href="https://github.com/Twinklebear/Charm-experiments/tree/master/scivis">volume renderer</a>.</p>
 
-			<a aria-label="View Twinklebear/Charm-experiments on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/Charm-experiments"
-				aria-label="View Twinklebear/Charm-experiments on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/Charm-experiments on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/Charm-experiments/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/Charm-experiments"
-				aria-label="Star Twinklebear/Charm-experiments on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/Charm-experiments">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/Charm-experiments.svg">
+			</a>
 		</div>
 		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
 			<img class="img-fluid" src="https://i.imgur.com/V47bIPs.png">
@@ -539,26 +422,13 @@ Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</
 			<h2><b>bspline</b></h2>
 		</div>
 
-	<div class="col-12 col-sm-8">
+		<div class="col-12 col-sm-8">
 			<p>A Rust library for computing B-spline interpolating curves on generic control points. bspline can be used to evaluate B-splines of varying orders on any type that can be linearly interpolated, ranging from floats, positions, RGB colors to transformation matrices and so on.
 The bspline logo (above) was generated using this library with a cubic B-spline in 2D for the positioning of the curve and a quadratic B-spline in RGB space to color it.</p>
 
-			<a aria-label="View Twinklebear/bspline on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/bspline"
-				aria-label="View Twinklebear/bspline on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/bspline on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/bspline/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/bspline"
-				aria-label="Star Twinklebear/bspline on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/bspline">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/bspline.svg">
+			</a>
 		</div>
 		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
 			<img class="img-fluid" src="http://i.imgur.com/JvVlYKf.png">
@@ -575,22 +445,9 @@ The bspline logo (above) was generated using this library with a cubic B-spline 
 		<div class="col-12">
 			<p>A viewer for B-spline curves and surfaces, initially written for a course on computer aided geometric design. You can edit and create 2D B-splines and tweak some properties of loaded 3D curves and surfaces. Useful for learning about and playing with B-splines.</p>
 
-			<a aria-label="View Twinklebear/spline-viewer on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/spline-viewer"
-				aria-label="View Twinklebear/spline-viewer on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/spline-viewer on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/spline-viewer/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/spline-viewer"
-				aria-label="Star Twinklebear/spline-viewer on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/spline-viewer">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/spline-viewer.svg">
+			</a>
 		</div>
 		<div class="col-12 mt-3 mx-auto">
 			
@@ -606,27 +463,14 @@ The bspline logo (above) was generated using this library with a cubic B-spline 
 			<h2><b>tobj</b></h2>
 		</div>
 
-	<div class="col-12 col-sm-8">
+		<div class="col-12 col-sm-8">
 			<p>tobj is a tiny OBJ loader in Rust that draws inspiration for its API and design from Syoyo’s excellent library, <a href="https://github.com/syoyo/tinyobjloader">tinyobjloader</a>. The crate aims to be a simple, fast and lightweight option for loading OBJ and MTL files for easy integration with realtime and offline renderers, or really any other project where you need to load OBJ files!</p>
 
 <p>The image shown is from a demo viewer written to test tobj named <a href="https://github.com/Twinklebear/tobj_viewer">tobj_viewer</a> displaying the <a href="http://graphics.cs.williams.edu/data/meshes.xml">Rungholt</a> model. The model can be found on Morgan McGuire’s meshes page and was originally built by kescha.</p>
 
-			<a aria-label="View Twinklebear/tobj on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/tobj"
-				aria-label="View Twinklebear/tobj on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/tobj on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/tobj/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/tobj"
-				aria-label="Star Twinklebear/tobj on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/tobj">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/tobj.svg">
+			</a>
 		</div>
 		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
 			<img class="img-fluid" src="http://i.imgur.com/wImyNG4.png">
@@ -645,22 +489,9 @@ The bspline logo (above) was generated using this library with a cubic B-spline 
 
 <p>The image shows just the ambient occlusion value for a view of the Crytek Sponza scene.</p>
 
-			<a aria-label="View Twinklebear/ssao on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/ssao"
-				aria-label="View Twinklebear/ssao on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/ssao on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/ssao/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/ssao"
-				aria-label="Star Twinklebear/ssao on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/ssao">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/ssao.svg">
+			</a>
 		</div>
 		<div class="row mt-0 mt-sm-3 justify-content-center text-center col-12 mx-auto">
 			
@@ -689,22 +520,9 @@ The bspline logo (above) was generated using this library with a cubic B-spline 
 		<div class="col-12">
 			<p>lfwatch is a lightweight file watcher for Windows, Linux and OS X. It monitors some desired directories for file changes and calls the callback set for the directory with information about the file change event. This was written to do hot reloading of GLSL shaders but could be useful for some other applications.</p>
 
-			<a aria-label="View Twinklebear/lfwatch on GitHub"
-				data-show-count="false"
-				data-size="large"
-				data-icon="octicon-mark-github"
-				href="https://github.com/Twinklebear/lfwatch"
-				aria-label="View Twinklebear/lfwatch on GitHub"
-				class="github-button">Repo</a>
-			<a aria-label="Star Twinklebear/lfwatch on GitHub"
-				data-count-aria-label="# stargazers on GitHub"
-				data-show-count="true"
-				data-count-href="/Twinklebear/lfwatch/stargazers"
-				data-size="large"
-				data-icon="octicon-star"
-				href="https://github.com/Twinklebear/lfwatch"
-				aria-label="Star Twinklebear/lfwatch on GitHub"
-				class="github-button">Star</a>
+			<a href="https://github.com/Twinklebear/lfwatch">
+				<img class="img-fluid" style="display:inline" src="https://gh-card.dev/repos/Twinklebear/lfwatch.svg">
+			</a>
 		</div>
 
 	</div>
