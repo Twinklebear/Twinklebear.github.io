@@ -28,6 +28,7 @@ www.willusher.io/courses/cs6620/tr15
 www.willusher.io/courses/cs6620/tr16
 www.willusher.io/publications/dfb
 www.willusher.io/publications/tubes
+www.willusher.io/publications/rtx-space-skipping
 www.willusher.io/publications/rtx-points
 www.willusher.io/publications/icpp19
 www.willusher.io/publications/amr-iso
