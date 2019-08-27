@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
+		<atom:link href="https://www.willusher.io//rss.xml" rel="self" type="application/rss+xml" />
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
-		<link>https://www.willusher.io</link>
-		<lastBuildDate>Tue, 27 Aug 2019 15:11:53 -0600</lastBuildDate>
-		<pubDate>Tue, 27 Aug 2019 15:11:53 -0600</pubDate>
+		<link>https://www.willusher.io/</link>
+		<lastBuildDate>Tue, 27 Aug 2019 17:10:48 -0600</lastBuildDate>
+		<pubDate>Tue, 27 Aug 2019 17:10:48 -0600</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -52,6 +53,7 @@ described in this post &lt;a href=&quot;https://www.willusher.io/webgl-volume-ra
 
 </description>
 			<link>https://www.willusher.io//webgl/2019/01/13/volume-rendering-with-webgl</link>
+			<guid>https://www.willusher.io//webgl/2019/01/13/volume-rendering-with-webgl</guid>
 			<pubDate>Sun, 13 Jan 2019 00:00:00 -0700</pubDate>
 		</item>
 		
@@ -76,6 +78,7 @@ the text. This is easy to do with the
 
 </description>
 			<link>https://www.willusher.io//latex/2018/07/10/comments-in-latex</link>
+			<guid>https://www.willusher.io//latex/2018/07/10/comments-in-latex</guid>
 			<pubDate>Tue, 10 Jul 2018 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -99,6 +102,7 @@ if you want to try out the distributed rendering yourself.&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//2016/01/02/distributed-rendering-with-rust-and-mio</link>
+			<guid>https://www.willusher.io//2016/01/02/distributed-rendering-with-rust-and-mio</guid>
 			<pubDate>Sat, 02 Jan 2016 00:00:00 -0700</pubDate>
 		</item>
 		
@@ -113,6 +117,7 @@ machines spread across two clusters at my lab.&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//2015/12/16/rendering-an-animation-in-rust</link>
+			<guid>https://www.willusher.io//2015/12/16/rendering-an-animation-in-rust</guid>
 			<pubDate>Wed, 16 Dec 2015 00:00:00 -0700</pubDate>
 		</item>
 		
@@ -134,6 +139,7 @@ coincidence, since Rust 1.0.0 is being released &lt;a href=&quot;http://blog.rus
 
 </description>
 			<link>https://www.willusher.io//2015/05/15/porting-a-ray-tracer-to-rust-part-3</link>
+			<guid>https://www.willusher.io//2015/05/15/porting-a-ray-tracer-to-rust-part-3</guid>
 			<pubDate>Fri, 15 May 2015 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -158,6 +164,7 @@ fast approaching.&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//2015/01/30/porting-a-ray-tracer-to-rust-part-2</link>
+			<guid>https://www.willusher.io//2015/01/30/porting-a-ray-tracer-to-rust-part-2</guid>
 			<pubDate>Fri, 30 Jan 2015 00:00:00 -0700</pubDate>
 		</item>
 		
@@ -181,6 +188,7 @@ sphere and save the image.&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//2014/12/30/porting-a-ray-tracer-to-rust-part-1</link>
+			<guid>https://www.willusher.io//2014/12/30/porting-a-ray-tracer-to-rust-part-1</guid>
 			<pubDate>Tue, 30 Dec 2014 00:00:00 -0700</pubDate>
 		</item>
 		
@@ -198,6 +206,7 @@ and so on.&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2014/08/01/postscript-1-easy-cleanup</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2014/08/01/postscript-1-easy-cleanup</guid>
 			<pubDate>Fri, 01 Aug 2014 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -212,6 +221,7 @@ be sure to grab that before getting started.&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2014/06/16/postscript-0-properly-finding-resource-paths</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2014/06/16/postscript-0-properly-finding-resource-paths</guid>
 			<pubDate>Mon, 16 Jun 2014 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -225,6 +235,7 @@ available on &lt;a href=&quot;http://www.cmake.org/cmake/help/cmake_tutorial.htm
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2014/03/06/lesson-0-cmake</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2014/03/06/lesson-0-cmake</guid>
 			<pubDate>Thu, 06 Mar 2014 00:00:00 -0700</pubDate>
 		</item>
 		
@@ -239,6 +250,7 @@ take a peek at the &lt;a href=&quot;http://www.libsdl.org/projects/SDL_ttf/docs/
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/12/18/lesson-6-true-type-fonts-with-sdl_ttf</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/12/18/lesson-6-true-type-fonts-with-sdl_ttf</guid>
 			<pubDate>Wed, 18 Dec 2013 00:00:00 -0700</pubDate>
 		</item>
 		
@@ -252,6 +264,7 @@ each time but rather just which subsection of the texture.&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/27/lesson-5-clipping-sprite-sheets</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/27/lesson-5-clipping-sprite-sheets</guid>
 			<pubDate>Tue, 27 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -266,6 +279,7 @@ The code for this lesson is built off of the lesson 3 code, if you need that cod
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/20/lesson-4-handling-events</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/20/lesson-4-handling-events</guid>
 			<pubDate>Tue, 20 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -282,6 +296,7 @@ and &lt;a href=&quot;http://www.libsdl.org/projects/SDL_mixer/&quot;&gt;SDL_mixe
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/18/lesson-3-sdl-extension-libraries</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/18/lesson-3-sdl-extension-libraries</guid>
 			<pubDate>Sun, 18 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -294,6 +309,7 @@ SDL error logger and learn how images are positioned and scaled when rendering w
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-2-dont-put-everything-in-main</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-2-dont-put-everything-in-main</guid>
 			<pubDate>Sat, 17 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -306,6 +322,7 @@ project and let’s get started!&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-1-hello-world</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-1-hello-world</guid>
 			<pubDate>Sat, 17 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -318,6 +335,7 @@ load our template and get to work. First we need a new empty C++ project.&lt;/p&
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-visual-studio</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-visual-studio</guid>
 			<pubDate>Thu, 15 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -329,6 +347,7 @@ them from the &lt;a href=&quot;http://www.libsdl.org/download-2.0.php&quot;&gt;S
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-setting-up-sdl</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-setting-up-sdl</guid>
 			<pubDate>Thu, 15 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -346,6 +365,7 @@ match your compiler (32/64bit) and the location of your SDL folder. To use makef
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mingw</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mingw</guid>
 			<pubDate>Thu, 15 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -360,6 +380,7 @@ downloads page and now have it available as a framework.&lt;/p&gt;
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mac-command-line</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mac-command-line</guid>
 			<pubDate>Thu, 15 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -378,6 +399,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 
 </description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line</link>
+			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line</guid>
 			<pubDate>Thu, 15 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
@@ -396,7 +418,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				Image- and data-parallel rendering across multiple nodes on high-performance computing systems is widely used in visualization to provide higher frame rates, support large data sets, and render data in situ. Specifically for in situ visualization, reducing bottlenecks incurred by the visualization and compositing is of key concern to reduce the overall simulation runtime. Moreover, prior algorithms have been designed to support either image- or data-parallel rendering and impose restrictions on the data distribution, requiring different implementations for each configuration. In this paper, we introduce the Distributed FrameBuffer, an asynchronous image-processing framework for multi-node rendering. We demonstrate that our approach achieves performance superior to the state of the art for common use cases, while providing the flexibility to support a wide range of parallel rendering algorithms and data distributions. By building on this framework, we extend the open-source ray tracing library OSPRay with a data-distributed API, enabling its use in data-distributed and in situ visualization applications.
 			</description>
 			<link>https://www.willusher.io/publications/dfb</link>
-			<pubDate>2019-07-10 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/dfb</guid>
+			<pubDate>Wed, 10 Jul 2019 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -413,7 +436,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				We present a general high-performance technique for ray tracing generalized tube primitives. Our technique efficiently supports tube primitives with fixed and varying radii, general acyclic graph structures with bifurcations, and correct transparency with interior surface removal. Such tube primitives are widely used in scientific visualization to represent diffusion tensor imaging tractographies, neuron morphologies, and scalar or vector fields of 3D flow. We implement our approach within the OSPRay ray tracing framework, and evaluate it on a range of interactive visualization use cases of fixed- and varying-radius streamlines, pathlines, complex neuron morphologies, and brain tractographies. Our proposed approach provides interactive, high-quality rendering, with low memory overhead.
 			</description>
 			<link>https://www.willusher.io/publications/tubes</link>
-			<pubDate>2019-07-10 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/tubes</guid>
+			<pubDate>Wed, 10 Jul 2019 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -430,7 +454,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				Sample based ray marching is an effective method for direct volume rendering of unstructured meshes. However, sampling such meshes remains expensive, and strategies to reduce the number of samples taken have received relatively little attention. In this paper, we introduce a method for rendering unstructured meshes using a combination of a coarse spatial acceleration structure and hardware-accelerated ray tracing. Our approach enables efficient empty space skipping and adaptive sampling of unstructured meshes, and outperforms a reference ray marcher by up to 7×
 			</description>
 			<link>https://www.willusher.io/publications/rtx-space-skipping</link>
-			<pubDate>2019-10-20 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/rtx-space-skipping</guid>
+			<pubDate>Sun, 20 Oct 2019 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -447,7 +472,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				We explore a first proof-of-concept example of creatively using the Turing generation&#39;s hardware ray tracing cores to solve a problem other than classical ray tracing, specifically, point location in unstructured tetrahedral meshes. Starting with a CUDA reference method, we describe and evaluate three different approaches to reformulate this problem in a manner that allows it to be mapped to these new hardware units. Each variant replaces the simpler problem of point queries with the more complex one of ray queries; however, thanks to hardware acceleration, these approaches are actually faster than the reference method.
 			</description>
 			<link>https://www.willusher.io/publications/rtx-points</link>
-			<pubDate>2019-07-08 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/rtx-points</guid>
+			<pubDate>Mon, 08 Jul 2019 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -464,7 +490,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				Particle data are used across a diverse set of large scale simulations, for example, in cosmology, molecular dynamics and combustion. At scale these applications generate tremendous amounts of data, which is often saved in an unstructured format that does not preserve spatial locality; resulting in poor read performance for post-processing analysis and visualization tasks, which typically make spatial queries. In this work, we explore some of the challenges of large scale particle data management, and introduce new techniques to perform scalable, spatially-aware write and read operations. We propose an adaptive aggregation technique to improve the performance of data aggregation, for both uniform and non-uniform particle distributions. Furthermore, we enable efficient read operations by employing a level of detail re-ordering and a multi-resolution layout. Finally, we demonstrate the scalability of our techniques with experiments on large scale simulation workloads up to 256K cores on two different leadership supercomputers, Mira and Theta.
 			</description>
 			<link>https://www.willusher.io/publications/icpp19</link>
-			<pubDate>2019-08-05 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/icpp19</guid>
+			<pubDate>Mon, 05 Aug 2019 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -481,7 +508,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				Adaptive mesh refinement (AMR) is a key technology for large-scale simulations that allows for adaptively changing the simulation mesh resolution, resulting in significant computational and storage savings. However, visualizing such AMR data poses a significant challenge due to the difficulties introduced by the hierarchical representation when reconstructing continuous field values. In this paper, we detail a comprehensive solution for interactive isosurface rendering of block-structured AMR data. We contribute a novel reconstruction strategy&amp;mdash;the &lt;i&gt;octant&lt;/i&gt; method&amp;mdash;which is continuous, adaptive and simple to implement. Furthermore, we present a generally applicable hybrid implicit isosurface ray-tracing method, which provides better rendering quality and performance than the built-in sampling-based approach in OSPRay. Finally, we integrate our &lt;i&gt;octant&lt;/i&gt; method and hybrid isosurface geometry into OSPRay as a module, providing the ability to create high-quality interactive visualizations combining volume and isosurface representations of BS-AMR data. We evaluate the rendering performance, memory consumption and quality of our method on two gigascale block-structured AMR datasets.
 			</description>
 			<link>https://www.willusher.io/publications/amr-iso</link>
-			<pubDate>2019-01-01 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/amr-iso</guid>
+			<pubDate>Mon, 31 Dec 2018 23:00:00 -0700</pubDate>
 		</item>
 		
 		<item>
@@ -498,7 +526,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				Tracing neurons in large-scale microscopy data is crucial to establishing a wiring diagram of the brain, which is needed to understand how neural circuits in the brain process information and generate behavior. Automatic techniques often fail for large and complex datasets, and connectomics researchers may spend weeks or months manually tracing neurons using 2D image stacks. We present a design study of a new virtual reality (VR) system, developed in collaboration with trained neuroanatomists, to trace neurons in microscope scans of the visual cortex of primates. We hypothesize that using consumer-grade VR technology to interact with neurons directly in 3D will help neuroscientists better resolve complex cases and enable them to trace neurons faster and with less physical and mental strain. We discuss both the design process and technical challenges in developing an interactive system to navigate and manipulate terabyte-sized image volumes in VR. Using a number of different datasets, we demonstrate that, compared to widely used commercial software, consumer-grade VR presents a promising alternative for scientists.
 			</description>
 			<link>https://www.willusher.io/publications/vrnt</link>
-			<pubDate>2018-01-01 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/vrnt</guid>
+			<pubDate>Sun, 31 Dec 2017 23:00:00 -0700</pubDate>
 		</item>
 		
 		<item>
@@ -515,7 +544,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				As simulations grow in scale, the need for in situ analysis methods to handle the large data produced grows correspondingly. One desirable approach to in situ visualization is in transit visualization. By decoupling the simulation and visualization code, in transit approaches alleviate common difficulties with regard to the scalability of the analysis, ease of integration, usability, and impact on the simulation. We present libIS, a lightweight, flexible library which lowers the bar for using in transit visualization. Our library works on the concept of abstract regions of space containing data, which are transferred from the simulation to the visualization clients upon request, using a client-server model. We also provide a SENSEI analysis adaptor, which allows for transparent deployment of in transit visualization. We demonstrate the flexibility of our approach on batch analysis and interactive visualization use cases on different HPC resources.
 			</description>
 			<link>https://www.willusher.io/publications/libis-isav18</link>
-			<pubDate>2018-11-12 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/libis-isav18</guid>
+			<pubDate>Sun, 11 Nov 2018 23:00:00 -0700</pubDate>
 		</item>
 		
 		<item>
@@ -532,7 +562,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				Large-scale simulations can easily produce data in excess of what can be efficiently visualized using production visualization software, making it challenging for scientists to gain insights from the results of these simulations. This trend is expected to grow with exascale. To meet this challenge, and run on the highly parallel hardware being deployed on HPC system, rendering systems in production visualization software must be redesigned to perform well at these new scales and levels of parallelism. In this work, we present VisIt-OSPRay, a high-performance, scalable, hybrid-parallel rendering system in VisIt, using OSPRay and IceT, coupled with PIDX for scalable I/O. We examine the scalability and memory efficiency of this system and investigate further areas for improvement to prepare VisIt for upcoming exascale workloads.
 			</description>
 			<link>https://www.willusher.io/publications/visit-ospray</link>
-			<pubDate>2018-06-04 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/visit-ospray</guid>
+			<pubDate>Mon, 04 Jun 2018 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -542,7 +573,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				The need to scale next-generation industrial engineering problems to the largest computational platforms presents unique challenges. This paper focuses on data management related problems faced by the Uintah simulation framework at a production scale of 260K processes. Uintah provides a highly scalable asynchronous many-task runtime system, which in this work is used for the modeling of a 1000 megawatt electric (MWe) ultra-supercritical (USC) coal boiler. At 260K processes, we faced both parallel I/O and visualization related challenges, e.g., the default file-per-process I/O approach of Uintah did not scale on Mira. In this paper we present a simple to implement, restructuring based parallel I/O technique. We impose a restructuring step that alters the distribution of data among processes. The goal is to distribute the dataset such that each process holds a larger chunk of data, which is then written to a file independently. This approach finds a middle ground between two of the most common parallel I/O schemes–file per process I/O and shared file I/O–in terms of both the total number of generated files, and the extent of communication involved during the data aggregation phase. To address scalability issues when visualizing the simulation data, we developed a lightweight renderer using OSPRay, which allows scientists to visualize the data interactively at high quality and make production movies. Finally, this work presents a highly efficient and scalable radiation model based on the sweeping method, which significantly outperforms previous approaches in Uintah, like discrete ordinates. The integrated approach allowed the USC boiler problem to run on 260K CPU cores on Mira.
 			</description>
 			<link>https://www.willusher.io/publications/scasia18</link>
-			<pubDate>2018-03-20 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/scasia18</guid>
+			<pubDate>Tue, 20 Mar 2018 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -559,7 +591,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				Adaptive Mesh Refinement (AMR) methods are widespread in scientific computing, and visualizing the resulting data with efficient and accurate rendering methods can be vital for enabling interactive data exploration. In this work, we detail a comprehensive solution for directly volume rendering block-structured (Berger-Colella) AMR data in the OSPRay interactive CPU ray tracing framework. In particular, we contribute a general method for representing and traversing AMR data using a kd-tree structure, and four different reconstruction options, one of which in particular (the basis function approach) is novel compared to existing methods. We demonstrate our system on two types of block-structured AMR data and compressed scalar field data, and show how it can be easily used in existing production-ready applications through a prototypical integration in the widely used visualization program ParaView.
 			</description>
 			<link>https://www.willusher.io/publications/cvamr</link>
-			<pubDate>2017-11-27 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/cvamr</guid>
+			<pubDate>Sun, 26 Nov 2017 23:00:00 -0700</pubDate>
 		</item>
 		
 		<item>
@@ -576,7 +609,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				We present a new method for progressive volume rendering by accumulating object-space samples over successively rendered frames. Existing methods for progressive refinement either use image space methods or average pixels over frames, which can blur features or integrate incorrectly with respect to depth. Our approach stores samples along each ray, accumulates new samples each frame into a buffer, and progressively interleaves and integrates these samples. Though this process requires additional memory, it ensures interactivity and is well suited for CPU architectures with large memory and cache. This approach also extends well to distributed rendering in cluster environments. We implement this technique in Intel’s open source OSPRay CPU ray tracing framework and demonstrate that it is particularly useful for rendering volumetric data with costly sampling functions.
 			</description>
 			<link>https://www.willusher.io/publications/savr</link>
-			<pubDate>2017-06-12 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/savr</guid>
+			<pubDate>Mon, 12 Jun 2017 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -593,7 +627,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				We present a system for interactive in situ visualization of large particle simulations, suitable for general CPU-based HPC architectures. As simulations grow in scale, in situ methods are needed to alleviate IO bottlenecks and visualize data at full spatio-temporal resolution. We use a lightweight loosely-coupled layer serving distributed data from the simulation to a data-parallel renderer running in separate processes. Leveraging the OSPRay ray tracing framework for visualization and balanced P-k-d trees, we can render simulation data in real-time, as they arrive, with negligible memory overhead. This flexible solution allows users to perform exploratory in situ visualization on the same computational resources as the simulation code, on dedicated visualization clusters or remote workstations, via a standalone rendering client that can be connected or disconnected as needed. We evaluate this system on simulations with up to 227M particles in the LAMMPS and Uintah computational frameworks, and show that our approach provides many of the advantages of tightly-coupled systems, with the flexibility to render on a wide variety of remote and co-processing resources.
 			</description>
 			<link>https://www.willusher.io/publications/isp-jsfi</link>
-			<pubDate>2016-10-01 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/isp-jsfi</guid>
+			<pubDate>Sat, 01 Oct 2016 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -603,7 +638,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				One of the most critical challenges for high-performance computing (HPC) scientific visualization is execution on massively threaded processors. Of the many fundamental changes we are seeing in HPC systems, one of the most profound is a reliance on new processor types optimized for execution bandwidth over latency hiding. Our current production scientific visualization software is not designed for these new types of architectures. To address this issue, the VTK-m framework serves as a container for algorithms, provides flexible data representation, and simplifies the design of visualization algorithms on new and future computer architecture.
 			</description>
 			<link>https://www.willusher.io/publications/vtkm</link>
-			<pubDate>2016-05-09 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/vtkm</guid>
+			<pubDate>Mon, 09 May 2016 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>
@@ -620,7 +656,8 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 				We present a novel approach to rendering large particle data sets from molecular dynamics, astrophysics and other sources. We employ a new data structure adapted from the original balanced k-d tree, which allows for representation of data with trivial or no overhead. In the OSPRay visualization framework, we have developed an efficient CPU algorithm for traversing, classifying and ray tracing these data. Our approach is able to render up to billions of particles on a typical workstation, purely on the CPU, without any approximations or level-of-detail techniques, and optionally with attribute-based color mapping, dynamic range query, and advanced lighting models such as ambient occlusion and path tracing.
 			</description>
 			<link>https://www.willusher.io/publications/pkd</link>
-			<pubDate>2015-10-25 00:00:00 -0600</pubDate>
+			<guid>https://www.willusher.io/publications/pkd</guid>
+			<pubDate>Sun, 25 Oct 2015 00:00:00 -0600</pubDate>
 		</item>
 		
 	</channel>
