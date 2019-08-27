@@ -22,6 +22,7 @@ www.willusher.io/courses/cs6620/prj7
 www.willusher.io/courses/cs6620/prj8
 www.willusher.io/courses/cs6620/prj9
 www.willusher.io/projects
+www.willusher.io/rss.xml
 www.willusher.io/sitemap.txt
 www.willusher.io/tags
 www.willusher.io/courses/cs6620/tr15
