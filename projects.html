@@ -101,6 +101,10 @@
 		
 		
 		<div class="col-3">
+			<a href="/projects#ChameleonRT">ChameleonRT</a>
+		</div>
+		
+		<div class="col-3">
 			<a href="/projects#Charm++ Experiments">Charm++ Experiments</a>
 		</div>
 		
@@ -226,24 +230,20 @@
 	</div>
 
 	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
-	  id="μPacket">
+	  id="ChameleonRT">
 		<div class="col-12">
-			<h2><b>μPacket</b></h2>
+			<h2><b>ChameleonRT</b></h2>
 		</div>
 
 		<div class="col-12 col-sm-8">
-			<p>μPacket is an extremely simple packet based ray tracer that uses the AVX/AVX2 instruction set to trace eight rays at once through the scene. Currently it only supports spheres and planes with Lambertian BRDFs illuminated by a single point light. Illumination is computed with Whitted ray tracing, although recursion only goes as far as computing shadows since there are no reflective or transmissive materials at the moment.</p>
+			<p>ChameleonRT is an example interactive path tracer which runs on multiple CPU and GPU ray tracing backends: Embree, DXR, OptiX, and Vulkan. Each backend uses an identical path tracer which supports the Disney BSDF material model to provide the same rendered result in each.</p>
 
-<p>Ray packets were first introduced by <a href="http://www.sci.utah.edu/~wald/Publications/2001/CRT/CRT.pdf">Wald et al., 2001</a> and are now widely used in high performance ray tracers like <a href="http://embree.github.io/">Embree</a> due to the performance gain achieved with good packet (and now stream) tracing techniques.</p>
-
-<p>Current plans for this project are to switch to trace ray streams and add support for a path tracing integrator for higher quality images.</p>
-
-			<a href="https://github.com/Twinklebear/micro-packet">
-				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/micro-packet.svg">
+			<a href="https://github.com/Twinklebear/ChameleonRT">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/ChameleonRT.svg">
 			</a>
 		</div>
 		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
-			<img class="img-fluid" src="http://i.imgur.com/WcM6Rcl.png">
+			<img class="img-fluid" src="https://imgur.com/TpSzXc0.jpg">
 		</div>
 
 	</div>
@@ -329,6 +329,29 @@
 				<img class="img-fluid" src="https://i.imgur.com/Vv98vJZ.png">
 			</div>
 			
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="μPacket">
+		<div class="col-12">
+			<h2><b>μPacket</b></h2>
+		</div>
+
+		<div class="col-12 col-sm-8">
+			<p>μPacket is an extremely simple packet based ray tracer that uses the AVX/AVX2 instruction set to trace eight rays at once through the scene. Currently it only supports spheres and planes with Lambertian BRDFs illuminated by a single point light. Illumination is computed with Whitted ray tracing, although recursion only goes as far as computing shadows since there are no reflective or transmissive materials at the moment.</p>
+
+<p>Ray packets were first introduced by <a href="http://www.sci.utah.edu/~wald/Publications/2001/CRT/CRT.pdf">Wald et al., 2001</a> and are now widely used in high performance ray tracers like <a href="http://embree.github.io/">Embree</a> due to the performance gain achieved with good packet (and now stream) tracing techniques.</p>
+
+<p>Current plans for this project are to switch to trace ray streams and add support for a path tracing integrator for higher quality images.</p>
+
+			<a href="https://github.com/Twinklebear/micro-packet">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/micro-packet.svg">
+			</a>
+		</div>
+		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
+			<img class="img-fluid" src="http://i.imgur.com/WcM6Rcl.png">
 		</div>
 
 	</div>
