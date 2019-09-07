@@ -186,14 +186,24 @@ and just use the primary ray group for the hit group, since we know it will neve
 </code></pre></div></div>
 <h3 id="benchmarks">Benchmarks</h3>
 
-<div class="col-12">
-    <img class="img-fluid" src="https://i.imgur.com/izqMaBd.jpg" />
-    <p class="text-center"><i>Sponza, 262K triangles</i></p>
+<div class="col-12 row">
+    <div class="col-12 col-md-6">
+        <img class="img-fluid" src="https://i.imgur.com/izqMaBd.jpg" />
+        <p class="text-center"><i>Sponza, 262K triangles</i></p>
+    </div>
+    <div class="col-12 col-md-6">
+        <img class="img-fluid" src="https://i.imgur.com/DYdbQgS.jpg" />
+        <p class="text-center"><i>Unshaded, primary ray + shadow only</i></p>
+    </div>
 </div>
 
-<p>I ran some small tests in <a href="https://github.com/Twinklebear/ChameleonRT">ChameleonRT</a> rendering the Sponza scene
-from <a href="https://casual-effects.com/data/">Morgan McGuire’s Computer Graphics Archive</a>
-on an RTX 2070, rendering at 1280x720. To measure the performance of each method I tracked both the
+<p>I ran some small tests in <a href="https://github.com/Twinklebear/ChameleonRT">ChameleonRT</a> with the DXR backend,
+rendering the Sponza scene from <a href="https://casual-effects.com/data/">Morgan McGuire’s Computer Graphics Archive</a>
+on an RTX 2070 at 1280x720. For these I ran both a full path traced and shaded version, and a version
+which only traces primary rays and shadow rays at the first hit point. The fully shaded and path traced
+version will give some idea of how this change effects the overall performance of a renderer,
+while the unshaded primary + shadow version will better isolate the impact of the shadow ray change.
+To measure the performance of each method I tracked both the
 the rays traced per-second and render time per-frame, shown in the table below.</p>
 
 <table class="table">
@@ -212,19 +222,31 @@ the rays traced per-second and render time per-frame, shown in the table below.<
         <td class="text-right" scope="col">373.75 MRay/s (17.00 ms)</td>
         <td class="text-right" scope="col">375.67 MRay/s (16.84 ms)</td>
         </tr>
+        <tr>
+        <td scope="col">Sponza Unshaded</td>
+        <td class="text-right" scope="col">378.26 MRay/s (4.93 ms)</td>
+        <td class="text-right" scope="col">389.31 MRay/s (4.88 ms)</td>
+        <td class="text-right" scope="col">398.92 MRay/s (4.82 ms)</td>
+        </tr>
     </tbody>
 </table>
 
-<p>A few extra million rays per-second and a simpler implementation is pretty great for <strong>RFO</strong>!
-However, <strong>RFO</strong> shares the same limitation of <strong>OGCH</strong>: since we no longer run the any hit shader,
+<p>A few extra million rays per-second and a simpler implementation is pretty great for <strong>RFO</strong>!</p>
+
+<p>However, <strong>RFO</strong> shares the same limitation of <strong>OGCH</strong>: since we no longer run the any hit shader,
 we won’t compute correct shadows when using alpha cut-out textures.
 In this case I think it is still possible to skip making an occlusion hit group
-and re-use the primary hit group (which implements an any hit shader to test against
+and re-use the primary hit group (which would also implement an any hit shader to test against
 the cut-out texture), and pass the accept first hit and skip closest hit ray flags. This will
 result in the first valid hit returned by the any hit shader (which doesn’t necessarily need to call
 <code class="highlighter-rouge">AcceptHitAndEndSearch</code> or terminate ray) to be taken as the final hit and the closest hit shader
 to be skipped. When I add support for alpha cut-out textures I’ll test this idea out to see how well it works.
 This would be the same as <strong>OGAH</strong> where we additionally specify the skip closest hit flag.</p>
+
+<h3 id="update-97">Update 9/7</h3>
+
+<p>I’ve added an unshaded primary + shadow ray only benchmark, thanks <a href="https://twitter.com/j_bikker/status/1170322992267780096">Jacco Bikker</a>
+for the suggestion!</p>
 
 
 		<hr>
