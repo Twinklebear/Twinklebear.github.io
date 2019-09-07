@@ -5,9 +5,41 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Wed, 04 Sep 2019 09:21:20 -0600</lastBuildDate>
-		<pubDate>Wed, 04 Sep 2019 09:21:20 -0600</pubDate>
+		<lastBuildDate>Fri, 06 Sep 2019 23:08:58 -0600</lastBuildDate>
+		<pubDate>Fri, 06 Sep 2019 23:08:58 -0600</pubDate>
 		<ttl>60</ttl>
+		
+		<item>
+			<title>Faster Shadow Rays on RTX</title>
+			<description>
+&lt;p&gt;To determine if a hit point can be directly lit by a light source in the scene
+we need to perform a visibility test between the point and the light.
+In a path tracer we must perform at least one visibility test per hit point
+to shade the point, or two if we’re using multiple importance sampling (one for the light
+sample, and one for the BSDF sample). When rendering just ambient occlusion,
+e.g., for baking occlusion maps, we may send even more shadow rays per hit-point.
+Fortunately, shadow rays can be relatively cheap to trace, as
+we don’t care about finding the closest hit point or computing surface shading information,
+but just whether or not something is intersected by the ray.
+There are a few options and combinations of ray flags which we can use
+when deciding how to trace shadow rays on RTX (through DXR, OptiX or Vulkan).
+I recently learned a method for skipping all hit group shaders (any hit, closest hit)
+and instead using just the miss shader to determine if the ray is &lt;em&gt;not&lt;/em&gt; occluded.
+This was a bit non-obvious to me, though has been used by others
+(see &lt;a href=&quot;http://intro-to-dxr.cwyman.org/presentations/IntroDXR_ShaderTutorial.pdf&quot;&gt;Chris Wyman’s Intro to DXR&lt;/a&gt;
+and &lt;a href=&quot;https://github.com/SaschaWillems/Vulkan/tree/master/data/shaders/nv_ray_tracing_shadows&quot;&gt;Sascha Willems’s NV Ray Tracing Shadows Example&lt;/a&gt;).
+After switching to this approach in &lt;a href=&quot;https://github.com/Twinklebear/ChameleonRT&quot;&gt;ChameleonRT&lt;/a&gt;
+I decided to run a small benchmark comparing some of the options for tracing shadow rays.
+I’ll also discuss an extra trick we can use to simplify the shader binding table setup,
+which lets us skip creating an occlusion hit group entirely.&lt;/p&gt;
+
+
+				&lt;a href=&quot;https://www.willusher.io//graphics/2019/09/06/faster-shadow-rays-on-rtx&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io//graphics/2019/09/06/faster-shadow-rays-on-rtx</link>
+			<guid>https://www.willusher.io//graphics/2019/09/06/faster-shadow-rays-on-rtx</guid>
+			<pubDate>Fri, 06 Sep 2019 00:00:00 -0600</pubDate>
+		</item>
 		
 		<item>
 			<title>Volume Rendering with WebGL</title>

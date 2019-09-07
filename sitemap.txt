@@ -44,6 +44,7 @@ https://www.willusher.io//publications/isp-jsfi
 https://www.willusher.io//publications/vtkm
 https://www.willusher.io//publications/pkd
 
+https://www.willusher.io//graphics/2019/09/06/faster-shadow-rays-on-rtx
 https://www.willusher.io//webgl/2019/01/13/volume-rendering-with-webgl
 https://www.willusher.io//latex/2018/07/10/comments-in-latex
 https://www.willusher.io//2016/01/02/distributed-rendering-with-rust-and-mio
