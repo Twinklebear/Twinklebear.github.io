@@ -153,7 +153,7 @@ run, we can’t use them to tell us if the ray was occluded. Instead, we assume 
 and use the miss shader to update the ray payload if it was not occluded.
 The advantage of <strong>RFO</strong> over <strong>OGCH</strong> and <strong>OGAH</strong> is that we skip all shader execution for
 rays which are occluded, and can still terminate traversal whenever any candidate hit is
-encountered.
+encountered. Since this method only calls the miss shader, it might also be referred to as “miss shader only”.
 An additional benefit of <strong>RFO</strong> is that we can even skip making an occlusion hit group entirely,
 and just use the primary ray group for the hit group, since we know it will never be called anyway.</p>
 
