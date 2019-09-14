@@ -1,0 +1,8 @@
+*.swp
+*.raw
+build/
+*.rsf
+*.sfl
+*.laz
+*.srsf
+
