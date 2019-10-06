@@ -48,18 +48,38 @@
 					<a href="https://github.com/Twinklebear/webgl-neuron">
 						Get the code on GitHub!</a>
 					</p>
+
+					<p>
+                    You can upload a TIFF stack or multi-page TIFF from your computer, or fetch a multi-page TIFF
+                    from a remote URL (e.g., Dropbox, Google Drive). When fetching a TIFF from a URL the remote
+                    site must support <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">
+                    Cross-Origin Resource Sharing</a> for this site to fetch the data. If fetching from a URL fails,
+                    you can download the file from the URL yourself and upload it.
+                    Supported TIFF Formats are single-channel 8 and 16bit unsigned int images.
+					16bit images may appear pixelated, as WebGL2 does not support filtering on these textures.
+					</p>
+                    <i id="loadingText"></i>
+                    <div class="progress mb-2">
+                        <div id="loadingProgressBar" class="progress-bar" role="progressbar"
+                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
 				</div>
 				<!-- hidden until the RAW is loaded -->
 				<div class="col-12 mt-2 mb-2" style="display:none" id="tiffUploadBox">
-					<p>Supported TIFF Formats are single-channel 8 and 16bit unsigned int images.
-					16bit images may appear pixelated, as WebGL2 does not support filtering on these textures.
-					</p>
-					<div class="col-12 mt-0 mb-0">
+					<div class="col-12 mt-0 mb-2">
 						<input type="file" class="custom-file-input" id="uploadTIFF"
 								accept=".tif,.tiff,.TIF,.TIFF"
 								onchange="uploadTIFF(this.files);" multiple>
 						<label class="custom-file-label" for="uploadTIFF">Upload TIFF Stack</label>
-					</div>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="fetchTIFF" placeholder="Enter a TIFF Stack URL">
+                        </div>
+                        <div class="form-group">
+                            <button id="fetchTIFFButton" type="button" class="btn btn-primary">Fetch TIFF URL</button>
+                        </div>
+                    <form>
 				</div>
 				<div class="col-12 mt-2 mb-2">
 					<h3>Traces</h3>
@@ -76,8 +96,7 @@
 						</div>
 					</div>
 					<div class="col-12 mt-2 mb-2">
-						<input type="file" class="custom-file-input" id="uploadSWC" accept=".swc"
-								onchange="uploadSWC(this.files);" multiple>
+						<input type="file" class="custom-file-input" id="uploadSWC" accept=".swc" multiple>
 						<label class="custom-file-label" for="uploadSWC">Upload SWC</label>
 					</div>
 					<div class="col-12 mt-2 mb-2" id="swcList">
@@ -103,20 +122,13 @@
 					<button type="button" class="btn btn-primary"
 						onclick="loadReference();">Load DIADEM Reference Traces</button>
 				</div>
-				<div class="col-12 mb-2">
-					<p id="loadingText"></p>
-					<div class="progress mb-2">
-						<div id="loadingProgressBar" class="progress-bar" role="progressbar"
-							aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
 	<script src="js/gl-matrix-min.js"></script>
-	<script src="js/tiff.min.js"></script>
+	<script src="js/tiff.raw.js"></script>
+	<script src="js/tiff.js"></script>
 	<script src="js/webgl-util.js"></script>
-	<script src="js/FileSaver.js"></script>
 	<script src="js/shader-srcs.js"></script>
 	<script src="js/neuron.js"></script>
 	<script src="js/swc.js"></script>
