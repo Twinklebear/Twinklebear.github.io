@@ -36,6 +36,7 @@ uniform mat4 inv_proj;
 uniform mat4 inv_view;
 uniform int highlight_trace;
 uniform float threshold;
+uniform float saturation_threshold;
 uniform int volume_is_int;
 uniform ivec2 canvas_dims;
 
@@ -120,6 +121,10 @@ void main(void) {
 		}
 		val = (val - value_range.x) / (value_range.y - value_range.x);
 
+        if (val >= saturation_threshold) {
+            val = 1.0;
+        }
+
 		if (val >= threshold) {
 			val = clamp((val - threshold) / (1.0 - threshold), 0.0, 1.0);
 			vec4 val_color = vec4(texture(colormap, vec2(val, 0.5)).rgb, val);
@@ -184,8 +189,18 @@ precision highp float;
 uniform sampler2D colors;
 out vec4 color;
 
+float linear_to_srgb(float x) {
+	if (x <= 0.0031308f) {
+		return 12.92f * x;
+	}
+	return 1.055f * pow(x, 1.f / 2.4f) - 0.055f;
+}
+
 void main(void){ 
 	ivec2 uv = ivec2(gl_FragCoord.xy);
 	color = texelFetch(colors, uv, 0);
+    color.x = linear_to_srgb(color.x);
+    color.y = linear_to_srgb(color.y);
+    color.z = linear_to_srgb(color.z);
 }`;
 

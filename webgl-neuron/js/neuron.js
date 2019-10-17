@@ -24,10 +24,13 @@ var swcShader = null;
 var highlightTrace = null;
 var showVolume = null;
 var volumeThreshold = null;
+var saturationThreshold = null;
 
 var loadingProgressText = null;
 var loadingProgressBar = null;
 var voxelSpacingInputs = null;
+var voxelSpacingFromURL = false;
+var volumeURL = null;
 
 var renderTargets = null;
 var depthColorFbo = null
@@ -88,6 +91,41 @@ var getVoxelSpacing = function() {
     return spacing;
 }
 
+var buildShareURL = function() {
+    window.location.hash = "";
+    if (volumeURL) {
+        window.location.hash += "url=" + volumeURL + "&";
+    }
+
+    var spacing = getVoxelSpacing();
+    if (spacing[0] != 1 || spacing[1] != 1 || spacing[2] != 1) {
+        window.location.hash += "vox=" + spacing[0] + "x" + spacing[1] + "x" + spacing[2] + "&";
+    }
+
+    window.location.hash += "thresh=" + volumeThreshold.value + "&";
+    window.location.hash += "sat=" + saturationThreshold.value + "&";
+
+    var selection = document.getElementById("colormapList").value;
+    if (selection == "Grayscale") {
+        window.location.hash += "cmap=" + 1;
+    } else if (selection == "Cool Warm") {
+        window.location.hash += "cmap=" + 2;
+    } else if (selection == "Matplotlib Plasma") {
+        window.location.hash += "cmap=" + 3;
+    } else if (selection == "Matplotlib Virdis") {
+        window.location.hash += "cmap=" + 4;
+    } else if (selection == "Rainbow") {
+        window.location.hash += "cmap=" + 5;
+    } else if (selection == "Samsel Linear Green") {
+        window.location.hash += "cmap=" + 6;
+    } else if (selection == "Samsel Linear YGB 1211G") {
+        window.location.hash += "cmap=" + 7;
+    }
+    var showURL = document.getElementById("shareURL");
+    showURL.setAttribute("style", "display:block");
+    showURL.innerText = window.location;
+}
+
 var loadRAWVolume = function(file, onload) {
     // Only one raw volume here anyway
     document.getElementById("volumeName").innerHTML = "Volume: DIADEM NC Layer 1 Axons";
@@ -101,8 +139,10 @@ var loadRAWVolume = function(file, onload) {
     loadingProgressText.innerHTML = "Loading Volume";
     loadingProgressBar.setAttribute("style", "width: 0%");
 
-    for (var i = 0; i < 3; ++i) {
-        voxelSpacingInputs[i].value = 1;
+    if (!voxelSpacingFromURL) {
+        for (var i = 0; i < 3; ++i) {
+            voxelSpacingInputs[i].value = 1;
+        }
     }
 
     req.open("GET", url, true);
@@ -243,6 +283,7 @@ var renderLoop = function() {
         gl.uniform3fv(shader.uniforms["eye_pos"], eye);
         gl.uniform1i(shader.uniforms["highlight_trace"], highlightTrace.checked);
         gl.uniform1f(shader.uniforms["threshold"], volumeThreshold.value);
+        gl.uniform1f(shader.uniforms["saturation_threshold"], saturationThreshold.value);
 
         gl.bindVertexArray(volumeVao);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, cubeStrip.length / 3);
@@ -300,6 +341,9 @@ window.onload = function() {
     volumeThreshold = document.getElementById("threshold");
     volumeThreshold.value = 0.1;
 
+    saturationThreshold = document.getElementById("saturationThreshold");
+    saturationThreshold.value = 1;
+
     loadingProgressText = document.getElementById("loadingText");
     loadingProgressBar = document.getElementById("loadingProgressBar");
 
@@ -308,6 +352,7 @@ window.onload = function() {
     // For some random JS/HTML reason it won't find the function if it's not set here
     document.getElementById("fetchTIFFButton").onclick = fetchTIFF;
     document.getElementById("uploadSWC").onchange = uploadSWC;
+    document.getElementById("shareURLButton").onclick = buildShareURL;
 
     voxelSpacingInputs = [
         document.getElementById("voxelSpacingX"),
@@ -315,17 +360,64 @@ window.onload = function() {
         document.getElementById("voxelSpacingZ")
     ];
 
-    var volumeURL = null;
     if (window.location.hash) {
         var regexResolution = /(\d+)x(\d+)/;
+        var regexVoxelSpacing = /(\d+)x(\d+)x(\d+)/;
         var urlParams = window.location.hash.substr(1).split("&");
         for (var i = 0; i < urlParams.length; ++i) {
             var str = decodeURI(urlParams[i]);
+            // URL load param
             if (str.startsWith("url=")) {
                 volumeURL = str.substr(4);
                 continue;
             }
-
+            // Volume threshold
+            if (str.startsWith("thresh=")) {
+                volumeThreshold.value = clamp(parseFloat(str.substr(7)), 0, 1);
+                continue;
+            }
+            // Saturation threshold 
+            if (str.startsWith("sat=")) {
+                saturationThreshold.value = clamp(parseFloat(str.substr(4)), 0, 1);
+                continue;
+            }
+            // Voxel Spacing
+            if (str.startsWith("vox=")) {
+                var m = str.substr(4).match(regexVoxelSpacing);
+                voxelSpacingFromURL = true;
+                voxelSpacingInputs[0].value = Math.max(parseFloat(m[1]), 1);
+                voxelSpacingInputs[1].value = Math.max(parseFloat(m[2]), 1);
+                voxelSpacingInputs[2].value = Math.max(parseFloat(m[3]), 1);
+                continue;
+            }
+            // Colormap
+            if (str.startsWith("cmap=")) {
+                var cmap = parseInt(str.substr(5));
+                var selector = document.getElementById("colormapList");
+                selector.value = "Grayscale";
+                if (cmap == 2) {
+                    selector.value = "Cool Warm";
+                } else if (cmap == 3) {
+                    selector.value = "Matplotlib Plasma";
+                } else if (cmap == 4) {
+                    selector.value = "Matplotlib Virdis";
+                } else if (cmap == 5) {
+                    selector.value = "Rainbow";
+                } else if (cmap == 6) {
+                    selector.value = "Samsel Linear Green";
+                } else if (cmap == 7) {
+                    selector.value = "Samsel Linear YGB 1211G";
+                }
+                continue;
+            }
+            // When embedding as an iframe, go hide the UI text and leave just the controls
+            if (str == "embed") {
+                document.getElementById("viewerTitle").setAttribute("style", "display:none");
+                document.getElementById("shareURLUI").setAttribute("style", "display:none");
+                document.getElementById("uiText").setAttribute("style", "display:none");
+                document.getElementById("loadDiademReference").setAttribute("style", "display:none");
+            }
+            // Canvas dimensions 
             var m = str.match(regexResolution);
             if (m) {
                 WIDTH = parseInt(m[1]);
@@ -401,7 +493,7 @@ window.onload = function() {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
-    gl.clearColor(0.1, 0.1, 0.1, 1.0);
+    gl.clearColor(0.01, 0.01, 0.01, 1.0);
     gl.clearDepth(1.0);
 
     // Setup the render targets for the splat rendering pass
@@ -446,7 +538,7 @@ window.onload = function() {
         var colormap = gl.createTexture();
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, colormap);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA8, 180, 1);
+        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.SRGB8_ALPHA8 , 180, 1);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -462,7 +554,7 @@ window.onload = function() {
         }
         setInterval(renderLoop, targetFrameTime);
     };
-    colormapImage.src = "colormaps/grayscale.png";
+    colormapImage.src = colormaps[document.getElementById("colormapList").value];
 }
 
 var fillcolormapSelector = function() {
@@ -496,12 +588,14 @@ var makeTIFFGLVolume = function(tiff) {
     var width = TIFFGetField(tiff, TiffTag.IMAGEWIDTH);
     var height = TIFFGetField(tiff, TiffTag.IMAGELENGTH);
 
-    for (var i = 0; i < 3; ++i) {
-        voxelSpacingInputs[i].value = 1;
+    if (!voxelSpacingFromURL) {
+        for (var i = 0; i < 3; ++i) {
+            voxelSpacingInputs[i].value = 1;
+        }
     }
 
     var description = TIFFGetStringField(tiff, TiffTag.IMAGEDESCRIPTION);
-    if (description) {
+    if (!voxelSpacingFromURL && description) {
         var findSpacing = /spacing=(\d+)/;
         var m = description.match(findSpacing);
         if (m) {
@@ -542,7 +636,7 @@ var makeTIFFGLVolume = function(tiff) {
     }
 }
 
-var loadTIFFSlice = function(tiff, z_index) {
+var loadTIFFSlice = function(tiff, z_index, slice_scratch) {
     var bps = TIFFGetField(tiff, TiffTag.BITSPERSAMPLE);
 
     // We only support single channel images
@@ -561,7 +655,6 @@ var loadTIFFSlice = function(tiff, z_index) {
 
     var bytesPerSample = TIFFGetField(tiff, TiffTag.BITSPERSAMPLE) / 8;
 
-    var img = new Uint8Array(width * height * bytesPerSample);
     var sbuf = TIFFMalloc(TIFFStripSize(tiff));
     for (var s = 0; s < numStrips; ++s) {
         var read = TIFFReadEncodedStrip(tiff, s, sbuf, -1);
@@ -570,7 +663,7 @@ var loadTIFFSlice = function(tiff, z_index) {
         }
         // Just make a view into the heap, not a copy
         var stripData = new Uint8Array(Module.HEAPU8.buffer, sbuf, read);
-        img.set(stripData, s * rowsPerStrip * width * bytesPerSample);
+        slice_scratch.set(stripData, s * rowsPerStrip * width * bytesPerSample);
     }
     TIFFFree(sbuf);
 
@@ -578,10 +671,10 @@ var loadTIFFSlice = function(tiff, z_index) {
     for (var y = 0; y < height / 2; ++y) {
         for (var x = 0; x < width; ++x) {
             for (var b = 0; b < bytesPerSample; ++b) {
-                var tmp = img[(y * width + x) * bytesPerSample];
-                img[(y * width + x) * bytesPerSample] =
-                    img[((height - y - 1) * width + x) * bytesPerSample];
-                img[((height - y - 1) * width + x) * bytesPerSample] = tmp;
+                var tmp = slice_scratch[(y * width + x) * bytesPerSample];
+                slice_scratch[(y * width + x) * bytesPerSample] =
+                    slice_scratch[((height - y - 1) * width + x) * bytesPerSample];
+                slice_scratch[((height - y - 1) * width + x) * bytesPerSample] = tmp;
             }
         }
     }
@@ -591,11 +684,11 @@ var loadTIFFSlice = function(tiff, z_index) {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_3D, volumeTexture);
         gl.texSubImage3D(gl.TEXTURE_3D, 0, 0, 0, z_index,
-            width, height, 1, gl.RED, gl.UNSIGNED_BYTE, img);
+            width, height, 1, gl.RED, gl.UNSIGNED_BYTE, slice_scratch);
     } else {
         gl.activeTexture(gl.TEXTURE5);
         gl.bindTexture(gl.TEXTURE_3D, volumeTexture);
-        var u16arr = new Uint16Array(img.buffer);
+        var u16arr = new Uint16Array(slice_scratch.buffer);
         for (var j = 0; j < u16arr.length; ++j) {
             volValueRange[0] = Math.min(volValueRange[0], u16arr[j]);
             volValueRange[1] = Math.max(volValueRange[1], u16arr[j]);
@@ -607,8 +700,12 @@ var loadTIFFSlice = function(tiff, z_index) {
 
 var loadMultipageTiff = function(tiff, numDirectories) {
     TIFFSetDirectory(tiff, 0);
+    var width = TIFFGetField(tiff, TiffTag.IMAGEWIDTH);
+    var height = TIFFGetField(tiff, TiffTag.IMAGELENGTH);
+    var bytesPerSample = TIFFGetField(tiff, TiffTag.BITSPERSAMPLE) / 8;
+    var slice_scratch = new Uint8Array(width * height * bytesPerSample);
     for (var i = 0; i < numDirectories; ++i) {
-        loadTIFFSlice(tiff, i);
+        loadTIFFSlice(tiff, i, slice_scratch);
         TIFFReadDirectory(tiff);
 
         var percent = i / numDirectories * 100;
@@ -622,11 +719,15 @@ var loadMultipageTiff = function(tiff, numDirectories) {
 }
 
 var uploadTIFF = function(files) {
+    var showURL = document.getElementById("shareURL").setAttribute("style", "display:none");
+
     var numLoaded = 0;
     volumeLoaded = false;
 
     loadingProgressText.innerHTML = "Loading Volume";
     loadingProgressBar.setAttribute("style", "width: 0%");
+
+    var slice_scratch = null;
 
     var loadFile = function(i) {
         var file = files[i];
@@ -645,7 +746,14 @@ var uploadTIFF = function(files) {
                 FS.createDataFile("/", fname, new Uint8Array(reader.result), true, false);
                 var tiff = TIFFOpen(fname, "r");
 
-                loadTIFFSlice(tiff, i);
+                if (!slice_scratch) {
+                    var width = TIFFGetField(tiff, TiffTag.IMAGEWIDTH);
+                    var height = TIFFGetField(tiff, TiffTag.IMAGELENGTH);
+                    var bytesPerSample = TIFFGetField(tiff, TiffTag.BITSPERSAMPLE) / 8;
+                    slice_scratch = new Uint8Array(width * height * bytesPerSample);
+                }
+
+                loadTIFFSlice(tiff, i, slice_scratch);
 
                 TIFFClose(tiff);
                 FS.unlink("/" + fname);
@@ -728,22 +836,37 @@ var uploadTIFF = function(files) {
 }
 
 var fetchTIFF = function() {
+    var showURL = document.getElementById("shareURL").setAttribute("style", "display:none");
     var url = document.getElementById("fetchTIFF").value;
+    voxelSpacingFromURL = false;
     fetchTIFFURL(url);
 }
 
 var fetchTIFFURL = function(url) {
+    volumeURL = url;
     volumeLoaded = false;
 
-    // Users will paste the shared URL from dropbox if they use that,
+    // Users will paste the shared URL from Dropbox or Google Drive
     // so we need to change it to the direct URL to fetch from
     var dropboxRegex = /.*dropbox.com\/s\/([^?]+)/
+    var googleDriveRegex = /.*drive.google.com.*id=([^&]+)/
     var m = url.match(dropboxRegex);
     if (m) {
         url = "https://www.dl.dropboxusercontent.com/s/" + m[1] + "?dl=1";
+    } else {
+        m = url.match(googleDriveRegex);
+        if (m) {
+            // This API key is restricted to my website, you'll want to replace it with
+            // your own
+            var GOOGLE_DRIVE_API_KEY = "AIzaSyDZz64-IKed44fGpXtpP4SYw8j0HhXdOF0";
+            url = "https://www.googleapis.com/drive/v3/files/" + m[1] +
+                "?alt=media&key=" + GOOGLE_DRIVE_API_KEY;
+        } else {
+            alert("Unsupported/handled URL: " + url);
+            return;
+        }
     }
 
-    window.location.hash = "#url=" + url;
     var req = new XMLHttpRequest();
 
     loadingProgressText.innerHTML = "Loading Volume";

@@ -20,7 +20,7 @@
         <g fill="#586069" fill-opacity="1" stroke="#586069" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)">
             <text fill="#586069" fill-opacity="1" stroke="none" xml:space="preserve" x="17" y="65" font-family="sans-serif" font-size="14" font-weight="400" font-style="normal">An example path tracer which runs on multiple ray tracing </text>
           </g><g fill="#586069" fill-opacity="1" stroke="#586069" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)">
-            <text fill="#586069" fill-opacity="1" stroke="none" xml:space="preserve" x="17" y="86" font-family="sans-serif" font-size="14" font-weight="400" font-style="normal">backends (Embree/DXR/OptiX/Vulkan) </text>
+            <text fill="#586069" fill-opacity="1" stroke="none" xml:space="preserve" x="17" y="86" font-family="sans-serif" font-size="14" font-weight="400" font-style="normal">backends (Embree/DXR/OptiX/Vulkan/OSPRay) </text>
           </g>
         <!-- Language  --><g fill="#24292e" fill-opacity="1" stroke="#24292e" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)">
               <text fill="#24292e" fill-opacity="1" stroke="none" xml:space="preserve" x="33" y="112" font-family="sans-serif" font-size="12" font-weight="400" font-style="normal">C++</text>
@@ -30,7 +30,7 @@
         <g fill="#586069" fill-opacity="1" stroke="#586069" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)">
           <!-- The number of stars or fork -->
           <a href="https://github.com/Twinklebear/ChameleonRT/stargazers">
-                  <text fill="#586069" fill-opacity="1" stroke="none" xml:space="preserve" x="96" y="112" font-family="sans-serif" font-size="12" font-weight="400" font-style="normal">69</text>
+                  <text fill="#586069" fill-opacity="1" stroke="none" xml:space="preserve" x="96" y="112" font-family="sans-serif" font-size="12" font-weight="400" font-style="normal">75</text>
                 </a>
         </g>
 
