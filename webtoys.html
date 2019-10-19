@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Web Toys</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content">
+		
+
+<h1 class="display-4">Web Toys</h1>
+
+<div class="row justify-content-md-center">
+	
+
+
+<div class="col-12 row pb-2 pt-2 mt-1 bg-light rounded">
+    <div class="col-12">
+        <p class="lead">
+        This page highlights the WebGL/WebAssembly based visualization and rendering
+        toys I've written with a goal of exploring how scivis tools can become
+        as readily available and easily deployable on the web as infovis ones. Although the
+        browser still imposes restrictions on the visualization system's ability to render and
+        work with large data sets or perform expensive computations,
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL2RenderingContext">WebGL2</a>
+        and <a href="https://webassembly.org/">WebAssembly</a> help push the browser's abilities
+        beyond what was previously possible. WebGL2 enables the browser to support the core rendering
+        features needed for scivis (3D textures, floating point images, fixed function fragment operations, etc.).
+        WebAssembly allows for recompiling existing scivis libraries to fast, portable byte-code, or
+        compiling new code for the browser without sacrificing performance. Furthermore, WebAssembly can
+        also be executed outside of the browser, or JIT'd to native code, enabling users to easily transition
+        from the browser to a native tool when working with larger data sets or computations which need
+        native code performance or multithreading.
+        Proposed future technologies
+        for the browser can enable even more powerful algorithms, WebGPU could enable data-parallel computation
+        through compute shaders, while shared memory multi-threading would enable multi-threaded CPU execution
+        of both Javascript and WebAssembly. Both technologies would allow tools to tap much of the compute available
+        across a range of platforms.
+        </p>
+        <p class="lead">
+        The toys listed below explore various aspects of these options. The WebGL Volume Raycaster implements
+        a standard volume raycaster using 3D textures in WebGL2. The EWA Surface Splatter implements
+        a splat-based renderer for visualizing point cloud data. The WebGL Marching Cubes example compares
+        the performance of marching cubes implemented in pure Javascript vs. Rust compiled to WebAssembly.
+        The WebGL Neuron Visualizer uses libtiff compiled to WebAssembly to allow loading microscopy data
+        into the browser to be rendered with WebGL.
+        </p>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="WebGL Volume Raycaster">
+		<div class="col-12">
+            <h2><b>WebGL Volume Raycaster</b> <a href="/webgl-volume-raycaster/">(Try it!)</a></h2>
+		</div>
+
+		<div class="col-12">
+			<p>A scientific visualization style volume raycaster written using WebGL2 and Javascript. The renderer uses an arcball camera which supports mouse or touch input, and dynamically adjusts the sampling rate to maintain a smooth framerate, even on mobile devices. The volumes are downloaded via XMLHttpRequest from Dropbox when selected. I’ve also written a <a href="https://www.willusher.io/webgl/2019/01/13/volume-rendering-with-webgl">post</a> about volume rendering for scientific visualization, and how I’ve implemented in WebGL to write this renderer. <a href="https://www.willusher.io/webgl-volume-raycaster/">Try it out online!</a></p>
+
+			<a href="https://github.com/Twinklebear/webgl-volume-raycaster">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgl-volume-raycaster.svg">
+			</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/yLa27hG.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/FOUKtV1.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/Vv98vJZ.png">
+			</div>
+			
+		</div>
+
+	</div>
+
+
+
+
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="WebGL EWA Surface Splatter">
+		<div class="col-12">
+            <h2><b>WebGL EWA Surface Splatter</b> <a href="/webgl-ewa-splatter/">(Try it!)</a></h2>
+		</div>
+
+		<div class="col-12">
+			<p>An elliptical weighted average (EWA) surface splatter renderer, implemented in WebGL, which also supports painting on the surfaces. <a href="https://www.willusher.io/webgl-ewa-splatter/">Try it out online!</a> This implements the papers: <em>Object Space EWA Surface Splatting: A Hardware Accelerated Approach to High Quality Point Rendering</em> by Ren, Pfister and Zwicker, and <em>High-Quality Point-Based Rendering on Modern GPUs</em> by Botsch and Kobbelt, with a few shortcuts. It also uses the deferred shading for splatting approach described in <em>High-quality surface splatting on today’s GPUs</em> by Botsch, Hornung, Zwicker and Kobbelt.
+The renderer uses an arcball camera which supports mouse or touch input, and downloads datasets via XMLHttpRequest from Dropbox when selected.
+Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</a> for some WebGL utilities, <a href="http://glmatrix.net/">glMatrix</a> for matrix/vector operations, and <a href="https://github.com/eligrey/FileSaver.js/">FileSaver.js</a> for saving models.</p>
+
+			<a href="https://github.com/Twinklebear/webgl-ewa-splatter">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgl-ewa-splatter.svg">
+			</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/yqCfPZz.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/c6Cj6xa.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/UBjFKRa.png">
+			</div>
+			
+		</div>
+
+	</div>
+
+
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="WebGL Marching Cubes">
+		<div class="col-12">
+            <h2><b>WebGL Marching Cubes</b> <a href="/webgl-marching-cubes/">(Try it!)</a></h2>
+		</div>
+
+		<div class="col-12">
+			<p>A WebGL + WebASM implementation of the classic <a href="https://en.wikipedia.org/wiki/Marching_cubes">Marching Cubes</a> algorithm for extracting <a href="https://en.wikipedia.org/wiki/Isosurface">isosurfaces</a> from 3D volume data. An isosurface is a surface which represents points in the 3D data which all have the same value (e.g., pressure, temperature). The isosurface extraction code is implemented in Rust and compiled to WebAssembly to accelerate extraction of the surface. Depending on your browser, the WebASM version is 10-50x faster than the pure Javascript one! The surface is rendered as a triangle mesh and combined with the volume during the volume raycasting step, in a manner roughly similar to shadow mapping. <a href="https://www.willusher.io/webgl-marching-cubes/">Try it out online!</a></p>
+
+			<a href="https://github.com/Twinklebear/webgl-marching-cubes">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgl-marching-cubes.svg">
+			</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/JW9UZYP.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/aRJzV7x.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/kW5sr9a.png">
+			</div>
+			
+		</div>
+
+	</div>
+
+
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="WebGL Neuron Visualizer">
+		<div class="col-12">
+            <h2><b>WebGL Neuron Visualizer</b> <a href="/webgl-neuron/">(Try it!)</a></h2>
+		</div>
+
+		<div class="col-12">
+			<p>A neuron visualization system using WebGL2. The renderer uses my WebGL2 volume renderer to display the RAW volume or imported TIFF stack and renders the imported neuron traces as lines within the volume. It can import single-channel 8bit and 16bit TIFF image stacks, and can import neuron traces in the SWC file format. TIFF files are loaded using a build of <a href="https://github.com/Twinklebear/tiff.js">libtiff compiled to WebAssembly</a>. The neurons are composited within the volume by rendering out the depth buffer and using this to terminate rays early in the volume when they hit the geometry, roughly similar to shadow mapping. A default demo dataset is included which renders a stitched version of the DIADEM NC Layer 1 Axons from the <a href="http://diademchallenge.org/">DIADEM Challenge</a>. <a href="https://www.willusher.io/webgl-neuron/">Try it out online!</a></p>
+
+			<a href="https://github.com/Twinklebear/webgl-neuron">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgl-neuron.svg">
+			</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/9vVRCLE.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/lwlbLCw.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/bXMjno0.png">
+			</div>
+			
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

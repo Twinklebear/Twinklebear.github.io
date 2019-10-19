@@ -412,7 +412,7 @@ Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</
 		</div>
 
 		<div class="col-12">
-			<p>A WebGL + WebASM implementation of the classic <a href="https://en.wikipedia.org/wiki/Marching_cubes">Marching Cubes</a> algorithm for extracting <a href="https://en.wikipedia.org/wiki/Isosurface">isosurfaces</a> from 3D volume data. An isosurface is a surface which represents points in the 3D data which all have the same value (e.g., pressure, temperature). The isosurface extraction code is implemented in Rust and compiled to WebAssembly to accelerate extraction of the surface. Depending on your browser, compared to the pure Javascript version the WebASM version is 10-50x faster! The surface is rendered as a triangle mesh and combined with the volume during the volume raycasting step, in a manner roughly similar to shadow mapping. <a href="https://www.willusher.io/webgl-marching-cubes/">Try it out online!</a></p>
+			<p>A WebGL + WebASM implementation of the classic <a href="https://en.wikipedia.org/wiki/Marching_cubes">Marching Cubes</a> algorithm for extracting <a href="https://en.wikipedia.org/wiki/Isosurface">isosurfaces</a> from 3D volume data. An isosurface is a surface which represents points in the 3D data which all have the same value (e.g., pressure, temperature). The isosurface extraction code is implemented in Rust and compiled to WebAssembly to accelerate extraction of the surface. Depending on your browser, the WebASM version is 10-50x faster than the pure Javascript one! The surface is rendered as a triangle mesh and combined with the volume during the volume raycasting step, in a manner roughly similar to shadow mapping. <a href="https://www.willusher.io/webgl-marching-cubes/">Try it out online!</a></p>
 
 			<a href="https://github.com/Twinklebear/webgl-marching-cubes">
 				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgl-marching-cubes.svg">
@@ -443,7 +443,7 @@ Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</
 		</div>
 
 		<div class="col-12">
-			<p>A neuron visualization system using WebGL2. The renderer uses my WebGL2 volume renderer to display the RAW volume or imported TIFF stack and renders the imported neuron traces as lines within the volume. It can import single-channel 8bit and 16bit TIFF image stacks, and can import neuron traces in the SWC file format. The neurons are composited within the volume by rendering out the depth buffer and using this to terminate rays early in the volume when they hit the geometry, roughly similar to shadow mapping. A default demo dataset is included which renders a stitched version of the DIADEM NC Layer 1 Axons from the <a href="http://diademchallenge.org/">DIADEM Challenge</a>. <a href="https://www.willusher.io/webgl-neuron/">Try it out online!</a></p>
+			<p>A neuron visualization system using WebGL2. The renderer uses my WebGL2 volume renderer to display the RAW volume or imported TIFF stack and renders the imported neuron traces as lines within the volume. It can import single-channel 8bit and 16bit TIFF image stacks, and can import neuron traces in the SWC file format. TIFF files are loaded using a build of <a href="https://github.com/Twinklebear/tiff.js">libtiff compiled to WebAssembly</a>. The neurons are composited within the volume by rendering out the depth buffer and using this to terminate rays early in the volume when they hit the geometry, roughly similar to shadow mapping. A default demo dataset is included which renders a stitched version of the DIADEM NC Layer 1 Axons from the <a href="http://diademchallenge.org/">DIADEM Challenge</a>. <a href="https://www.willusher.io/webgl-neuron/">Try it out online!</a></p>
 
 			<a href="https://github.com/Twinklebear/webgl-neuron">
 				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgl-neuron.svg">
@@ -597,8 +597,6 @@ The bspline logo (above) was generated using this library with a cubic B-spline 
 
 	</div>
 
-
-<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
 
 
 </div>
