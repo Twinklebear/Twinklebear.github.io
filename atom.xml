@@ -3,7 +3,7 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2019-10-19T22:48:34-07:00</updated>
+	<updated>2019-11-20T08:28:04-07:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
@@ -11,9 +11,41 @@
 	</author>
 	
 	<entry>
+		<title>The RTX Shader Binding Table Three Ways</title>
+		<link href="https://www.willusher.io//graphics/2019/11/20/the-sbt-three-ways"/>
+		<updated>2019-11-20T00:00:00-07:00</updated>
+		<id>https://www.willusher.io//graphics/2019/11/20/the-sbt-three-ways</id>
+		<content type="html">
+&lt;p&gt;DirectX Ray Tracing, Vulkan’s NV Ray Tracing extension, and OptiX (or collectively, the RTX APIs)
+build on the same execution model for running user code to trace
+and process rays. The user creates a &lt;em&gt;Shader Binding Table&lt;/em&gt; (SBT), which consists of a set
+of shader function handles and embedded parameters for these functions. The shaders in the table
+are executed depending on whether or not a geometry was hit by a ray, and which geometry was hit.
+When a geometry is hit, a set of parameters specified on both the host and
+device side of the application combine to determine which shader is executed.
+The RTX APIs provide a great deal of flexibility in how the SBT can be set up and
+indexed into during rendering, leaving a number of options open to applications.
+However, with incorrect SBT access leading
+to crashes and difficult bugs, sparse examples or documentation, and
+subtle differences in naming and SBT setup between the APIs, properly setting up
+and accessing the SBT is an especially thorny part of the RTX APIs for new users.&lt;/p&gt;
+
+&lt;p&gt;In this post we’ll look at the similarities and differences of each ray tracing API’s shader
+binding table to gain a fundamental understanding of the execution model. I’ll then
+present an interactive tool for constructing the SBT, building a scene which uses it,
+and executing trace calls on the scene to see which hit groups and miss shaders are called.
+Finally, we’ll look at how this model can be brought back to the CPU using Embree,
+to potentially build a unified low-level API for ray tracing.&lt;/p&gt;
+
+
+			&lt;a href=&quot;https://www.willusher.io//graphics/2019/11/20/the-sbt-three-ways&quot;&gt;Continue Reading&lt;/a&gt;
+		</content>
+	</entry>
+	
+	<entry>
 		<title>Faster Shadow Rays on RTX</title>
 		<link href="https://www.willusher.io//graphics/2019/09/06/faster-shadow-rays-on-rtx"/>
-		<updated>2019-09-06T00:00:00-07:00</updated>
+		<updated>2019-09-06T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//graphics/2019/09/06/faster-shadow-rays-on-rtx</id>
 		<content type="html">
 &lt;p&gt;To determine if a hit point can be directly lit by a light source in the scene
@@ -45,7 +77,7 @@ which lets us skip creating an occlusion hit group entirely.&lt;/p&gt;
 	<entry>
 		<title>Volume Rendering with WebGL</title>
 		<link href="https://www.willusher.io//webgl/2019/01/13/volume-rendering-with-webgl"/>
-		<updated>2019-01-13T00:00:00-08:00</updated>
+		<updated>2019-01-13T00:00:00-07:00</updated>
 		<id>https://www.willusher.io//webgl/2019/01/13/volume-rendering-with-webgl</id>
 		<content type="html">
 &lt;figure&gt;
@@ -95,7 +127,7 @@ described in this post &lt;a href=&quot;https://www.willusher.io/webgl-volume-ra
 	<entry>
 		<title>Comments in LaTeX</title>
 		<link href="https://www.willusher.io//latex/2018/07/10/comments-in-latex"/>
-		<updated>2018-07-10T00:00:00-07:00</updated>
+		<updated>2018-07-10T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//latex/2018/07/10/comments-in-latex</id>
 		<content type="html">
 &lt;p&gt;When writing a paper in LaTeX, it’s common to leave
@@ -122,7 +154,7 @@ the text. This is easy to do with the
 	<entry>
 		<title>Distributed Rendering with Rust and Mio</title>
 		<link href="https://www.willusher.io//2016/01/02/distributed-rendering-with-rust-and-mio"/>
-		<updated>2016-01-02T00:00:00-08:00</updated>
+		<updated>2016-01-02T00:00:00-07:00</updated>
 		<id>https://www.willusher.io//2016/01/02/distributed-rendering-with-rust-and-mio</id>
 		<content type="html">
 &lt;p&gt;In this post we’ll take a look at adding distributed rendering to
@@ -148,7 +180,7 @@ if you want to try out the distributed rendering yourself.&lt;/p&gt;
 	<entry>
 		<title>Rendering an Animation in Rust</title>
 		<link href="https://www.willusher.io//2015/12/16/rendering-an-animation-in-rust"/>
-		<updated>2015-12-16T00:00:00-08:00</updated>
+		<updated>2015-12-16T00:00:00-07:00</updated>
 		<id>https://www.willusher.io//2015/12/16/rendering-an-animation-in-rust</id>
 		<content type="html">
 &lt;p&gt;In this post we’ll look at adding a pretty awesome new feature to &lt;a href=&quot;https://github.com/Twinklebear/tray_rust&quot;&gt;tray_rust&lt;/a&gt;,
@@ -165,7 +197,7 @@ machines spread across two clusters at my lab.&lt;/p&gt;
 	<entry>
 		<title>Porting a Ray Tracer to Rust, part 3</title>
 		<link href="https://www.willusher.io//2015/05/15/porting-a-ray-tracer-to-rust-part-3"/>
-		<updated>2015-05-15T00:00:00-07:00</updated>
+		<updated>2015-05-15T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//2015/05/15/porting-a-ray-tracer-to-rust-part-3</id>
 		<content type="html">
 &lt;p&gt;It’s been a little while since my last post on tray_rust as I’ve been a busy with classes, but I’ve
@@ -189,7 +221,7 @@ coincidence, since Rust 1.0.0 is being released &lt;a href=&quot;http://blog.rus
 	<entry>
 		<title>Porting a Ray Tracer to Rust, part 2</title>
 		<link href="https://www.willusher.io//2015/01/30/porting-a-ray-tracer-to-rust-part-2"/>
-		<updated>2015-01-30T00:00:00-08:00</updated>
+		<updated>2015-01-30T00:00:00-07:00</updated>
 		<id>https://www.willusher.io//2015/01/30/porting-a-ray-tracer-to-rust-part-2</id>
 		<content type="html">
 &lt;p&gt;As mentioned in my &lt;a href=&quot;/2014/12/30/porting-a-ray-tracer-to-rust-part-1&quot;&gt;previous post&lt;/a&gt; I spent the past month-ish
@@ -216,7 +248,7 @@ fast approaching.&lt;/p&gt;
 	<entry>
 		<title>Porting a Ray Tracer to Rust, part 1</title>
 		<link href="https://www.willusher.io//2014/12/30/porting-a-ray-tracer-to-rust-part-1"/>
-		<updated>2014-12-30T00:00:00-08:00</updated>
+		<updated>2014-12-30T00:00:00-07:00</updated>
 		<id>https://www.willusher.io//2014/12/30/porting-a-ray-tracer-to-rust-part-1</id>
 		<content type="html">
 &lt;p&gt;I’ve decided to port over my physically based ray tracer &lt;a href=&quot;https://github.com/Twinklebear/tray&quot;&gt;tray&lt;/a&gt;
@@ -242,7 +274,7 @@ sphere and save the image.&lt;/p&gt;
 	<entry>
 		<title>Postscript 1: Easy Cleanup</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2014/08/01/postscript-1-easy-cleanup"/>
-		<updated>2014-08-01T00:00:00-07:00</updated>
+		<updated>2014-08-01T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2014/08/01/postscript-1-easy-cleanup</id>
 		<content type="html">
 &lt;p&gt;In this quick postscript we’ll look into a simple way to clean up our various SDL resources with variadic templates
@@ -262,7 +294,7 @@ and so on.&lt;/p&gt;
 	<entry>
 		<title>Postscript 0: Properly Finding Resource Paths</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2014/06/16/postscript-0-properly-finding-resource-paths"/>
-		<updated>2014-06-16T00:00:00-07:00</updated>
+		<updated>2014-06-16T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2014/06/16/postscript-0-properly-finding-resource-paths</id>
 		<content type="html">
 &lt;p&gt;In this short postscript we’ll learn how to make use of &lt;a href=&quot;https://wiki.libsdl.org/SDL_GetBasePath&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SDL_GetBasePath&lt;/code&gt;&lt;/a&gt; to
@@ -279,7 +311,7 @@ be sure to grab that before getting started.&lt;/p&gt;
 	<entry>
 		<title>Lesson 0: CMake</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2014/03/06/lesson-0-cmake"/>
-		<updated>2014-03-06T00:00:00-08:00</updated>
+		<updated>2014-03-06T00:00:00-07:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2014/03/06/lesson-0-cmake</id>
 		<content type="html">
 &lt;p&gt;CMake is really useful for building the lessons since it lets us generate make files or project files for just about
@@ -295,7 +327,7 @@ available on &lt;a href=&quot;http://www.cmake.org/cmake/help/cmake_tutorial.htm
 	<entry>
 		<title>Lesson 6: True Type Fonts with SDL_ttf</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/12/18/lesson-6-true-type-fonts-with-sdl_ttf"/>
-		<updated>2013-12-18T00:00:00-08:00</updated>
+		<updated>2013-12-18T00:00:00-07:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/12/18/lesson-6-true-type-fonts-with-sdl_ttf</id>
 		<content type="html">
 &lt;p&gt;In this lesson we’ll see how to perform basic True Type font rendering with the SDL_ttf extension library.
@@ -312,7 +344,7 @@ take a peek at the &lt;a href=&quot;http://www.libsdl.org/projects/SDL_ttf/docs/
 	<entry>
 		<title>Lesson 5: Clipping Sprite Sheets</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/27/lesson-5-clipping-sprite-sheets"/>
-		<updated>2013-08-27T00:00:00-07:00</updated>
+		<updated>2013-08-27T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/27/lesson-5-clipping-sprite-sheets</id>
 		<content type="html">
 &lt;p&gt;It’s common in sprite based games to use a larger image file containing many smaller images, such as the 
@@ -328,7 +360,7 @@ each time but rather just which subsection of the texture.&lt;/p&gt;
 	<entry>
 		<title>Lesson 4: Handling Events</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/20/lesson-4-handling-events"/>
-		<updated>2013-08-20T00:00:00-07:00</updated>
+		<updated>2013-08-20T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/20/lesson-4-handling-events</id>
 		<content type="html">
 &lt;p&gt;In this lesson we’ll learn the basics of reading user input with SDL, in this simple example we’ll interpret any input
@@ -345,7 +377,7 @@ The code for this lesson is built off of the lesson 3 code, if you need that cod
 	<entry>
 		<title>Lesson 3: SDL Extension Libraries</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/18/lesson-3-sdl-extension-libraries"/>
-		<updated>2013-08-18T00:00:00-07:00</updated>
+		<updated>2013-08-18T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/18/lesson-3-sdl-extension-libraries</id>
 		<content type="html">
 &lt;p&gt;Up until now we’ve only been using BMP images as they’re the only type supported by the base SDL library,
@@ -364,7 +396,7 @@ and &lt;a href=&quot;http://www.libsdl.org/projects/SDL_mixer/&quot;&gt;SDL_mixe
 	<entry>
 		<title>Lesson 2: Don&#39;t Put Everything in Main</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-2-dont-put-everything-in-main"/>
-		<updated>2013-08-17T00:00:00-07:00</updated>
+		<updated>2013-08-17T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-2-dont-put-everything-in-main</id>
 		<content type="html">
 &lt;p&gt;In this lesson we’ll begin organizing our texture loading and rendering code from the previous lesson by 
@@ -379,7 +411,7 @@ SDL error logger and learn how images are positioned and scaled when rendering w
 	<entry>
 		<title>Lesson 1: Hello World</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-1-hello-world"/>
-		<updated>2013-08-17T00:00:00-07:00</updated>
+		<updated>2013-08-17T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-1-hello-world</id>
 		<content type="html">
 &lt;p&gt;In this lesson we’ll learn how to open a window, create a rendering context and draw
@@ -394,7 +426,7 @@ project and let’s get started!&lt;/p&gt;
 	<entry>
 		<title>Lesson 0: Visual Studio</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-visual-studio"/>
-		<updated>2013-08-15T00:00:00-07:00</updated>
+		<updated>2013-08-15T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-visual-studio</id>
 		<content type="html">
 &lt;p&gt;Now that we’ve got the libraries installed we’ll want to create a new project to include and
@@ -409,7 +441,7 @@ load our template and get to work. First we need a new empty C++ project.&lt;/p&
 	<entry>
 		<title>Lesson 0: Setting Up SDL</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-setting-up-sdl"/>
-		<updated>2013-08-15T00:00:00-07:00</updated>
+		<updated>2013-08-15T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-setting-up-sdl</id>
 		<content type="html">
 &lt;p&gt;The first step is to get the SDL2 development libraries setup on your system, you can download
@@ -423,7 +455,7 @@ them from the &lt;a href=&quot;http://www.libsdl.org/download-2.0.php&quot;&gt;S
 	<entry>
 		<title>Lesson 0: MinGW</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mingw"/>
-		<updated>2013-08-15T00:00:00-07:00</updated>
+		<updated>2013-08-15T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mingw</id>
 		<content type="html">
 &lt;p&gt;To build the projects with mingw we’ll be using a lightweight makefile that will set the
@@ -443,7 +475,7 @@ match your compiler (32/64bit) and the location of your SDL folder. To use makef
 	<entry>
 		<title>Lesson 0: Mac Command Line</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mac-command-line"/>
-		<updated>2013-08-15T00:00:00-07:00</updated>
+		<updated>2013-08-15T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mac-command-line</id>
 		<content type="html">
 &lt;p&gt;To build the projects on OS X we’ll be using a simple makefile that will include the framework for us.
@@ -460,7 +492,7 @@ downloads page and now have it available as a framework.&lt;/p&gt;
 	<entry>
 		<title>Lesson 0: Linux Command Line</title>
 		<link href="https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line"/>
-		<updated>2013-08-15T00:00:00-07:00</updated>
+		<updated>2013-08-15T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line</id>
 		<content type="html">
 &lt;p&gt;To build the projects on Linux we’ll be using a simple makefile that will setup the include and library
@@ -482,7 +514,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>Scalable Ray Tracing Using the Distributed FrameBuffer</title>
 		<link href="https://www.willusher.io/publications/dfb"/>
-		<updated>2019-07-09T23:00:00-07:00</updated>
+		<updated>2019-07-10T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/dfb</id>
 		<content type="html">
 			
@@ -501,7 +533,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>Ray Tracing Generalized Tube Primitives: Method and Applications</title>
 		<link href="https://www.willusher.io/publications/tubes"/>
-		<updated>2019-07-09T23:00:00-07:00</updated>
+		<updated>2019-07-10T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/tubes</id>
 		<content type="html">
 			
@@ -520,7 +552,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>Efficient Space Skipping and Adaptive Sampling of Unstructured Volumes Using Hardware Accelerated Ray Tracing</title>
 		<link href="https://www.willusher.io/publications/rtx-space-skipping"/>
-		<updated>2019-10-19T23:00:00-07:00</updated>
+		<updated>2019-10-20T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/rtx-space-skipping</id>
 		<content type="html">
 			
@@ -539,7 +571,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>RTX Beyond Ray Tracing: Exploring the Use of Hardware Ray Tracing Cores for Tet-Mesh Point Location</title>
 		<link href="https://www.willusher.io/publications/rtx-points"/>
-		<updated>2019-07-07T23:00:00-07:00</updated>
+		<updated>2019-07-08T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/rtx-points</id>
 		<content type="html">
 			
@@ -558,7 +590,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>Spatially-aware Parallel I/O for Particle Data</title>
 		<link href="https://www.willusher.io/publications/icpp19"/>
-		<updated>2019-08-04T23:00:00-07:00</updated>
+		<updated>2019-08-05T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/icpp19</id>
 		<content type="html">
 			
@@ -577,7 +609,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>CPU Isosurface Ray Tracing of Adaptive Mesh Refinement Data</title>
 		<link href="https://www.willusher.io/publications/amr-iso"/>
-		<updated>2018-12-31T22:00:00-08:00</updated>
+		<updated>2018-12-31T23:00:00-07:00</updated>
 		<id>https://www.willusher.io//publications/amr-iso</id>
 		<content type="html">
 			
@@ -596,7 +628,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>A Virtual Reality Visualization Tool for Neuron Tracing</title>
 		<link href="https://www.willusher.io/publications/vrnt"/>
-		<updated>2017-12-31T22:00:00-08:00</updated>
+		<updated>2017-12-31T23:00:00-07:00</updated>
 		<id>https://www.willusher.io//publications/vrnt</id>
 		<content type="html">
 			
@@ -615,7 +647,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>libIS: A Lightweight Library for Flexible In Transit Visualization</title>
 		<link href="https://www.willusher.io/publications/libis-isav18"/>
-		<updated>2018-11-11T22:00:00-08:00</updated>
+		<updated>2018-11-11T23:00:00-07:00</updated>
 		<id>https://www.willusher.io//publications/libis-isav18</id>
 		<content type="html">
 			
@@ -634,7 +666,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>VisIt-OSPRay: Toward an Exascale Volume Visualization System</title>
 		<link href="https://www.willusher.io/publications/visit-ospray"/>
-		<updated>2018-06-03T23:00:00-07:00</updated>
+		<updated>2018-06-04T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/visit-ospray</id>
 		<content type="html">
 			
@@ -653,7 +685,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>Scalable Data Management of the Uintah Simulation Framework for Next-Generation Engineering Problems with Radiation</title>
 		<link href="https://www.willusher.io/publications/scasia18"/>
-		<updated>2018-03-19T23:00:00-07:00</updated>
+		<updated>2018-03-20T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/scasia18</id>
 		<content type="html">
 			
@@ -665,7 +697,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>CPU Volume Rendering of Adaptive Mesh Refinement Data</title>
 		<link href="https://www.willusher.io/publications/cvamr"/>
-		<updated>2017-11-26T22:00:00-08:00</updated>
+		<updated>2017-11-26T23:00:00-07:00</updated>
 		<id>https://www.willusher.io//publications/cvamr</id>
 		<content type="html">
 			
@@ -684,7 +716,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>Progressive CPU Volume Rendering with Sample Accumulation</title>
 		<link href="https://www.willusher.io/publications/savr"/>
-		<updated>2017-06-11T23:00:00-07:00</updated>
+		<updated>2017-06-12T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/savr</id>
 		<content type="html">
 			
@@ -703,7 +735,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>In Situ Exploration of Particle Simulations with CPU Ray Tracing</title>
 		<link href="https://www.willusher.io/publications/isp-jsfi"/>
-		<updated>2016-09-30T23:00:00-07:00</updated>
+		<updated>2016-10-01T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/isp-jsfi</id>
 		<content type="html">
 			
@@ -722,7 +754,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures</title>
 		<link href="https://www.willusher.io/publications/vtkm"/>
-		<updated>2016-05-08T23:00:00-07:00</updated>
+		<updated>2016-05-09T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/vtkm</id>
 		<content type="html">
 			
@@ -734,7 +766,7 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 	<entry>
 		<title>CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees</title>
 		<link href="https://www.willusher.io/publications/pkd"/>
-		<updated>2015-10-24T23:00:00-07:00</updated>
+		<updated>2015-10-25T00:00:00-06:00</updated>
 		<id>https://www.willusher.io//publications/pkd</id>
 		<content type="html">
 			

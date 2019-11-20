@@ -72,3 +72,12 @@ a.icon:hover {
 	color: black;
 }
 
+blockquote {
+    padding-top: 0.5em;
+    padding-bottom: 0.25em;
+    border-left: 2px solid lightgray;
+    margin-left: 1em;
+    padding-left: 1em;
+    font-style: italic;
+}
+

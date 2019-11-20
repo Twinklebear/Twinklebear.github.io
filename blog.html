@@ -91,6 +91,38 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2019/11/20/the-sbt-three-ways"><h3>The RTX Shader Binding Table Three Ways</h3></a>
+		<b>20 Nov 2019</b>
+		
+<p>DirectX Ray Tracing, Vulkan’s NV Ray Tracing extension, and OptiX (or collectively, the RTX APIs)
+build on the same execution model for running user code to trace
+and process rays. The user creates a <em>Shader Binding Table</em> (SBT), which consists of a set
+of shader function handles and embedded parameters for these functions. The shaders in the table
+are executed depending on whether or not a geometry was hit by a ray, and which geometry was hit.
+When a geometry is hit, a set of parameters specified on both the host and
+device side of the application combine to determine which shader is executed.
+The RTX APIs provide a great deal of flexibility in how the SBT can be set up and
+indexed into during rendering, leaving a number of options open to applications.
+However, with incorrect SBT access leading
+to crashes and difficult bugs, sparse examples or documentation, and
+subtle differences in naming and SBT setup between the APIs, properly setting up
+and accessing the SBT is an especially thorny part of the RTX APIs for new users.</p>
+
+<p>In this post we’ll look at the similarities and differences of each ray tracing API’s shader
+binding table to gain a fundamental understanding of the execution model. I’ll then
+present an interactive tool for constructing the SBT, building a scene which uses it,
+and executing trace calls on the scene to see which hit groups and miss shaders are called.
+Finally, we’ll look at how this model can be brought back to the CPU using Embree,
+to potentially build a unified low-level API for ray tracing.</p>
+
+
+
+		<a href="/graphics/2019/11/20/the-sbt-three-ways">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/graphics/2019/09/06/faster-shadow-rays-on-rtx"><h3>Faster Shadow Rays on RTX</h3></a>
 		<b>06 Sep 2019</b>
 		
@@ -195,32 +227,6 @@ the text. This is easy to do with the
 
 
 		<a href="/latex/2018/07/10/comments-in-latex">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/2016/01/02/distributed-rendering-with-rust-and-mio"><h3>Distributed Rendering with Rust and Mio</h3></a>
-		<b>02 Jan 2016</b>
-		
-<p>In this post we’ll take a look at adding distributed rendering to
-<a href="https://github.com/Twinklebear/tray_rust">tray_rust</a> which will let us take advantage of multiple
-machines when rendering an image, like a compute cluster.
-To do this we’ll look at options for how to distribute the rendering job across multiple nodes
-and what sort of communication is needed synchronize their work. We’ll also look into how we
-can use <a href="https://github.com/carllerche/mio">mio</a> to write an efficient master process that
-can manage multiple workers effectively.</p>
-
-<p>After implementing a simple technique to distribute the job we’ll discuss
-the scalability of this approach and possible paths forward to improve it. I’ve
-also recently written a <a href="https://github.com/Twinklebear/tray_rust_blender">plugin for Blender</a> so you can
-easily create your own scenes and
-will mention a bit on how to run the ray tracer on Google Compute Engine (or AWS EC2)
-if you want to try out the distributed rendering yourself.</p>
-
-
-
-		<a href="/2016/01/02/distributed-rendering-with-rust-and-mio">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
 		</div>
 	</div>
