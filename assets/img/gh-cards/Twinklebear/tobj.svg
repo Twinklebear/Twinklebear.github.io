@@ -28,7 +28,7 @@
         <g fill="#586069" fill-opacity="1" stroke="#586069" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)">
           <!-- The number of stars or fork -->
           <a href="https://github.com/Twinklebear/tobj/stargazers">
-                  <text fill="#586069" fill-opacity="1" stroke="none" xml:space="preserve" x="101" y="91" font-family="sans-serif" font-size="12" font-weight="400" font-style="normal">70</text>
+                  <text fill="#586069" fill-opacity="1" stroke="none" xml:space="preserve" x="101" y="91" font-family="sans-serif" font-size="12" font-weight="400" font-style="normal">71</text>
                 </a>
         </g>
 
@@ -37,7 +37,7 @@
         <g fill="#586069" fill-opacity="1" stroke="#586069" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)">
           <!-- The number of forks or none -->
           <a href="https://github.com/Twinklebear/tobj/network/members">
-                <text fill="" fill-opacity="1" stroke="none" xml:space="preserve" x="160" y="91" font-family="sans-serif" font-size="12" font-weight="400" font-style="normal">21</text>
+                <text fill="" fill-opacity="1" stroke="none" xml:space="preserve" x="160" y="91" font-family="sans-serif" font-size="12" font-weight="400" font-style="normal">22</text>
               </a>
         </g>
         <!-- Language color --><circle cx="23" cy="86" r="7" stroke="none" fill="#dea584"/>
