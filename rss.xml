@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Mon, 24 Feb 2020 11:14:16 -0700</lastBuildDate>
-		<pubDate>Mon, 24 Feb 2020 11:14:16 -0700</pubDate>
+		<lastBuildDate>Tue, 25 Feb 2020 23:15:14 -0700</lastBuildDate>
+		<pubDate>Tue, 25 Feb 2020 23:15:14 -0700</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -509,6 +509,25 @@ of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with
 			<pubDate>Thu, 15 Aug 2013 00:00:00 -0600</pubDate>
 		</item>
 		
+		
+		<item>
+			<title> A Comparison of Rendering Techniques for 3D Line Sets with Transparency</title>
+			<description>
+				
+				&lt;figure&gt;
+					&lt;img src=&quot;https://i.imgur.com/Sceg1iM.jpg&quot;/&gt;
+					&lt;figcaption&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Strengths and weaknesses of transparent line rendering techniques. For each pair, the left image shows the ground truth (GT). Right images show (a) approximate blending using MLABDB, (b) opacity over-estimation of MBOIT, (c) reverse blending order of MLABDB, (d) blur effect of MBOIT. Speed-ups to GT rendering technique: (a) 7, (b) 2, (c) 3.5, (d) 4.5.&lt;/i&gt;
+					&lt;/figcaption&gt;
+				&lt;/figure&gt;
+				
+				This paper presents a comprehensive study of rendering techniques for 3D line sets with transparency. The rendering of transparent lines is widely used for visualizing trajectories of tracer particles in flow fields. Transparency is then used to fade out lines deemed unimportant, based on, for instance, geometric properties or attributes defined along with them. Accurate blending of transparent lines requires rendering the lines in back-to-front or front-to-back order, yet enforcing this order for space-filling 3D line sets with extremely high-depth complexity becomes challenging. In this paper, we study CPU and GPU rendering techniques for transparent 3D line sets. We compare accurate and approximate techniques using optimized implementations and several benchmark data sets. We discuss the effects of data size and transparency on quality, performance, and memory consumption. Based on our study, we propose two improvements to per-pixel fragment lists and multi-layer alpha blending. The first improves the rendering speed via an improved GPU sorting operation, and the second improves rendering quality via transparency-based bucketing.
+				&lt;a href=&quot;https://www.willusher.io//publications/tvcg20_oit&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io/publications/tvcg20_oit</link>
+			<guid>https://www.willusher.io/publications/tvcg20_oit</guid>
+			<pubDate>Sun, 23 Feb 2020 23:00:00 -0700</pubDate>
+		</item>
 		
 		<item>
 			<title>Scalable Ray Tracing Using the Distributed FrameBuffer</title>

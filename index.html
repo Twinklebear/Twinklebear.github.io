@@ -13,7 +13,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
-	<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
 
 	<link href="/assets/syntax.css" rel="stylesheet">
 	<link href="/assets/custom.css" rel="stylesheet">
@@ -84,7 +85,7 @@
 		</div>
 	</nav>
 
-	<div class="container content">
+	<div class="container content mb-4">
 		
 
 
@@ -132,25 +133,43 @@
 	</div>
 	<div class="col-12 mb-1">
 		<h2 class="border-bottom border-secondary">Publications</h2>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/xVd40uT.jpg">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>Scalable Ray Tracing Using the Distributed FrameBuffer</b></h5>
-				Will Usher, Ingo Wald, Jefferson Amstutz, Johannes Günther, Carson Brownlee, and Valerio Pascucci. <i>Computer Graphics Forum (Proceedings of EuroVis)</i>, 2019.
-				<br/>
-				<a class="mr-2" href="/publications/dfb">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/dfb.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@article{usher_scalable_2019,
+        <ul class="nav nav-tabs" id="pubTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="selectedPubsTab" data-toggle="tab" href="#selectedPublications" role="tab"
+                    aria-controls="selectedPublications" aria-selected="true">
+                    Selected Publications</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="allPubsTab" data-toggle="tab" href="#allPublications" role="tab"
+                    aria-controls="allPublications" aria-selected="false">
+                    All Publications</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="selectedPublications" role="tabpanel" aria-labelledby="selectedPubsTab">
+                <div class="col-12 mt-4"></div>
+                
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/xVd40uT.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Scalable Ray Tracing Using the Distributed FrameBuffer</b></h5>
+        Will Usher, Ingo Wald, Jefferson Amstutz, Johannes Günther, Carson Brownlee, and Valerio Pascucci. <i>Computer Graphics Forum (Proceedings of EuroVis)</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/dfb">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/dfb.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{usher_scalable_2019,
  journal = {Computer Graphics Forum},
  title = {{Scalable Ray Tracing Using the Distributed FrameBuffer}},
  author = {Usher, Will and Wald, Ingo and Amstutz, Jefferson and Günther, Johannes and Brownlee, Carson and Pascucci, Valerio},
@@ -159,202 +178,188 @@
  ISSN = {1467-8659},
  DOI = {10.1111/cgf.13702}
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1111/cgf.13702">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/gsgdwlZ.jpg">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>Ray Tracing Generalized Tube Primitives: Method and Applications</b></h5>
-				Mengjiao Han, Ingo Wald, Will Usher, Qi Wu, Feng Wang, Valerio Pascucci, Charles D. Hansen, and Chris R. Johnson. <i>Computer Graphics Forum (Proceedings of EuroVis)</i>, 2019.
-				<br/>
-				<a class="mr-2" href="/publications/tubes">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/tubes.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@article{han_ray_2019,
- journal = {Computer Graphics Forum},
- title = {{Ray Tracing Generalized Tube Primitives: Method and Applications}},
- author = {Han, Mengjiao and Wald, Ingo and Usher, Will and Wu, Qi and Wang, Feng and Pascucci, Valerio and Hansen, Charles D. and Johnson, Chris R.},
- year = {2019},
- publisher = {The Eurographics Association and John Wiley & Sons Ltd.},
- ISSN = {1467-8659},
- DOI = {10.1111/cgf.13703}
-}" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1111/cgf.13703">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/deoKQwV.jpg">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>Efficient Space Skipping and Adaptive Sampling of Unstructured Volumes Using Hardware Accelerated Ray Tracing</b></h5>
-				Nate Morrical, Will Usher, Ingo Wald and Valerio Pascucci. <i>To Appear, IEEE VIS Short Papers</i>, 2019.
-				<br/>
-				<a class="mr-2" href="/publications/rtx-space-skipping">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/vis19-space-skipping-short.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@inproceedings{morrical_skipping_2019,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1111/cgf.13702">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/deoKQwV.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Efficient Space Skipping and Adaptive Sampling of Unstructured Volumes Using Hardware Accelerated Ray Tracing</b></h5>
+        Nate Morrical, Will Usher, Ingo Wald and Valerio Pascucci. <i>To Appear, IEEE VIS Short Papers</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/rtx-space-skipping">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/vis19-space-skipping-short.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{morrical_skipping_2019,
  title = {Efficient {Space} {Skipping} and {Adaptive} {Sampling} of {Unstructured} {Volumes} {Using} {Hardware} {Accelerated} {Ray} {Tracing}},
  booktitle = {IEEE VIS 2019 - Short Papers},
  author = {Morrical, Nate, and Usher, Will and Wald, Ingo, and Pascucci, Valerio},
  year = {2019},
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/nbHnD45.jpg">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>RTX Beyond Ray Tracing: Exploring the Use of Hardware Ray Tracing Cores for Tet-Mesh Point Location</b></h5>
-				Ingo Wald, Will Usher, Nate Morrical, Laura Lediaev, and Valerio Pascucci. <i>High Performance Graphics Short Papers</i>, 2019.
-				<br/>
-				<a class="mr-2" href="/publications/rtx-points">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/rtx-points-hpg19.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@inproceedings{wald_rtx_2019,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/nbHnD45.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>RTX Beyond Ray Tracing: Exploring the Use of Hardware Ray Tracing Cores for Tet-Mesh Point Location</b></h5>
+        Ingo Wald, Will Usher, Nate Morrical, Laura Lediaev, and Valerio Pascucci. <i>High Performance Graphics Short Papers</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/rtx-points">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/rtx-points-hpg19.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{wald_rtx_2019,
  title = {{RTX} {Beyond} {Ray} {Tracing:} {Exploring} the {Use} of {Hardware} {Ray} {Tracing} {Cores} for {Tet}-{Mesh} {Point} {Location}},
  booktitle = {High-Performance Graphics - Short Papers},
  author = {Wald, Ingo and Usher, Will and Morrical, Nate and Lediaev, Laura and Pascucci, Valerio},
  year = {2019},
  DOI = {10.2312/hpg.20191189}
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.2312/hpg.20191189">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/GWCom0N.jpg">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>Spatially-aware Parallel I/O for Particle Data</b></h5>
-				Sidharth Kumar, Steve Petruzza, Will Usher, and Valerio Pascucci. <i>48th International Conference on Parallel Processing (ICPP)</i>, 2019.
-				<br/>
-				<a class="mr-2" href="/publications/icpp19">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/icpp19.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@inproceedings{kumar_spatially-aware_2019,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.2312/hpg.20191189">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/GWCom0N.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Spatially-aware Parallel I/O for Particle Data</b></h5>
+        Sidharth Kumar, Steve Petruzza, Will Usher, and Valerio Pascucci. <i>48th International Conference on Parallel Processing (ICPP)</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/icpp19">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/icpp19.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{kumar_spatially-aware_2019,
  title = {{Spatially}-aware {Parallel} {I}/{O} for {Particle} {Data}},
  booktitle = {Proceedings of the 48th International Conference on Parallel Processing},
  series = {ICPP 2019}, author = {Kumar, Sidharth and Petruzza, Steve and Usher, Will and Pascucci, Valerio},
  year = {2019},
  doi = {10.1145/3337821.3337875}
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1145/3337821.3337875">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/Yzxf5OT.jpg">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>CPU Isosurface Ray Tracing of Adaptive Mesh Refinement Data</b></h5>
-				Feng Wang, Ingo Wald, Qi Wu, Will Usher and Chris R. Johnson. <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2019.
-				<br/>
-				<a class="mr-2" href="/publications/amr-iso">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/amr-isosurface.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@article{Wang_AMR_Iso_2019,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1145/3337821.3337875">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/Yzxf5OT.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>CPU Isosurface Ray Tracing of Adaptive Mesh Refinement Data</b></h5>
+        Feng Wang, Ingo Wald, Qi Wu, Will Usher and Chris R. Johnson. <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/amr-iso">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/amr-isosurface.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{Wang_AMR_Iso_2019,
  author={F. Wang and I. Wald and Q. Wu and W. Usher and C. R. Johnson},
  journal={{IEEE} {Transactions} on {Visualization} and {Computer} {Graphics}},
  title={{CPU} {Isosurface} {Ray} {Tracing} of {Adaptive} {Mesh} {Refinement} {Data}},
  year={2019},
  doi={10.1109/TVCG.2018.2864850},
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1109/TVCG.2018.2864850">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/2iL7UdK.png">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>A Virtual Reality Visualization Tool for Neuron Tracing</b></h5>
-				Will Usher, Pavol Klacansky, Frederick Federer, Peer-Timo Bremer, Aaron Knoll, Jeff Yarch, Alessandra Angelucci, and Valerio Pascucci. <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2018.
-				<br/>
-				<a class="mr-2" href="/publications/vrnt">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@article{Usher_VRNT_2018,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1109/TVCG.2018.2864850">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/2iL7UdK.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>A Virtual Reality Visualization Tool for Neuron Tracing</b></h5>
+        Will Usher, Pavol Klacansky, Frederick Federer, Peer-Timo Bremer, Aaron Knoll, Jeff Yarch, Alessandra Angelucci, and Valerio Pascucci. <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2018.
+        <br/>
+        <a class="mr-2" href="/publications/vrnt">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{Usher_VRNT_2018,
  author={W. Usher and P. Klacansky and F. Federer and P. T. Bremer and A. Knoll and J. Yarch and A. Angelucci and V. Pascucci},
  journal={{IEEE} {Transactions} on {Visualization} and {Computer} {Graphics}},
  title={A {Virtual} {Reality} {Visualization} {Tool} for {Neuron} {Tracing}},
@@ -366,34 +371,38 @@
  ISSN={1077-2626},
  month={Jan},
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1109/TVCG.2017.2744079">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/aCX8XH2.png">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>libIS: A Lightweight Library for Flexible In Transit Visualization</b></h5>
-				Will Usher, Silvio Rizzi, Ingo Wald, Jefferson Amstutz, Joseph Insley, Venkatram Vishwanath, Nicola Ferrier, Michael E. Papka, and Valerio Pascucci. <i>ISAV: In Situ Infrastructures for Enabling Extreme-Scale Analysis and Visualization (ISAV '18)</i>, 2018.
-				<br/>
-				<a class="mr-2" href="/publications/libis-isav18">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/libis-isav18.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@inproceedings{usher_libis_2018,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1109/TVCG.2017.2744079">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/aCX8XH2.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>libIS: A Lightweight Library for Flexible In Transit Visualization</b></h5>
+        Will Usher, Silvio Rizzi, Ingo Wald, Jefferson Amstutz, Joseph Insley, Venkatram Vishwanath, Nicola Ferrier, Michael E. Papka, and Valerio Pascucci. <i>ISAV: In Situ Infrastructures for Enabling Extreme-Scale Analysis and Visualization (ISAV '18)</i>, 2018.
+        <br/>
+        <a class="mr-2" href="/publications/libis-isav18">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/libis-isav18.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{usher_libis_2018,
  title = {{libIS}: {A} {Lightweight} {Library} for {Flexible} {In} {Transit} {Visualization}},
  year = {2018},
  booktitle = {ISAV: In Situ Infrastructures for Enabling Extreme-Scale Analysis and Visualization},
@@ -401,34 +410,38 @@
  author = {Usher, Will and Rizzi, Silvio and Wald, Ingo and Amstutz, Jefferson and Insley, Joseph and Vishwanath, Venkatram and Ferrier, Nicola and Papka, Michael E. and Pascucci, Valerio},
  doi={10.1145/3281464.3281466}
  }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1145/3281464.3281466">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/RxCFTxo.jpg">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>VisIt-OSPRay: Toward an Exascale Volume Visualization System</b></h5>
-				Qi Wu, Will Usher, Steve Petruzza, Sidharth Kumar, Feng Wang, Ingo Wald, Valerio Pascucci, and Charles D. Hansen. <i>Eurographics Symposium on Parallel Graphics and Visualization</i>, 2018.
-				<br/>
-				<a class="mr-2" href="/publications/visit-ospray">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/visit-ospray-egpgv18.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@inproceedings{Wu_VisItOSPRay_2018,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1145/3281464.3281466">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/RxCFTxo.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>VisIt-OSPRay: Toward an Exascale Volume Visualization System</b></h5>
+        Qi Wu, Will Usher, Steve Petruzza, Sidharth Kumar, Feng Wang, Ingo Wald, Valerio Pascucci, and Charles D. Hansen. <i>Eurographics Symposium on Parallel Graphics and Visualization</i>, 2018.
+        <br/>
+        <a class="mr-2" href="/publications/visit-ospray">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/visit-ospray-egpgv18.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{Wu_VisItOSPRay_2018,
  booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},
  editor = {Hank Childs and Fernando Cucchietti},
  title = {{VisIt}-{OSPRay}: {Toward} an {Exascale} {Volume} {Visualization} {System}},
@@ -439,73 +452,40 @@
  ISBN = {978-3-03868-054-3},
  DOI = {10.2312/pgv.20181091}
  }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.2312/pgv.20181091">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/w5YWvd6.png">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>Scalable Data Management of the Uintah Simulation Framework for Next-Generation Engineering Problems with Radiation</b></h5>
-				Sidharth Kumar, Alan Humphrey, Will Usher, Steve Petruzza, Brad Peterson, John A. Schmidt, Derek Harris, Ben Isaac, Jeremy Thornock, Todd Harman, Valerio Pascucci, and Martin Berzins. <i>Supercomputing Frontiers</i>, 2018.
-				<br/>
-				<a class="mr-2" href="/publications/scasia18">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/scasia18.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@incollection{kumar_scalable_2018,
- title = {Scalable {Data} {Management} of the {Uintah} {Simulation} {Framework} for {Next}-{Generation} {Engineering} {Problems} with {Radiation}},
- volume = {10776},
- isbn = {978-3-319-69952-3 978-3-319-69953-0},
- booktitle = {Supercomputing {Frontiers}},
- publisher = {Springer International Publishing},
- author = {Kumar, Sidharth and Humphrey, Alan and Usher, Will and Petruzza, Steve and Peterson, Brad and Schmidt, John A. and Harris, Derek and Isaac, Ben and Thornock, Jeremy and Harman, Todd and Pascucci, Valerio and Berzins, Martin},
- editor = {Yokota, Rio and Wu, Weigang},
- year = {2018},
- doi = {10.1007/978-3-319-69953-0_13},
- pages = {219--240},
-}" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1007/978-3-319-69953-0_13">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/JFShB4G.png">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>CPU Volume Rendering of Adaptive Mesh Refinement Data</b></h5>
-				Ingo Wald, Carson Brownlee, Will Usher, Aaron Knoll. <i>SIGGRAPH Asia 2017 Symposium on Visualization</i>, 2017.
-				<br/>
-				<a class="mr-2" href="/publications/cvamr">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/cvamr/cvamr.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@inproceedings{Wald_CVAMR_2017,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.2312/pgv.20181091">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/JFShB4G.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>CPU Volume Rendering of Adaptive Mesh Refinement Data</b></h5>
+        Ingo Wald, Carson Brownlee, Will Usher, Aaron Knoll. <i>SIGGRAPH Asia 2017 Symposium on Visualization</i>, 2017.
+        <br/>
+        <a class="mr-2" href="/publications/cvamr">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/cvamr/cvamr.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{Wald_CVAMR_2017,
  author = {Wald, Ingo and Brownlee, Carson and Usher, Will and Knoll, Aaron},
  title = {CPU Volume Rendering of Adaptive Mesh Refinement Data},
  booktitle = {SIGGRAPH Asia 2017 Symposium on Visualization},
@@ -522,34 +502,542 @@
  publisher = {ACM},
  address = {New York, NY, USA},
  }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1145/3139295.3139305">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/tdxjYs3.png">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>Progressive CPU Volume Rendering with Sample Accumulation</b></h5>
-				Will Usher, Jefferson Amstutz, Carson Brownlee, Aaron Knoll, Ingo Wald. <i>Eurographics Symposium on Parallel Graphics and Visualization</i>, 2017.
-				<br/>
-				<a class="mr-2" href="/publications/savr">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/savr/savr.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@inproceedings{Usher_SAVR_2017,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1145/3139295.3139305">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/qpTN5kR.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees</b></h5>
+        Ingo Wald, Aaron Knoll, Gregory P. Johnson, Will Usher, Valerio Pasucci, Michael E. Papka. <i>IEEE Vis (conference)</i>, 2015.
+        <br/>
+        <a class="mr-2" href="/publications/pkd">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/pkd/pkd_tree.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{Wald_PKD_2015,
+ author={I. Wald and A. Knoll and G. P. Johnson and W. Usher and V. Pascucci and M. E. Papka},
+ booktitle={2015 IEEE Scientific Visualization Conference (SciVis)},
+ title={{CPU} ray tracing large particle data with balanced {P-k-d} trees},
+ year={2015},
+ doi={10.1109/SciVis.2015.7429492},
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1109/SciVis.2015.7429492">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                    
+                
+            </div>
+            <div class="tab-pane fade" id="allPublications" role="tabpanel" aria-labelledby="allPubsTab">
+                <div class="col-12 mt-4"></div>
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/Yy9H2ZR.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b> A Comparison of Rendering Techniques for 3D Line Sets with Transparency</b></h5>
+        Michael Kern, Christoph Neuhauser, Torben Maack, Mengjiao Han, Will Usher, Rüdiger Westermann. <i>IEEE Transactions on Visualization and Computer Graphics (To Appear)</i>, 2020.
+        <br/>
+        <a class="mr-2" href="/publications/tvcg20_oit">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/tvcg20_oit/tvcg_oit_lines.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{kern_comparison_20,
+ journal = {IEEE Transactions on Visualization and Computer Graphics (To Appear)},
+ title = {{A Comparison of Rendering Techniques for 3D Line Sets with Transparency}},
+ author = {Kern, Michael and Neuhauser, Christoph and Maack, Torben and Han, Mengjiao and Usher, Will and Westermann, Rüdiger},
+ year = {2020},
+ DOI = {10.1109/TVCG.2020.2975795}
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1109/TVCG.2020.2975795">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/xVd40uT.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Scalable Ray Tracing Using the Distributed FrameBuffer</b></h5>
+        Will Usher, Ingo Wald, Jefferson Amstutz, Johannes Günther, Carson Brownlee, and Valerio Pascucci. <i>Computer Graphics Forum (Proceedings of EuroVis)</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/dfb">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/dfb.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{usher_scalable_2019,
+ journal = {Computer Graphics Forum},
+ title = {{Scalable Ray Tracing Using the Distributed FrameBuffer}},
+ author = {Usher, Will and Wald, Ingo and Amstutz, Jefferson and Günther, Johannes and Brownlee, Carson and Pascucci, Valerio},
+ year = {2019},
+ publisher = {The Eurographics Association and John Wiley & Sons Ltd.},
+ ISSN = {1467-8659},
+ DOI = {10.1111/cgf.13702}
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1111/cgf.13702">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/gsgdwlZ.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Ray Tracing Generalized Tube Primitives: Method and Applications</b></h5>
+        Mengjiao Han, Ingo Wald, Will Usher, Qi Wu, Feng Wang, Valerio Pascucci, Charles D. Hansen, and Chris R. Johnson. <i>Computer Graphics Forum (Proceedings of EuroVis)</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/tubes">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/tubes.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{han_ray_2019,
+ journal = {Computer Graphics Forum},
+ title = {{Ray Tracing Generalized Tube Primitives: Method and Applications}},
+ author = {Han, Mengjiao and Wald, Ingo and Usher, Will and Wu, Qi and Wang, Feng and Pascucci, Valerio and Hansen, Charles D. and Johnson, Chris R.},
+ year = {2019},
+ publisher = {The Eurographics Association and John Wiley & Sons Ltd.},
+ ISSN = {1467-8659},
+ DOI = {10.1111/cgf.13703}
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1111/cgf.13703">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/deoKQwV.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Efficient Space Skipping and Adaptive Sampling of Unstructured Volumes Using Hardware Accelerated Ray Tracing</b></h5>
+        Nate Morrical, Will Usher, Ingo Wald and Valerio Pascucci. <i>To Appear, IEEE VIS Short Papers</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/rtx-space-skipping">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/vis19-space-skipping-short.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{morrical_skipping_2019,
+ title = {Efficient {Space} {Skipping} and {Adaptive} {Sampling} of {Unstructured} {Volumes} {Using} {Hardware} {Accelerated} {Ray} {Tracing}},
+ booktitle = {IEEE VIS 2019 - Short Papers},
+ author = {Morrical, Nate, and Usher, Will and Wald, Ingo, and Pascucci, Valerio},
+ year = {2019},
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/nbHnD45.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>RTX Beyond Ray Tracing: Exploring the Use of Hardware Ray Tracing Cores for Tet-Mesh Point Location</b></h5>
+        Ingo Wald, Will Usher, Nate Morrical, Laura Lediaev, and Valerio Pascucci. <i>High Performance Graphics Short Papers</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/rtx-points">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/rtx-points-hpg19.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{wald_rtx_2019,
+ title = {{RTX} {Beyond} {Ray} {Tracing:} {Exploring} the {Use} of {Hardware} {Ray} {Tracing} {Cores} for {Tet}-{Mesh} {Point} {Location}},
+ booktitle = {High-Performance Graphics - Short Papers},
+ author = {Wald, Ingo and Usher, Will and Morrical, Nate and Lediaev, Laura and Pascucci, Valerio},
+ year = {2019},
+ DOI = {10.2312/hpg.20191189}
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.2312/hpg.20191189">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/GWCom0N.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Spatially-aware Parallel I/O for Particle Data</b></h5>
+        Sidharth Kumar, Steve Petruzza, Will Usher, and Valerio Pascucci. <i>48th International Conference on Parallel Processing (ICPP)</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/icpp19">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/icpp19.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{kumar_spatially-aware_2019,
+ title = {{Spatially}-aware {Parallel} {I}/{O} for {Particle} {Data}},
+ booktitle = {Proceedings of the 48th International Conference on Parallel Processing},
+ series = {ICPP 2019}, author = {Kumar, Sidharth and Petruzza, Steve and Usher, Will and Pascucci, Valerio},
+ year = {2019},
+ doi = {10.1145/3337821.3337875}
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1145/3337821.3337875">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/Yzxf5OT.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>CPU Isosurface Ray Tracing of Adaptive Mesh Refinement Data</b></h5>
+        Feng Wang, Ingo Wald, Qi Wu, Will Usher and Chris R. Johnson. <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2019.
+        <br/>
+        <a class="mr-2" href="/publications/amr-iso">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/amr-isosurface.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{Wang_AMR_Iso_2019,
+ author={F. Wang and I. Wald and Q. Wu and W. Usher and C. R. Johnson},
+ journal={{IEEE} {Transactions} on {Visualization} and {Computer} {Graphics}},
+ title={{CPU} {Isosurface} {Ray} {Tracing} of {Adaptive} {Mesh} {Refinement} {Data}},
+ year={2019},
+ doi={10.1109/TVCG.2018.2864850},
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1109/TVCG.2018.2864850">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/2iL7UdK.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>A Virtual Reality Visualization Tool for Neuron Tracing</b></h5>
+        Will Usher, Pavol Klacansky, Frederick Federer, Peer-Timo Bremer, Aaron Knoll, Jeff Yarch, Alessandra Angelucci, and Valerio Pascucci. <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2018.
+        <br/>
+        <a class="mr-2" href="/publications/vrnt">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/vrnt/vr-neuron-tracing.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{Usher_VRNT_2018,
+ author={W. Usher and P. Klacansky and F. Federer and P. T. Bremer and A. Knoll and J. Yarch and A. Angelucci and V. Pascucci},
+ journal={{IEEE} {Transactions} on {Visualization} and {Computer} {Graphics}},
+ title={A {Virtual} {Reality} {Visualization} {Tool} for {Neuron} {Tracing}},
+ year={2018},
+ volume={24},
+ number={1},
+ pages={994-1003},
+ doi={10.1109/TVCG.2017.2744079},
+ ISSN={1077-2626},
+ month={Jan},
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1109/TVCG.2017.2744079">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/aCX8XH2.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>libIS: A Lightweight Library for Flexible In Transit Visualization</b></h5>
+        Will Usher, Silvio Rizzi, Ingo Wald, Jefferson Amstutz, Joseph Insley, Venkatram Vishwanath, Nicola Ferrier, Michael E. Papka, and Valerio Pascucci. <i>ISAV: In Situ Infrastructures for Enabling Extreme-Scale Analysis and Visualization (ISAV '18)</i>, 2018.
+        <br/>
+        <a class="mr-2" href="/publications/libis-isav18">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/libis-isav18.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{usher_libis_2018,
+ title = {{libIS}: {A} {Lightweight} {Library} for {Flexible} {In} {Transit} {Visualization}},
+ year = {2018},
+ booktitle = {ISAV: In Situ Infrastructures for Enabling Extreme-Scale Analysis and Visualization},
+ series = {ISAV'18},
+ author = {Usher, Will and Rizzi, Silvio and Wald, Ingo and Amstutz, Jefferson and Insley, Joseph and Vishwanath, Venkatram and Ferrier, Nicola and Papka, Michael E. and Pascucci, Valerio},
+ doi={10.1145/3281464.3281466}
+ }" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1145/3281464.3281466">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/RxCFTxo.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>VisIt-OSPRay: Toward an Exascale Volume Visualization System</b></h5>
+        Qi Wu, Will Usher, Steve Petruzza, Sidharth Kumar, Feng Wang, Ingo Wald, Valerio Pascucci, and Charles D. Hansen. <i>Eurographics Symposium on Parallel Graphics and Visualization</i>, 2018.
+        <br/>
+        <a class="mr-2" href="/publications/visit-ospray">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/visit-ospray-egpgv18.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{Wu_VisItOSPRay_2018,
+ booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},
+ editor = {Hank Childs and Fernando Cucchietti},
+ title = {{VisIt}-{OSPRay}: {Toward} an {Exascale} {Volume} {Visualization} {System}},
+ author = {Wu, Qi and Usher, Will and Petruzza, Steve and Kumar, Sidharth and Wang, Feng and Wald, Ingo and Pascucci, Valerio and Hansen, Charles D.},
+ year = {2018},
+ publisher = {The Eurographics Association},
+ ISSN = {1727-348X},
+ ISBN = {978-3-03868-054-3},
+ DOI = {10.2312/pgv.20181091}
+ }" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.2312/pgv.20181091">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/w5YWvd6.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Scalable Data Management of the Uintah Simulation Framework for Next-Generation Engineering Problems with Radiation</b></h5>
+        Sidharth Kumar, Alan Humphrey, Will Usher, Steve Petruzza, Brad Peterson, John A. Schmidt, Derek Harris, Ben Isaac, Jeremy Thornock, Todd Harman, Valerio Pascucci, and Martin Berzins. <i>Supercomputing Frontiers</i>, 2018.
+        <br/>
+        <a class="mr-2" href="/publications/scasia18">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/scasia18.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@incollection{kumar_scalable_2018,
+ title = {Scalable {Data} {Management} of the {Uintah} {Simulation} {Framework} for {Next}-{Generation} {Engineering} {Problems} with {Radiation}},
+ volume = {10776},
+ isbn = {978-3-319-69952-3 978-3-319-69953-0},
+ booktitle = {Supercomputing {Frontiers}},
+ publisher = {Springer International Publishing},
+ author = {Kumar, Sidharth and Humphrey, Alan and Usher, Will and Petruzza, Steve and Peterson, Brad and Schmidt, John A. and Harris, Derek and Isaac, Ben and Thornock, Jeremy and Harman, Todd and Pascucci, Valerio and Berzins, Martin},
+ editor = {Yokota, Rio and Wu, Weigang},
+ year = {2018},
+ doi = {10.1007/978-3-319-69953-0_13},
+ pages = {219--240},
+}" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1007/978-3-319-69953-0_13">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/JFShB4G.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>CPU Volume Rendering of Adaptive Mesh Refinement Data</b></h5>
+        Ingo Wald, Carson Brownlee, Will Usher, Aaron Knoll. <i>SIGGRAPH Asia 2017 Symposium on Visualization</i>, 2017.
+        <br/>
+        <a class="mr-2" href="/publications/cvamr">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/cvamr/cvamr.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{Wald_CVAMR_2017,
+ author = {Wald, Ingo and Brownlee, Carson and Usher, Will and Knoll, Aaron},
+ title = {CPU Volume Rendering of Adaptive Mesh Refinement Data},
+ booktitle = {SIGGRAPH Asia 2017 Symposium on Visualization},
+ series = {SA '17},
+ year = {2017},
+ isbn = {978-1-4503-5411-0},
+ location = {Bangkok, Thailand},
+ pages = {9:1--9:8},
+ articleno = {9},
+ numpages = {8},
+ url = {http://doi.acm.org/10.1145/3139295.3139305},
+ doi = {10.1145/3139295.3139305},
+ acmid = {3139305},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }" data-toggle="popover" data-content="Copied!"
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1145/3139295.3139305">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/tdxjYs3.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>Progressive CPU Volume Rendering with Sample Accumulation</b></h5>
+        Will Usher, Jefferson Amstutz, Carson Brownlee, Aaron Knoll, Ingo Wald. <i>Eurographics Symposium on Parallel Graphics and Visualization</i>, 2017.
+        <br/>
+        <a class="mr-2" href="/publications/savr">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/savr/savr.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{Usher_SAVR_2017,
  booktitle={Eurographics Symposium on Parallel Graphics and Visualization},
  editor={Alexandru Telea and Janine Bennett},
  title={{Progressive CPU Volume Rendering with Sample Accumulation}},
@@ -560,34 +1048,36 @@
  isbn={978-3-03868-034-5},
  doi={10.2312/pgv.20171090},
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.2312/pgv.20171090">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/gieTAy3.png">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>In Situ Exploration of Particle Simulations with CPU Ray Tracing</b></h5>
-				Will Usher, Ingo Wald, Aaron Knoll, Michael Papka, Valerio Pascucci. <i>Supercomputing Frontiers and Innovations</i>, 2016.
-				<br/>
-				<a class="mr-2" href="/publications/isp-jsfi">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/in_situ_particles/in_situ_particles.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@article{Usher_InSituParticles_2016,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.2312/pgv.20171090">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/gieTAy3.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>In Situ Exploration of Particle Simulations with CPU Ray Tracing</b></h5>
+        Will Usher, Ingo Wald, Aaron Knoll, Michael Papka, Valerio Pascucci. <i>Supercomputing Frontiers and Innovations</i>, 2016.
+        <br/>
+        <a class="mr-2" href="/publications/isp-jsfi">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/in_situ_particles/in_situ_particles.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{Usher_InSituParticles_2016,
  author={Will Usher and Ingo Wald and Aaron Knoll and Michael Papka and Valerio Pascucci},
  title={In {Situ} {Exploration} of {Particle} {Simulations} with {CPU} {Ray} {Tracing}},
  journal={{Supercomputing} {Frontiers} and {Innovations}},
@@ -597,80 +1087,91 @@
  issn={2313-8734},
  doi={10.14529/jsfi160401},
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.14529/jsfi160401">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures</b></h5>
-				Kenneth Moreland, Christopher Sewell, William Usher, Li-ta Lo, Jeremy Meredith, David Pugmire, James Kress, Hendrik Schroots, Kwan-Liu Ma, Hank Childs, Matthew Larsen, Chun-Ming Chen, Robert Maynard, Berk Geveci. <i>IEEE Computer Graphics and Applications</i>, 2016.
-				<br/>
-				<a class="mr-2" href="/publications/vtkm">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7466740"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@article{Moreland_VTKm_2016,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.14529/jsfi160401">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/VEcRSDW.jpg">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>VTK-m: Accelerating the Visualization Toolkit for Massively Threaded Architectures</b></h5>
+        Kenneth Moreland, Christopher Sewell, William Usher, Li-ta Lo, Jeremy Meredith, David Pugmire, James Kress, Hendrik Schroots, Kwan-Liu Ma, Hank Childs, Matthew Larsen, Chun-Ming Chen, Robert Maynard, Berk Geveci. <i>IEEE Computer Graphics and Applications</i>, 2016.
+        <br/>
+        <a class="mr-2" href="/publications/vtkm">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=7466740"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@article{Moreland_VTKm_2016,
  author={K. Moreland and C. Sewell and W. Usher and L. t. Lo and J. Meredith and D. Pugmire and J. Kress and H. Schroots and K. L. Ma and H. Childs and M. Larsen and C. M. Chen and R. Maynard and B. Geveci},
  journal={{IEEE} {Computer} {Graphics} and {Applications}},
  title={{VTK-m}: {Accelerating} the {Visualization} {Toolkit} for {Massively} {Threaded} {Architectures}},
  year={2016},
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1109/MCG.2016.48">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
-		<div class="row col-12 mb-3 float-sm-left">
-			<div class="float-sm-left col-12 col-sm-2">
-				
-				<!-- I'm debating if I prefer with or without the thumbnail border -->
-				<img class="mx-auto img-thumbnail" src="https://i.imgur.com/qpTN5kR.png">
-				
-				<!-- todo: something for pubss wihtout thumbs? -->
-			</div>
-			<div class="col-sm-10 col-12 text-center text-sm-left">
-				<h5><b>CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees</b></h5>
-				Ingo Wald, Aaron Knoll, Gregory P. Johnson, Will Usher, Valerio Pasucci, Michael E. Papka. <i>IEEE Vis (conference)</i>, 2015.
-				<br/>
-				<a class="mr-2" href="/publications/pkd">
-					<i class="far fa-file-alt"></i> Project Page</a>
-				<a class="mr-2" href="http://sci.utah.edu/~will/papers/pkd/pkd_tree.pdf"><i class="far fa-file-pdf"></i> PDF</a>
-				
-				<a class="bib mr-2" href="javascript:void(0);"
-					data-clipboard-text="@inproceedings{Wald_PKD_2015,
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1109/MCG.2016.48">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+                    <div class="row col-12 mb-3 float-sm-left">
+    <div class="float-sm-left col-12 col-sm-2">
+        
+        <!-- I'm debating if I prefer with or without the thumbnail border -->
+        <img class="mx-auto img-thumbnail" src="https://i.imgur.com/qpTN5kR.png">
+        
+        <!-- todo: something for pubss wihtout thumbs? -->
+    </div>
+    <div class="col-sm-10 col-12 text-center text-sm-left">
+        <h5><b>CPU Ray Tracing Large Particle Data with Balanced P-k-d Trees</b></h5>
+        Ingo Wald, Aaron Knoll, Gregory P. Johnson, Will Usher, Valerio Pasucci, Michael E. Papka. <i>IEEE Vis (conference)</i>, 2015.
+        <br/>
+        <a class="mr-2" href="/publications/pkd">
+            <i class="far fa-file-alt"></i> Project Page</a>
+        <a class="mr-2" href="http://sci.utah.edu/~will/papers/pkd/pkd_tree.pdf"><i class="far fa-file-pdf"></i> PDF</a>
+        
+        <a class="bib mr-2" href="javascript:void(0);"
+            data-clipboard-text="@inproceedings{Wald_PKD_2015,
  author={I. Wald and A. Knoll and G. P. Johnson and W. Usher and V. Pascucci and M. E. Papka},
  booktitle={2015 IEEE Scientific Visualization Conference (SciVis)},
  title={{CPU} ray tracing large particle data with balanced {P-k-d} trees},
  year={2015},
  doi={10.1109/SciVis.2015.7429492},
 }" data-toggle="popover" data-content="Copied!"
-					data-delay='{"show":0,"hide":1000}' data-trigger="focus">
-					<i class="fas fa-quote-left"></i> Copy BibTeX</a>
-				
-				
-				<a class="mr-2" href="https://dx.doi.org/10.1109/SciVis.2015.7429492">
-					<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-				
-			</div>
-		</div>
-		
+            data-delay='{"show":0,"hide":1000}' data-trigger="focus">
+            <i class="fas fa-quote-left"></i> Copy BibTeX</a>
+        
+        
+        <a class="mr-2" href="https://dx.doi.org/10.1109/SciVis.2015.7429492">
+            <i class="fas fa-external-link-alt"></i> Publisher's Version</a>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
 	</div>
 	<div class="col-12">
 		<h2 class="border-bottom border-secondary">Selected Projects</h2>
