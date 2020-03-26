@@ -29,6 +29,7 @@ https://www.willusher.io//tags
 https://www.willusher.io//courses/cs6620/tr15
 https://www.willusher.io//courses/cs6620/tr16
 https://www.willusher.io//webtoys
+https://www.willusher.io//publications/tamr
 https://www.willusher.io//publications/tvcg20_oit
 https://www.willusher.io//publications/dfb
 https://www.willusher.io//publications/tubes

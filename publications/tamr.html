@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<title>A Comparison of Rendering Techniques for 3D Line Sets with Transparency</title>
+	<title>CPU Ray Tracing of Tree-Based Adaptive Mesh Refinement Data</title>
 	
     <meta name="author" content="Will Usher">
 
@@ -91,21 +91,21 @@
 
 <div class="row col-12 mt-4">
 	<div class="col-12 text-center">
-		<h1>A Comparison of Rendering Techniques for 3D Line Sets with Transparency</h1>
-		<h5 class="font-italic">Michael Kern, Christoph Neuhauser, Torben Maack, Mengjiao Han, Will Usher, Rüdiger Westermann</h5>
-		<h5>In <i>IEEE Transactions on Visualization and Computer Graphics (To Appear)</i>, 2020</h5>
+		<h1>CPU Ray Tracing of Tree-Based Adaptive Mesh Refinement Data</h1>
+		<h5 class="font-italic">Feng Wang, Nathan Marshak, Will Usher, Carsten Burstedde, Aaron Knoll, Timo Heister, and Chris R. Johnson</h5>
+		<h5>In <i>Computer Graphics Forum (To Appear)</i>, 2020</h5>
 		
 		<figure>
-			<img class="img-fluid" src="https://i.imgur.com/Sceg1iM.jpg"/>
+			<img class="img-fluid" src="https://i.imgur.com/bwoCE0y.jpg"/>
 			<figcaption class="text-left mt-2">
-				<b>Fig. 1: </b><i>Strengths and weaknesses of transparent line rendering techniques. For each pair, the left image shows the ground truth (GT). Right images show (a) approximate blending using MLABDB, (b) opacity over-estimation of MBOIT, (c) reverse blending order of MLABDB, (d) blur effect of MBOIT. Speed-ups to GT rendering technique: (a) 7, (b) 2, (c) 3.5, (d) 4.5.</i>
+				<b>Fig. 1: </b><i>High-fidelity visualization (volume and implicit isosurface rendering) of the NASA ExaJet dataset (field: vorticity). This dataset contains 656M cells (1.31B after instancing) of adaptive resolution and 63.2M triangles (126M after instancing). This 2400×600 image is rendered on a workstation with four Intel Xeon E7-8890 v3 CPUs (72 cores, 2.5 GHz) at a framerate of 6.64 FPS. We show that our system has the capability of ray tracing TB-AMR data in combination with advanced shading effects like ambient occlusion and path tracing.</i>
 			</figcaption>
 		</figure>
 		
 	</div>
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">Abstract</h2>
-		<p>This paper presents a comprehensive study of rendering techniques for 3D line sets with transparency. The rendering of transparent lines is widely used for visualizing trajectories of tracer particles in flow fields. Transparency is then used to fade out lines deemed unimportant, based on, for instance, geometric properties or attributes defined along with them. Accurate blending of transparent lines requires rendering the lines in back-to-front or front-to-back order, yet enforcing this order for space-filling 3D line sets with extremely high-depth complexity becomes challenging. In this paper, we study CPU and GPU rendering techniques for transparent 3D line sets. We compare accurate and approximate techniques using optimized implementations and several benchmark data sets. We discuss the effects of data size and transparency on quality, performance, and memory consumption. Based on our study, we propose two improvements to per-pixel fragment lists and multi-layer alpha blending. The first improves the rendering speed via an improved GPU sorting operation, and the second improves rendering quality via transparency-based bucketing.</p>
+		<p>Adaptive mesh refinement (AMR) techniques allow for representing a simulation’s computation domain in an adaptive fashion. Although these techniques have found widespread adoption in high-performance computing simulations, visualizing their data output interactively and without cracks or artifacts remains challenging. In this paper, we present an efficient solution for direct volume rendering and hybrid implicit isosurface ray tracing of tree-based AMR (TB-AMR) data. We propose a novel reconstruction strategy, Generalized Trilinear Interpolation (GTI), to interpolate across AMR level boundaries without cracks or discontinuities in the surface normal. We employ a general sparse octree structure supporting a wide range of AMR data, and use it to accelerate volume rendering, hybrid implicit isosurface rendering and value queries. We demonstrate that our approach achieves artifact-free isosurface and volume rendering and provides higher quality output images compared to existing methods at interactive rendering rates.</p>
 	</div>
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">Downloads</h2>
@@ -116,59 +116,50 @@
 		list of entries. One main supplemental video could be included though in the main page.-->
 		<dl>
 			<dt>Publication</dt>
-			<dd><a href="http://sci.utah.edu/~will/papers/tvcg20_oit/tvcg_oit_lines.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
-			
-			<dd><a href="https://dx.doi.org/10.1109/TVCG.2020.2975795">
-				<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
-			</dd>
+			<dd><a href="http://sci.utah.edu/~will/papers/tamr/tamr.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
 			
 			
 			<dt>Supplemental Material</dt>
 				
-				<dd><a href="http://sci.utah.edu/~will/papers/tvcg20_oit/tvcg_oit_lines_appendices.pdf">
+				<dd><a href="http://sci.utah.edu/~will/papers/tamr/tamr-appendix.pdf">
 					
 					<i class="far fa-file-pdf"></i>
 					
-					 Appendices</a></dd>
+					 Appendix</a></dd>
 				
-				<dd><a href="https://github.com/chrismile/PixelSyncOIT">
-					
-					<i class="fab fa-github"></i>
-					
-					 Benchmark Framework and GPU Rendering Algorithms</a></dd>
-				
-				<dd><a href="https://github.com/MengjiaoH/ospray-module-tubes">
-					
-					<i class="fab fa-github"></i>
-					
-					 OSPRay Generalized Tubes Module</a></dd>
-				
-				<dd><a href="http://doi.org/10.5281/zenodo.3637625">
+				<dd><a href="http://sci.utah.edu/~will/papers/tamr/tamr-simpy-notebook.zip">
 					
 					<i class="far fa-file-archive"></i>
 					
-					 Line Data Sets</a></dd>
+					 SimPy Notebook</a></dd>
 				
-				<dd><a href="http://doi.org/10.5281/zenodo.3637621">
+				<dd><a href="https://github.com/ethan0911/TB-AMR">
 					
-					<i class="far fa-file-archive"></i>
+					<i class="fab fa-github"></i>
 					
-					 RTX Ray Tracing Test Framework</a></dd>
+					 OSPRay TB-AMR Module</a></dd>
 				
 			</dt>
 			
 		</dl>
 	</div>
 	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Supplemental Video</h2>
+		<div class="embed-responsive embed-responsive-16by9">
+			<iframe class="embed-responsive-item" allowfullscreen src="https://www.youtube.com/embed/pVd9Fpv2yoE">
+			</iframe>
+		</div>
+	</div>
+	
 	
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">BibTeX</h2>
-		<code>@article{kern_comparison_20,<br />
- journal = {IEEE Transactions on Visualization and Computer Graphics (To Appear)},<br />
- title = {{A Comparison of Rendering Techniques for 3D Line Sets with Transparency}},<br />
- author = {Kern, Michael and Neuhauser, Christoph and Maack, Torben and Han, Mengjiao and Usher, Will and Westermann, Rüdiger},<br />
+		<code>@article{wang_tamr_20,<br />
+ journal = {Computer Graphics Forum (To Appear)},<br />
+ title = {{CPU Ray Tracing of Tree-Based Adaptive Mesh Refinement Data}},<br />
+ author = {Wang, Feng and Marshak, Nathan and Usher, Will and Burstedde, Carsten and Knoll, Aaron and Heister, Timo and Johson, Chris R.},<br />
  year = {2020},<br />
- DOI = {10.1109/TVCG.2020.2975795}<br />
 }</code>
 	</div>
 </div>
