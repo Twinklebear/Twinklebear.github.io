@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Thu, 26 Mar 2020 11:23:28 -0600</lastBuildDate>
-		<pubDate>Thu, 26 Mar 2020 11:23:28 -0600</pubDate>
+		<lastBuildDate>Fri, 01 May 2020 22:01:17 -0600</lastBuildDate>
+		<pubDate>Fri, 01 May 2020 22:01:17 -0600</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -32,6 +32,8 @@ present an interactive tool for constructing the SBT, building a scene which use
 and executing trace calls on the scene to see which hit groups and miss shaders are called.
 Finally, we’ll look at how this model can be brought back to the CPU using Embree,
 to potentially build a unified low-level API for ray tracing.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Updated 5/1/2020:&lt;/strong&gt; Added discussion on &lt;code class=&quot;highlighter-rouge&quot;&gt;KHR_ray_tracing&lt;/code&gt; for Vulkan.&lt;/p&gt;
 
 
 				&lt;a href=&quot;https://www.willusher.io//graphics/2019/11/20/the-sbt-three-ways&quot;&gt;Continue Reading&lt;/a&gt;

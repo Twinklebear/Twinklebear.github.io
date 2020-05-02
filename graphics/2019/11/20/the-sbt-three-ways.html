@@ -116,6 +116,8 @@ and executing trace calls on the scene to see which hit groups and miss shaders 
 Finally, we’ll look at how this model can be brought back to the CPU using Embree,
 to potentially build a unified low-level API for ray tracing.</p>
 
+<p><strong>Updated 5/1/2020:</strong> Added discussion on <code class="highlighter-rouge">KHR_ray_tracing</code> for Vulkan.</p>
+
 <!--more-->
 
 <h1 id="the-rtx-execution-model">The RTX Execution Model</h1>
@@ -379,7 +381,8 @@ One way to avoid conflicts is to use separate register spaces for the global and
 local root signature parameter registers.</p>
 
 <p>The shader handle size is defined by <code class="highlighter-rouge">D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES</code> (32 bytes),
-the shader record alignment requirement is <code class="highlighter-rouge">D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT</code> (64 bytes).
+the stride between records must be a multiple of <code class="highlighter-rouge">D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES</code>,
+each shader table start address must be aligned to <code class="highlighter-rouge">D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT</code> (64 bytes).
 The maximum size allowed for the stride is 4096 bytes, placing an upper bound on the number of
 parameters which can be embedded for a shader record.</p>
 
@@ -434,16 +437,15 @@ The parameters which affect the SBT indexing are:</p>
   <li><code class="highlighter-rouge">MissShaderIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
 </ul>
 
-<h2 id="vulkan-ray-tracing">Vulkan Ray Tracing</h2>
+<h2 id="vulkan-nv-ray-tracing">Vulkan NV Ray Tracing</h2>
+
+<p>This post was originally written when only the <code class="highlighter-rouge">NV_ray_tracing</code> extension was available, which is discussed here.
+I’ve since updated the post (5/1/2020) with <code class="highlighter-rouge">KHR_ray_tracing</code>, which is discussed in the next section.</p>
 
 <p>For more documentation about the Vulkan NV Ray Tracing extension, also
 <a href="https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#VK_NV_ray_tracing">extension specification</a>,
 <a href="https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VK_NV_ray_tracing.html">manual page</a>,
 and the <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/nv/GLSL_NV_ray_tracing.txt">GLSL NV Ray Tracing extension</a>.</p>
-
-<blockquote>
-  <p>Note: This post covers the <code class="highlighter-rouge">NV_ray_racing</code> extension, I’ll update it soon to cover <code class="highlighter-rouge">KHR_ray_tracing</code> instead</p>
-</blockquote>
 
 <h3 id="shader-records-and-parameters-1">Shader Records and Parameters</h3>
 
@@ -463,6 +465,11 @@ are queried at runtime by querying the
 On my desktop with an RTX 2070 and Nvidia driver 441.12 the shader handle size
 is 16 bytes and the shader record alignment requirement is 64 bytes.
 The maximum allowed size for the shader record stride is 4096 bytes.</p>
+
+<blockquote>
+  <p>Note: Parameters which are not 4-byte constants can be sent as well, along with buffer handles with
+buffer device address support (see <a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetBufferDeviceAddress.html"><code class="highlighter-rouge">vkGetBufferDeviceAddress</code></a>)</p>
+</blockquote>
 
 <h3 id="instance-parameters-1">Instance Parameters</h3>
 
@@ -529,13 +536,131 @@ one will be used. For example:</p>
 <span class="p">};</span>
 <span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">rayPayloadNV</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
 
+<h2 id="vulkan-khr-ray-tracing-added-512020">Vulkan KHR Ray Tracing (added 5/1/2020)</h2>
+
+<p>For more documentation about the Vulkan KHR Ray Tracing extension, also
+<a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VK_KHR_ray_tracing.html">extension specification</a>
+and the <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GLSL_EXT_ray_tracing.txt">GLSL EXT Ray Tracing extension</a>.</p>
+
+<h3 id="shader-records-and-parameters-2">Shader Records and Parameters</h3>
+
+<p>In Vulkan, the parameters embedded in the shader record can be any data which could otherwise
+be placed in a uniform buffer. The embedded parameters are
+accessed in the shader through a special buffer type declared with the <code class="highlighter-rouge">shaderRecordEXT</code> layout.
+For example, if we wanted to pass a material ID for the geometry in the shader record
+we could declare the buffer as follows:</p>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="k">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
+    <span class="n">uint32_t</span> <span class="n">material_id</span><span class="p">;</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>Buffer pointers can also be passed through the SBT in Vulkan, using the support for <code class="highlighter-rouge">vkGetBufferDeviceAddress</code>
+(now core in 1.2) and the GLSL extension <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GLSL_EXT_buffer_reference2.txt"><code class="highlighter-rouge">GL_EXT_buffer_reference2</code></a>.
+The <code class="highlighter-rouge">VkDeviceAddress</code> for a buffer can be written into the SBT, and accessed from GLSL by defining a buffer reference
+buffer type.
+The following closest hit shader example demonstrates this for accessing the index buffer data.
+The example also makes use of <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GL_EXT_scalar_block_layout.txt"><code class="highlighter-rouge">GLSL_EXT_scalar_block_layout</code></a>
+for C-like struct layout in buffers.</p>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="k">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">VertexBuffer</span> <span class="p">{</span>
+    <span class="kt">vec3</span> <span class="n">v</span><span class="p">[];</span>
+<span class="p">};</span>
+
+<span class="k">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">IndexBuffer</span> <span class="p">{</span>
+    <span class="kt">uvec3</span> <span class="n">i</span><span class="p">[];</span>
+<span class="p">};</span>
+
+<span class="k">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">,</span> <span class="n">std430</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBT</span> <span class="p">{</span>
+    <span class="n">VertexBuffer</span> <span class="n">verts</span><span class="p">;</span>
+    <span class="n">IndexBuffer</span> <span class="n">indices</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">uvec3</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">i</span><span class="p">[</span><span class="nb">gl_PrimitiveID</span><span class="p">];</span>
+    <span class="c1">// ....
+</span><span class="p">}</span></code></pre></figure>
+
+<p>The size of the shader handles and alignment requirements for the shader records
+are queried at runtime by querying the
+<a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceRayTracingPropertiesKHR.html"><code class="highlighter-rouge">VkPhysicalDeviceRayTracingPropertiesKHR</code></a>
+On my desktop with an RTX 2070 and Nvidia driver 442.81 the shader handle size
+is 32 bytes and the shader record stride must be a multiple of 32 bytes.
+The required alignment for the starting address of each table is 64 bytes.
+The maximum allowed size for the shader record stride is 4096 bytes.
+Note that this now matches the configuration of DXR, which was not the case with <code class="highlighter-rouge">NV_ray_tracing</code>.</p>
+
+<h3 id="instance-parameters-2">Instance Parameters</h3>
+
+<p>Instances in Vulkan are specified through the same structure layout as in DXR,
+using the <a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAccelerationStructureInstanceKHR.html"><code class="highlighter-rouge">VkAccelerationStructureInstanceKHR</code></a>
+struct.</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">struct</span> <span class="n">VkAccelerationStructureInstanceKHR</span> <span class="p">{</span>
+    <span class="n">VkTransformMatrixKHR</span> <span class="n">transform</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">instanceCustomIndex</span><span class="o">:</span><span class="mi">24</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">mask</span><span class="o">:</span><span class="mi">8</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="n">instanceShaderBindingTableRecordOffset</span><span class="o">:</span><span class="mi">24</span><span class="p">;</span>
+    <span class="n">VkGeometryInstanceFlagsKHR</span> <span class="n">flags</span><span class="o">:</span><span class="mi">8</span><span class="p">;</span>
+    <span class="kt">uint64_t</span> <span class="n">accelerationStructureReference</span><span class="p">;</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>The parameters which affect the SBT indexing are:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">instanceShaderBindingTableRecordOffset</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
+  <li><code class="highlighter-rouge">mask</code>: While the mask does not effect which hit group is called, it can
+  be used to skip traversal of instances entirely, by masking them out of the traversal</li>
+</ul>
+
+<h3 id="trace-ray-parameters-2">Trace Ray Parameters</h3>
+
+<p>In the ray generation, closest hit and miss shaders the function
+<a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GLSL_EXT_ray_tracing.txt#L771-L781">traceRayExt</a> from
+<code class="highlighter-rouge">GLSL_EXT_ray_tracing</code> can be called to trace rays.</p>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="kt">void</span> <span class="n">traceRayEXT</span><span class="p">(</span><span class="n">accelerationStructureEXT</span> <span class="n">topLevel</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">cullMask</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">missIndex</span><span class="p">,</span>
+                 <span class="kt">vec3</span> <span class="n">origin</span><span class="p">,</span>
+                 <span class="kt">float</span> <span class="n">Tmin</span><span class="p">,</span>
+                 <span class="kt">vec3</span> <span class="n">direction</span><span class="p">,</span>
+                 <span class="kt">float</span> <span class="n">Tmax</span><span class="p">,</span>
+                 <span class="kt">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
+
+<p>traceRayEXT takes the acceleration structure to trace against,
+a set of ray flags to adjust the traversal being
+performed, the instance mask, SBT indexing parameters, the ray parameters
+and the index of the ray payload to be updated by the closest hit or miss shaders.
+The parameters which effect the SBT indexing are:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">cullMask</code>: This mask effects which instances are masked out by and’ing it
+  with each instance’s <code class="highlighter-rouge">mask</code>.</li>
+  <li><code class="highlighter-rouge">sbtRecordOffset</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
+  <li><code class="highlighter-rouge">sbtRecordStride</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
+  <li><code class="highlighter-rouge">missIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
+</ul>
+
+<p>In contrast to HLSL, the ray payloads are specified as a special shader input/output
+variable, where the value of <code class="highlighter-rouge">payload</code> passed to traceRayEXT selects which
+one will be used. For example:</p>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="k">struct</span> <span class="n">RayPayload</span> <span class="p">{</span>
+    <span class="kt">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
+    <span class="kt">vec3</span> <span class="n">normal</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">rayPayloadEXT</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
+
 <h2 id="optix">OptiX</h2>
 
 <p>For more documentation about OptiX see the
 <a href="https://raytracing-docs.nvidia.com/optix7/guide/index.html#introduction#">OptiX 7 Programming Guide</a>
 and the <a href="https://gitlab.com/ingowald/optix7course">OptiX 7 Course</a> from SIGGRAPH 2019.</p>
 
-<h3 id="shader-records-and-parameters-2">Shader Records and Parameters</h3>
+<h3 id="shader-records-and-parameters-3">Shader Records and Parameters</h3>
 
 <p>In OptiX, the parameters embedded in the shader record can be arbitrary structs,
 potentially containing CUDA device pointers or texture handles.
@@ -546,7 +671,7 @@ after the shader handle.</p>
 <p>The size of the shader handle is defined by <code class="highlighter-rouge">OPTIX_SBT_RECORD_HEADER_SIZE</code> (32 bytes),
 the shader record alignment requirement is <code class="highlighter-rouge">OPTIX_SBT_RECORD_ALIGNMENT</code> (16 bytes).</p>
 
-<h3 id="instance-parameters-2">Instance Parameters</h3>
+<h3 id="instance-parameters-3">Instance Parameters</h3>
 
 <p>Instances in OptiX are specified through the <a href="https://raytracing-docs.nvidia.com/optix7/api/html/struct_optix_instance.html"><code class="highlighter-rouge">OptixInstance</code></a>
 structure:</p>
@@ -569,7 +694,7 @@ structure:</p>
   be used to skip traversal of instances entirely, by masking them out of the traversal</li>
 </ul>
 
-<h3 id="trace-ray-parameters-2">Trace Ray Parameters</h3>
+<h3 id="trace-ray-parameters-3">Trace Ray Parameters</h3>
 
 <p>In the ray generation, closest hit, and miss shaders the
 <a href="https://raytracing-docs.nvidia.com/optix7/api/html/group__optix__device__api.html">optixTrace</a>
@@ -652,14 +777,15 @@ them all in one buffer here to simplify the visualization.</p>
     <svg width="800" height="380" id="sbtWidget">
     </svg>
     <div class="col-12 row mb-2">
-        <div class="col-2 mb-3">
+        <div class="col-12 mb-3">
             API: <select id="selectAPI" onchange="selectAPI()">
             <option selected="selected">DXR</option>
-            <option>Vulkan</option>
+            <option>Vulkan NV Ray Tracing</option>
+            <option>Vulkan KHR Ray Tracing</option>
             <option>OptiX</option>
             </select>
         </div>
-        <div class="col-8">
+        <div class="col-12">
             Dispatch/Launch Config:
             <ul>
             <li>Raygen Size: <span id="raygenSize"></span></li>
@@ -683,13 +809,23 @@ them all in one buffer here to simplify the visualization.</p>
             <p class="mt-2 mb-1">Shader Record Parameters:</p>
             <button id="addConstant" type="button" class="btn btn-primary" onclick="addConstantParam()">Add 4byte Constant</button>
         </div>
+        <div class="col-12" id="vulkanKHRParamsUI">
+            <div class="col-12">
+                <p class="mt-2 mb-1">Shader Record Parameters:</p>
+            </div>
+            <div class="col-12 row">
+                <div class="col-6 mb-2">
+                    <input type="number" class="form-control" id="shaderRecordEXT" min="0" placeholder="Shader record buffer size (bytes)" oninput="addStructParam(this)" />
+                </div>
+            </div>
+        </div>
         <div class="col-12 row" id="optixParamsUI">
             <div class="col-12">
                 <p class="mt-2 mb-1">Shader Record Parameters:</p>
             </div>
             <div class="col-12 row">
                 <div class="col-6 mb-2">
-                    <input type="number" class="form-control" id="structParamSize" min="0" placeholder="Struct size (bytes)" oninput="addStructParam()" />
+                    <input type="number" class="form-control" id="structParamSize" min="0" placeholder="Struct size (bytes)" oninput="addStructParam(this)" />
                 </div>
             </div>
         </div>
@@ -768,6 +904,24 @@ TraceRay(accelerationStructure,
 <figure class="highlight">
 <pre>
 traceNV(accelerationStructure,
+    rayFlags,
+    <span class="mh" id="instanceMaskVal">0xff</span>, <span class="c1">// Instance mask</span>
+    <span class="mh" id="raySBTOffsetVal">0</span>, <span class="c1">// Ray SBT offset</span>
+    <span class="mh" id="raySBTStrideVal">1</span>, <span class="c1">// Ray SBT stride</span>
+    <span class="mh" id="missShaderIndexVal">0</span>, <span class="c1">// Miss shader index</span>
+    rayOrigin
+    tmin
+    rayDirection,
+    tmax,
+    payloadIndex);
+</pre>
+</figure>
+</div>
+
+<div id="vulkanKHRTrace" class="col-12">
+<figure class="highlight">
+<pre>
+traceRayEXT(accelerationStructure,
     rayFlags,
     <span class="mh" id="instanceMaskVal">0xff</span>, <span class="c1">// Instance mask</span>
     <span class="mh" id="raySBTOffsetVal">0</span>, <span class="c1">// Ray SBT offset</span>

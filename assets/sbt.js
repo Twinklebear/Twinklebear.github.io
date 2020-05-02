@@ -1,14 +1,22 @@
 var API = {
     'DXR': {
         SHADER_IDENTIFIER_SIZE: 32,
+        SHADER_RECORD_STRIDE_ALIGNMENT: 32,
         SHADER_TABLE_BYTE_ALIGNMENT: 64,
     },
-    'Vulkan': {
+    'Vulkan NV Ray Tracing': {
         SHADER_IDENTIFIER_SIZE: 16,
+        SHADER_RECORD_STRIDE_ALIGNMENT: 32,
+        SHADER_TABLE_BYTE_ALIGNMENT: 64,
+    },
+    'Vulkan KHR Ray Tracing': {
+        SHADER_IDENTIFIER_SIZE: 32,
+        SHADER_RECORD_STRIDE_ALIGNMENT: 32,
         SHADER_TABLE_BYTE_ALIGNMENT: 64,
     },
     'OptiX': {
         SHADER_IDENTIFIER_SIZE: 32,
+        SHADER_RECORD_STRIDE_ALIGNMENT: 16,
         SHADER_TABLE_BYTE_ALIGNMENT: 16,
     },
 };
@@ -34,6 +42,7 @@ var shaderRecordWidget = null;
 var shaderRecordZoom = null;
 var shaderRecordZoomRect = null;
 
+var vulkanKHRSizeInput = null;
 var optixStructSizeInput = null;
 var instanceGeometryCountUI = null;
 var sbtOffsetUI = null;
@@ -41,6 +50,7 @@ var instanceMaskUI = null;
 
 var dxrUI = null;
 var vulkanUI = null;
+var vulkanKHRUI = null;
 var optixUI = null;
 
 var traceParams = {
@@ -146,11 +156,21 @@ ShaderRecord.prototype.addParam = function(param) {
         } else {
             alert('Only GPU handles and 4byte constants are supported for DXR');
         }
-    } else if (currentAPI == API['Vulkan']) {
+    } else if (currentAPI == API['Vulkan NV Ray Tracing']) {
         if (param.type == ParamType.FOUR_BYTE_CONSTANT) {
             this.params.push(param);
         } else {
             alert('Only 4byte constants are support for Vulkan');
+        }
+    } else if (currentAPI == API['Vulkan KHR Ray Tracing']) {
+        if (param.type == ParamType.STRUCT) {
+            if (this.params.length == 0) {
+                this.params.push(param);
+            } else {
+                this.params[0] = param;
+            }
+        } else {
+            alert('Only struct params are valid for Vulkan KHR');
         }
     } else if (currentAPI == API['OptiX']) {
         if (param.type == ParamType.STRUCT) {
@@ -223,7 +243,11 @@ ShaderRecord.prototype.removeParam = function(i) {
 
 ShaderRecord.prototype.render = function() {
     var self = this;
-    optixStructSizeInput.value = '';
+    if (currentAPI == API['OptiX']) {
+        optixStructSizeInput.value = '';
+    } else {
+        vulkanKHRSizeInput.value = '';
+    }
 
     shaderRecordWidget.select('.shaderRecordDetail').remove();
     var widget = shaderRecordWidget.append('g')
@@ -280,7 +304,11 @@ ShaderRecord.prototype.render = function() {
         .merge(selection)
         .attr('fill', function(d) {
             if (d.type == ParamType.STRUCT) {
-                optixStructSizeInput.value = d.size;
+                if (currentAPI == API['OptiX']) {
+                    optixStructSizeInput.value = d.size;
+                } else {
+                    vulkanKHRSizeInput.value = d.size;
+                }
                 return '#fdc086';
             }
             if (d.type == ParamType.FOUR_BYTE_CONSTANT) {
@@ -324,7 +352,11 @@ ShaderRecord.prototype.render = function() {
         .merge(selection)
         .text(function(d) {
             if (d.type == ParamType.STRUCT) {
-                return 'Struct (' + d.size + 'b)';
+                if (currentAPI == API['OptiX']) {
+                    return 'Struct (' + d.size + 'b)';
+                } else {
+                    return 'Shader Rec. Buf. (' + d.size + 'b)';
+                }
             }
             if (d.type == ParamType.FOUR_BYTE_CONSTANT) {
                 return '4-byte Constant'
@@ -382,27 +414,27 @@ ShaderTable.prototype.clearParams = function() {
 }
 
 ShaderTable.prototype.size = function() {
-    var raygenSize = alignTo(this.raygen.size(), currentAPI.SHADER_TABLE_BYTE_ALIGNMENT);
+    var raygenSize = alignTo(this.raygen.size(), currentAPI.SHADER_RECORD_STRIDE_ALIGNMENT);
     document.getElementById('raygenSize').innerHTML = raygenSize + 'b';
 
-    this.hgOffset = raygenSize;
+    this.hgOffset = alignTo(raygenSize, currentAPI.SHADER_TABLE_BYTE_ALIGNMENT);
     this.hgStride = 0;
     for (var i = 0; i < this.hitGroups.length; ++i) {
-        this.hgStride = Math.max(this.hgStride, alignTo(this.hitGroups[i].size(), currentAPI.SHADER_TABLE_BYTE_ALIGNMENT)); 
+        this.hgStride = Math.max(this.hgStride, alignTo(this.hitGroups[i].size(), currentAPI.SHADER_RECORD_STRIDE_ALIGNMENT)); 
     }
 
     document.getElementById('hitGroupStride').innerHTML = this.hgStride + 'b';
     document.getElementById('hitGroupOffset').innerHTML = this.hgOffset + 'b';
 
-    this.missOffset = this.hgOffset + this.hgStride * this.hitGroups.length;
+    this.missOffset = alignTo(this.hgOffset + this.hgStride * this.hitGroups.length, currentAPI.SHADER_TABLE_BYTE_ALIGNMENT);
     this.missStride = 0;
     for (var i = 0; i < this.missShaders.length; ++i) {
-        this.missStride = Math.max(this.missStride, alignTo(this.missShaders[i].size(), currentAPI.SHADER_TABLE_BYTE_ALIGNMENT)); 
+        this.missStride = Math.max(this.missStride, alignTo(this.missShaders[i].size(), currentAPI.SHADER_RECORD_STRIDE_ALIGNMENT)); 
     }
     document.getElementById('missStride').innerHTML = this.missStride + 'b';
     document.getElementById('missOffset').innerHTML = this.missOffset + 'b';
 
-    return raygenSize + this.hgStride * this.hitGroups.length + this.missStride * this.missShaders.length;
+    return this.missOffset + this.missStride * this.missShaders.length;
 }
 
 ShaderTable.prototype.render = function() {
@@ -674,12 +706,14 @@ Instance.prototype.hitGroupRange = function() {
 
 window.onload = function() {
     optixStructSizeInput = document.getElementById('structParamSize');
+    vulkanKHRSizeInput = document.getElementById('shaderRecordEXT');
     instanceGeometryCountUI = document.getElementById('geometryCount');
     sbtOffsetUI = document.getElementById('instanceSbtOffset');
     instanceMaskUI = document.getElementById('instanceMask');
 
     dxrUI = [document.getElementById('dxrParamsUI'), document.getElementById('dxrTrace')];
     vulkanUI = [document.getElementById('vulkanParamsUI'), document.getElementById('vulkanTrace')];
+    vulkanKHRUI = [document.getElementById('vulkanKHRParamsUI'), document.getElementById('vulkanKHRTrace')];
     optixUI = [document.getElementById('optixParamsUI'), document.getElementById('optixTrace')];
 
     // TODO: Something to handle variable size viewports,
@@ -758,18 +792,28 @@ var selectAPI = function() {
         for (var i = 0; i < 2; ++i) {
             dxrUI[i].setAttribute('style', 'display:block');
             vulkanUI[i].setAttribute('style', 'display:none');
+            vulkanKHRUI[i].setAttribute('style', 'display:none');
             optixUI[i].setAttribute('style', 'display:none');
         }
-    } else if (apiName == 'Vulkan') {
+    } else if (apiName == 'Vulkan NV Ray Tracing') {
         for (var i = 0; i < 2; ++i) {
             dxrUI[i].setAttribute('style', 'display:none');
             vulkanUI[i].setAttribute('style', 'display:block');
+            vulkanKHRUI[i].setAttribute('style', 'display:none');
+            optixUI[i].setAttribute('style', 'display:none');
+        }
+    } else if (apiName == 'Vulkan KHR Ray Tracing') {
+        for (var i = 0; i < 2; ++i) {
+            dxrUI[i].setAttribute('style', 'display:none');
+            vulkanUI[i].setAttribute('style', 'display:none');
+            vulkanKHRUI[i].setAttribute('style', 'display:block');
             optixUI[i].setAttribute('style', 'display:none');
         }
     } else {
         for (var i = 0; i < 2; ++i) {
             dxrUI[i].setAttribute('style', 'display:none');
             vulkanUI[i].setAttribute('style', 'display:none');
+            vulkanKHRUI[i].setAttribute('style', 'display:none');
             optixUI[i].setAttribute('style', 'display:block');
         }
     }
@@ -989,11 +1033,11 @@ var addGPUHandleParam = function() {
     updateViews();
 }
 
-var addStructParam = function() {
-    if (optixStructSizeInput.value == '' || optixStructSizeInput.value == 0) {
+var addStructParam = function(elem) {
+    if (elem.value == '' || elem.value == 0) {
         selectedShaderRecord.params = [];
     } else {
-        selectedShaderRecord.addParam(new ShaderParam(ParamType.STRUCT, parseInt(optixStructSizeInput.value)));
+        selectedShaderRecord.addParam(new ShaderParam(ParamType.STRUCT, parseInt(elem.value)));
     }
 
     updateViews();
