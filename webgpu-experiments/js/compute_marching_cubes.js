@@ -457,15 +457,9 @@ MarchingCubes.prototype.compactActiveVoxels = function(totalActive) {
         var numWorkGroups = Math.min(voxelsToProcess - i * this.maxDispatchSize, this.maxDispatchSize);
         var offset = i * this.maxDispatchSize * 4;
         if (numWorkGroups == this.maxDispatchSize) {
-            pass.setBindGroup(0, streamCompactBG, [i * 256, offset, offset]);
-            // TODO: When Chrome Canary gets the Dawn bugfix added, switch to pass it in right order
-            // https://bugs.chromium.org/p/dawn/issues/detail?id=408
-            //pass.setBindGroup(0, streamCompactBG, [offset, offset, i * 256]);
+            pass.setBindGroup(0, streamCompactBG, [offset, offset, i * 256]);
         } else {
-            // TODO: When Chrome Canary gets the Dawn bugfix added, switch to pass it in right order
-            // https://bugs.chromium.org/p/dawn/issues/detail?id=408
-            pass.setBindGroup(0, streamCompactRemainderBG, [i * 256, offset, offset]);
-            //pass.setBindGroup(0, streamCompactRemainderBG, [offset, offset, i * 256]);
+            pass.setBindGroup(0, streamCompactRemainderBG, [offset, offset, i * 256]);
         }
         pass.dispatch(numWorkGroups, 1, 1);
     }
@@ -532,7 +526,6 @@ MarchingCubes.prototype.computeNumVertices = async function(totalActive, activeV
 MarchingCubes.prototype.computeVertices = function(totalActive, activeVoxelIds, totalVerts, vertexOffsetBuffer) {
     // Compute the vertices and output them along with the rendering command
     // We just write vec4's for positions to have an easier std430 layout
-    // TODO: Don't re-allocate if our old one has enough room to hold the new surface
     if (totalVerts > this.totalVerts) {
         this.vertexBuffer = this.device.createBuffer({
             size: totalVerts * 4 * 4,
