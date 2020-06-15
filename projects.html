@@ -16,7 +16,7 @@
     <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
     <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
 
-	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/molokai.css" rel="stylesheet">
 	<link href="/assets/custom.css" rel="stylesheet">
 	<link rel="shortcut icon" href="/assets/img/identicon.ico">
 
@@ -110,6 +110,10 @@
 		</div>
 		
 		<div class="col-6 mb-1 col-md-3 mb-md-0">
+			<a href="/projects#DXR Ambient Occlusion Baking">DXR Ambient Occlusion Baking</a>
+		</div>
+		
+		<div class="col-6 mb-1 col-md-3 mb-md-0">
 			<a href="/projects#Spline Viewer">Spline Viewer</a>
 		</div>
 		
@@ -127,6 +131,10 @@
 		
 		<div class="col-6 mb-1 col-md-3 mb-md-0">
 			<a href="/projects#WebGL Volume Raycaster">WebGL Volume Raycaster</a>
+		</div>
+		
+		<div class="col-6 mb-1 col-md-3 mb-md-0">
+			<a href="/projects#WebGPU Experiments">WebGPU Experiments</a>
 		</div>
 		
 		<div class="col-6 mb-1 col-md-3 mb-md-0">
@@ -374,6 +382,25 @@
 	</div>
 
 	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="DXR Ambient Occlusion Baking">
+		<div class="col-12">
+			<h2><b>DXR Ambient Occlusion Baking</b></h2>
+		</div>
+
+		<div class="col-12 col-sm-8">
+			<p>A demo of ambient occlusion map baking using DXR inline ray tracing. Uses <a href="https://github.com/jpcy/xatlas">xatlas</a> to unwrap the mesh. The mesh is rasterized into the atlas image by using the UV coordinates as the output vertex positions, and the AO factor computed by using inline ray tracing in the fragment shader. The image shows the computed AO map on Sponza.</p>
+
+			<a href="https://github.com/Twinklebear/dxr-ao-bake">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/dxr-ao-bake.svg">
+			</a>
+		</div>
+		<div class="col-12 mt-2 mt-sm-0 col-sm-4 mx-auto">
+			<img class="img-fluid" src="https://i.imgur.com/O3BSRJ9.png">
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
 	  id="WebGL EWA Surface Splatter">
 		<div class="col-12">
 			<h2><b>WebGL EWA Surface Splatter</b></h2>
@@ -431,6 +458,37 @@ Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util</
 			
 			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
 				<img class="img-fluid" src="https://i.imgur.com/kW5sr9a.png">
+			</div>
+			
+		</div>
+
+	</div>
+
+	<div class="col-12 row pb-4 mt-4 border-bottom border-secondary"
+	  id="WebGPU Experiments">
+		<div class="col-12">
+			<h2><b>WebGPU Experiments</b></h2>
+		</div>
+
+		<div class="col-12">
+			<p>A series of examples written while learning about <a href="https://gpuweb.github.io/gpuweb/">WebGPU</a>: a glTF viewer, a web-based LiDAR viewer, and a data-parallel Marching Cubes implementation using compute shaders. The glTF viewer uses a custom glb importer to load data efficiently into WebGPU and supports the basic glTF features. The LiDAR viewer uses <a href="https://github.com/Twinklebear/LAStools.js">LAStools.js</a>, a version of <a href="https://github.com/LAStools/LAStools">libLAS</a> compiled to Web Assembly, to load las and laz files directly in the browser. The Marching Cubes example is a data-parallel implementation of marching cubes written using compute shaders to leverage GPU compute for interactive isosurface extraction. If you have a browser with WebGPU enabled, you can try them out: <a href="https://www.willusher.io/webgpu-experiments/glb_viewer.html">glTF Viewer</a>, <a href="https://www.willusher.io/webgpu-experiments/lidar_viewer.html">LiDAR Viewer</a>, <a href="https://www.willusher.io/webgpu-experiments/marching_cubes.html">Marching Cubes</a>.</p>
+
+			<a href="https://github.com/Twinklebear/webgpu-experiments">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgpu-experiments.svg">
+			</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/GQBJC92.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/j21k9Z9.png">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://i.imgur.com/3XMumHL.png">
 			</div>
 			
 		</div>

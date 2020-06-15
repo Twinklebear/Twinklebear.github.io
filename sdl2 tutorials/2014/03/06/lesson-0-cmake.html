@@ -18,7 +18,7 @@
     <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
     <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
 
-	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/molokai.css" rel="stylesheet">
 	<link href="/assets/custom.css" rel="stylesheet">
 	<link rel="shortcut icon" href="/assets/img/identicon.ico">
 
@@ -113,7 +113,7 @@ and libraries you downloaded previously.
 <p>To lookup SDL2 we’ll need a module to find the dependency we want. Typically these are included in the CMake distribution
 but for some newer libraries they may not be integrated yet. In the case of SDL2 we’ll need to provide our own module
 to lookup the dependency. This module is available around online and in the lesson <a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/blob/master/cmake/FindSDL2.cmake">repository</a>. For Windows users I recommend using the modified version from the
-repository since it will also check for your <code class="highlighter-rouge">SDL2</code> environment variable. The existing FindSDL2.cmake that’s floating
+repository since it will also check for your <code>SDL2</code> environment variable. The existing FindSDL2.cmake that’s floating
 around will work for Linux and Mac but will likely fail to find the libraries on Windows.</p>
 
 <h2 id="the-cmakeliststxt-files-for-our-project">The CMakeLists.txt Files for Our Project</h2>
@@ -121,49 +121,42 @@ around will work for Linux and Mac but will likely fail to find the libraries on
 
 <ul>
   <li>Append to the CMake module path so we can find our modified SDL2 modules.</li>
-  <li>Set an install directory (called <code class="highlighter-rouge">BIN_DIR</code> here) that we can reference for installing our executables.</li>
+  <li>Set an install directory (called <code>BIN_DIR</code> here) that we can reference for installing our executables.</li>
   <li>Find SDL2 and add the SDL2 include directory to the include path.</li>
   <li>Add the Lesson0 subdirectory to find this lesson’s CMakeLists.txt so that we can build it.</li>
 </ul>
 
 <p>This CMakeLists.txt file should be in the top level directory of your project folder for the lessons.</p>
 
-<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">cmake_minimum_required</span><span class="p">(</span>VERSION 2.6<span class="p">)</span>
-<span class="nb">project</span><span class="p">(</span>TwinklebearDevLessons<span class="p">)</span>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">2.6</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">TwinklebearDevLessons</span><span class="p">)</span>
 
-<span class="c1"># Use our modified FindSDL2* modules
-</span>
-<span class="nb">set</span><span class="p">(</span>CMAKE_MODULE_PATH <span class="si">${</span><span class="nv">CMAKE_MODULE_PATH</span><span class="si">}</span> <span class="s2">"</span><span class="si">${</span><span class="nv">TwinklebearDevLessons_SOURCE_DIR</span><span class="si">}</span><span class="s2">/cmake"</span><span class="p">)</span>
-<span class="c1"># Set an output directory for our binaries
-</span>
-<span class="nb">set</span><span class="p">(</span>BIN_DIR <span class="si">${</span><span class="nv">TwinklebearDevLessons_SOURCE_DIR</span><span class="si">}</span>/bin<span class="p">)</span>
+<span class="c"># Use our modified FindSDL2* modules</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_MODULE_PATH</span> <span class="o">${</span><span class="nv">CMAKE_MODULE_PATH</span><span class="o">}</span> <span class="s2">&quot;${TwinklebearDevLessons_SOURCE_DIR}/cmake&quot;</span><span class="p">)</span>
+<span class="c"># Set an output directory for our binaries</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">BIN_DIR</span> <span class="o">${</span><span class="nv">TwinklebearDevLessons_SOURCE_DIR</span><span class="o">}</span><span class="s">/bin</span><span class="p">)</span>
 
-<span class="c1"># Bump up warning levels appropriately for clang, gcc &amp; msvc
-</span>
-<span class="c1"># Also set debug/optimization flags depending on the build type. IDE users choose this when
-</span>
-<span class="c1"># selecting the build mode in their IDE
-</span>
-<span class="nb">if</span> <span class="p">(</span><span class="si">${</span><span class="nv">CMAKE_CXX_COMPILER_ID</span><span class="si">}</span> STREQUAL <span class="s2">"GNU"</span> OR <span class="si">${</span><span class="nv">CMAKE_CXX_COMPILER_ID</span><span class="si">}</span> STREQUAL <span class="s2">"Clang"</span><span class="p">)</span>
-	<span class="nb">set</span><span class="p">(</span>CMAKE_CXX_FLAGS <span class="s2">"</span><span class="si">${</span><span class="nv">CMAKE_CXX_FLAGS</span><span class="si">}</span><span class="s2"> -Wall -Wextra -pedantic -std=c++11"</span><span class="p">)</span>
-	<span class="nb">set</span><span class="p">(</span>CMAKE_CXX_FLAGS_DEBUG <span class="s2">"</span><span class="si">${</span><span class="nv">CMAKE_CXX_FLAGS</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">CMAKE_CXX_FLAGS_DEBUG</span><span class="si">}</span><span class="s2"> -g"</span><span class="p">)</span>
-	<span class="nb">set</span><span class="p">(</span>CMAKE_CXX_FLAGS_RELEASE <span class="s2">"</span><span class="si">${</span><span class="nv">CMAKE_CXX_FLAGS</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">CMAKE_CXX_FLAGS_RELEASE</span><span class="si">}</span><span class="s2"> -O2"</span><span class="p">)</span>
-<span class="nb">elseif</span> <span class="p">(</span><span class="si">${</span><span class="nv">CMAKE_CXX_COMPILER_ID</span><span class="si">}</span> STREQUAL <span class="s2">"MSVC"</span><span class="p">)</span>
-	<span class="nb">if</span> <span class="p">(</span>CMAKE_CXX_FLAGS MATCHES <span class="s2">"/W[0-4]"</span><span class="p">)</span>
-		<span class="nb">string</span><span class="p">(</span>REGEX REPLACE <span class="s2">"/W[0-4]"</span> <span class="s2">"/W4"</span> CMAKE_CXX_FLAGS <span class="s2">"</span><span class="si">${</span><span class="nv">CMAKE_CXX_FLAGS</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c"># Bump up warning levels appropriately for clang, gcc &amp; msvc</span>
+<span class="c"># Also set debug/optimization flags depending on the build type. IDE users choose this when</span>
+<span class="c"># selecting the build mode in their IDE</span>
+<span class="nb">if</span> <span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CXX_COMPILER_ID</span><span class="o">}</span> <span class="s">STREQUAL</span> <span class="s2">&quot;GNU&quot;</span> <span class="s">OR</span> <span class="o">${</span><span class="nv">CMAKE_CXX_COMPILER_ID</span><span class="o">}</span> <span class="s">STREQUAL</span> <span class="s2">&quot;Clang&quot;</span><span class="p">)</span>
+	<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_FLAGS</span> <span class="s2">&quot;${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11&quot;</span><span class="p">)</span>
+	<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_FLAGS_DEBUG</span> <span class="s2">&quot;${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} -g&quot;</span><span class="p">)</span>
+	<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_FLAGS_RELEASE</span> <span class="s2">&quot;${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE} -O2&quot;</span><span class="p">)</span>
+<span class="nb">elseif</span> <span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CXX_COMPILER_ID</span><span class="o">}</span> <span class="s">STREQUAL</span> <span class="s2">&quot;MSVC&quot;</span><span class="p">)</span>
+	<span class="nb">if</span> <span class="p">(</span><span class="s">CMAKE_CXX_FLAGS</span> <span class="s">MATCHES</span> <span class="s2">&quot;/W[0-4]&quot;</span><span class="p">)</span>
+		<span class="nb">string</span><span class="p">(</span><span class="s">REGEX</span> <span class="s">REPLACE</span> <span class="s2">&quot;/W[0-4]&quot;</span> <span class="s2">&quot;/W4&quot;</span> <span class="s">CMAKE_CXX_FLAGS</span> <span class="s2">&quot;${CMAKE_CXX_FLAGS}&quot;</span><span class="p">)</span>
 	<span class="nb">else</span><span class="p">()</span>
-		<span class="nb">set</span><span class="p">(</span>CMAKE_CXX_FLAGS <span class="s2">"</span><span class="si">${</span><span class="nv">CMAKE_CXX_FLAGS</span><span class="si">}</span><span class="s2"> /W4"</span><span class="p">)</span>
+		<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_FLAGS</span> <span class="s2">&quot;${CMAKE_CXX_FLAGS} /W4&quot;</span><span class="p">)</span>
 	<span class="nb">endif</span><span class="p">()</span>
 <span class="nb">endif</span><span class="p">()</span>
 
-<span class="c1"># Look up SDL2 and add the include directory to our include path
-</span>
-<span class="nb">find_package</span><span class="p">(</span>SDL2 REQUIRED<span class="p">)</span>
-<span class="nb">include_directories</span><span class="p">(</span><span class="si">${</span><span class="nv">SDL2_INCLUDE_DIR</span><span class="si">}</span><span class="p">)</span>
+<span class="c"># Look up SDL2 and add the include directory to our include path</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">SDL2</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">SDL2_INCLUDE_DIR</span><span class="o">}</span><span class="p">)</span>
 
-<span class="c1"># Look in the Lesson0 subdirectory to find its CMakeLists.txt so we can build the executable
-</span>
-<span class="nb">add_subdirectory</span><span class="p">(</span>Lesson0<span class="p">)</span></code></pre></figure>
+<span class="c"># Look in the Lesson0 subdirectory to find its CMakeLists.txt so we can build the executable</span>
+<span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">Lesson0</span><span class="p">)</span></code></pre></figure>
 
 <p><br /></p>
 
@@ -174,15 +167,15 @@ around will work for Linux and Mac but will likely fail to find the libraries on
 Our build system will look for this file under Lesson0/src/main.cpp.
 If you place it elsewhere you’ll need to update the file names and subdirectories in the CMakeLists files.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;
-#include &lt;SDL.h&gt;
-</span>
-<span class="cm">/*
- * Lesson 0: Test to make sure SDL is setup properly
- */</span>
-<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span><span class="p">){</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;SDL.h&gt;</span><span class="cp"></span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Lesson 0: Test to make sure SDL is setup properly</span>
+<span class="cm"> */</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_Init Error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;SDL_Init Error: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 	<span class="p">}</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
@@ -196,16 +189,16 @@ main CMakeLists file will check since we’ve added the subdirectory to be searc
 executable to be built from our source file and tell CMake to link the executable against the SDL2 libraries.
 We also add an install target to have the executable be installed to our binary directory.</p>
 
-<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">project</span><span class="p">(</span>Lesson0<span class="p">)</span>
-<span class="nb">add_executable</span><span class="p">(</span>Lesson0 src/main.cpp<span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span>Lesson0 <span class="si">${</span><span class="nv">SDL2_LIBRARY</span><span class="si">}</span><span class="p">)</span>
-<span class="nb">install</span><span class="p">(</span>TARGETS Lesson0 RUNTIME DESTINATION <span class="si">${</span><span class="nv">BIN_DIR</span><span class="si">}</span><span class="p">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span></span><span class="nb">project</span><span class="p">(</span><span class="s">Lesson0</span><span class="p">)</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">Lesson0</span> <span class="s">src/main.cpp</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">Lesson0</span> <span class="o">${</span><span class="nv">SDL2_LIBRARY</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">Lesson0</span> <span class="s">RUNTIME</span> <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">BIN_DIR</span><span class="o">}</span><span class="p">)</span></code></pre></figure>
 
 <p><br /></p>
 
 <p>If you’ve been using the folder hierarchy used in the lessons you should now have something like this.</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text">TwinklebearDevLessons/
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><span></span>TwinklebearDevLessons/
     CMakeLists.txt
     Lesson0/
         CMakeLists.txt
@@ -218,29 +211,29 @@ We also add an install target to have the executable be installed to our binary 
 
 <h2 id="building-with-cmake">Building With CMake</h2>
 <p>To build the project with CMake we’ll want to make a temporary build directory to store the various build artifacts so we
-don’t pollute our source directory with a bunch of junk. From this folder we can then run <code class="highlighter-rouge">cmake -G "Your Generator" ../</code>
-and CMake will generate makefiles or project files for <code class="highlighter-rouge">Your Generator</code>. You can run <code class="highlighter-rouge">cmake -H</code> to see which generators
-are available on your system. You can also specify the build type with <code class="highlighter-rouge">-DCMAKE_BUILD_TYPE=Type</code>, passing Debug will
+don’t pollute our source directory with a bunch of junk. From this folder we can then run <code>cmake -G "Your Generator" ../</code>
+and CMake will generate makefiles or project files for <code>Your Generator</code>. You can run <code>cmake -H</code> to see which generators
+are available on your system. You can also specify the build type with <code>-DCMAKE_BUILD_TYPE=Type</code>, passing Debug will
 use the debug flags we set above and likewise for Release. I recommend building with the debug flags since it’ll make
 it easier to track down problems with your debugger. A sample run of building a Unix Makefiles target 
 in debug mode is shown below.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
-<span class="nv">$ </span>cmake <span class="nt">-G</span> <span class="s2">"Unix Makefiles"</span> <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Debug ../
-<span class="nv">$ </span>make
-<span class="nv">$ </span>make install</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>$ mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+$ cmake -G <span class="s2">&quot;Unix Makefiles&quot;</span> -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug ../
+$ make
+$ make install</code></pre></figure>
 
 <p><br /></p>
 
 <p>In this example regular Unix Makefiles will be generated in the build directory so the project can now be built
-with make. Running <code class="highlighter-rouge">make install</code> will install any targets we’ve specified (our Lesson0 binary) to their install
-locations (<code class="highlighter-rouge">BIN_DIR</code>). Windows users will also need to copy the relevant SDL2.dll to their install directory so
+with make. Running <code>make install</code> will install any targets we’ve specified (our Lesson0 binary) to their install
+locations (<code>BIN_DIR</code>). Windows users will also need to copy the relevant SDL2.dll to their install directory so
 that the executables can find it. Be sure to copy the appropriate 32bit or 64bit dll depending on which you built.</p>
 
 <h2 id="end-of-lesson-0">End of Lesson 0</h2>
 <p>When we add more programs throughout the lesson series you can simply add the subdirectory with
-<code class="highlighter-rouge">add_subdirectory(Lesson#)</code> and then re-use the Lesson0 CMakeLists.txt file but replacing the occurances of
-<code class="highlighter-rouge">Lesson0</code> with <code class="highlighter-rouge">Lesson#</code>. When we start adding SDL extension libraries we’ll have to add some more CMake modules
+<code>add_subdirectory(Lesson#)</code> and then re-use the Lesson0 CMakeLists.txt file but replacing the occurances of
+<code>Lesson0</code> with <code>Lesson#</code>. When we start adding SDL extension libraries we’ll have to add some more CMake modules
 and link targets but it’s pretty straightforward to setup.</p>
 
 <p>If you’re having any problems with the lesson please leave a comment below.</p>

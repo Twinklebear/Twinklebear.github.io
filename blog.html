@@ -16,7 +16,7 @@
     <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
     <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
 
-	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/molokai.css" rel="stylesheet">
 	<link href="/assets/custom.css" rel="stylesheet">
 	<link rel="shortcut icon" href="/assets/img/identicon.ico">
 
@@ -92,6 +92,31 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2020/06/15/0-to-gltf-triangle"><h3>From 0 to glTF with WebGPU: The First Triangle</h3></a>
+		<b>15 Jun 2020</b>
+		
+<p>WebGPU is a modern graphics API for the web, in development by the
+major browser vendors. When compared to WebGL, WebGPU provides more direct
+control over the GPU to allow applications to leverage the hardware
+more efficiently, similar to Vulkan and DirectX 12.
+WebGPU also exposes additional GPU capabilities not available in WebGL, such as compute
+shaders and storage buffers, enabling powerful GPU compute applications
+to run on the web. As with the switch from OpenGL to Vulkan, WebGPU
+exposes more complexity to the user than WebGL, though the API strikes
+a good balance between complexity and usability, and overall is quite nice to work with.
+In this series, we’ll learn the key aspects of WebGPU from the ground up,
+with the goal of going from zero to a basic glTF model renderer.
+This post marks our initial step on this journey, where we’ll setup
+a WebGPU context and get a triangle on the screen.</p>
+
+
+
+		<a href="/graphics/2020/06/15/0-to-gltf-triangle">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/graphics/2019/11/20/the-sbt-three-ways"><h3>The RTX Shader Binding Table Three Ways</h3></a>
 		<b>20 Nov 2019</b>
 		
@@ -116,7 +141,7 @@ and executing trace calls on the scene to see which hit groups and miss shaders 
 Finally, we’ll look at how this model can be brought back to the CPU using Embree,
 to potentially build a unified low-level API for ray tracing.</p>
 
-<p><strong>Updated 5/1/2020:</strong> Added discussion on <code class="highlighter-rouge">KHR_ray_tracing</code> for Vulkan.</p>
+<p><strong>Updated 5/1/2020:</strong> Added discussion on <code>KHR_ray_tracing</code> for Vulkan.</p>
 
 
 
@@ -203,33 +228,6 @@ described in this post <a href="https://www.willusher.io/webgl-volume-raycaster/
 
 
 		<a href="/webgl/2019/01/13/volume-rendering-with-webgl">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/latex/2018/07/10/comments-in-latex"><h3>Comments in LaTeX</h3></a>
-		<b>10 Jul 2018</b>
-		
-<p>When writing a paper in LaTeX, it’s common to leave
-notes and comments in the text, either to yourself
-or your co-authors. I used to write these
-as just different colored text using <code class="highlighter-rouge">\textcolor{...}</code>,
-with each author assigned a color, or all with the same color.
-However, with more authors
-it can get hard to keep picking legible font colors.
-Futhermore, sometimes just a different color font doesn’t
-stand out quite as much as I’d like from the rest of the text.
-More recently I’ve switched to using highlights for
-the comments, which works well with multiple authors,
-and helps the comments stand out from the rest of
-the text. This is easy to do with the
-<a href="https://ctan.org/pkg/soul?lang=en">soul</a> and
-<a href="https://ctan.org/pkg/xcolor?lang=en">xcolor</a> packages.</p>
-
-
-
-		<a href="/latex/2018/07/10/comments-in-latex">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
 		</div>
 	</div>

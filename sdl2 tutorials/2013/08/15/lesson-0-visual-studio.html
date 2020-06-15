@@ -18,7 +18,7 @@
     <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
     <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
 
-	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/molokai.css" rel="stylesheet">
 	<link href="/assets/custom.css" rel="stylesheet">
 	<link rel="shortcut icon" href="/assets/img/identicon.ico">
 
@@ -122,7 +122,7 @@ edit panel through the down arrow at the right side of the box.</p>
 <br /></p>
 
 <p>Add a new folder to this window and navigate to your SDL include directory. If you put
-your SDL development files under <code class="highlighter-rouge">C:\</code> your include directories panel will look like this
+your SDL development files under <code>C:\</code> your include directories panel will look like this
 after you’ve selected the include directory correctly.</p>
 
 <p><br />
@@ -136,7 +136,7 @@ after you’ve selected the include directory correctly.</p>
 and open the <strong>General</strong> page. To add the library path select <strong>Additional Library Directories</strong>
 and add the lib path, selecting either the 32bit (x86) or 64bit (x64) version of the library.
 I’ve chosen to use the 32bit version for this tutorial series. After setting the
-path your entry should look like this if SDL is under <code class="highlighter-rouge">C:\</code> and you chose the 32bit libraries.</p>
+path your entry should look like this if SDL is under <code>C:\</code> and you chose the 32bit libraries.</p>
 
 <p><br />
 <a href="/assets/img/lesson_0_vs/library_path_set.png">
@@ -146,7 +146,7 @@ path your entry should look like this if SDL is under <code class="highlighter-r
 
 <h2 id="adding-the-library-dependencies">Adding the Library Dependencies</h2>
 <p>Now we’ll add the libraries themselves as dependencies. Switch to the <strong>Input</strong> page and open
-the <strong>Additional Dependencies</strong> entry’s edit panel and add <code class="highlighter-rouge">SDL2.lib; SDL2main.lib</code>.
+the <strong>Additional Dependencies</strong> entry’s edit panel and add <code>SDL2.lib; SDL2main.lib</code>.
 Once you’ve done this your Input page should look like so:</p>
 
 <p><br />
@@ -175,15 +175,15 @@ applications be sure to select Windows so your users don’t have a console wind
 <a href="https://wiki.libsdl.org/SDL_Init">initialize</a> the SDL video subsystem, check for any
 <a href="https://wiki.libsdl.org/SDL_GetError">errors</a> and then <a href="https://wiki.libsdl.org/SDL_Quit">quit</a>.
 Before we can run this program we’ll need to copy the
-SDL binary into our executable’s directory. <code class="highlighter-rouge">SDL2.dll</code> can be found in the lib directory
+SDL binary into our executable’s directory. <code>SDL2.dll</code> can be found in the lib directory
 of your SDL folder under lib/(x86/x64), use the one for the architecture you linked against.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;
-#include &lt;SDL.h&gt;
-</span>
-<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span><span class="p">){</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;SDL.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
-		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_Init Error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+		<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;SDL_Init Error: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 	<span class="p">}</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>

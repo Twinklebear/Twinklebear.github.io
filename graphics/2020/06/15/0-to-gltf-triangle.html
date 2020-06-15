@@ -1,0 +1,669 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>From 0 to glTF with WebGPU: The First Triangle</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
+
+	<link href="/assets/molokai.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content mb-4">
+		
+
+<h1 class="display-4">From 0 to glTF with WebGPU: The First Triangle</h1>
+
+<div class="row justify-content-center">
+	<div class="col-9">
+		
+<p>WebGPU is a modern graphics API for the web, in development by the
+major browser vendors. When compared to WebGL, WebGPU provides more direct
+control over the GPU to allow applications to leverage the hardware
+more efficiently, similar to Vulkan and DirectX 12.
+WebGPU also exposes additional GPU capabilities not available in WebGL, such as compute
+shaders and storage buffers, enabling powerful GPU compute applications
+to run on the web. As with the switch from OpenGL to Vulkan, WebGPU
+exposes more complexity to the user than WebGL, though the API strikes
+a good balance between complexity and usability, and overall is quite nice to work with.
+In this series, we’ll learn the key aspects of WebGPU from the ground up,
+with the goal of going from zero to a basic glTF model renderer.
+This post marks our initial step on this journey, where we’ll setup
+a WebGPU context and get a triangle on the screen.</p>
+
+<!--more-->
+
+<h1 id="getting-a-webgpu-context">Getting a WebGPU Context</h1>
+
+<p>The first step to working with WebGPU is to setup a browser
+with it enabled. Chrome, Firefox, and Safari’s implementations
+are <a href="https://github.com/gpuweb/gpuweb/wiki/Implementation-Status">still in progress</a>,
+and as such we need to use the corresponding nightly
+browsers provided by the vendors. At the time of writing, I’ve found that
+<a href="https://www.google.com/chrome/canary/">Chrome Canary</a>
+has the most complete implementation, and recommend using it for
+development.
+You’ll also need to enable the WebGPU feature
+in the nightly browser, following the <a href="https://github.com/gpuweb/gpuweb/wiki/Implementation-Status">guides here</a>.
+Since browser support is still in progress, you’ll want to disable
+WebGPU during regular web browsing.
+You can check if you’ve got WebGPU enabled by jumping to the bottom of this
+post, where you should see the triangle we’re going to be rendering. If
+WebGPU isn’t enabled, you’ll see an error message instead.</p>
+
+<p>The triangle renderer we’ll implement in this post will work
+in both Chrome Canary and Firefox Nightly; however, the WebGPU
+implementation in Safari Technology Preview looks to possibly be on an older
+version of the spec, and has some differences in default parameters
+and the vertex buffer specificiation APIs. Thus, the code we discuss here
+will not work in Safari for now, but can be made to work with some smaller tweaks.</p>
+
+<p>The initial setup of our WebGPU rendering context is similar to WebGL.
+Our webpage will have a canvas to display our rendered image,
+and load our rendering code from <code>render.js</code>.</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>WebGPU<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="c">&lt;!-- The canvas to display our renderer output on --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;webgpu-canvas&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;640&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;480&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;render.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></code></pre></figure>
+
+<p>A number of the APIs used to interact with the GPU are <code>async</code>, thus
+we’ll place our rendering code inside an <code>async</code>
+function which is executed when the script is loaded.
+Our first step is to get a <a href="https://gpuweb.github.io/gpuweb/#adapter"><code>GPUAdapter</code></a>
+from the WebGPU API. Each adapter represents a GPU on the machine
+and the browser’s implementation of WebGPU on top of that GPU.
+We can then request a <a href="https://gpuweb.github.io/gpuweb/#devices"><code>GPUDevice</code></a>
+from the adapter, which gives us a context to work with the hardware.
+The <code>GPUDevice</code> provides APIs to create GPU objects such as buffers and textures, and
+execute commands on the device. The distinction between the <code>GPUAdapter</code>
+and <code>GPUDevice</code> is similar to that of <code>VkPhysicalDevice</code> and <code>VkDevice</code> in Vulkan.
+As with WebGL, we need a context for the canvas which will
+be used to display our rendered image. To use WebGPU with the
+canvas, we request a <code>gpupresent</code> context (Safari calls it a <code>gpu</code> context).
+After this setup, we can load our shaders and vertex
+data, configure our render targets, and build our render pipeline, to draw
+our triangle!</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="p">(</span><span class="nx">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;WebGPU is not supported/enabled in your browser&quot;</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Get a GPU device to render with</span>
+    <span class="kd">var</span> <span class="nx">adapter</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">.</span><span class="nx">requestAdapter</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">device</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">adapter</span><span class="p">.</span><span class="nx">requestDevice</span><span class="p">();</span>
+
+    <span class="c1">// Get a context to display our rendered image on the canvas</span>
+    <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;webgpu-canvas&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;gpupresent&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Setup shader modules</span>
+    <span class="c1">// ....</span>
+
+    <span class="c1">// Specify vertex data</span>
+    <span class="c1">// ....</span>
+
+    <span class="c1">// Setup render outputs</span>
+    <span class="c1">// ....</span>
+
+    <span class="c1">// Create render pipeline</span>
+    <span class="c1">// ....</span>
+
+    <span class="c1">// Render!</span>
+    <span class="c1">// ....</span>
+<span class="p">})();</span></code></pre></figure>
+
+<h1 id="the-webgpu-rendering-pipeline">The WebGPU Rendering Pipeline</h1>
+
+<p>The WebGPU rendering pipeline consists of two programmable stages: the
+vertex shader and the fragment shader, similar to WebGL.
+WebGPU also adds support for compute shaders, which exist outside
+the rendering pipeline.</p>
+
+<figure>
+	<img class="img-fluid" src="/assets/img/webgl-volumes/webgl-triangle-pipeline.svg" />
+	
+	<figcaption><b>Figure 1:</b>
+	<i>The rendering pipeline in WebGPU consists of two programmable shader stages:
+	the vertex shader, responsible for transforming input
+	vertices into clip space, and the fragment shader, responsible
+	for shading the pixels covered by each triangle.
+	</i></figcaption>
+</figure>
+
+<p>To render our triangle, we’ll need to configure such a pipeline,
+specifying our shaders, vertex attribute configuration, etc.
+In WebGPU, this pipeline takes the form of a concrete object, the
+<a href="https://gpuweb.github.io/gpuweb/#gpurenderpipeline"><code>GPURenderPipeline</code></a>,
+which specifies the different pieces of the pipeline.
+The configuration of the components of this pipeline (e.g., the shaders,
+vertex state, render output state, etc.) are fixed, allowing the GPU
+to better optimize rendering for the pipeline. The buffers
+or textures bound to the corresponding inputs or outputs can be changed;
+however, the number of inputs and outputs, and their types, etc. cannot be changed.
+This is in contrast to WebGL, where the pipeline state for a draw
+is implicitly specified through modifying a global state machine,
+and the shaders, vertex state, etc., can be swapped out at any time
+between draw calls, making it challenging to optimize the pipeline.</p>
+
+<h2 id="shader-modules">Shader Modules</h2>
+
+<p>Our first step in creating the pipeline is to create the vertex and fragment
+<a href="https://gpuweb.github.io/gpuweb/#shader-modules">shader modules</a>,
+which will be executed in the pipeline.
+WebGPU takes shaders in the form of SPV bytecode, which can either
+be compiled from GLSL in the browser by shipping a GLSL compiler with
+your application, or compiled to SPV bytecode ahead of time and fetched
+from the server or embedded in the application code.
+We’ll take the embedded route, and use the <code>glslc</code> compiler
+provided with the Vulkan SDK to compile our GLSL shaders to SPV.</p>
+
+<p>The GLSL shaders for rendering our triangle are shown below.
+Our vertex shader will take two inputs: the triangle position
+and a color, and pass this color to the fragment shader.
+The fragment shader will take this color as an input and write
+it out to the first render target.</p>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="c1">// Vertex shader</span>
+<span class="cp">#version 450 core</span>
+
+<span class="c1">// Inputs: position and color</span>
+<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec4</span> <span class="n">pos</span><span class="p">;</span>
+<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec4</span> <span class="n">vcolor</span><span class="p">;</span>
+
+<span class="c1">// Outputs: color passed to fragment shader</span>
+<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="k">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
+
+<span class="k">void</span> <span class="n">main</span><span class="p">(</span><span class="k">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fcolor</span> <span class="o">=</span> <span class="n">vcolor</span><span class="p">;</span>
+    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="c1">// Fragment shader</span>
+<span class="cp">#version 450 core</span>
+
+<span class="c1">// Input: fragment color</span>
+<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
+
+<span class="c1">// Output: fragment color</span>
+<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="k">vec4</span> <span class="n">color</span><span class="p">;</span>
+
+<span class="k">void</span> <span class="n">main</span><span class="p">(</span><span class="k">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">fcolor</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>To embed our SPV bytecode JavaScript, we’ll use the same approach for
+embedding it in C or C++ programs. We compile the shaders
+to SPV using <code>glslc</code> and output the bytecode as a C array (<code>-mfmt=c</code>).
+The compiler will output our shader as an array of uint32’s
+which can be embedded into the program as an array variable.
+In JavaScript, we can embed this array as a <code>Uint32Array</code> variable.
+The shader compilation and output as an embedded <code>Uint32Array</code>
+is performed by the Python script below.
+First, the shader is compiled to SPV and output to <code>a.spv</code>,
+using the C array output format.
+The script then reads the array in this file and
+generates a JS snippet to create a <code>Uint32Array</code> containing the
+bytecode and writes it to stdout.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Usage &lt;glslc&gt; &lt;shader&gt; &lt;var_name&gt; [glslc_args...]&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">glslc</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">shader</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">var_name</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="n">compiled_shader</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">glslc</span><span class="p">,</span> <span class="n">shader</span><span class="p">,</span> <span class="s2">&quot;-mfmt=c&quot;</span><span class="p">]</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">:])</span>
+
+<span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;a.spv&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">compiled_code</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">compiled_shader</span> <span class="o">=</span> <span class="s2">&quot;const &quot;</span> <span class="o">+</span> <span class="n">var_name</span> <span class="o">+</span> <span class="s2">&quot; = new Uint32Array([&quot;</span> <span class="o">+</span> <span class="n">compiled_code</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;]);</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;a.spv&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">compiled_shader</span><span class="p">)</span></code></pre></figure>
+
+<p>We can then paste the embedded SPV arrays into our code
+and use them to create shader modules.
+A shader module is created by calling <code>createShaderModule</code> on
+our <code>GPUDevice</code>. The method takes an object containing
+the parameters, and expects that the <code>code</code> member of the object
+refers to our desired SPV bytecode.
+Each shader module will be used in the pipeline as part of a
+<a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuprogrammablestagedescriptor"><code>GPUProgrammableStageDescriptor</code></a>,
+which specifies a shader module and entry point function
+to call in the shader.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Setup shader modules</span>
+
+<span class="c1">// Embedded SPV bytecode for our shaders</span>
+<span class="kr">const</span> <span class="nx">triangle_vert_spv</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint32Array</span><span class="p">([</span><span class="cm">/* .... */</span><span class="p">]);</span>
+<span class="kr">const</span> <span class="nx">triangle_frag_spv</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint32Array</span><span class="p">([</span><span class="cm">/* .... */</span><span class="p">]);</span>
+
+<span class="kd">var</span> <span class="nx">vertModule</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createShaderModule</span><span class="p">({</span><span class="nx">code</span><span class="o">:</span> <span class="nx">triangle_vert_spv</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">vertexStage</span> <span class="o">=</span>  <span class="p">{</span>
+    <span class="nx">module</span><span class="o">:</span> <span class="nx">vertModule</span><span class="p">,</span>
+    <span class="nx">entryPoint</span><span class="o">:</span> <span class="s2">&quot;main&quot;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">fragModule</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createShaderModule</span><span class="p">({</span><span class="nx">code</span><span class="o">:</span> <span class="nx">triangle_frag_spv</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">fragmentStage</span> <span class="o">=</span>  <span class="p">{</span>
+    <span class="nx">module</span><span class="o">:</span> <span class="nx">fragModule</span><span class="p">,</span>
+    <span class="nx">entryPoint</span><span class="o">:</span> <span class="s2">&quot;main&quot;</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>Although embedding the shader bytecode is convenient,
+if many variants of the shader need to be compiled and embedded (e.g., to handle different
+model properties or material configurations), embedding them all can significantly
+increase your application download size. In this case, it would be better to store the
+different compiled variants separately on the server and fetch
+them as needed using additional web requests.</p>
+
+<h2 id="specifying-vertex-data">Specifying Vertex Data</h2>
+
+<p>Next, we’ll specify the vertex data for our triangle.
+We’ll specify both the vertex positions and colors in a single
+buffer, with the positions and colors interleaved with each other.
+Each position and color will be stored as a <code>float4</code>.
+First, we allocate and map a buffer on the device with enough
+room to store the vertex data, using <code>createBufferMapped</code>.
+This method takes the size (in bytes) of the buffer we want
+to create and a set of flags or’d together specifying the
+desired <a href="https://gpuweb.github.io/gpuweb/#buffer-usage">usage modes</a> of the buffer.</p>
+
+<p><code>createBufferMapped</code> returns the <code>GPUBuffer</code> and an <code>ArrayBuffer</code> which
+we can use to upload data into the buffer.
+To write our vertex data we create a <code>Float32Array</code> view of the array buffer
+and set the data through this view.
+Finally, we have to unmap the buffer before using it later in rendering.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Specify vertex data</span>
+<span class="c1">// Allocate room for the vertex data: 3 vertices, each with 2 float4&#39;s</span>
+<span class="kd">var</span> <span class="p">[</span><span class="nx">dataBuf</span><span class="p">,</span> <span class="nx">dataBufMapping</span><span class="p">]</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBufferMapped</span><span class="p">({</span>
+    <span class="nx">size</span><span class="o">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">VERTEX</span>
+<span class="p">});</span>
+
+<span class="c1">// Interleaved positions and colors</span>
+<span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">dataBufMapping</span><span class="p">).</span><span class="nx">set</span><span class="p">([</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1">// position</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
+    <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// position</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// position</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
+<span class="p">]);</span>
+<span class="nx">dataBuf</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span></code></pre></figure>
+
+<p>In the rendering pipeline, we’ll specify an array of
+<a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuvertexbufferlayoutdescriptor"><code>GPUVertexBufferLayoutDescriptor</code></a>
+objects, describing the input buffers containing vertex data and the
+attributes within them. The attributes are described with an
+array of <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuvertexattributedescriptor"><code>GPUVertexAttributeDescriptor</code></a>
+objects set on each buffer descriptor.
+This array is passed as the <code>vertexBuffers</code>
+member of the <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuvertexstatedescriptor"><code>GPUVertexStateDescriptor</code></a>
+object.
+In this example, we have a single buffer containing the interleaved
+attributes of each vertex. Thus, the stride between elements is 32 bytes (2 <code>float4</code>),
+and the buffer specifies two <code>float4</code> attributes.
+The first attribute is the position, and is sent to shader input location 0.
+The second is the color, and is sent to shader input location 1.</p>
+
+<p>WebGPU’s model for specifying vertex buffers and attributes follows that of D3D12 and Vulkan,
+where vertex buffers are bound to input slots and provide some set of vertex attributes,
+illustrated below.
+From a D3D12 view, the <code>vertexBuffers</code> member maps to the array of <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_input_element_desc"><code>D3D12_INPUT_ELEMENT_DESC</code></a>
+structures passed through the <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_input_layout_desc"><code>D3D12_INPUT_LAYOUT_DESC</code></a>
+when creating a graphics pipeline.
+From a Vulkan view, the <code>vertexBuffers</code> member maps directly to the
+<a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineVertexInputStateCreateInfo.html"><code>VkPipelineVertexInputStateCreateInfo</code></a>
+structure passed when creating a graphics pipeline.</p>
+
+<figure>
+	<img class="img-fluid" src="/assets/img/webgpu-ia-slots.svg" />
+	
+	<figcaption><b>Figure 2:</b>
+	<i>Providing vertex attributes for our triangle to the input assembler through buffers.
+    Our attributes are read from the buffer bound to input slot 0 and passed to the
+    specified shader input locations, using the strides and offsets specified for
+    the input slot and attributes.
+	</i></figcaption>
+</figure>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Specify vertex buffer input slots and the attributes provided by those buffers</span>
+<span class="kd">var</span> <span class="nx">vertexState</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">vertexBuffers</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nx">arrayStride</span><span class="o">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="nx">attributes</span><span class="o">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nx">format</span><span class="o">:</span> <span class="s2">&quot;float4&quot;</span><span class="p">,</span>
+                    <span class="nx">offset</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="nx">shaderLocation</span><span class="o">:</span> <span class="mi">0</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nx">format</span><span class="o">:</span> <span class="s2">&quot;float4&quot;</span><span class="p">,</span>
+                    <span class="nx">offset</span><span class="o">:</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+                    <span class="nx">shaderLocation</span><span class="o">:</span> <span class="mi">1</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">};</span></code></pre></figure>
+
+<h2 id="writing-rendering-outputs">Writing Rendering Outputs</h2>
+
+<p>Next we’ll create a swap chain and specify where the results output from our fragment
+shader should be written.
+To display the images on our canvas, we need a swap chain associated with its context.
+The swap chain will let us rotate through the images being displayed on the canvas,
+rendering to a buffer which is not visible while another is shown (i.e., double-buffering).
+We create a swap chain by specifying the desired image format and texture usage.
+The swap chain will create one or more textures for us, sized to match the canvas
+they’ll be displayed on.
+Since we’ll be rendering directly to the swap chain textures, we specify that
+they’ll be used as output attachments.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Setup render outputs</span>
+<span class="kd">var</span> <span class="nx">swapChainFormat</span> <span class="o">=</span> <span class="s2">&quot;bgra8unorm&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">swapChain</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">configureSwapChain</span><span class="p">({</span>
+    <span class="nx">device</span><span class="o">:</span> <span class="nx">device</span><span class="p">,</span>
+    <span class="nx">format</span><span class="o">:</span> <span class="nx">swapChainFormat</span><span class="p">,</span>
+    <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUTextureUsage</span><span class="p">.</span><span class="nx">OUTPUT_ATTACHMENT</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Although in this example we’re just drawing a single triangle, we’ll
+still create and use a depth texture since we’ll need it later on.
+The depth texture is created as a regular texture, specifying
+the size, format, and usage. As before, we’ll be rendering
+directly to this texture and thus specify it will be used as
+an output attachment.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="kd">var</span> <span class="nx">depthFormat</span> <span class="o">=</span> <span class="s2">&quot;depth24plus-stencil8&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">depthTexture</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createTexture</span><span class="p">({</span>
+    <span class="nx">size</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">width</span><span class="o">:</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span>
+        <span class="nx">height</span><span class="o">:</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span>
+        <span class="nx">depth</span><span class="o">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="nx">format</span><span class="o">:</span> <span class="nx">depthFormat</span><span class="p">,</span>
+    <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUTextureUsage</span><span class="p">.</span><span class="nx">OUTPUT_ATTACHMENT</span>
+<span class="p">});</span></code></pre></figure>
+
+<h2 id="creating-the-rendering-pipeline">Creating the Rendering Pipeline</h2>
+
+<p>Finally, we can create the rendering pipeline that combines our
+shaders, vertex attributes, and output configuration, which we can
+use to render our triangle. The rendering pipeline description is
+passed through a <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpipelinedescriptor"><code>GPURenderPipelineDescriptor</code></a>
+object, passed to <code>createRenderPipeline</code>.
+The final pieces required to create the rendering pipeline are
+the pipeline layout, which specifies the bind group layouts used by the pipeline;
+and the color and depth states, specifying the configuration used
+to write the shader outputs.
+We won’t need bind groups in this example, so we can make a
+pipeline layout which specifies that no bind groups will be used.</p>
+
+<p>The color states behave similar to the input assembler’s input slots.
+We specify an array of <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpucolorstatedescriptor"><code>GPUColorStateDescriptor</code></a>,
+which describe the set of output slots and texture format that will
+be bound to them. During rendering, we attach textures to these slots
+to write shader outputs to them. Our fragment shader has a single output slot
+for the color data, which we’ll write directly to the swap chain
+image. Thus, we specify a single color state for an image with the swap
+chain format. We’ll also use our depth buffer, and specify the depth state
+describing how the depth buffer should be used.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Create render pipeline</span>
+<span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span><span class="nx">bindGroupLayouts</span><span class="o">:</span> <span class="p">[]});</span>
+
+<span class="kd">var</span> <span class="nx">renderPipeline</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createRenderPipeline</span><span class="p">({</span>
+    <span class="nx">layout</span><span class="o">:</span> <span class="nx">layout</span><span class="p">,</span>
+    <span class="nx">vertexStage</span><span class="o">:</span> <span class="nx">vertexStage</span><span class="p">,</span>
+    <span class="nx">fragmentStage</span><span class="o">:</span> <span class="nx">fragmentStage</span><span class="p">,</span>
+    <span class="nx">primitiveTopology</span><span class="o">:</span> <span class="s2">&quot;triangle-list&quot;</span><span class="p">,</span>
+    <span class="nx">vertexState</span><span class="o">:</span> <span class="nx">vertexState</span><span class="p">,</span>
+    <span class="nx">colorStates</span><span class="o">:</span> <span class="p">[{</span>
+        <span class="nx">format</span><span class="o">:</span> <span class="nx">swapChainFormat</span>
+    <span class="p">}],</span>
+    <span class="nx">depthStencilState</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">format</span><span class="o">:</span> <span class="nx">depthFormat</span><span class="p">,</span>
+        <span class="nx">depthWriteEnabled</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">depthCompare</span><span class="o">:</span> <span class="s2">&quot;less&quot;</span>
+    <span class="p">}</span>
+<span class="p">});</span></code></pre></figure>
+
+<h2 id="rendering">Rendering!</h2>
+
+<p>Rendering in WebGPU takes place during a Render Pass, which is
+described through a <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpassdescriptor"><code>GPURenderPassDescriptor</code></a>.
+The render pass descriptor specifies the images to bind to the output slots
+written from the fragment shader, and optionally a depth buffer
+and the occlusion query set. The color and depth attachments specified must
+match the color and depth states specified for the render pipelines used in the render pass.
+Our fragment shader writes to a single output slot, the object color, which we’ll write
+to the current swap chain image. As the image will change each frame
+to the current swap chain image, we don’t set it just yet.</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="kd">var</span> <span class="nx">renderPassDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">colorAttachments</span><span class="o">:</span> <span class="p">[{</span>
+        <span class="nx">attachment</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
+        <span class="nx">loadValue</span><span class="o">:</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">}],</span>
+    <span class="nx">depthStencilAttachment</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">attachment</span><span class="o">:</span> <span class="nx">depthTexture</span><span class="p">.</span><span class="nx">createView</span><span class="p">(),</span>
+        <span class="nx">depthLoadValue</span><span class="o">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="nx">depthStoreOp</span><span class="o">:</span> <span class="s2">&quot;store&quot;</span><span class="p">,</span>
+        <span class="nx">stencilLoadValue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">stencilStoreOp</span><span class="o">:</span> <span class="s2">&quot;store&quot;</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>All that’s left to do is write our rendering loop, and pass it to <code>requestAnimationFrame</code>
+to call it each frame to update the image.
+To record and submit GPU commands, we use a <a href="https://gpuweb.github.io/gpuweb/#command-encoder"><code>GPUCommandEncoder</code></a>.
+The command encoder can be used to prerecord and command buffers that can
+be submitted multiple times to the GPU, or rerecord and submit each frame.
+As we’ll be changing the render pass color attachment each frame, we’ll be
+rerecording and submitting the command buffer each frame.</p>
+
+<p>For each frame, we get the latest swap chain image which we should write rendering outputs
+to and set this as our output color attachment image.
+We then create a command encoder to record our rendering commands.
+We begin the render pass by calling <code>beginRenderPass</code> and passing our render pass descriptor
+to get back a <a href="https://gpuweb.github.io/gpuweb/#gpurenderpassencoder"><code>GPURenderPassEncoder</code></a>,
+that will allow us to record rendering commands.
+We can then set the render pipeline to use, bind our vertex buffers to the
+corresponding input slots, draw the triangle, and end the render pass.
+To get a command buffer which can be submitted to the GPU for execution
+we call <code>finish</code> on the command encoder. The returned command buffer
+is then passed to the device for execution. After the command buffer is run
+our triangle will be written to the swap chain image and displayed on the
+canvas as shown below!</p>
+
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Render!</span>
+<span class="kd">var</span> <span class="nx">frame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Update the color output image to the current swap chain render target</span>
+    <span class="nx">renderPassDesc</span><span class="p">.</span><span class="nx">colorAttachments</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">attachment</span> <span class="o">=</span> <span class="nx">swapChain</span><span class="p">.</span><span class="nx">getCurrentTexture</span><span class="p">().</span><span class="nx">createView</span><span class="p">();</span>
+
+    <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createCommandEncoder</span><span class="p">();</span>
+    
+    <span class="kd">var</span> <span class="nx">renderPass</span> <span class="o">=</span> <span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">beginRenderPass</span><span class="p">(</span><span class="nx">renderPassDesc</span><span class="p">);</span>
+
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setPipeline</span><span class="p">(</span><span class="nx">renderPipeline</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dataBuf</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">endPass</span><span class="p">();</span>
+    <span class="nx">device</span><span class="p">.</span><span class="nx">defaultQueue</span><span class="p">.</span><span class="nx">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">finish</span><span class="p">()]);</span>
+
+    <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span></code></pre></figure>
+
+<div class="col-12 row">
+    <div class="col-12 d-flex justify-content-center">
+        <canvas id="webgpu-canvas" width="640" height="480"></canvas>
+    </div>
+    <div class="col-12 alert alert-danger" id="no-webgpu" style="display:none;">
+        <h4>Error: Your browser does not support WebGPU</h4>
+    </div>
+    <div class="col-12">
+        
+        <figcaption><b>Figure 3:</b>
+        <i>Our triangle, rendered with WebGPU.
+        </i></figcaption>
+    </div>
+</div>
+<script src="/assets/webgpu_triangle.js"></script>
+
+<h2 id="wrapping-up">Wrapping Up</h2>
+
+<p>With our first triangle on screen, we’re well on our way to getting a basic
+glTF model viewer together. In the next post, we’ll look at how
+to pass additional data to our shaders (e.g., uniform buffers), using
+bind groups. If you run into issues getting the example to work,
+<a href="/assets/webgpu_triangle.js">check out the code</a> for rendering the triangle in Figure 3,
+or get in touch via <a href="https://twitter.com/_wusher">Twitter</a> or email.</p>
+
+<p>Although WebGPU is in its early stages, here are a few useful resources
+which are also worth checking out:</p>
+
+<ul>
+  <li>Alain’s <a href="https://alain.xyz/blog/raw-webgpu">Raw WebGPU</a> tutorial</li>
+  <li>Mik’s curated <a href="https://github.com/mikbry/awesome-webgpu">Awesome WebGPU list</a></li>
+  <li><a href="https://hacks.mozilla.org/2020/04/experimental-webgpu-in-firefox/">A Taste of WebGPU in Firefox</a></li>
+  <li>Austin’s <a href="https://github.com/austinEng/webgpu-samples">WebGPU Samples</a></li>
+  <li>The <a href="https://webkit.org/demos/webgpu/">Safari WebGPU Demos</a></li>
+  <li><a href="https://gpuweb.github.io/gpuweb/">The WebGPU Specification</a></li>
+</ul>
+
+
+		<hr>
+		<div class="col-12">
+			<p>Published: 15 June 2020</p>
+		</div>
+		<div class="col-12 row">
+			
+			<div class="col-md-6 justify-content-left">
+				<a href="/graphics/2019/11/20/the-sbt-three-ways" title="The RTX Shader Binding Table Three Ways">
+					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

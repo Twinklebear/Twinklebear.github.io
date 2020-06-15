@@ -18,7 +18,7 @@
     <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
     <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
 
-	<link href="/assets/syntax.css" rel="stylesheet">
+	<link href="/assets/molokai.css" rel="stylesheet">
 	<link href="/assets/custom.css" rel="stylesheet">
 	<link rel="shortcut icon" href="/assets/img/identicon.ico">
 
@@ -116,7 +116,7 @@ and executing trace calls on the scene to see which hit groups and miss shaders 
 Finally, we’ll look at how this model can be brought back to the CPU using Embree,
 to potentially build a unified low-level API for ray tracing.</p>
 
-<p><strong>Updated 5/1/2020:</strong> Added discussion on <code class="highlighter-rouge">KHR_ray_tracing</code> for Vulkan.</p>
+<p><strong>Updated 5/1/2020:</strong> Added discussion on <code>KHR_ray_tracing</code> for Vulkan.</p>
 
 <!--more-->
 
@@ -380,31 +380,31 @@ those used by the global root signature, which is shared by all shaders.
 One way to avoid conflicts is to use separate register spaces for the global and
 local root signature parameter registers.</p>
 
-<p>The shader handle size is defined by <code class="highlighter-rouge">D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES</code> (32 bytes),
-the stride between records must be a multiple of <code class="highlighter-rouge">D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES</code>,
-each shader table start address must be aligned to <code class="highlighter-rouge">D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT</code> (64 bytes).
+<p>The shader handle size is defined by <code>D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES</code> (32 bytes),
+the stride between records must be a multiple of <code>D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES</code>,
+each shader table start address must be aligned to <code>D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT</code> (64 bytes).
 The maximum size allowed for the stride is 4096 bytes, placing an upper bound on the number of
 parameters which can be embedded for a shader record.</p>
 
 <h3 id="instance-parameters">Instance Parameters</h3>
 
-<p>Instances in DXR are specified through the <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_raytracing_instance_desc"><code class="highlighter-rouge">D3D12_RAYTRACING_INSTANCE_DESC</code></a>
+<p>Instances in DXR are specified through the <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_raytracing_instance_desc"><code>D3D12_RAYTRACING_INSTANCE_DESC</code></a>
 structure:</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">D3D12_RAYTRACING_INSTANCE_DESC</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">D3D12_RAYTRACING_INSTANCE_DESC</span> <span class="p">{</span>
   <span class="n">FLOAT</span> <span class="n">Transform</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
-  <span class="n">UINT</span> <span class="n">InstanceID</span> <span class="o">:</span> <span class="mi">24</span><span class="p">;</span>
-  <span class="n">UINT</span> <span class="n">InstanceMask</span> <span class="o">:</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="n">UINT</span> <span class="n">InstanceContributionToHitGroupIndex</span> <span class="o">:</span> <span class="mi">24</span><span class="p">;</span>
-  <span class="n">UINT</span> <span class="n">Flags</span> <span class="o">:</span> <span class="mi">8</span><span class="p">;</span>
+  <span class="n">UINT</span> <span class="nl">InstanceID</span> <span class="p">:</span> <span class="mi">24</span><span class="p">;</span>
+  <span class="n">UINT</span> <span class="nl">InstanceMask</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
+  <span class="n">UINT</span> <span class="nl">InstanceContributionToHitGroupIndex</span> <span class="p">:</span> <span class="mi">24</span><span class="p">;</span>
+  <span class="n">UINT</span> <span class="nl">Flags</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
   <span class="n">D3D12_GPU_VIRTUAL_ADDRESS</span> <span class="n">AccelerationStructure</span><span class="p">;</span>
 <span class="p">}</span> <span class="n">D3D12_RAYTRACING_INSTANCE_DESC</span><span class="p">;</span></code></pre></figure>
 
 <p>The parameters which effect the SBT indexing are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">InstanceContributionToHitGroupIndex</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
-  <li><code class="highlighter-rouge">InstanceMask</code>: While the mask does not affect which hit group is called, it can
+  <li><code>InstanceContributionToHitGroupIndex</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
+  <li><code>InstanceMask</code>: While the mask does not affect which hit group is called, it can
   be used to skip traversal of instances entirely, by masking them out of the traversal</li>
 </ul>
 
@@ -414,13 +414,13 @@ structure:</p>
 <a href="https://docs.microsoft.com/en-us/windows/win32/direct3d12/traceray-function">TraceRay</a> function
 can be called to trace rays through the scene.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="n">Template</span><span class="o">&lt;</span><span class="n">payload_t</span><span class="o">&gt;</span>
-<span class="kt">void</span> <span class="n">TraceRay</span><span class="p">(</span><span class="n">RaytracingAccelerationStructure</span> <span class="n">AccelerationStructure</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">RayFlags</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">InstanceInclusionMask</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">RayContributionToHitGroupIndex</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">MultiplierForGeometryContributionToHitGroupIndex</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">MissShaderIndex</span><span class="p">,</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="n">Template</span><span class="o">&lt;</span><span class="n">payload_t</span><span class="o">&gt;</span>
+<span class="k">void</span> <span class="n">TraceRay</span><span class="p">(</span><span class="n">RaytracingAccelerationStructure</span> <span class="n">AccelerationStructure</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">RayFlags</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">InstanceInclusionMask</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">RayContributionToHitGroupIndex</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">MultiplierForGeometryContributionToHitGroupIndex</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">MissShaderIndex</span><span class="p">,</span>
               <span class="n">RayDesc</span> <span class="n">Ray</span><span class="p">,</span>
               <span class="k">inout</span> <span class="n">payload_t</span> <span class="n">Payload</span><span class="p">);</span></code></pre></figure>
 
@@ -430,17 +430,17 @@ closest hit or miss shaders.
 The parameters which affect the SBT indexing are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">InstanceInclusionMask</code>: This mask affects which instances are masked out by and’ing it
-  with each instance’s <code class="highlighter-rouge">InstanceMask</code>.</li>
-  <li><code class="highlighter-rouge">RayContributionToHitGroupIndex</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
-  <li><code class="highlighter-rouge">MultiplierForGeometryContributionToHitGroupIndex</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
-  <li><code class="highlighter-rouge">MissShaderIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
+  <li><code>InstanceInclusionMask</code>: This mask affects which instances are masked out by and’ing it
+  with each instance’s <code>InstanceMask</code>.</li>
+  <li><code>RayContributionToHitGroupIndex</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
+  <li><code>MultiplierForGeometryContributionToHitGroupIndex</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
+  <li><code>MissShaderIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
 </ul>
 
 <h2 id="vulkan-nv-ray-tracing">Vulkan NV Ray Tracing</h2>
 
-<p>This post was originally written when only the <code class="highlighter-rouge">NV_ray_tracing</code> extension was available, which is discussed here.
-I’ve since updated the post (5/1/2020) with <code class="highlighter-rouge">KHR_ray_tracing</code>, which is discussed in the next section.</p>
+<p>This post was originally written when only the <code>NV_ray_tracing</code> extension was available, which is discussed here.
+I’ve since updated the post (5/1/2020) with <code>KHR_ray_tracing</code>, which is discussed in the next section.</p>
 
 <p>For more documentation about the Vulkan NV Ray Tracing extension, also
 <a href="https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#VK_NV_ray_tracing">extension specification</a>,
@@ -451,24 +451,24 @@ and the <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/nv/
 
 <p>In Vulkan, the parameters embedded in the shader record can only be 4-byte constants,
 but do not require extra padding to 8-bytes as in DXR. The embedded parameters are
-accessed in the shader through a special buffer type declared with the <code class="highlighter-rouge">shaderRecordNV</code> layout.
+accessed in the shader through a special buffer type declared with the <code>shaderRecordNV</code> layout.
 For example, if we wanted to pass a material ID for the geometry in the shader record
 we could declare the buffer as follows:</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="k">layout</span><span class="p">(</span><span class="n">shaderRecordNV</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="n">layout</span><span class="p">(</span><span class="n">shaderRecordNV</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
     <span class="n">uint32_t</span> <span class="n">material_id</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
 
 <p>The size of the shader handles and alignment requirements for the shader records
 are queried at runtime by querying the
-<a href="https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRayTracingPropertiesNV.html"><code class="highlighter-rouge">VkPhysicalDeviceRayTracingPropertiesNV</code></a>.
+<a href="https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRayTracingPropertiesNV.html"><code>VkPhysicalDeviceRayTracingPropertiesNV</code></a>.
 On my desktop with an RTX 2070 and Nvidia driver 441.12 the shader handle size
 is 16 bytes and the shader record alignment requirement is 64 bytes.
 The maximum allowed size for the shader record stride is 4096 bytes.</p>
 
 <blockquote>
   <p>Note: Parameters which are not 4-byte constants can be sent as well, along with buffer handles with
-buffer device address support (see <a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetBufferDeviceAddress.html"><code class="highlighter-rouge">vkGetBufferDeviceAddress</code></a>)</p>
+buffer device address support (see <a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetBufferDeviceAddress.html"><code>vkGetBufferDeviceAddress</code></a>)</p>
 </blockquote>
 
 <h3 id="instance-parameters-1">Instance Parameters</h3>
@@ -478,20 +478,20 @@ buffer device address support (see <a href="https://www.khronos.org/registry/vul
 However, a definition is not provided in the headers and we must declare
 our own struct which matches the specified layout:</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">struct</span> <span class="n">GeometryInstance</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">struct</span> <span class="n">GeometryInstance</span> <span class="p">{</span>
     <span class="kt">float</span> <span class="n">transform</span><span class="p">[</span><span class="mi">12</span><span class="p">];</span>
-    <span class="kt">uint32_t</span> <span class="n">instance_custom_index</span> <span class="o">:</span> <span class="mi">24</span><span class="p">;</span>
-    <span class="kt">uint32_t</span> <span class="n">mask</span> <span class="o">:</span> <span class="mi">8</span><span class="p">;</span>
-    <span class="kt">uint32_t</span> <span class="n">instance_offset</span> <span class="o">:</span> <span class="mi">24</span><span class="p">;</span>
-    <span class="kt">uint32_t</span> <span class="n">flags</span> <span class="o">:</span> <span class="mi">8</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="nl">instance_custom_index</span> <span class="p">:</span> <span class="mi">24</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="nl">mask</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="nl">instance_offset</span> <span class="p">:</span> <span class="mi">24</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="nl">flags</span> <span class="p">:</span> <span class="mi">8</span><span class="p">;</span>
     <span class="kt">uint64_t</span> <span class="n">acceleration_structure_handle</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
 
 <p>The parameters which affect the SBT indexing are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">instance_offset</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
-  <li><code class="highlighter-rouge">mask</code>: While the mask does not effect which hit group is called, it can
+  <li><code>instance_offset</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
+  <li><code>mask</code>: While the mask does not effect which hit group is called, it can
   be used to skip traversal of instances entirely, by masking them out of the traversal</li>
 </ul>
 
@@ -500,17 +500,17 @@ our own struct which matches the specified layout:</p>
 <p>In the ray generation, closest hit and miss shaders the function <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/nv/GLSL_NV_ray_tracing.txt#L687-L697">traceNV</a> from
 the GLSL NV Ray Tracing extension can be called to trace rays.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"> <span class="kt">void</span> <span class="n">traceNV</span><span class="p">(</span><span class="n">accelerationStructureNV</span> <span class="n">topLevel</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">cullMask</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
-              <span class="kt">uint</span> <span class="n">missIndex</span><span class="p">,</span>
-              <span class="kt">vec3</span> <span class="n">origin</span><span class="p">,</span>
-              <span class="kt">float</span> <span class="n">Tmin</span><span class="p">,</span>
-              <span class="kt">vec3</span> <span class="n">direction</span><span class="p">,</span>
-              <span class="kt">float</span> <span class="n">Tmax</span><span class="p">,</span>
-              <span class="kt">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span> <span class="k">void</span> <span class="n">traceNV</span><span class="p">(</span><span class="n">accelerationStructureNV</span> <span class="n">topLevel</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">cullMask</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
+              <span class="n">uint</span> <span class="n">missIndex</span><span class="p">,</span>
+              <span class="k">vec3</span> <span class="n">origin</span><span class="p">,</span>
+              <span class="k">float</span> <span class="n">Tmin</span><span class="p">,</span>
+              <span class="k">vec3</span> <span class="n">direction</span><span class="p">,</span>
+              <span class="k">float</span> <span class="n">Tmax</span><span class="p">,</span>
+              <span class="k">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
 
 <p>traceNV takes the acceleration structure to trace against,
 a set of ray flags to adjust the traversal being
@@ -519,22 +519,22 @@ and the index of the ray payload to be updated by the closest hit or miss shader
 The parameters which effect the SBT indexing are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">cullMask</code>: This mask effects which instances are masked out by and’ing it
-  with each instance’s <code class="highlighter-rouge">mask</code>.</li>
-  <li><code class="highlighter-rouge">sbtRecordOffset</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
-  <li><code class="highlighter-rouge">sbtRecordStride</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
-  <li><code class="highlighter-rouge">missIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
+  <li><code>cullMask</code>: This mask effects which instances are masked out by and’ing it
+  with each instance’s <code>mask</code>.</li>
+  <li><code>sbtRecordOffset</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
+  <li><code>sbtRecordStride</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
+  <li><code>missIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
 </ul>
 
 <p>In contrast to HLSL, the ray payloads are specified as a special shader input/output
-variable, where the value of <code class="highlighter-rouge">payload</code> passed to traceNV selects which
+variable, where the value of <code>payload</code> passed to traceNV selects which
 one will be used. For example:</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="k">struct</span> <span class="n">RayPayload</span> <span class="p">{</span>
-    <span class="kt">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
-    <span class="kt">vec3</span> <span class="n">normal</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">struct</span> <span class="n">RayPayload</span> <span class="p">{</span>
+    <span class="k">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
+    <span class="k">vec3</span> <span class="n">normal</span><span class="p">;</span>
 <span class="p">};</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">rayPayloadNV</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
+<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="n">rayPayloadNV</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
 
 <h2 id="vulkan-khr-ray-tracing-added-512020">Vulkan KHR Ray Tracing (added 5/1/2020)</h2>
 
@@ -546,69 +546,69 @@ and the <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext
 
 <p>In Vulkan, the parameters embedded in the shader record can be any data which could otherwise
 be placed in a uniform buffer. The embedded parameters are
-accessed in the shader through a special buffer type declared with the <code class="highlighter-rouge">shaderRecordEXT</code> layout.
+accessed in the shader through a special buffer type declared with the <code>shaderRecordEXT</code> layout.
 For example, if we wanted to pass a material ID for the geometry in the shader record
 we could declare the buffer as follows:</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="k">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="n">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
     <span class="n">uint32_t</span> <span class="n">material_id</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
 
-<p>Buffer pointers can also be passed through the SBT in Vulkan, using the support for <code class="highlighter-rouge">vkGetBufferDeviceAddress</code>
-(now core in 1.2) and the GLSL extension <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GLSL_EXT_buffer_reference2.txt"><code class="highlighter-rouge">GL_EXT_buffer_reference2</code></a>.
-The <code class="highlighter-rouge">VkDeviceAddress</code> for a buffer can be written into the SBT, and accessed from GLSL by defining a buffer reference
+<p>Buffer pointers can also be passed through the SBT in Vulkan, using the support for <code>vkGetBufferDeviceAddress</code>
+(now core in 1.2) and the GLSL extension <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GLSL_EXT_buffer_reference2.txt"><code>GL_EXT_buffer_reference2</code></a>.
+The <code>VkDeviceAddress</code> for a buffer can be written into the SBT, and accessed from GLSL by defining a buffer reference
 buffer type.
 The following closest hit shader example demonstrates this for accessing the index buffer data.
-The example also makes use of <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GL_EXT_scalar_block_layout.txt"><code class="highlighter-rouge">GLSL_EXT_scalar_block_layout</code></a>
+The example also makes use of <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GL_EXT_scalar_block_layout.txt"><code>GLSL_EXT_scalar_block_layout</code></a>
 for C-like struct layout in buffers.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="k">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">VertexBuffer</span> <span class="p">{</span>
-    <span class="kt">vec3</span> <span class="n">v</span><span class="p">[];</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="n">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">VertexBuffer</span> <span class="p">{</span>
+    <span class="k">vec3</span> <span class="n">v</span><span class="p">[];</span>
 <span class="p">};</span>
 
-<span class="k">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">IndexBuffer</span> <span class="p">{</span>
-    <span class="kt">uvec3</span> <span class="n">i</span><span class="p">[];</span>
+<span class="n">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">IndexBuffer</span> <span class="p">{</span>
+    <span class="n">uvec3</span> <span class="n">i</span><span class="p">[];</span>
 <span class="p">};</span>
 
-<span class="k">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">,</span> <span class="n">std430</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBT</span> <span class="p">{</span>
+<span class="n">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">,</span> <span class="n">std430</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBT</span> <span class="p">{</span>
     <span class="n">VertexBuffer</span> <span class="n">verts</span><span class="p">;</span>
     <span class="n">IndexBuffer</span> <span class="n">indices</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">const</span> <span class="kt">uvec3</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">i</span><span class="p">[</span><span class="nb">gl_PrimitiveID</span><span class="p">];</span>
-    <span class="c1">// ....
-</span><span class="p">}</span></code></pre></figure>
+<span class="k">void</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="n">uvec3</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">i</span><span class="p">[</span><span class="n">gl_PrimitiveID</span><span class="p">];</span>
+    <span class="c1">// ....</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>The size of the shader handles and alignment requirements for the shader records
 are queried at runtime by querying the
-<a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceRayTracingPropertiesKHR.html"><code class="highlighter-rouge">VkPhysicalDeviceRayTracingPropertiesKHR</code></a>.
+<a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPhysicalDeviceRayTracingPropertiesKHR.html"><code>VkPhysicalDeviceRayTracingPropertiesKHR</code></a>.
 On my desktop with an RTX 2070 and Nvidia driver 442.81 the shader handle size
 is 32 bytes and the shader record stride must be a multiple of 32 bytes.
 The required alignment for the starting address of each table is 64 bytes.
 The maximum allowed size for the shader record stride is 4096 bytes.
-Note that this now matches the configuration of DXR, which was not the case with <code class="highlighter-rouge">NV_ray_tracing</code>.</p>
+Note that this now matches the configuration of DXR, which was not the case with <code>NV_ray_tracing</code>.</p>
 
 <h3 id="instance-parameters-2">Instance Parameters</h3>
 
 <p>Instances in Vulkan are specified through the same structure layout as in DXR,
-using the <a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAccelerationStructureInstanceKHR.html"><code class="highlighter-rouge">VkAccelerationStructureInstanceKHR</code></a>
+using the <a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkAccelerationStructureInstanceKHR.html"><code>VkAccelerationStructureInstanceKHR</code></a>
 struct.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">struct</span> <span class="n">VkAccelerationStructureInstanceKHR</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">struct</span> <span class="n">VkAccelerationStructureInstanceKHR</span> <span class="p">{</span>
     <span class="n">VkTransformMatrixKHR</span> <span class="n">transform</span><span class="p">;</span>
-    <span class="kt">uint32_t</span> <span class="n">instanceCustomIndex</span><span class="o">:</span><span class="mi">24</span><span class="p">;</span>
-    <span class="kt">uint32_t</span> <span class="n">mask</span><span class="o">:</span><span class="mi">8</span><span class="p">;</span>
-    <span class="kt">uint32_t</span> <span class="n">instanceShaderBindingTableRecordOffset</span><span class="o">:</span><span class="mi">24</span><span class="p">;</span>
-    <span class="n">VkGeometryInstanceFlagsKHR</span> <span class="n">flags</span><span class="o">:</span><span class="mi">8</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="nl">instanceCustomIndex</span><span class="p">:</span><span class="mi">24</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="nl">mask</span><span class="p">:</span><span class="mi">8</span><span class="p">;</span>
+    <span class="kt">uint32_t</span> <span class="nl">instanceShaderBindingTableRecordOffset</span><span class="p">:</span><span class="mi">24</span><span class="p">;</span>
+    <span class="n">VkGeometryInstanceFlagsKHR</span> <span class="nl">flags</span><span class="p">:</span><span class="mi">8</span><span class="p">;</span>
     <span class="kt">uint64_t</span> <span class="n">accelerationStructureReference</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
 
 <p>The parameters which affect the SBT indexing are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">instanceShaderBindingTableRecordOffset</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
-  <li><code class="highlighter-rouge">mask</code>: While the mask does not effect which hit group is called, it can
+  <li><code>instanceShaderBindingTableRecordOffset</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
+  <li><code>mask</code>: While the mask does not effect which hit group is called, it can
   be used to skip traversal of instances entirely, by masking them out of the traversal</li>
 </ul>
 
@@ -616,19 +616,19 @@ struct.</p>
 
 <p>In the ray generation, closest hit and miss shaders the function
 <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GLSL_EXT_ray_tracing.txt#L771-L781">traceRayExt</a> from
-<code class="highlighter-rouge">GLSL_EXT_ray_tracing</code> can be called to trace rays.</p>
+<code>GLSL_EXT_ray_tracing</code> can be called to trace rays.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="kt">void</span> <span class="n">traceRayEXT</span><span class="p">(</span><span class="n">accelerationStructureEXT</span> <span class="n">topLevel</span><span class="p">,</span>
-                 <span class="kt">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
-                 <span class="kt">uint</span> <span class="n">cullMask</span><span class="p">,</span>
-                 <span class="kt">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
-                 <span class="kt">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
-                 <span class="kt">uint</span> <span class="n">missIndex</span><span class="p">,</span>
-                 <span class="kt">vec3</span> <span class="n">origin</span><span class="p">,</span>
-                 <span class="kt">float</span> <span class="n">Tmin</span><span class="p">,</span>
-                 <span class="kt">vec3</span> <span class="n">direction</span><span class="p">,</span>
-                 <span class="kt">float</span> <span class="n">Tmax</span><span class="p">,</span>
-                 <span class="kt">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">void</span> <span class="n">traceRayEXT</span><span class="p">(</span><span class="n">accelerationStructureEXT</span> <span class="n">topLevel</span><span class="p">,</span>
+                 <span class="n">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
+                 <span class="n">uint</span> <span class="n">cullMask</span><span class="p">,</span>
+                 <span class="n">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
+                 <span class="n">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
+                 <span class="n">uint</span> <span class="n">missIndex</span><span class="p">,</span>
+                 <span class="k">vec3</span> <span class="n">origin</span><span class="p">,</span>
+                 <span class="k">float</span> <span class="n">Tmin</span><span class="p">,</span>
+                 <span class="k">vec3</span> <span class="n">direction</span><span class="p">,</span>
+                 <span class="k">float</span> <span class="n">Tmax</span><span class="p">,</span>
+                 <span class="k">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
 
 <p>traceRayEXT takes the acceleration structure to trace against,
 a set of ray flags to adjust the traversal being
@@ -637,22 +637,22 @@ and the index of the ray payload to be updated by the closest hit or miss shader
 The parameters which effect the SBT indexing are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">cullMask</code>: This mask effects which instances are masked out by and’ing it
-  with each instance’s <code class="highlighter-rouge">mask</code>.</li>
-  <li><code class="highlighter-rouge">sbtRecordOffset</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
-  <li><code class="highlighter-rouge">sbtRecordStride</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
-  <li><code class="highlighter-rouge">missIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
+  <li><code>cullMask</code>: This mask effects which instances are masked out by and’ing it
+  with each instance’s <code>mask</code>.</li>
+  <li><code>sbtRecordOffset</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
+  <li><code>sbtRecordStride</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
+  <li><code>missIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
 </ul>
 
 <p>In contrast to HLSL, the ray payloads are specified as a special shader input/output
-variable, where the value of <code class="highlighter-rouge">payload</code> passed to traceRayEXT selects which
+variable, where the value of <code>payload</code> passed to traceRayEXT selects which
 one will be used. For example:</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="k">struct</span> <span class="n">RayPayload</span> <span class="p">{</span>
-    <span class="kt">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
-    <span class="kt">vec3</span> <span class="n">normal</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">struct</span> <span class="n">RayPayload</span> <span class="p">{</span>
+    <span class="k">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
+    <span class="k">vec3</span> <span class="n">normal</span><span class="p">;</span>
 <span class="p">};</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">rayPayloadEXT</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
+<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="n">rayPayloadEXT</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
 
 <h2 id="optix">OptiX</h2>
 
@@ -665,18 +665,18 @@ and the <a href="https://gitlab.com/ingowald/optix7course">OptiX 7 Course</a> fr
 <p>In OptiX, the parameters embedded in the shader record can be arbitrary structs,
 potentially containing CUDA device pointers or texture handles.
 A pointer to the embedded parameters for the shader can be retrieved in the shader with by calling
-<code class="highlighter-rouge">optixGetSbtDataPointer()</code>, which returns a <code class="highlighter-rouge">void*</code> to the portion of the SBT
+<code>optixGetSbtDataPointer()</code>, which returns a <code>void*</code> to the portion of the SBT
 after the shader handle.</p>
 
-<p>The size of the shader handle is defined by <code class="highlighter-rouge">OPTIX_SBT_RECORD_HEADER_SIZE</code> (32 bytes),
-the shader record alignment requirement is <code class="highlighter-rouge">OPTIX_SBT_RECORD_ALIGNMENT</code> (16 bytes).</p>
+<p>The size of the shader handle is defined by <code>OPTIX_SBT_RECORD_HEADER_SIZE</code> (32 bytes),
+the shader record alignment requirement is <code>OPTIX_SBT_RECORD_ALIGNMENT</code> (16 bytes).</p>
 
 <h3 id="instance-parameters-3">Instance Parameters</h3>
 
-<p>Instances in OptiX are specified through the <a href="https://raytracing-docs.nvidia.com/optix7/api/html/struct_optix_instance.html"><code class="highlighter-rouge">OptixInstance</code></a>
+<p>Instances in OptiX are specified through the <a href="https://raytracing-docs.nvidia.com/optix7/api/html/struct_optix_instance.html"><code>OptixInstance</code></a>
 structure:</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">struct</span> <span class="n">OptixInstance</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">struct</span> <span class="n">OptixInstance</span> <span class="p">{</span>
     <span class="kt">float</span> <span class="n">transform</span><span class="p">[</span><span class="mi">12</span><span class="p">];</span>
     <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">instanceId</span><span class="p">;</span>
     <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">sbtOffset</span><span class="p">;</span>
@@ -689,8 +689,8 @@ structure:</p>
 <p>The parameters which effect the SBT indexing are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">sbtOffset</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
-  <li><code class="highlighter-rouge">visibilityMask</code>: While the mask does not affect which hit group is called, it can
+  <li><code>sbtOffset</code>: This sets the instance’s SBT offset, <script type="math/tex">\mathbb{I}_\text{offset}</script></li>
+  <li><code>visibilityMask</code>: While the mask does not affect which hit group is called, it can
   be used to skip traversal of instances entirely, by masking them out of the traversal</li>
 </ul>
 
@@ -700,7 +700,7 @@ structure:</p>
 <a href="https://raytracing-docs.nvidia.com/optix7/api/html/group__optix__device__api.html">optixTrace</a>
 function can be called to trace rays through the scene.</p>
 
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="n">optixTrace</span><span class="p">(</span><span class="n">OptixTraversableHandle</span> <span class="n">handle</span><span class="p">,</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span></span><span class="kt">void</span> <span class="n">optixTrace</span><span class="p">(</span><span class="n">OptixTraversableHandle</span> <span class="n">handle</span><span class="p">,</span>
                 <span class="n">float3</span> <span class="n">rayOrigin</span><span class="p">,</span>
                 <span class="n">float3</span> <span class="n">rayDirection</span><span class="p">,</span>
                 <span class="kt">float</span> <span class="n">tmin</span><span class="p">,</span>
@@ -711,9 +711,9 @@ function can be called to trace rays through the scene.</p>
                 <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">SBToffset</span><span class="p">,</span>
                 <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">SBTstride</span><span class="p">,</span>
                 <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">missSBTIndex</span><span class="p">,</span>
-                <span class="c1">// up to 8 32-bit values to be passed through registers
-</span>                <span class="c1">// unsigned int&amp; p0-p7
-</span><span class="p">)</span></code></pre></figure>
+                <span class="c1">// up to 8 32-bit values to be passed through registers</span>
+                <span class="c1">// unsigned int&amp; p0-p7</span>
+<span class="p">)</span></code></pre></figure>
 
 <p>optixTrace takes the acceleration structure to trace against, a set of ray flags to adjust the traversal being
 performed, the instance mask, SBT indexing parameters, the ray parameters, and up to 8 unsigned 32-bit values
@@ -723,11 +723,11 @@ through by splitting it into two 32-bit ints, and then packing the pointer back 
 The parameters which affect the SBT indexing are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">visibilityMask</code>: This mask affects which instances are masked out by and’ing it
-  with each instance’s <code class="highlighter-rouge">visibilityMask</code>.</li>
-  <li><code class="highlighter-rouge">SBToffset</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
-  <li><code class="highlighter-rouge">SBTstride</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
-  <li><code class="highlighter-rouge">missSBTIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
+  <li><code>visibilityMask</code>: This mask affects which instances are masked out by and’ing it
+  with each instance’s <code>visibilityMask</code>.</li>
+  <li><code>SBToffset</code>: This is the ray’s SBT offset, <script type="math/tex">R_\text{offset}</script>.</li>
+  <li><code>SBTstride</code>: This is the ray’s SBT stride <script type="math/tex">R_\text{stride}</script>.</li>
+  <li><code>missSBTIndex</code>: This is the miss shader index to call, <script type="math/tex">R_\text{miss}</script>.</li>
 </ul>
 
 <h1 id="interactive-sbt-builder">Interactive SBT Builder</h1>
@@ -1001,11 +1001,11 @@ which now support enough features to re-implement my original Embree path tracer
 Embree-SBT model (two ray types, shader record parameters, opaque geometry).
 Since ISPC is somewhat similar to CUDA, I’ve followed
 the OptiX style SBT in my implementation. The shader handles are just
-ISPC function pointers which are passed a <code class="highlighter-rouge">void*</code> to the region
+ISPC function pointers which are passed a <code>void*</code> to the region
 following the shader handle which contains any user-provided struct of embedded parameters.
 On the ISPC side I provide a
 <a href="https://github.com/Twinklebear/ChameleonRT/blob/embree-sbt/embree/render_embree.ispc#L110-L146">trace ray wrapper function</a>
-which calls <code class="highlighter-rouge">rtcIntersect</code> or <code class="highlighter-rouge">rtcOccluded</code> based on the ray flags and computes Equations 1 or 4
+which calls <code>rtcIntersect</code> or <code>rtcOccluded</code> based on the ray flags and computes Equations 1 or 4
 to determine which hit group or miss shader to call from the shader binding table.
 What’s really exciting to note here is that not only does this work,
 but in my limited testing it actually seems to perform similar to or even slightly
@@ -1058,6 +1058,11 @@ or comments about this post, Twitter or email are the best ways to get in touch.
 					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
 			</div>
 			
+			
+			<div class="col-6 text-right">
+				<a href="/graphics/2020/06/15/0-to-gltf-triangle" title="From 0 to glTF with WebGPU: The First Triangle">
+					Next &nbsp<span class="fa fa-chevron-right" aria-hidden="true"></span></a>
+			</div>
 			
 		</div>
 	</div>
