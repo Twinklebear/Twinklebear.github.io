@@ -5,9 +5,34 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Tue, 16 Jun 2020 17:03:10 -0600</lastBuildDate>
-		<pubDate>Tue, 16 Jun 2020 17:03:10 -0600</pubDate>
+		<lastBuildDate>Sat, 20 Jun 2020 12:25:06 -0600</lastBuildDate>
+		<pubDate>Sat, 20 Jun 2020 12:25:06 -0600</pubDate>
 		<ttl>60</ttl>
+		
+		<item>
+			<title>From 0 to glTF with WebGPU: Bind Groups</title>
+			<description>
+&lt;p&gt;In this second post of the series we’ll learn about Bind Groups,
+which let us pass buffers and textures to our shaders.
+When writing a renderer, we typically have inputs which do not make sense as vertex
+attributes (e.g., transform matrices, material parameters), or simply cannot be passed
+as vertex attributes (e.g., textures). Such parameters are instead
+passed as uniforms in GLSL terms, or root parameters in HLSL terms.
+The application then associates the desired buffers and textures with the
+parameters in the shader. In WebGPU, the association of data to parameters is made using Bind Groups.
+In this post, we’ll use Bind Groups to pass a uniform buffer containing a view
+transform to our vertex shader, allowing us to add camera controls to our triangle
+from the previous post.
+If you haven’t read the &lt;a href=&quot;/graphics/2020/06/15/0-to-gltf-triangle&quot;&gt;first post in this series&lt;/a&gt;
+I recommend reading that first, as we’ll continue directly off the code written there.&lt;/p&gt;
+
+
+				&lt;a href=&quot;https://www.willusher.io//graphics/2020/06/20/0-to-gltf-bind-groups&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io//graphics/2020/06/20/0-to-gltf-bind-groups</link>
+			<guid>https://www.willusher.io//graphics/2020/06/20/0-to-gltf-bind-groups</guid>
+			<pubDate>Sat, 20 Jun 2020 00:00:00 -0600</pubDate>
+		</item>
 		
 		<item>
 			<title>From 0 to glTF with WebGPU: The First Triangle</title>

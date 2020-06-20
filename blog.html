@@ -92,6 +92,31 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2020/06/20/0-to-gltf-bind-groups"><h3>From 0 to glTF with WebGPU: Bind Groups</h3></a>
+		<b>20 Jun 2020</b>
+		
+<p>In this second post of the series we’ll learn about Bind Groups,
+which let us pass buffers and textures to our shaders.
+When writing a renderer, we typically have inputs which do not make sense as vertex
+attributes (e.g., transform matrices, material parameters), or simply cannot be passed
+as vertex attributes (e.g., textures). Such parameters are instead
+passed as uniforms in GLSL terms, or root parameters in HLSL terms.
+The application then associates the desired buffers and textures with the
+parameters in the shader. In WebGPU, the association of data to parameters is made using Bind Groups.
+In this post, we’ll use Bind Groups to pass a uniform buffer containing a view
+transform to our vertex shader, allowing us to add camera controls to our triangle
+from the previous post.
+If you haven’t read the <a href="/graphics/2020/06/15/0-to-gltf-triangle">first post in this series</a>
+I recommend reading that first, as we’ll continue directly off the code written there.</p>
+
+
+
+		<a href="/graphics/2020/06/20/0-to-gltf-bind-groups">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/graphics/2020/06/15/0-to-gltf-triangle"><h3>From 0 to glTF with WebGPU: The First Triangle</h3></a>
 		<b>15 Jun 2020</b>
 		
@@ -178,56 +203,6 @@ which lets us skip creating an occlusion hit group entirely.</p>
 
 
 		<a href="/graphics/2019/09/06/faster-shadow-rays-on-rtx">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/webgl/2019/01/13/volume-rendering-with-webgl"><h3>Volume Rendering with WebGL</h3></a>
-		<b>13 Jan 2019</b>
-		
-<figure>
-	<img class="img-fluid" src="https://i.imgur.com/YqdyKCj.png" />
-	
-	<figcaption><i>Figure 1:
-	Example volume renderings, using the WebGL volume renderer described in this post.
-	Left: A simulation of the spatial probability distribution
-	of electrons in a high potential protein molecule.
-	Right: A CT scan of a Bonsai Tree.
-	Both datasets are from the
-	<a href="https://klacansky.com/open-scivis-datasets/">Open SciVis Datasets</a>
-	repository.
-	</i></figcaption>
-</figure>
-
-<p>In scientific visualization, volume rendering is widely used to visualize
-3D scalar fields. These scalar fields are often
-uniform grids of values, representing,
-for example, charge density around a molecule,
-an MRI or CT scan, air flow around an airplane, etc.
-Volume rendering is a conceptually straightforward method
-for turning such data into an image: by sampling the data
-along rays from the eye and assigning
-a color and transparency to each sample, we can
-produce useful and beautiful images of such scalar fields
-(see Figure 1).
-In a GPU renderer, these 3D scalar fields are stored
-as 3D textures; however, in WebGL1 3D textures were
-not supported, requiring additional hacks to emulate them
-for volume rendering.
-Recently, WebGL2 added support for 3D textures,
-allowing for an elegant and fast volume renderer to be
-implemented entirely in the browser.
-In this post we’ll discuss the mathematical background
-for volume rendering, and how it can be implemented in
-WebGL2 to create an interactive volume renderer
-entirely in the browser!
-Before we start, you can try out the volume renderer
-described in this post <a href="https://www.willusher.io/webgl-volume-raycaster/">online</a>.</p>
-
-
-
-		<a href="/webgl/2019/01/13/volume-rendering-with-webgl">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
 		</div>
 	</div>
