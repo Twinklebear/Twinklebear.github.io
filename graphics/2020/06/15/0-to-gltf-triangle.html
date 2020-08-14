@@ -320,6 +320,12 @@ bytecode and writes it to stdout.</p>
 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;a.spv&quot;</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">compiled_shader</span><span class="p">)</span></code></pre></figure>
 
+<p>To compile a shader you can run the script and pass the glslc compiler, your shader,
+and the variable name to use for the array. The compiled shader bytecode array will
+be printed to the console.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>python3 ./compile_shader.py glslc.exe ./triangle.vert triangle_vert_spv</code></pre></figure>
+
 <p>We can then paste the embedded SPV arrays into our code
 and use them to create shader modules.
 A shader module is created by calling <code>createShaderModule</code> on
