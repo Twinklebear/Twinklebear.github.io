@@ -333,11 +333,12 @@ view transform applied, as shown below!</p>
 
     <span class="c1">// Compute and upload the combined projection and view matrix</span>
     <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">mul</span><span class="p">(</span><span class="nx">projView</span><span class="p">,</span> <span class="nx">projection</span><span class="p">,</span> <span class="nx">camera</span><span class="p">.</span><span class="nx">camera</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="p">[</span><span class="nx">upload</span><span class="p">,</span> <span class="nx">mapping</span><span class="p">]</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBufferMapped</span><span class="p">({</span>
+    <span class="kd">var</span> <span class="nx">upload</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
         <span class="nx">size</span><span class="o">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
-        <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_SRC</span>
+        <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_SRC</span><span class="p">,</span>
+        <span class="nx">mappedAtCreation</span><span class="o">:</span> <span class="kc">true</span>
     <span class="p">});</span>
-    <span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">mapping</span><span class="p">).</span><span class="nx">set</span><span class="p">(</span><span class="nx">projView</span><span class="p">);</span>
+    <span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">upload</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="nx">set</span><span class="p">(</span><span class="nx">projView</span><span class="p">);</span>
     <span class="nx">upload</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span>
 
     <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createCommandEncoder</span><span class="p">();</span>
@@ -389,6 +390,11 @@ first real triangle mesh.
 If you run into issues getting the example to work,
 <a href="/assets/webgpu/triangle_bind_groups.js">check out the code</a> for rendering the triangle in Figure 3,
 or get in touch via <a href="https://twitter.com/_wusher">Twitter</a> or email.</p>
+
+<h2 id="update-824">Update 8/24</h2>
+
+<p>Updated from <code>device.createBufferMapped</code> to <code>device.createBuffer</code> with the <code>mappedAtCreation</code> parameter set.
+See the <a href="https://hackmd.io/szV68rOVQ56GYzPJMBko8A#PSA-for-Chromium--Dawn-WebGPU-API-updates-2020-07-28">corresponding Dawn PSA about these changes in Chrome and WebGPU</a>.</p>
 
 
 		<hr>

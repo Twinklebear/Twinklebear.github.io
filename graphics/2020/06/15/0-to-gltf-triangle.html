@@ -369,12 +369,13 @@ We’ll specify both the vertex positions and colors in a single
 buffer, with the positions and colors interleaved with each other.
 Each position and color will be stored as a <code>float4</code>.
 First, we allocate and map a buffer on the device with enough
-room to store the vertex data, using <code>createBufferMapped</code>.
+room to store the vertex data, using <code>createBuffer</code>.
 This method takes the size (in bytes) of the buffer we want
 to create and a set of flags or’d together specifying the
-desired <a href="https://gpuweb.github.io/gpuweb/#buffer-usage">usage modes</a> of the buffer.</p>
+desired <a href="https://gpuweb.github.io/gpuweb/#buffer-usage">usage modes</a> of the buffer.
+We specify the buffer should be mapped when it’s created by setting the <code>mappedAtCreation</code> parameter.</p>
 
-<p><code>createBufferMapped</code> returns the <code>GPUBuffer</code> and an <code>ArrayBuffer</code> which
+<p><code>createBuffer</code> returns the <code>GPUBuffer</code> and an <code>ArrayBuffer</code> which
 we can use to upload data into the buffer.
 To write our vertex data we create a <code>Float32Array</code> view of the array buffer
 and set the data through this view.
@@ -382,13 +383,14 @@ Finally, we have to unmap the buffer before using it later in rendering.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Specify vertex data</span>
 <span class="c1">// Allocate room for the vertex data: 3 vertices, each with 2 float4&#39;s</span>
-<span class="kd">var</span> <span class="p">[</span><span class="nx">dataBuf</span><span class="p">,</span> <span class="nx">dataBufMapping</span><span class="p">]</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBufferMapped</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">dataBuf</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
     <span class="nx">size</span><span class="o">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
-    <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">VERTEX</span>
+    <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">,</span>
+    <span class="nx">mappedAtCreation</span><span class="o">:</span> <span class="kc">true</span>
 <span class="p">});</span>
 
 <span class="c1">// Interleaved positions and colors</span>
-<span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">dataBufMapping</span><span class="p">).</span><span class="nx">set</span><span class="p">([</span>
+<span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">dataBuf</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="nx">set</span><span class="p">([</span>
     <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1">// position</span>
     <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
     <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// position</span>
@@ -641,6 +643,11 @@ which are also worth checking out:</p>
   <li>The <a href="https://webkit.org/demos/webgpu/">Safari WebGPU Demos</a></li>
   <li><a href="https://gpuweb.github.io/gpuweb/">The WebGPU Specification</a></li>
 </ul>
+
+<h2 id="update-824">Update 8/24</h2>
+
+<p>Updated from <code>device.createBufferMapped</code> to <code>device.createBuffer</code> with the <code>mappedAtCreation</code> parameter set.
+See the <a href="https://hackmd.io/szV68rOVQ56GYzPJMBko8A#PSA-for-Chromium--Dawn-WebGPU-API-updates-2020-07-28">corresponding Dawn PSA about these changes in Chrome and WebGPU</a>.</p>
 
 
 		<hr>

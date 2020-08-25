@@ -134,12 +134,13 @@
     };
 
     // Specify vertex data
-    var [dataBuf, dataBufMapping] = device.createBufferMapped({
+    var dataBuf = device.createBuffer({
         size: 3 * 2 * 4 * 4,
-        usage: GPUBufferUsage.VERTEX
+        usage: GPUBufferUsage.VERTEX,
+        mappedAtCreation: true,
     });
     // Interleaved positions and colors
-    new Float32Array(dataBufMapping).set([
+    new Float32Array(dataBuf.getMappedRange()).set([
         1, -1, 0, 1,
         1, 0, 0, 1,
         -1, -1, 0, 1,
@@ -292,11 +293,12 @@
 
             // Upload the combined projection and view matrix
             projView = mat4.mul(projView, projection, camera.camera);
-            var [upload, mapping] = device.createBufferMapped({
+            var upload = device.createBuffer({
                 size: 16 * 4,
-                usage: GPUBufferUsage.COPY_SRC
+                usage: GPUBufferUsage.COPY_SRC,
+                mappedAtCreation: true
             });
-            new Float32Array(mapping).set(projView);
+            new Float32Array(upload.getMappedRange()).set(projView);
             upload.unmap();
 
             var commandEncoder = device.createCommandEncoder();
