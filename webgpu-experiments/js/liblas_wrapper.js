@@ -17,7 +17,10 @@ class LASFile {
     }
 
     loadPoints() {
+        var start = performance.now();
         loadPoints(this.lasFile, true);
+        var end = performance.now();
+        console.log(`Loading data took ${end - start}ms`);
         this.positions = new Float32Array(HEAPF32.buffer,
             getPositions(this.lasFile),
             getNumLoadedPoints(this.lasFile) * 3);

@@ -85,11 +85,12 @@ var ExclusiveScanner = function(device) {
         usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST,
     });
 
-    var [clearCarryBuf, mapping] = this.device.createBufferMapped({
+    var clearCarryBuf = this.device.createBuffer({
         size: 8,
         usage: GPUBufferUsage.COPY_SRC,
+        mappedAtCreation: true
     });
-    new Uint32Array(mapping).set([0, 0]);
+    new Uint32Array(clearCarryBuf.getMappedRange()).set([0, 0]);
     clearCarryBuf.unmap();
     this.clearCarryBuf = clearCarryBuf;
 }
@@ -102,11 +103,12 @@ ExclusiveScanner.prototype.prepareInput = function(cpuArray) {
     var alignedSize = alignTo(cpuArray.length, this.blockSize)
 
     // Upload input and pad to block size elements
-    var [inputBuf, mapping] = this.device.createBufferMapped({
+    var inputBuf = this.device.createBuffer({
         size: alignedSize * 4,
         usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+        mappedAtCreation: true
     });
-    new Uint32Array(mapping).set(cpuArray);
+    new Uint32Array(inputBuf.getMappedRange()).set(cpuArray);
     inputBuf.unmap();
 
     this.prepareGPUInput(inputBuf, alignedSize, cpuArray.length);
@@ -121,19 +123,31 @@ ExclusiveScanner.prototype.prepareGPUInput = function(gpuBuffer, alignedSize, da
     this.inputBuf = gpuBuffer
 
     // Block sum buffer
-    var [blockSumBuf, mapping] = this.device.createBufferMapped({
+    var blockSumBuf = this.device.createBuffer({
         size: this.blockSize * 4,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+        mappedAtCreation: true
     });
-    new Uint32Array(mapping).fill(0);
+    new Uint32Array(blockSumBuf.getMappedRange()).fill(0);
     blockSumBuf.unmap();
     this.blockSumBuf = blockSumBuf;
-
-    var [carryBuf, mapping] = this.device.createBufferMapped({
-        size: 8,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST
+ 
+    // Buffer to clear the block sums for each new scan
+    var clearBlocks = this.device.createBuffer({
+        size: ScanBlockSize * 4,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC,
+        mappedAtCreation: true
     });
-    new Uint32Array(mapping).fill(0);
+    new Uint32Array(clearBlocks.getMappedRange()).fill(0);
+    clearBlocks.unmap();
+    this.clearBlockSumBuf = clearBlocks;
+
+    var carryBuf = this.device.createBuffer({
+        size: 8,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+        mappedAtCreation: true
+    });
+    new Uint32Array(carryBuf.getMappedRange()).fill(0);
     carryBuf.unmap();
     this.carryBuf = carryBuf;
 
@@ -206,29 +220,34 @@ ExclusiveScanner.prototype.prepareGPUInput = function(gpuBuffer, alignedSize, da
         });
     }
 
-    var numChunks = Math.ceil(this.inputSize / this.maxScanSize);
-    this.offsets = new Uint32Array(numChunks);
-    for (var i = 0; i < numChunks; ++i) {
+    this.numChunks = Math.ceil(this.inputSize / this.maxScanSize);
+    this.offsets = new Uint32Array(this.numChunks);
+    for (var i = 0; i < this.numChunks; ++i) {
         this.offsets.set([i * this.maxScanSize * 4], i);
     }
+}
 
+ExclusiveScanner.prototype.scan = async function() {
     // Scan through the data in chunks, updating carry in/out at the end to carry
     // over the results of the previous chunks
     var commandEncoder = this.device.createCommandEncoder();
 
-    // Clear the carry buffer and the readback sum entry if it's not scan size aligned
+    // Clear the carry buffer, block sum buffer, and the readback sum entry if it's not scan size aligned
     commandEncoder.copyBufferToBuffer(this.clearCarryBuf, 0, this.carryBuf, 0, 8);
+    commandEncoder.copyBufferToBuffer(this.clearCarryBuf, 0, this.carryIntermediateBuf, 0, 4);
     // TODO: Lingering bug on FF, seems like the buffer or scan input isn't cleared?
     if (this.dataSize < this.inputSize) {
         commandEncoder.copyBufferToBuffer(this.clearCarryBuf, 0, this.inputBuf, this.dataSize * 4, 4);
     }
-    for (var i = 0; i < numChunks; ++i) {
+    for (var i = 0; i < this.numChunks; ++i) {
         var nWorkGroups = Math.min((this.inputSize - i * this.maxScanSize) / this.blockSize, this.blockSize);
 
         var scanBlockBG = this.scanBlocksBindGroup;
         if (nWorkGroups < this.blockSize) {
             scanBlockBG = this.remainderScanBlocksBindGroup;
         }
+
+        commandEncoder.copyBufferToBuffer(this.clearBlockSumBuf, 0, this.blockSumBuf, 0, ScanBlockSize * 4);
 
         var computePass = commandEncoder.beginComputePass();
 
@@ -256,11 +275,7 @@ ExclusiveScanner.prototype.prepareGPUInput = function(gpuBuffer, alignedSize, da
     } else {
         commandEncoder.copyBufferToBuffer(this.carryBuf, 4, this.readbackBuf, 0, 4);
     }
-    this.commandBuffer = commandEncoder.finish();
-}
-
-ExclusiveScanner.prototype.scan = async function() {
-    this.device.defaultQueue.submit([this.commandBuffer]);
+    this.device.defaultQueue.submit([commandEncoder.finish()]);
     /*
     this.device.defaultQueue.signal(this.fence, scanner.fenceValue);
 
@@ -269,7 +284,8 @@ ExclusiveScanner.prototype.scan = async function() {
     */
 
     // Readback the final carry out, which is the sum
-    var mapping = new Uint32Array(await this.readbackBuf.mapReadAsync());
+    await this.readbackBuf.mapAsync(GPUMapMode.READ);
+    var mapping = new Uint32Array(this.readbackBuf.getMappedRange());
     var sum = mapping[0];
     this.readbackBuf.unmap();
 
