@@ -3,7 +3,7 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2020-08-24T22:33:38-06:00</updated>
+	<updated>2020-08-27T14:43:36-06:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
@@ -562,6 +562,25 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 		</content>
 	</entry>
 	
+	
+	<entry>
+		<title>Interactive Visualization of Terascale Data in the Browser: Fact or Fiction?</title>
+		<link href="https://www.willusher.io/publications/teraweb"/>
+		<updated>2020-10-25T00:00:00-06:00</updated>
+		<id>https://www.willusher.io//publications/teraweb</id>
+		<content type="html">
+			
+			&lt;figure&gt;
+			&lt;img src=&quot;https://i.imgur.com/XmBXWgu.png&quot;/&gt;
+			&lt;figcaption&gt;
+			&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Interactive visualization of an isosurface of a ~1TB dataset entirely in the web browser. The full data is a float64 10240×7680×1536 grid computed by a DNS simulation. The isosurface is interactively computed and visualized entirely in the browser using our GPU isosurface computation algorithm for block-compressed data, after applying advanced precision and resolution trade-offs. The surface consists of 137.5M triangles and is computed in 526ms on an RTX 2070 using WebGPU in Chrome and rendered at 30FPS at 1280×720. The original surface, shown in the right split image, consists of 4.3B triangles and was computed with VTK&#39;s Flying Edges filter on a quad-socket Xeon server in 78s using 1.3TB of memory.&lt;/i&gt;
+			&lt;/figcaption&gt;
+			&lt;/figure&gt;
+			
+			Information visualization applications have become ubiquitous, in no small part thanks to the ease of wide distribution and deployment to users enabled by the web browser. Scientific visualization applications, relying on native code libraries and parallel processing, have been less suited to such widespread distribution, as browsers do not provide the required libraries or compute capabilities. In this paper, we revisit this gap in visualization technologies and explore how new web technologies, WebAssembly and WebGPU, can be used to deploy powerful visualization solutions for large-scale scientific data in the browser. In particular, we evaluate the programming effort required to bring scientific visualization applications to the browser through these technologies and assess their competitiveness against classic native solutions. As a main example, we present a new GPU-driven isosurface extraction method for block-compressed data sets, that is suitable for interactive isosurface computation on large volumes in resource-constrained environments, such as the browser. We conclude that web browsers are on the verge of becoming a competitive platform for even the most demanding scientific visualization tasks, such as interactive visualization of isosurfaces from a 1TB DNS simulation. We call on researchers and developers to consider investing in a community software stack to ease use of these upcoming browser features to bring accessible scientific visualization to the browser.
+			&lt;a href=&quot;https://www.willusher.io//publications/teraweb&quot;&gt;Continue Reading&lt;/a&gt;
+		</content>
+	</entry>
 	
 	<entry>
 		<title>Using Hardware Ray Transforms to Accelerate Ray/Primitive Intersections for Long, Thin Primitive Types</title>
