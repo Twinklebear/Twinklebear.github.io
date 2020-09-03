@@ -3,7 +3,7 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2020-08-27T14:43:36-06:00</updated>
+	<updated>2020-09-03T08:58:08-06:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
@@ -579,6 +579,25 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 			
 			Information visualization applications have become ubiquitous, in no small part thanks to the ease of wide distribution and deployment to users enabled by the web browser. Scientific visualization applications, relying on native code libraries and parallel processing, have been less suited to such widespread distribution, as browsers do not provide the required libraries or compute capabilities. In this paper, we revisit this gap in visualization technologies and explore how new web technologies, WebAssembly and WebGPU, can be used to deploy powerful visualization solutions for large-scale scientific data in the browser. In particular, we evaluate the programming effort required to bring scientific visualization applications to the browser through these technologies and assess their competitiveness against classic native solutions. As a main example, we present a new GPU-driven isosurface extraction method for block-compressed data sets, that is suitable for interactive isosurface computation on large volumes in resource-constrained environments, such as the browser. We conclude that web browsers are on the verge of becoming a competitive platform for even the most demanding scientific visualization tasks, such as interactive visualization of isosurfaces from a 1TB DNS simulation. We call on researchers and developers to consider investing in a community software stack to ease use of these upcoming browser features to bring accessible scientific visualization to the browser.
 			&lt;a href=&quot;https://www.willusher.io//publications/teraweb&quot;&gt;Continue Reading&lt;/a&gt;
+		</content>
+	</entry>
+	
+	<entry>
+		<title>Improving the Usability of Virtual Reality Neuron Tracing with Topological Elements</title>
+		<link href="https://www.willusher.io/publications/mscvrnt"/>
+		<updated>2020-10-27T00:00:00-06:00</updated>
+		<id>https://www.willusher.io//publications/mscvrnt</id>
+		<content type="html">
+			
+			&lt;figure&gt;
+			&lt;img src=&quot;https://i.imgur.com/NPqNeOU.png&quot;/&gt;
+			&lt;figcaption&gt;
+			&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Left to right: A connected graph of ridge-like structures is extracted from the Morse-Smale complex (MSC), containing a superset of the possible neuron segments in the data. Our MSC-guided semi-automatic tracing tool enables users to rapidly trace paths and view a live preview as they do so (orange line). When satisfied with the trace, they can add it to the reconstruction (white line).&lt;/i&gt;
+			&lt;/figcaption&gt;
+			&lt;/figure&gt;
+			
+			Researchers in the field of connectomics are working to reconstruct a map of neural connections in the brain in order to understand at a fundamental level how the brain processes information. Constructing this wiring diagram is done by tracing neurons through high-resolution image stacks acquired with fluorescence microscopy imaging techniques. While a large number of automatic tracing algorithms have been proposed, these frequently rely on local features in the data and fail on noisy data or ambiguous cases, requiring time-consuming manual correction. As a result, manual and semi-automatic tracing methods remain the state-of-the-art for creating accurate neuron reconstructions. We propose a new semi-automatic method that uses topological features to guide users in tracing neurons and integrate this method within a virtual reality (VR) framework previously used for manual tracing. Our approach augments both visualization and interaction with topological elements, allowing rapid understanding and tracing of complex morphologies. In our pilot study, neuroscientists demonstrated a strong preference for using our tool over prior approaches, reported less fatigue during tracing, and commended the ability to better understand possible paths and alternatives. Quantitative evaluation of the traces reveals that users&#39; tracing speed increased, while retaining similar accuracy compared to a fully manual approach.
+			&lt;a href=&quot;https://www.willusher.io//publications/mscvrnt&quot;&gt;Continue Reading&lt;/a&gt;
 		</content>
 	</entry>
 	
