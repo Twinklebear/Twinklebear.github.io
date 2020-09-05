@@ -3,7 +3,7 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2020-09-05T00:05:06-06:00</updated>
+	<updated>2020-09-05T00:06:05-06:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
@@ -622,9 +622,9 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 	
 	<entry>
 		<title>A Virtual Frame Buffer Abstraction for Parallel Rendering of Large Tiled Display Walls</title>
-		<link href="https://www.willusher.io/publications/ospDisplayWall"/>
+		<link href="https://www.willusher.io/publications/ospdisplaywall"/>
 		<updated>2020-10-27T00:00:00-06:00</updated>
-		<id>https://www.willusher.io//publications/ospDisplayWall</id>
+		<id>https://www.willusher.io//publications/ospdisplaywall</id>
 		<content type="html">
 			
 			&lt;figure&gt;
@@ -635,7 +635,7 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 			&lt;/figure&gt;
 			
 			We present dw2, a flexible and easy-to-use software infrastructure for interactive rendering of large tiled display walls. Our library represents the tiled display wall as a single virtual screen through a display &#39;service&#39;, which renderers connect to and send image tiles to be displayed, either from an on-site or remote cluster. The display service can be easily configured to support a range of typical network and display hardware configurations; the client library provides a straightforward interface for easy integration into existing renderers. We evaluate the performance of our display wall service in different configurations using a CPU and GPU ray tracer, in both on-site and remote rendering scenarios using multiple display walls.
-			&lt;a href=&quot;https://www.willusher.io//publications/ospDisplayWall&quot;&gt;Continue Reading&lt;/a&gt;
+			&lt;a href=&quot;https://www.willusher.io//publications/ospdisplaywall&quot;&gt;Continue Reading&lt;/a&gt;
 		</content>
 	</entry>
 	

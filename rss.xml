@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Sat, 05 Sep 2020 00:05:06 -0600</lastBuildDate>
-		<pubDate>Sat, 05 Sep 2020 00:05:06 -0600</pubDate>
+		<lastBuildDate>Sat, 05 Sep 2020 00:06:05 -0600</lastBuildDate>
+		<pubDate>Sat, 05 Sep 2020 00:06:05 -0600</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -631,10 +631,10 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 				&lt;/figure&gt;
 				
 				We present dw2, a flexible and easy-to-use software infrastructure for interactive rendering of large tiled display walls. Our library represents the tiled display wall as a single virtual screen through a display &#39;service&#39;, which renderers connect to and send image tiles to be displayed, either from an on-site or remote cluster. The display service can be easily configured to support a range of typical network and display hardware configurations; the client library provides a straightforward interface for easy integration into existing renderers. We evaluate the performance of our display wall service in different configurations using a CPU and GPU ray tracer, in both on-site and remote rendering scenarios using multiple display walls.
-				&lt;a href=&quot;https://www.willusher.io//publications/ospDisplayWall&quot;&gt;Continue Reading&lt;/a&gt;
+				&lt;a href=&quot;https://www.willusher.io//publications/ospdisplaywall&quot;&gt;Continue Reading&lt;/a&gt;
 			</description>
-			<link>https://www.willusher.io/publications/ospDisplayWall</link>
-			<guid>https://www.willusher.io/publications/ospDisplayWall</guid>
+			<link>https://www.willusher.io/publications/ospdisplaywall</link>
+			<guid>https://www.willusher.io/publications/ospdisplaywall</guid>
 			<pubDate>Tue, 27 Oct 2020 00:00:00 -0600</pubDate>
 		</item>
 		
