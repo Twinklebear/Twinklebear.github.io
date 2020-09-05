@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<title>Improving the Usability of Virtual Reality Neuron Tracing with Topological Elements</title>
+	<title>Ray Tracing Structured AMR Data Using ExaBricks</title>
 	
     <meta name="author" content="Will Usher">
 
@@ -91,21 +91,21 @@
 
 <div class="row col-12 mt-4">
 	<div class="col-12 text-center">
-		<h1>Improving the Usability of Virtual Reality Neuron Tracing with Topological Elements</h1>
-		<h5 class="font-italic">Torin McDonald, Will Usher, Nate Morrical, Attila Gyulassy, Steve Petruzza, Frederick Federer, Alessandra Angelucci, and Valerio Pascucci</h5>
+		<h1>Ray Tracing Structured AMR Data Using ExaBricks</h1>
+		<h5 class="font-italic">Ingo Wald, Stefan Zellmann, Will Usher, Nate Morrical, Ulrich Lang, and Valerio Pascucci</h5>
 		<h5>In <i>IEEE Transactions on Visualization and Computer Graphics (To Appear)</i>, 2021</h5>
 		
 		<figure>
-			<img class="img-fluid" src="https://i.imgur.com/NPqNeOU.png"/>
+			<img class="img-fluid" src="https://i.imgur.com/9upElMb.jpg"/>
 			<figcaption class="text-left mt-2">
-				<b>Fig. 1: </b><i>Left to right: A connected graph of ridge-like structures is extracted from the Morse-Smale complex (MSC), containing a superset of the possible neuron segments in the data. Our MSC-guided semi-automatic tracing tool enables users to rapidly trace paths and view a live preview as they do so (orange line). When satisfied with the trace, they can add it to the reconstruction (white line).</i>
+				<b>Fig. 1: </b><i>The Exajet contains an AMR simulation of air flow around the left side of a plane, and consists of 656M cells (across four refinement levels) plus 63.2M triangles. For rendering we mirror the data set via instancing, resulting in effectively 1.31B instanced cells and 126M instanced triangles. This visualization—rendered with our method—shows flow vorticity and velocity, with an implicitly ray-traced iso-surface of the vorticity (color-mapped by velocity), plus volume ray tracing of the vorticity field. At a resolution of 2500×625, and running on a workstation with two RTX 8000 GPUs, this configuration renders in roughly 252 milliseconds.</i>
 			</figcaption>
 		</figure>
 		
 	</div>
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">Abstract</h2>
-		<p>Researchers in the field of connectomics are working to reconstruct a map of neural connections in the brain in order to understand at a fundamental level how the brain processes information. Constructing this wiring diagram is done by tracing neurons through high-resolution image stacks acquired with fluorescence microscopy imaging techniques. While a large number of automatic tracing algorithms have been proposed, these frequently rely on local features in the data and fail on noisy data or ambiguous cases, requiring time-consuming manual correction. As a result, manual and semi-automatic tracing methods remain the state-of-the-art for creating accurate neuron reconstructions. We propose a new semi-automatic method that uses topological features to guide users in tracing neurons and integrate this method within a virtual reality (VR) framework previously used for manual tracing. Our approach augments both visualization and interaction with topological elements, allowing rapid understanding and tracing of complex morphologies. In our pilot study, neuroscientists demonstrated a strong preference for using our tool over prior approaches, reported less fatigue during tracing, and commended the ability to better understand possible paths and alternatives. Quantitative evaluation of the traces reveals that users' tracing speed increased, while retaining similar accuracy compared to a fully manual approach.</p>
+		<p>Structured Adaptive Mesh Refinement (Structured AMR) enables simulations to adapt the domain resolution to save computation and storage, and has become one of the dominant data representations used by scientific simulations; however, efficiently rendering such data remains a challenge. We present an efficient approach for volume- and iso-surface ray tracing of Structured AMR data on GPU-equipped workstations, using a combination of two different data structures. Together, these data structures allow a ray tracing based renderer to quickly determine which segments along the ray need to be integrated and at what frequency, while also providing quick access to all data values required for a smooth sample reconstruction kernel. Our method makes use of the RTX ray tracing hardware for surface rendering, ray marching, space skipping, and adaptive sampling; and allows for interactive changes to the transfer function and implicit iso-surfacing thresholds. We demonstrate that our method achieves high performance with little memory overhead, enabling interactive high quality rendering of complex AMR data sets on individual GPU workstation.</p>
 	</div>
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">Downloads</h2>
@@ -116,7 +116,7 @@
 		list of entries. One main supplemental video could be included though in the main page.-->
 		<dl>
 			<dt>Publication</dt>
-			<dd><a href="http://sci.utah.edu/~will/papers/mscvrnt-vis20.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			<dd><a href="http://sci.utah.edu/~will/papers/exabrick-vis20.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
 			
 			
 		</dl>
@@ -125,7 +125,7 @@
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">Supplemental Video</h2>
 		<div class="embed-responsive embed-responsive-16by9">
-			<iframe class="embed-responsive-item" allowfullscreen src="https://www.youtube.com/embed/X0JDCms3gKk">
+			<iframe class="embed-responsive-item" allowfullscreen src="https://www.youtube.com/embed/r8G2qECeoqU">
 			</iframe>
 		</div>
 	</div>
@@ -133,10 +133,10 @@
 	
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">BibTeX</h2>
-		<code>@article{mcdonald_mscvrnt_2021,<br />
- author={McDonald, Torin and Usher, Will and Morrical, Nate and Gyulassy, Attila and Petruzza, Steve and Federer, Frederick and Angelucci, Alessandra and Pascucci, Valerio},<br />
+		<code>@article{wald_exabrick_2021,<br />
+ author={Wald, Ingo and Zellmann, Stefan and Usher, Will and Morrical, Nate and Lang, Ulrich and Pascucci, Valerio},<br />
  journal={{IEEE} {Transactions} on {Visualization} and {Computer} {Graphics} (To Appear)},<br />
- title={{Improving} the {Usability} of {Virtual} {Reality} {Neuron} {Tracing} with {Topological} {Elements}},<br />
+ title={{Ray} {Tracing} {Structured} {AMR} {Data} {Using} {ExaBricks}},<br />
  year={2021},<br />
 }</code>
 	</div>

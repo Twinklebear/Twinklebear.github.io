@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Thu, 03 Sep 2020 08:58:08 -0600</lastBuildDate>
-		<pubDate>Thu, 03 Sep 2020 08:58:08 -0600</pubDate>
+		<lastBuildDate>Fri, 04 Sep 2020 22:25:37 -0600</lastBuildDate>
+		<pubDate>Fri, 04 Sep 2020 22:25:37 -0600</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -597,6 +597,25 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 			</description>
 			<link>https://www.willusher.io/publications/mscvrnt</link>
 			<guid>https://www.willusher.io/publications/mscvrnt</guid>
+			<pubDate>Tue, 27 Oct 2020 00:00:00 -0600</pubDate>
+		</item>
+		
+		<item>
+			<title>Ray Tracing Structured AMR Data Using ExaBricks</title>
+			<description>
+				
+				&lt;figure&gt;
+					&lt;img src=&quot;https://i.imgur.com/9upElMb.jpg&quot;/&gt;
+					&lt;figcaption&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;The Exajet contains an AMR simulation of air flow around the left side of a plane, and consists of 656M cells (across four refinement levels) plus 63.2M triangles. For rendering we mirror the data set via instancing, resulting in effectively 1.31B instanced cells and 126M instanced triangles. This visualization—rendered with our method—shows flow vorticity and velocity, with an implicitly ray-traced iso-surface of the vorticity (color-mapped by velocity), plus volume ray tracing of the vorticity field. At a resolution of 2500×625, and running on a workstation with two RTX 8000 GPUs, this configuration renders in roughly 252 milliseconds.&lt;/i&gt;
+					&lt;/figcaption&gt;
+				&lt;/figure&gt;
+				
+				Structured Adaptive Mesh Refinement (Structured AMR) enables simulations to adapt the domain resolution to save computation and storage, and has become one of the dominant data representations used by scientific simulations; however, efficiently rendering such data remains a challenge. We present an efficient approach for volume- and iso-surface ray tracing of Structured AMR data on GPU-equipped workstations, using a combination of two different data structures. Together, these data structures allow a ray tracing based renderer to quickly determine which segments along the ray need to be integrated and at what frequency, while also providing quick access to all data values required for a smooth sample reconstruction kernel. Our method makes use of the RTX ray tracing hardware for surface rendering, ray marching, space skipping, and adaptive sampling; and allows for interactive changes to the transfer function and implicit iso-surfacing thresholds. We demonstrate that our method achieves high performance with little memory overhead, enabling interactive high quality rendering of complex AMR data sets on individual GPU workstation.
+				&lt;a href=&quot;https://www.willusher.io//publications/exabrick&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io/publications/exabrick</link>
+			<guid>https://www.willusher.io/publications/exabrick</guid>
 			<pubDate>Tue, 27 Oct 2020 00:00:00 -0600</pubDate>
 		</item>
 		

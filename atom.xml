@@ -3,7 +3,7 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2020-09-03T08:58:08-06:00</updated>
+	<updated>2020-09-04T22:25:37-06:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
@@ -598,6 +598,25 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 			
 			Researchers in the field of connectomics are working to reconstruct a map of neural connections in the brain in order to understand at a fundamental level how the brain processes information. Constructing this wiring diagram is done by tracing neurons through high-resolution image stacks acquired with fluorescence microscopy imaging techniques. While a large number of automatic tracing algorithms have been proposed, these frequently rely on local features in the data and fail on noisy data or ambiguous cases, requiring time-consuming manual correction. As a result, manual and semi-automatic tracing methods remain the state-of-the-art for creating accurate neuron reconstructions. We propose a new semi-automatic method that uses topological features to guide users in tracing neurons and integrate this method within a virtual reality (VR) framework previously used for manual tracing. Our approach augments both visualization and interaction with topological elements, allowing rapid understanding and tracing of complex morphologies. In our pilot study, neuroscientists demonstrated a strong preference for using our tool over prior approaches, reported less fatigue during tracing, and commended the ability to better understand possible paths and alternatives. Quantitative evaluation of the traces reveals that users&#39; tracing speed increased, while retaining similar accuracy compared to a fully manual approach.
 			&lt;a href=&quot;https://www.willusher.io//publications/mscvrnt&quot;&gt;Continue Reading&lt;/a&gt;
+		</content>
+	</entry>
+	
+	<entry>
+		<title>Ray Tracing Structured AMR Data Using ExaBricks</title>
+		<link href="https://www.willusher.io/publications/exabrick"/>
+		<updated>2020-10-27T00:00:00-06:00</updated>
+		<id>https://www.willusher.io//publications/exabrick</id>
+		<content type="html">
+			
+			&lt;figure&gt;
+			&lt;img src=&quot;https://i.imgur.com/9upElMb.jpg&quot;/&gt;
+			&lt;figcaption&gt;
+			&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;The Exajet contains an AMR simulation of air flow around the left side of a plane, and consists of 656M cells (across four refinement levels) plus 63.2M triangles. For rendering we mirror the data set via instancing, resulting in effectively 1.31B instanced cells and 126M instanced triangles. This visualization—rendered with our method—shows flow vorticity and velocity, with an implicitly ray-traced iso-surface of the vorticity (color-mapped by velocity), plus volume ray tracing of the vorticity field. At a resolution of 2500×625, and running on a workstation with two RTX 8000 GPUs, this configuration renders in roughly 252 milliseconds.&lt;/i&gt;
+			&lt;/figcaption&gt;
+			&lt;/figure&gt;
+			
+			Structured Adaptive Mesh Refinement (Structured AMR) enables simulations to adapt the domain resolution to save computation and storage, and has become one of the dominant data representations used by scientific simulations; however, efficiently rendering such data remains a challenge. We present an efficient approach for volume- and iso-surface ray tracing of Structured AMR data on GPU-equipped workstations, using a combination of two different data structures. Together, these data structures allow a ray tracing based renderer to quickly determine which segments along the ray need to be integrated and at what frequency, while also providing quick access to all data values required for a smooth sample reconstruction kernel. Our method makes use of the RTX ray tracing hardware for surface rendering, ray marching, space skipping, and adaptive sampling; and allows for interactive changes to the transfer function and implicit iso-surfacing thresholds. We demonstrate that our method achieves high performance with little memory overhead, enabling interactive high quality rendering of complex AMR data sets on individual GPU workstation.
+			&lt;a href=&quot;https://www.willusher.io//publications/exabrick&quot;&gt;Continue Reading&lt;/a&gt;
 		</content>
 	</entry>
 	
