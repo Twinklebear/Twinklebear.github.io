@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Fri, 04 Sep 2020 22:25:37 -0600</lastBuildDate>
-		<pubDate>Fri, 04 Sep 2020 22:25:37 -0600</pubDate>
+		<lastBuildDate>Sat, 05 Sep 2020 00:02:47 -0600</lastBuildDate>
+		<pubDate>Sat, 05 Sep 2020 00:02:47 -0600</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -616,6 +616,25 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 			</description>
 			<link>https://www.willusher.io/publications/exabrick</link>
 			<guid>https://www.willusher.io/publications/exabrick</guid>
+			<pubDate>Tue, 27 Oct 2020 00:00:00 -0600</pubDate>
+		</item>
+		
+		<item>
+			<title>A Virtual Frame Buffer Abstraction for Parallel Rendering of Large Tiled Display Walls</title>
+			<description>
+				
+				&lt;figure&gt;
+					&lt;img src=&quot;https://i.imgur.com/e4HJywq.jpg&quot;/&gt;
+					&lt;figcaption&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Left: The Disney Moana Island rendered remotely with OSPRay&#39;s path tracer at full detail using 128 Skylake Xeon (SKX) nodes on Stampede2 and streamed to the 132Mpixel POWERwall display wall, averages 0.2-1.2 FPS. Right: The Boeing 777 model, consisting of 349M triangles, rendered remotely with OSPRay&#39;s scivis renderer using 64 Intel Xeon Phi Knight’s Landing nodes on Stampede2 and streamed to the POWERwall, averages 6-7 FPS&lt;/i&gt;
+					&lt;/figcaption&gt;
+				&lt;/figure&gt;
+				
+				We present dw2, a flexible and easy-to-use software infrastructure for interactive rendering of large tiled display walls. Our library represents the tiled display wall as a single virtual screen through a display &#39;service&#39;, which renderers connect to and send image tiles to be displayed, either from an on-site or remote cluster. The display service can be easily configured to support a range of typical network and display hardware configurations; the client library provides a straightforward interface for easy integration into existing renderers. We evaluate the performance of our display wall service in different configurations using a CPU and GPU ray tracer, in both on-site and remote rendering scenarios using multiple display walls.
+				&lt;a href=&quot;https://www.willusher.io//publications/ospDisplayWall&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io/publications/ospDisplayWall</link>
+			<guid>https://www.willusher.io/publications/ospDisplayWall</guid>
 			<pubDate>Tue, 27 Oct 2020 00:00:00 -0600</pubDate>
 		</item>
 		
