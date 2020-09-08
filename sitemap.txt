@@ -32,6 +32,7 @@ https://www.willusher.io//webtoys
 https://www.willusher.io//publications/teraweb
 https://www.willusher.io//publications/mscvrnt
 https://www.willusher.io//publications/exabrick
+https://www.willusher.io//publications/varprec-vis20
 https://www.willusher.io//publications/ospdisplaywall
 https://www.willusher.io//publications/owltubes
 https://www.willusher.io//publications/tamr

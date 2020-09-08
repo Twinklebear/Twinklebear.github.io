@@ -1,0 +1,149 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Efficient and Flexible Hierarchical Data Layouts for a Unified Encoding of Scalar Field Precision and Resolution</title>
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
+
+	<link href="/assets/molokai.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content mb-4">
+		
+
+
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
+		<h1>Efficient and Flexible Hierarchical Data Layouts for a Unified Encoding of Scalar Field Precision and Resolution</h1>
+		<h5 class="font-italic">Duong Hoang, Brian Summa, Harsh Bhatia, Peter Lindstrom, Pavol Klacansky, Will Usher, Peer-Timo Bremer and Valerio Pascucci</h5>
+		<h5>In <i>IEEE Transactions on Visualization and Computer Graphics (To Appear)</i>, 2021</h5>
+		
+		<figure>
+			<img class="img-fluid" src="https://i.imgur.com/UICjif7.png"/>
+			<figcaption class="text-left mt-2">
+				<b>Fig. 1: </b><i>We propose a hierarchical data layout that allows for various forms of progressive decoding that modulate improvements in both precision and resolution. Each progressive decoding traces a monotonic nondecreasing curve in the precision-resolution space from the origin, 0%, to the full data, 100% (shown in (a)). Using a 900 GB turbulent channel flow field (10240×7680×1536, float64) (b), we demonstrate three approximations (c,d,e) of progressively increasing quality decoded along the curve in (a). The time to decode the data and RAM used are shown in the figure; data retrieved values are inclusive of the preceding points along the curve</i>
+			</figcaption>
+		</figure>
+		
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
+		<p>To address the problem of ever-growing scientific data sizes making data movement a major hindrance to analysis, we introduce a novel encoding for scalar fields: a unified tree of resolution and precision, specifically constructed so that valid cuts correspond to sensible approximations of the original field in the precision-resolution space. Furthermore, we introduce a highly flexible encoding of such trees that forms a parameterized family of data hierarchies. We discuss how different parameter choices lead to different trade-offs in practice, and show how specific choices result in known data representation schemes such as ZFP, IDX, and JPEG2000. Finally, we provide system-level details and empirical evidence on how such hierarchies facilitate common approximate queries with minimal data movement and time, using real-world data sets ranging from a few gigabytes to nearlya terabyte in size. Experiments suggest that our new strategy of combining reductions in resolution and precision is competitive with state-of-the-art compression techniques with respect to data quality, while being significantly more flexible and orders of magnitude faster, and requiring significantly reduced resources</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="http://sci.utah.edu/~will/papers/varprec-vis20.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			
+			
+		</dl>
+	</div>
+	
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>@article{hoang_efficient_2021,<br />
+ author={Hoang, Duong and Summa, Brian and Bhatia, Harsh and Lindstrom, Peter and Klacansky, Pavol and Usher, Will and Bremer, Peer-Timo and Pascucci, Valerio},<br />
+ journal={{IEEE} {Transactions} on {Visualization} and {Computer} {Graphics} (To Appear)},<br />
+ title={{Efficient} and {Flexible} {Hierarchical} {Data} {Layouts} for a {Unified} {Encoding} of {Scalar} {Field} {Precision} and {Resolution}},<br />
+ year={2021},<br />
+}</code>
+	</div>
+</div>
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+
