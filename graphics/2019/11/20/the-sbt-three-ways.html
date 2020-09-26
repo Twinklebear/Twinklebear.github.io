@@ -415,12 +415,12 @@ structure:</p>
 can be called to trace rays through the scene.</p>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="n">Template</span><span class="o">&lt;</span><span class="n">payload_t</span><span class="o">&gt;</span>
-<span class="k">void</span> <span class="n">TraceRay</span><span class="p">(</span><span class="n">RaytracingAccelerationStructure</span> <span class="n">AccelerationStructure</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">RayFlags</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">InstanceInclusionMask</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">RayContributionToHitGroupIndex</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">MultiplierForGeometryContributionToHitGroupIndex</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">MissShaderIndex</span><span class="p">,</span>
+<span class="kt">void</span> <span class="n">TraceRay</span><span class="p">(</span><span class="n">RaytracingAccelerationStructure</span> <span class="n">AccelerationStructure</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">RayFlags</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">InstanceInclusionMask</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">RayContributionToHitGroupIndex</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">MultiplierForGeometryContributionToHitGroupIndex</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">MissShaderIndex</span><span class="p">,</span>
               <span class="n">RayDesc</span> <span class="n">Ray</span><span class="p">,</span>
               <span class="k">inout</span> <span class="n">payload_t</span> <span class="n">Payload</span><span class="p">);</span></code></pre></figure>
 
@@ -455,7 +455,7 @@ accessed in the shader through a special buffer type declared with the <code>sha
 For example, if we wanted to pass a material ID for the geometry in the shader record
 we could declare the buffer as follows:</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="n">layout</span><span class="p">(</span><span class="n">shaderRecordNV</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">layout</span><span class="p">(</span><span class="n">shaderRecordNV</span><span class="p">)</span> <span class="k">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
     <span class="n">uint32_t</span> <span class="n">material_id</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
 
@@ -500,17 +500,17 @@ our own struct which matches the specified layout:</p>
 <p>In the ray generation, closest hit and miss shaders the function <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/nv/GLSL_NV_ray_tracing.txt#L687-L697">traceNV</a> from
 the GLSL NV Ray Tracing extension can be called to trace rays.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span> <span class="k">void</span> <span class="n">traceNV</span><span class="p">(</span><span class="n">accelerationStructureNV</span> <span class="n">topLevel</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">cullMask</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
-              <span class="n">uint</span> <span class="n">missIndex</span><span class="p">,</span>
-              <span class="k">vec3</span> <span class="n">origin</span><span class="p">,</span>
-              <span class="k">float</span> <span class="n">Tmin</span><span class="p">,</span>
-              <span class="k">vec3</span> <span class="n">direction</span><span class="p">,</span>
-              <span class="k">float</span> <span class="n">Tmax</span><span class="p">,</span>
-              <span class="k">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span> <span class="kt">void</span> <span class="n">traceNV</span><span class="p">(</span><span class="n">accelerationStructureNV</span> <span class="n">topLevel</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">cullMask</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
+              <span class="kt">uint</span> <span class="n">missIndex</span><span class="p">,</span>
+              <span class="kt">vec3</span> <span class="n">origin</span><span class="p">,</span>
+              <span class="kt">float</span> <span class="n">Tmin</span><span class="p">,</span>
+              <span class="kt">vec3</span> <span class="n">direction</span><span class="p">,</span>
+              <span class="kt">float</span> <span class="n">Tmax</span><span class="p">,</span>
+              <span class="kt">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
 
 <p>traceNV takes the acceleration structure to trace against,
 a set of ray flags to adjust the traversal being
@@ -531,10 +531,10 @@ variable, where the value of <code>payload</code> passed to traceNV selects whic
 one will be used. For example:</p>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">struct</span> <span class="n">RayPayload</span> <span class="p">{</span>
-    <span class="k">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
-    <span class="k">vec3</span> <span class="n">normal</span><span class="p">;</span>
+    <span class="kt">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
+    <span class="kt">vec3</span> <span class="n">normal</span><span class="p">;</span>
 <span class="p">};</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="n">rayPayloadNV</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="n">rayPayloadNV</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
 
 <h2 id="vulkan-khr-ray-tracing-added-512020">Vulkan KHR Ray Tracing (added 5/1/2020)</h2>
 
@@ -550,7 +550,7 @@ accessed in the shader through a special buffer type declared with the <code>sha
 For example, if we wanted to pass a material ID for the geometry in the shader record
 we could declare the buffer as follows:</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="n">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">)</span> <span class="k">buffer</span> <span class="n">SBTData</span> <span class="p">{</span>
     <span class="n">uint32_t</span> <span class="n">material_id</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
 
@@ -562,21 +562,21 @@ The following closest hit shader example demonstrates this for accessing the ind
 The example also makes use of <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GL_EXT_scalar_block_layout.txt"><code>GLSL_EXT_scalar_block_layout</code></a>
 for C-like struct layout in buffers.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="n">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">VertexBuffer</span> <span class="p">{</span>
-    <span class="k">vec3</span> <span class="n">v</span><span class="p">[];</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="k">buffer</span> <span class="n">VertexBuffer</span> <span class="p">{</span>
+    <span class="kt">vec3</span> <span class="n">v</span><span class="p">[];</span>
 <span class="p">};</span>
 
-<span class="n">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">IndexBuffer</span> <span class="p">{</span>
-    <span class="n">uvec3</span> <span class="n">i</span><span class="p">[];</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">buffer_reference</span><span class="p">,</span> <span class="n">buffer_reference_align</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span> <span class="k">buffer</span> <span class="n">IndexBuffer</span> <span class="p">{</span>
+    <span class="kt">uvec3</span> <span class="n">i</span><span class="p">[];</span>
 <span class="p">};</span>
 
-<span class="n">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">,</span> <span class="n">std430</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">SBT</span> <span class="p">{</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">shaderRecordEXT</span><span class="p">,</span> <span class="n">std430</span><span class="p">)</span> <span class="k">buffer</span> <span class="n">SBT</span> <span class="p">{</span>
     <span class="n">VertexBuffer</span> <span class="n">verts</span><span class="p">;</span>
     <span class="n">IndexBuffer</span> <span class="n">indices</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="k">void</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">const</span> <span class="n">uvec3</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">i</span><span class="p">[</span><span class="n">gl_PrimitiveID</span><span class="p">];</span>
+<span class="kt">void</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">uvec3</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">i</span><span class="p">[</span><span class="nb">gl_PrimitiveID</span><span class="p">];</span>
     <span class="c1">// ....</span>
 <span class="p">}</span></code></pre></figure>
 
@@ -618,17 +618,17 @@ struct.</p>
 <a href="https://github.com/KhronosGroup/GLSL/blob/master/extensions/ext/GLSL_EXT_ray_tracing.txt#L771-L781">traceRayExt</a> from
 <code>GLSL_EXT_ray_tracing</code> can be called to trace rays.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">void</span> <span class="n">traceRayEXT</span><span class="p">(</span><span class="n">accelerationStructureEXT</span> <span class="n">topLevel</span><span class="p">,</span>
-                 <span class="n">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
-                 <span class="n">uint</span> <span class="n">cullMask</span><span class="p">,</span>
-                 <span class="n">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
-                 <span class="n">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
-                 <span class="n">uint</span> <span class="n">missIndex</span><span class="p">,</span>
-                 <span class="k">vec3</span> <span class="n">origin</span><span class="p">,</span>
-                 <span class="k">float</span> <span class="n">Tmin</span><span class="p">,</span>
-                 <span class="k">vec3</span> <span class="n">direction</span><span class="p">,</span>
-                 <span class="k">float</span> <span class="n">Tmax</span><span class="p">,</span>
-                 <span class="k">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="kt">void</span> <span class="n">traceRayEXT</span><span class="p">(</span><span class="n">accelerationStructureEXT</span> <span class="n">topLevel</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">rayFlags</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">cullMask</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">sbtRecordOffset</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">sbtRecordStride</span><span class="p">,</span>
+                 <span class="kt">uint</span> <span class="n">missIndex</span><span class="p">,</span>
+                 <span class="kt">vec3</span> <span class="n">origin</span><span class="p">,</span>
+                 <span class="kt">float</span> <span class="n">Tmin</span><span class="p">,</span>
+                 <span class="kt">vec3</span> <span class="n">direction</span><span class="p">,</span>
+                 <span class="kt">float</span> <span class="n">Tmax</span><span class="p">,</span>
+                 <span class="kt">int</span> <span class="n">payload</span><span class="p">);</span></code></pre></figure>
 
 <p>traceRayEXT takes the acceleration structure to trace against,
 a set of ray flags to adjust the traversal being
@@ -649,10 +649,10 @@ variable, where the value of <code>payload</code> passed to traceRayEXT selects 
 one will be used. For example:</p>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="k">struct</span> <span class="n">RayPayload</span> <span class="p">{</span>
-    <span class="k">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
-    <span class="k">vec3</span> <span class="n">normal</span><span class="p">;</span>
+    <span class="kt">vec3</span> <span class="n">hit_pos</span><span class="p">;</span>
+    <span class="kt">vec3</span> <span class="n">normal</span><span class="p">;</span>
 <span class="p">};</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="n">rayPayloadEXT</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="n">rayPayloadEXT</span> <span class="n">RayPayload</span> <span class="n">payload</span><span class="p">;</span></code></pre></figure>
 
 <h2 id="optix">OptiX</h2>
 

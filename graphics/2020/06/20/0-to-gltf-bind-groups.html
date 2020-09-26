@@ -165,19 +165,19 @@ buffer to our vertices is shown below.</p>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="cp">#version 450 core</span>
 
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec4</span> <span class="n">pos</span><span class="p">;</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec4</span> <span class="n">vcolor</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec4</span> <span class="n">pos</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec4</span> <span class="n">vcolor</span><span class="p">;</span>
 
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="k">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="kt">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
 
 <span class="c1">// Our uniform buffer containing the projection * view matrix</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">set</span> <span class="o">=</span> <span class="mo">0</span><span class="p">,</span> <span class="n">binding</span> <span class="o">=</span> <span class="mo">0</span><span class="p">,</span> <span class="n">std140</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">ViewParams</span> <span class="p">{</span>
-    <span class="n">mat4</span> <span class="n">proj_view</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">set</span> <span class="o">=</span> <span class="mo">0</span><span class="p">,</span> <span class="n">binding</span> <span class="o">=</span> <span class="mo">0</span><span class="p">,</span> <span class="n">std140</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">ViewParams</span> <span class="p">{</span>
+    <span class="kt">mat4</span> <span class="n">proj_view</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="k">void</span> <span class="n">main</span><span class="p">(</span><span class="k">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">fcolor</span> <span class="o">=</span> <span class="n">vcolor</span><span class="p">;</span>
-    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">proj_view</span> <span class="o">*</span> <span class="n">pos</span><span class="p">;</span>
+    <span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">proj_view</span> <span class="o">*</span> <span class="n">pos</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
 <h2 id="creating-the-bind-group-and-pipeline-layout">Creating the Bind Group and Pipeline Layout</h2>

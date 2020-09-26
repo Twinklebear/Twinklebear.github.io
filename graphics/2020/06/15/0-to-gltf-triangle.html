@@ -255,27 +255,27 @@ it out to the first render target.</p>
 <span class="cp">#version 450 core</span>
 
 <span class="c1">// Inputs: position and color</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec4</span> <span class="n">pos</span><span class="p">;</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec4</span> <span class="n">vcolor</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec4</span> <span class="n">pos</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec4</span> <span class="n">vcolor</span><span class="p">;</span>
 
 <span class="c1">// Outputs: color passed to fragment shader</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="k">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="kt">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
 
-<span class="k">void</span> <span class="n">main</span><span class="p">(</span><span class="k">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">fcolor</span> <span class="o">=</span> <span class="n">vcolor</span><span class="p">;</span>
-    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+    <span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="c1">// Fragment shader</span>
 <span class="cp">#version 450 core</span>
 
 <span class="c1">// Input: fragment color</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
 
 <span class="c1">// Output: fragment color</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="k">vec4</span> <span class="n">color</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="kt">vec4</span> <span class="n">color</span><span class="p">;</span>
 
-<span class="k">void</span> <span class="n">main</span><span class="p">(</span><span class="k">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">color</span> <span class="o">=</span> <span class="n">fcolor</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 

@@ -328,18 +328,18 @@ operations during the raymarching in the fragment shader, since we’ll already 
 back faces colored by the view ray direction are shown in Figure 7.</p>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="cp">#version 300 es</span>
-<span class="n">layout</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">pos</span><span class="p">;</span>
-<span class="k">uniform</span> <span class="n">mat4</span> <span class="n">proj_view</span><span class="p">;</span>
-<span class="k">uniform</span> <span class="k">vec3</span> <span class="n">eye_pos</span><span class="p">;</span>
-<span class="k">uniform</span> <span class="k">vec3</span> <span class="n">volume_scale</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec3</span> <span class="n">pos</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">mat4</span> <span class="n">proj_view</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">vec3</span> <span class="n">eye_pos</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">vec3</span> <span class="n">volume_scale</span><span class="p">;</span>
 
-<span class="k">out</span> <span class="k">vec3</span> <span class="n">vray_dir</span><span class="p">;</span>
-<span class="n">flat</span> <span class="k">out</span> <span class="k">vec3</span> <span class="n">transformed_eye</span><span class="p">;</span>
+<span class="k">out</span> <span class="kt">vec3</span> <span class="n">vray_dir</span><span class="p">;</span>
+<span class="k">flat</span> <span class="k">out</span> <span class="kt">vec3</span> <span class="n">transformed_eye</span><span class="p">;</span>
 
-<span class="k">void</span> <span class="n">main</span><span class="p">(</span><span class="k">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
 	<span class="c1">// Translate the cube to center it at the origin.</span>
-	<span class="k">vec3</span> <span class="n">volume_translation</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">-</span> <span class="n">volume_scale</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">;</span>
-	<span class="n">gl_Position</span> <span class="o">=</span> <span class="n">proj_view</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="n">volume_scale</span> <span class="o">+</span> <span class="n">volume_translation</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+	<span class="kt">vec3</span> <span class="n">volume_translation</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">-</span> <span class="n">volume_scale</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">;</span>
+	<span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">proj_view</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="n">volume_scale</span> <span class="o">+</span> <span class="n">volume_translation</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
 	<span class="c1">// Compute eye position and ray directions in the unit cube space</span>
 	<span class="n">transformed_eye</span> <span class="o">=</span> <span class="p">(</span><span class="n">eye_pos</span> <span class="o">-</span> <span class="n">volume_translation</span><span class="p">)</span> <span class="o">/</span> <span class="n">volume_scale</span><span class="p">;</span>
@@ -413,39 +413,39 @@ before reaching the eye.</p>
 additional comments marking each step in the process.</p>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="cp">#version 300 es</span>
-<span class="k">precision</span> <span class="k">highp</span> <span class="k">int</span><span class="p">;</span>
-<span class="k">precision</span> <span class="k">highp</span> <span class="k">float</span><span class="p">;</span>
+<span class="k">precision</span> <span class="k">highp</span> <span class="kt">int</span><span class="p">;</span>
+<span class="k">precision</span> <span class="k">highp</span> <span class="kt">float</span><span class="p">;</span>
 
-<span class="k">uniform</span> <span class="k">highp</span> <span class="n">sampler3D</span> <span class="n">volume</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="k">highp</span> <span class="kt">sampler3D</span> <span class="n">volume</span><span class="p">;</span>
 <span class="c1">// WebGL doesn&#39;t support 1D textures, so we use a 2D texture for the transfer function</span>
-<span class="k">uniform</span> <span class="k">highp</span> <span class="k">sampler2D</span> <span class="n">transfer_fcn</span><span class="p">;</span>
-<span class="k">uniform</span> <span class="k">ivec3</span> <span class="n">volume_dims</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="k">highp</span> <span class="kt">sampler2D</span> <span class="n">transfer_fcn</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">ivec3</span> <span class="n">volume_dims</span><span class="p">;</span>
 
-<span class="k">in</span> <span class="k">vec3</span> <span class="n">vray_dir</span><span class="p">;</span>
-<span class="n">flat</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">transformed_eye</span><span class="p">;</span>
+<span class="k">in</span> <span class="kt">vec3</span> <span class="n">vray_dir</span><span class="p">;</span>
+<span class="k">flat</span> <span class="k">in</span> <span class="kt">vec3</span> <span class="n">transformed_eye</span><span class="p">;</span>
 
-<span class="k">out</span> <span class="k">vec4</span> <span class="n">color</span><span class="p">;</span>
+<span class="k">out</span> <span class="kt">vec4</span> <span class="n">color</span><span class="p">;</span>
 
-<span class="k">vec2</span> <span class="n">intersect_box</span><span class="p">(</span><span class="k">vec3</span> <span class="n">orig</span><span class="p">,</span> <span class="k">vec3</span> <span class="n">dir</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">const</span> <span class="k">vec3</span> <span class="n">box_min</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mo">0</span><span class="p">);</span>
-	<span class="k">const</span> <span class="k">vec3</span> <span class="n">box_max</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-	<span class="k">vec3</span> <span class="n">inv_dir</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">dir</span><span class="p">;</span>
-	<span class="k">vec3</span> <span class="n">tmin_tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">box_min</span> <span class="o">-</span> <span class="n">orig</span><span class="p">)</span> <span class="o">*</span> <span class="n">inv_dir</span><span class="p">;</span>
-	<span class="k">vec3</span> <span class="n">tmax_tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">box_max</span> <span class="o">-</span> <span class="n">orig</span><span class="p">)</span> <span class="o">*</span> <span class="n">inv_dir</span><span class="p">;</span>
-	<span class="k">vec3</span> <span class="n">tmin</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">tmin_tmp</span><span class="p">,</span> <span class="n">tmax_tmp</span><span class="p">);</span>
-	<span class="k">vec3</span> <span class="n">tmax</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin_tmp</span><span class="p">,</span> <span class="n">tmax_tmp</span><span class="p">);</span>
-	<span class="k">float</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tmin</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
-	<span class="k">float</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">tmax</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">tmax</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tmax</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
-	<span class="k">return</span> <span class="k">vec2</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">);</span>
+<span class="kt">vec2</span> <span class="n">intersect_box</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">orig</span><span class="p">,</span> <span class="kt">vec3</span> <span class="n">dir</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="kt">vec3</span> <span class="n">box_min</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mo">0</span><span class="p">);</span>
+	<span class="k">const</span> <span class="kt">vec3</span> <span class="n">box_max</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+	<span class="kt">vec3</span> <span class="n">inv_dir</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">dir</span><span class="p">;</span>
+	<span class="kt">vec3</span> <span class="n">tmin_tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">box_min</span> <span class="o">-</span> <span class="n">orig</span><span class="p">)</span> <span class="o">*</span> <span class="n">inv_dir</span><span class="p">;</span>
+	<span class="kt">vec3</span> <span class="n">tmax_tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">box_max</span> <span class="o">-</span> <span class="n">orig</span><span class="p">)</span> <span class="o">*</span> <span class="n">inv_dir</span><span class="p">;</span>
+	<span class="kt">vec3</span> <span class="n">tmin</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">tmin_tmp</span><span class="p">,</span> <span class="n">tmax_tmp</span><span class="p">);</span>
+	<span class="kt">vec3</span> <span class="n">tmax</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin_tmp</span><span class="p">,</span> <span class="n">tmax_tmp</span><span class="p">);</span>
+	<span class="kt">float</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">max</span><span class="p">(</span><span class="n">tmin</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tmin</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+	<span class="kt">float</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">tmax</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">tmax</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tmax</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+	<span class="k">return</span> <span class="kt">vec2</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="k">void</span> <span class="n">main</span><span class="p">(</span><span class="k">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
 	<span class="c1">// Step 1: Normalize the view ray</span>
-	<span class="k">vec3</span> <span class="n">ray_dir</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">vray_dir</span><span class="p">);</span>
+	<span class="kt">vec3</span> <span class="n">ray_dir</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">vray_dir</span><span class="p">);</span>
 
 	<span class="c1">// Step 2: Intersect the ray with the volume bounds to find the interval</span>
 	<span class="c1">// along the ray overlapped by the volume.</span>
-	<span class="k">vec2</span> <span class="n">t_hit</span> <span class="o">=</span> <span class="n">intersect_box</span><span class="p">(</span><span class="n">transformed_eye</span><span class="p">,</span> <span class="n">ray_dir</span><span class="p">);</span>
+	<span class="kt">vec2</span> <span class="n">t_hit</span> <span class="o">=</span> <span class="n">intersect_box</span><span class="p">(</span><span class="n">transformed_eye</span><span class="p">,</span> <span class="n">ray_dir</span><span class="p">);</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
 		<span class="k">discard</span><span class="p">;</span>
 	<span class="p">}</span>
@@ -455,18 +455,18 @@ additional comments marking each step in the process.</p>
 	<span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">t_hit</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
 
 	<span class="c1">// Step 3: Compute the step size to march through the volume grid</span>
-	<span class="k">vec3</span> <span class="n">dt_vec</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="n">volume_dims</span><span class="p">)</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">ray_dir</span><span class="p">));</span>
-	<span class="k">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">dt_vec</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">dt_vec</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dt_vec</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+	<span class="kt">vec3</span> <span class="n">dt_vec</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="kt">vec3</span><span class="p">(</span><span class="n">volume_dims</span><span class="p">)</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">ray_dir</span><span class="p">));</span>
+	<span class="kt">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">dt_vec</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">dt_vec</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dt_vec</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
 
 	<span class="c1">// Step 4: Starting from the entry point, march the ray through the volume</span>
 	<span class="c1">// and sample it</span>
-	<span class="k">vec3</span> <span class="n">p</span> <span class="o">=</span> <span class="n">transformed_eye</span> <span class="o">+</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">ray_dir</span><span class="p">;</span>
-	<span class="k">for</span> <span class="p">(</span><span class="k">float</span> <span class="n">t</span> <span class="o">=</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">x</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">y</span><span class="p">;</span> <span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">vec3</span> <span class="n">p</span> <span class="o">=</span> <span class="n">transformed_eye</span> <span class="o">+</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">ray_dir</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">t</span> <span class="o">=</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">x</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">y</span><span class="p">;</span> <span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span><span class="p">)</span> <span class="p">{</span>
 		<span class="c1">// Step 4.1: Sample the volume, and color it by the transfer function.</span>
 		<span class="c1">// Note that here we don&#39;t use the opacity from the transfer function,</span>
 		<span class="c1">// and just use the sample value as the opacity</span>
-		<span class="k">float</span> <span class="n">val</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">p</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
-		<span class="k">vec4</span> <span class="n">val_color</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">(</span><span class="n">texture</span><span class="p">(</span><span class="n">transfer_fcn</span><span class="p">,</span> <span class="k">vec2</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)).</span><span class="n">rgb</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+		<span class="kt">float</span> <span class="n">val</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">p</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+		<span class="kt">vec4</span> <span class="n">val_color</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">texture</span><span class="p">(</span><span class="n">transfer_fcn</span><span class="p">,</span> <span class="kt">vec2</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)).</span><span class="n">rgb</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
 
 		<span class="c1">// Step 4.2: Accumulate the color and opacity using the front-to-back</span>
 		<span class="c1">// compositing equation</span>
