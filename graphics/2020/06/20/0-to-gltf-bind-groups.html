@@ -116,7 +116,7 @@ I recommend reading that first, as we’ll continue directly off the code writte
 <p>At a high level, bind groups follow a similar model to vertex buffers in WebGPU.
 Each bind group specifies an array of buffers and textures which it contains, and
 the parameter binding indices to map these too in the shader. Each pipeline specifies
-that it will use zero or much such bind groups. During rendering, the bind groups required
+that it will use zero or more such bind groups. During rendering, the bind groups required
 by the pipeline are bound to the corresponding bind group slots specified
 when creating the pipeline layout, to bind data to the shader parameters.
 The bind group layout and bind groups using the layout are treated as
