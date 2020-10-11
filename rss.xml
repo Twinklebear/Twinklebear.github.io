@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Sun, 27 Sep 2020 09:57:35 -0600</lastBuildDate>
-		<pubDate>Sun, 27 Sep 2020 09:57:35 -0600</pubDate>
+		<lastBuildDate>Sat, 10 Oct 2020 20:44:17 -0600</lastBuildDate>
+		<pubDate>Sat, 10 Oct 2020 20:44:17 -0600</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -655,6 +655,18 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 			<link>https://www.willusher.io/publications/ospdisplaywall</link>
 			<guid>https://www.willusher.io/publications/ospdisplaywall</guid>
 			<pubDate>Tue, 27 Oct 2020 00:00:00 -0600</pubDate>
+		</item>
+		
+		<item>
+			<title>A terminology for in situ visualization and analysis systems</title>
+			<description>
+				
+				The term 'in situ processing' has evolved over the last decade to mean both a specific strategy for visualizing and analyzing data and an umbrella term for a processing paradigm. The resulting confusion makes it difficult for visualization and analysis scientists to communicate with each other and with their stakeholders. To address this problem, a group of over 50 experts convened with the goal of standardizing terminology. This paper summarizes their findings and proposes a new terminology for describing in situ systems. An important finding from this group was that in situ systems are best described via multiple, distinct axes: integration type, proximity, access, division of execution, operation controls, and output type. This paper discusses these axes, evaluates existing systems within the axes, and explores how currently used terms relate to the axes.
+				&lt;a href=&quot;https://www.willusher.io//publications/istp&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io/publications/istp</link>
+			<guid>https://www.willusher.io/publications/istp</guid>
+			<pubDate>Fri, 14 Aug 2020 00:00:00 -0600</pubDate>
 		</item>
 		
 		<item>

@@ -3,7 +3,7 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2020-09-27T09:57:35-06:00</updated>
+	<updated>2020-10-10T20:44:17-06:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
@@ -655,6 +655,18 @@ of &lt;code&gt;sdl2-config&lt;/code&gt; with the &lt;code&gt;--cflags&lt;/code&g
 			
 			We present dw2, a flexible and easy-to-use software infrastructure for interactive rendering of large tiled display walls. Our library represents the tiled display wall as a single virtual screen through a display 'service', which renderers connect to and send image tiles to be displayed, either from an on-site or remote cluster. The display service can be easily configured to support a range of typical network and display hardware configurations; the client library provides a straightforward interface for easy integration into existing renderers. We evaluate the performance of our display wall service in different configurations using a CPU and GPU ray tracer, in both on-site and remote rendering scenarios using multiple display walls.
 			&lt;a href=&quot;https://www.willusher.io//publications/ospdisplaywall&quot;&gt;Continue Reading&lt;/a&gt;
+		</content>
+	</entry>
+	
+	<entry>
+		<title>A terminology for in situ visualization and analysis systems</title>
+		<link href="https://www.willusher.io/publications/istp"/>
+		<updated>2020-08-14T00:00:00-06:00</updated>
+		<id>https://www.willusher.io//publications/istp</id>
+		<content type="html">
+			
+			The term 'in situ processing' has evolved over the last decade to mean both a specific strategy for visualizing and analyzing data and an umbrella term for a processing paradigm. The resulting confusion makes it difficult for visualization and analysis scientists to communicate with each other and with their stakeholders. To address this problem, a group of over 50 experts convened with the goal of standardizing terminology. This paper summarizes their findings and proposes a new terminology for describing in situ systems. An important finding from this group was that in situ systems are best described via multiple, distinct axes: integration type, proximity, access, division of execution, operation controls, and output type. This paper discusses these axes, evaluates existing systems within the axes, and explores how currently used terms relate to the axes.
+			&lt;a href=&quot;https://www.willusher.io//publications/istp&quot;&gt;Continue Reading&lt;/a&gt;
 		</content>
 	</entry>
 	
