@@ -3,12 +3,57 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2020-11-01T18:24:31-07:00</updated>
+	<updated>2020-11-13T08:56:34-07:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
 		<email>will@willusher.io</email>
 	</author>
+	
+	<entry>
+		<title>The VIS 2020 Streaming Infrastructure</title>
+		<link href="https://www.willusher.io//general/2020/11/13/vis2020-streaming-infrastructure"/>
+		<updated>2020-11-13T00:00:00-07:00</updated>
+		<id>https://www.willusher.io//general/2020/11/13/vis2020-streaming-infrastructure</id>
+		<content type="html">
+&lt;p&gt;Now that it’s been a bit over a week since VIS 2020 ended I thought I’d
+write up some information on the streaming infrastructure
+we used during conference. For context, &lt;a href=&quot;http://ieeevis.org/year/2020/welcome&quot;&gt;IEEE VIS 2020&lt;/a&gt;,
+like all conferences this year and likely well into the next, was held as a virtual event.
+VIS 2020 was “hosted” by the University of Utah, as it was originally planned (pre-COVID) to
+be held in Salt Lake City. My advisor was one of the co-chairs, and asked if I’d volunteer
+to be on the Technology Committee for VIS 2020. The role of this committee is to manage the technical
+aspects of streaming the event. The change to a virtual format brings a lot of challenges,
+especially when pivoting later in the planning cycle (the past in-person events are typically
+over a year in the making).
+However, the virtual format also brings improvements in terms of accessibility, cost to attendees,
+environmental impact, and archiving.&lt;/p&gt;
+
+&lt;p&gt;This post will be one part technical documentation and one
+part reflection. The feedback we received for VIS 2020 was overwhelmingly positive,
+and thus I hope that both the technical documentation on how we ran the event
+and the reflection on what worked and didn’t are helpful to organizers planning virtual
+events through the next year.&lt;/p&gt;
+
+&lt;p&gt;Before we begin, I must of course mention that this was not a solo effort.
+Alex Bock and Martin Falk were also on the Tech committee and provided valuable
+advice about their experience running &lt;a href=&quot;https://conferences.eg.org/egev20/&quot;&gt;EGEV 2020&lt;/a&gt; as a virtual event earlier this year,
+which was also well received. We followed the same model for VIS, which aims to keep
+the feeling of a live conference while reducing surface area for technical issues.
+I must also mention the amazing work done by Alper Sarikaya, Hendrik Strobelt,
+Jagoda Walny, and Steve Petruzza on the web committee setting up the
+&lt;a href=&quot;https://virtual.ieeevis.org/&quot;&gt;virtual conference webpage&lt;/a&gt;.
+The webpage was adapted from &lt;a href=&quot;https://github.com/Mini-Conf/Mini-Conf&quot;&gt;mini-conf&lt;/a&gt;,
+originally written by Alexander Rush and Hendrik Strobelt.
+Alper promised a separate blog post about this, so I won’t discuss it here.
+Finally, during the event we had a rotation of about 24 student volunteers
+who were responsible for managing the streams and assisting presenters
+with technical issues, without whom the event would not have been possible.&lt;/p&gt;
+
+
+			&lt;a href=&quot;https://www.willusher.io//general/2020/11/13/vis2020-streaming-infrastructure&quot;&gt;Continue Reading&lt;/a&gt;
+		</content>
+	</entry>
 	
 	<entry>
 		<title>From 0 to glTF with WebGPU: Bind Groups</title>
