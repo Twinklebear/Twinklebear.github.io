@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Hardware Accelerated Video Encoding on the Raspberry Pi 4 on Ubuntu 20.04 64-bit</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
+
+	<link href="/assets/molokai.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content mb-4">
+		
+
+<h1 class="display-4">Hardware Accelerated Video Encoding on the Raspberry Pi 4 on Ubuntu 20.04 64-bit</h1>
+
+<div class="row justify-content-center">
+	<div class="col-9">
+		
+<p>I recently picked up a Raspberry Pi 4 8GB model to use for some lightweight server tasks
+on my home network. After setting up Pi-Hole, OpenVPN, Plex, and Samba,
+I got curious about using it to re-encode some videos I had. The videos are on
+an external drive being monitored by Plex and shared on the network by Samba,
+and some are quite large since they’re at a (likely unnecessarily) high bitrate.
+Trimming them down would help save a bit of space, and gives me an excuse to
+play around with Python, FFmpeg, and the Pi’s hardware accelerated video encoder.
+In this post, I’ll cover how to get FFmpeg setup to use the Pi 4’s video encoding
+hardware on a 64-bit OS and the little encoding manager/dashboard, <a href="https://github.com/Twinklebear/fbed">FBED</a>,
+that I put together to monitor the progress of the encoding tasks.</p>
+
+<!--more-->
+
+<h1 id="setting-up-ffmpeg">Setting up FFmpeg</h1>
+
+<p>Some initial searching about what encoder to pick in FFmpeg for hardware accelerated
+encoding on the Raspberry Pi pointed me to the <code>h264_omx</code> encoder. Unfortunately,
+if you try running this on a 64-bit OS you’ll get errors that <code>libOMX_Core.so</code>
+and <code>libOmxCore.so</code> weren’t found. Even after installing <code>libomxil-bellagio-dev</code>
+these continue to not be found, as this package provides different libraries
+than the OMX ones being searched for. It’s possible that making a symlink here
+would work, but I didn’t test that (it seems a bit iffy). However, it sounds
+like the <code>h264_omx</code> encoder is <a href="https://github.com/raspberrypi/firmware/issues/1366#issuecomment-612902082">considered deprecated</a>
+and won’t be supported on 64-bit OS’s.</p>
+
+<p>Instead, FFmpeg provides the <code>h264_v4l2m2m</code> for hardware accelerated encoding/decoding
+which is supported on the Raspberry Pi 4 and a 64-bit OS. It seems like the v4l2m2m API
+is the new API that folks are moving forward with. However, if you install ffmpeg from apt and use
+the <code>h264_v4l2m2m</code> encoder, the results are not very good:</p>
+
+<div class="col-12 mb-2 text-center">
+    <img class="img-fluid" src="https://i.imgur.com/WeWZzwW.png" />
+    <p>
+    <b>Figure 1:</b> <i>Not quite what we're after.</i>
+    </p>
+</div>
+
+<p>The version of FFmpeg distributed in apt (4.2.4) is missing some commits that
+fix this issue, which didn’t make it in til release 4.3. So we’ll have to build from
+source. First, we can grab the source for 4.3 from Github:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>git clone --depth <span class="m">1</span> --branch release/4.3 git@github.com:FFmpeg/FFmpeg.git</code></pre></figure>
+
+<p>Then follow the <a href="https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu">build guide for Ubuntu</a>.
+Since this will replace your install of ffmpeg, you’ll also want to setup the third party libraries
+mentioned in the guide to get support for libx264/265 CPU encoding and any others you want.
+As with the guide, I recommend not installing to <code>/bin/</code> to avoid conflicts with the system package manager.
+Instead you can install to <code>~/bin/</code> as in the guide, or in the repo directory (as I do here),
+and add the directory with the binaries for <code>ffmpeg</code> and <code>ffprobe</code> to your <code>$PATH</code>.
+My configure command is below:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>./configure --prefix<span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/install <span class="se">\</span>
+    --enable-gpl <span class="se">\</span>
+    --enable-nonfree <span class="se">\</span>
+    --arch<span class="o">=</span>aarch64 <span class="se">\</span>
+    --enable-libaom <span class="se">\</span>
+    --enable-libass <span class="se">\</span>
+    --enable-libfdk-aac <span class="se">\</span>
+    --enable-libfreetype <span class="se">\</span>
+    --enable-libmp3lame <span class="se">\</span>
+    --enable-libopus <span class="se">\</span>
+    --enable-libvorbis <span class="se">\</span>
+    --enable-libvpx <span class="se">\</span>
+    --enable-libx264 <span class="se">\</span>
+    --enable-libx265 <span class="se">\</span>
+    --enable-libxml2 <span class="se">\</span>
+    --enable-libwebp <span class="se">\</span>
+    --enable-libdrm</code></pre></figure>
+
+<p>With FFmpeg 4.3 built and in our path, we can try again with the <code>h264_v4l2m2m</code> encoder.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>ffmpeg -i video.mp4 -c:v h264_v4l2m2m -b:v 8M -c:a copy test.mp4</code></pre></figure>
+
+<p>Now we get a correct video output, powered by hardware accelerated encoding!
+Using the hardware encoder the Pi can encode this 1080p video at 53-60 FPS, compared to
+just 8-10 FPS when using the libx264 CPU decoder.</p>
+
+<div class="col-12 mb-2 text-center">
+    <img class="img-fluid" src="https://imgur.com/g7SE3eg.png" />
+    <p>
+    <b>Figure 2:</b> <i>A properly encoded cow.</i>
+    </p>
+</div>
+
+<h1 id="a-command-line-encoding-dashboard">A Command Line Encoding Dashboard</h1>
+
+<p>With this running, I could now re-encode the set of videos I wanted to trim
+down using the Pi’s hardware encoder for better performance. While a
+bash script would do, a lot of the files have spaces in the names
+which makes it a bit of a pain in bash, and just running ffmpeg directly
+doesn’t give some information I’d like about the estimated
+time left and progress so far. Instead, I decided to script
+the batch conversion in Python using <a href="https://github.com/kkroening/ffmpeg-python">ffmpeg-python</a> and
+put a basic command line UI on top of it using <a href="http://urwid.org/">urwid</a>.
+The result is <a href="https://github.com/Twinklebear/fbed">FBED - FFmpeg Batch Encoding Dashboard</a>,
+shown below.</p>
+
+<div class="col-12 mb-2 text-center">
+    <img class="img-fluid" src="https://i.imgur.com/UPywbV8.png" />
+    <p>
+    <b>Figure 3:</b> <i>The FFmpeg Batch Encoding Dashboard</i>
+    </p>
+</div>
+
+<p>FBED takes the number of parallel encodes to run and a list of files or directories
+to encode, and will then encode them all using FFmpeg.
+FBED can run multiple encodes in parallel by running multiple FFmpeg subprocesses,
+if the hardware can support it. On the RPi4 I didn’t observe much overall speed-up
+running two 1080p encodes in parallel to each other compared to a single one,
+though have gotten speed-ups for parallel encodes on lower resolution videos.</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><span></span>Usage:
+    ./fbed.py &lt;parallel_encodes&gt; &lt;items&gt;...
+
+Guide:
+    &lt;items&gt; can be a single files or a directories. If a directory is passed all
+    files in the directory and it subdirectories besides those in one named
+    &#39;encode_output&#39; will be re-encoded</code></pre></figure>
+
+<h2 id="configuring-fbed">Configuring FBED</h2>
+
+<p>FBED has a few settings hard-coded in it that I found to work well for my use case.
+The script will pick the output target bitrate based on the video resolution, which you
+can increase or decrease as desired by editing <a href="https://github.com/Twinklebear/fbed/blob/main/fbed.py#L52-L57">the script</a>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="c1"># Pick bitrate based on resolution, 1080p (8Mbps), 720p (5Mbps), smaller (3Mbps)</span>
+<span class="n">bitrate</span> <span class="o">=</span> <span class="s2">&quot;3M&quot;</span>
+<span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">720</span><span class="p">:</span>
+    <span class="n">bitrate</span> <span class="o">=</span> <span class="s2">&quot;8M&quot;</span>
+<span class="k">elif</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">480</span><span class="p">:</span>
+    <span class="n">bitrate</span> <span class="o">=</span> <span class="s2">&quot;5M&quot;</span></code></pre></figure>
+
+<p>You can also change the encoder used to select a different hardware encoder (e.g., <code>h264_nvenc</code> on Nvidia GPUs,
+<code>h264_qsv</code> on Intel GPUs, etc.) by changing the value of <code>c:v</code> in the <a href="https://github.com/Twinklebear/fbed/blob/main/fbed.py#L58-L67"><code>encoding_args</code></a>
+to your desired encoder. You can also pass additional arguments to the encoder by adding them here.
+If you’re on the RPi4 using <code>h264_v4l2m2m</code> I recommend leaving the <code>num_output_buffers</code> and
+<code>num_capture_buffers</code> as I’ve set them, which raises their values above the defaults of 16 and 4 respectively.
+When running parallel encodes of 720p and smaller videos I would get warnings from ffmpeg that the
+capture buffers where flushed out to user space, and to consider increasing them. These are set
+high enough that I don’t seem to get these warnings, though will cause the memory capacity of the encoder to
+be exceeded if trying to do multiple 1080p streams in parallel. In that case you’d want to set them to half their current value (i.e.,
+to 16 and 8 respectively). Do not modify or remove the <code>progress</code> parameter, as this is required by the dashboard
+to get progress information from FFmpeg, discussed below.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">encoding_args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># HWAccel for RPi4, may need to pick a different encoder</span>
+    <span class="c1"># for HW accel on other systems</span>
+    <span class="s2">&quot;c:v&quot;</span><span class="p">:</span> <span class="s2">&quot;h264_v4l2m2m&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;num_output_buffers&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="s2">&quot;num_capture_buffers&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="s2">&quot;b:v&quot;</span><span class="p">:</span> <span class="n">bitrate</span><span class="p">,</span>
+    <span class="s2">&quot;c:a&quot;</span><span class="p">:</span> <span class="s2">&quot;copy&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="n">f</span><span class="s2">&quot;pipe:{self.pipe_write}&quot;</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="monitoring-ffmpegs-progress">Monitoring FFmpeg’s Progress</h2>
+
+<p>The aspect of FBED that’s probably most interesting to other folks writing scripts using FFmpeg
+is how the progress monitoring works. This is done using FFmpeg’s <a href="https://ffmpeg.org/ffmpeg.html#Main-options"><code>-progress</code></a>
+argument which has FFmpeg output program-friendly progress information. An example of this
+output is shown below.
+The Python script gets this output by opening a pipe with <code>os.pipe()</code> and
+passing the write end of this pipe to the FFmpeg subprocess. The script then
+reads from the read end of the pipe every second to get the latest progress message to update the UI.</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><span></span>fps=104.59
+stream_0_0_q=15.0
+bitrate=4305.6kbits/s
+total_size=6291504
+out_time_us=11690000
+out_time_ms=11690000
+out_time=00:00:11.690000
+dup_frames=0
+drop_frames=0
+speed=4.48x
+progress=continue</code></pre></figure>
+
+<p>The output we need for monitoring progress for the dashboard are <code>out_time</code> and <code>speed</code>.
+The <code>out_time</code> is the current
+time point in the video that FFmpeg is encoding, <code>speed</code> is how fast relative to regular playback
+FFmpeg is encoding the video. For example, 1x means FFmpeg is encoding the video just
+as fast as it would be played back, meaning a 1 hour video will take 1 hour to encode.
+A speed of 2x means the 1 hour video would take 30 minutes to encode, and 0.5x means
+it would take 2 hours.</p>
+
+<p>Once we know the current time point FFmpeg has reached (<code>out_time</code>)
+and total length of the video we can compute the percentage of the video FFmpeg has
+finished so far to display a progress bar:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.0</span> <span class="o">*</span> <span class="n">out_time</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">/</span> <span class="n">video_duration</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span></code></pre></figure>
+
+<p>Since we also know how fast FFmpeg is encoding the video relative to regular playback
+speed, we can estimate how much longer it will take until the encoding is finished:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span></span><span class="n">remaining_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">video_duration</span> <span class="o">-</span> <span class="n">out_time</span><span class="p">)</span> <span class="o">/</span> <span class="n">speed</span></code></pre></figure>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>FBED was a fun weekend project for my Raspberry Pi 4 and I’m impressed with
+the video hardware’s encoding performance! While I could have just
+run FFmpeg manually to encode the videos I wanted to re-encode in less
+time, it certainly wouldn’t have been as fun.
+It’s also pretty easy to configure FBED to pick a different encoder
+to take advantage of different machine’s capabilities, so it could
+come in handy in other server encoding environments as a dashboard for FFmpeg.
+The code is available on <a href="https://github.com/Twinklebear/fbed">Github</a>,
+so check it out and let me know if you find it useful!</p>
+
+
+		<hr>
+		<div class="col-12">
+			<p>Published: 15 November 2020</p>
+		</div>
+		<div class="col-12 row">
+			
+			<div class="col-md-6 justify-content-left">
+				<a href="/general/2020/11/13/vis2020-streaming-infrastructure" title="The VIS 2020 Streaming Infrastructure">
+					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<!-- Do I actually need popper ? -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+</html>
+
+
+

@@ -92,6 +92,28 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/general/2020/11/15/hw-accel-encoding-rpi4"><h3>Hardware Accelerated Video Encoding on the Raspberry Pi 4 on Ubuntu 20.04 64-bit</h3></a>
+		<b>15 Nov 2020</b>
+		
+<p>I recently picked up a Raspberry Pi 4 8GB model to use for some lightweight server tasks
+on my home network. After setting up Pi-Hole, OpenVPN, Plex, and Samba,
+I got curious about using it to re-encode some videos I had. The videos are on
+an external drive being monitored by Plex and shared on the network by Samba,
+and some are quite large since they’re at a (likely unnecessarily) high bitrate.
+Trimming them down would help save a bit of space, and gives me an excuse to
+play around with Python, FFmpeg, and the Pi’s hardware accelerated video encoder.
+In this post, I’ll cover how to get FFmpeg setup to use the Pi 4’s video encoding
+hardware on a 64-bit OS and the little encoding manager/dashboard, <a href="https://github.com/Twinklebear/fbed">FBED</a>,
+that I put together to monitor the progress of the encoding tasks.</p>
+
+
+
+		<a href="/general/2020/11/15/hw-accel-encoding-rpi4">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/general/2020/11/13/vis2020-streaming-infrastructure"><h3>The VIS 2020 Streaming Infrastructure</h3></a>
 		<b>13 Nov 2020</b>
 		
@@ -182,40 +204,6 @@ a WebGPU context and get a triangle on the screen.</p>
 
 
 		<a href="/graphics/2020/06/15/0-to-gltf-triangle">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/graphics/2019/11/20/the-sbt-three-ways"><h3>The RTX Shader Binding Table Three Ways</h3></a>
-		<b>20 Nov 2019</b>
-		
-<p>DirectX Ray Tracing, Vulkan’s NV Ray Tracing extension, and OptiX (or collectively, the RTX APIs)
-build on the same execution model for running user code to trace
-and process rays. The user creates a <em>Shader Binding Table</em> (SBT), which consists of a set
-of shader function handles and embedded parameters for these functions. The shaders in the table
-are executed depending on whether or not a geometry was hit by a ray, and which geometry was hit.
-When a geometry is hit, a set of parameters specified on both the host and
-device side of the application combine to determine which shader is executed.
-The RTX APIs provide a great deal of flexibility in how the SBT can be set up and
-indexed into during rendering, leaving a number of options open to applications.
-However, with incorrect SBT access leading
-to crashes and difficult bugs, sparse examples or documentation, and
-subtle differences in naming and SBT setup between the APIs, properly setting up
-and accessing the SBT is an especially thorny part of the RTX APIs for new users.</p>
-
-<p>In this post we’ll look at the similarities and differences of each ray tracing API’s shader
-binding table to gain a fundamental understanding of the execution model. I’ll then
-present an interactive tool for constructing the SBT, building a scene which uses it,
-and executing trace calls on the scene to see which hit groups and miss shaders are called.
-Finally, we’ll look at how this model can be brought back to the CPU using Embree,
-to potentially build a unified low-level API for ray tracing.</p>
-
-<p><strong>Updated 5/1/2020:</strong> Added discussion on <code>KHR_ray_tracing</code> for Vulkan.</p>
-
-
-
-		<a href="/graphics/2019/11/20/the-sbt-three-ways">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
 		</div>
 	</div>
