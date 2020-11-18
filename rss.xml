@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Sun, 15 Nov 2020 21:32:04 -0700</lastBuildDate>
-		<pubDate>Sun, 15 Nov 2020 21:32:04 -0700</pubDate>
+		<lastBuildDate>Wed, 18 Nov 2020 09:55:47 -0700</lastBuildDate>
+		<pubDate>Wed, 18 Nov 2020 09:55:47 -0700</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -63,7 +63,8 @@ Jagoda Walny, and Steve Petruzza on the web committee setting up the
 &lt;a href=&quot;https://virtual.ieeevis.org/&quot;&gt;virtual conference webpage&lt;/a&gt;.
 The webpage was adapted from &lt;a href=&quot;https://github.com/Mini-Conf/Mini-Conf&quot;&gt;mini-conf&lt;/a&gt;,
 originally written by Alexander Rush and Hendrik Strobelt.
-Alper promised a separate blog post about this, so I won’t discuss it here.
+Alper &lt;a href=&quot;https://alper.datav.is/blog/2020/11/virtual-ieee-vis-website/&quot;&gt;has written up a blog post about this&lt;/a&gt;,
+so I won’t cover it here.
 Finally, during the event we had a rotation of about 24 student volunteers
 who were responsible for managing the streams and assisting presenters
 with technical issues, without whom the event would not have been possible.&lt;/p&gt;
