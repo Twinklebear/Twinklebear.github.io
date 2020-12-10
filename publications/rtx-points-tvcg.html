@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<title>Efficient and Flexible Hierarchical Data Layouts for a Unified Encoding of Scalar Field Precision and Resolution</title>
+	<title>Accelerating Unstructured Mesh Point Location with RT Cores</title>
 	
     <meta name="author" content="Will Usher">
 
@@ -91,22 +91,22 @@
 
 <div class="row col-12 mt-4">
 	<div class="col-12 text-center">
-		<h1>Efficient and Flexible Hierarchical Data Layouts for a Unified Encoding of Scalar Field Precision and Resolution</h1>
-		<h5 class="font-italic">Duong Hoang, Brian Summa, Harsh Bhatia, Peter Lindstrom, Pavol Klacansky, Will Usher, Peer-Timo Bremer and Valerio Pascucci</h5>
-		<h5>In <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2021</h5>
+		<h1>Accelerating Unstructured Mesh Point Location with RT Cores</h1>
+		<h5 class="font-italic">Nate Morrical, Ingo Wald, Will Usher, Valerio Pascucci</h5>
+		<h5>In <i>IEEE Transactions on Visualization and Computer Graphics</i>, 2020</h5>
         
 		
 		<figure>
-			<img class="img-fluid" src="https://i.imgur.com/UICjif7.png"/>
+			<img class="img-fluid" src="https://i.imgur.com/5CpRXQc.jpg"/>
 			<figcaption class="text-left mt-2">
-				<b>Fig. 1: </b><i>We propose a hierarchical data layout that allows for various forms of progressive decoding that modulate improvements in both precision and resolution. Each progressive decoding traces a monotonic nondecreasing curve in the precision-resolution space from the origin, 0%, to the full data, 100% (shown in (a)). Using a 900 GB turbulent channel flow field (10240×7680×1536, float64) (b), we demonstrate three approximations (c,d,e) of progressively increasing quality decoded along the curve in (a). The time to decode the data and RAM used are shown in the figure; data retrieved values are inclusive of the preceding points along the curve</i>
+				<b>Fig. 1: </b><i>The Agulhas Current dataset, courtesy Niklas Röber, DKRZ. This image shows simulated ocean currents off the coast of South Africa, represented using cell-centered wedges. When rendered using our hardware accelerated point queries, we see up to a 14.86× performance improvement over a CUDA reference implementation (2.49 FPS vs 37 FPS on an RTX 2080 at 1024×1024).</i>
 			</figcaption>
 		</figure>
 		
 	</div>
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">Abstract</h2>
-		<p>To address the problem of ever-growing scientific data sizes making data movement a major hindrance to analysis, we introduce a novel encoding for scalar fields: a unified tree of resolution and precision, specifically constructed so that valid cuts correspond to sensible approximations of the original field in the precision-resolution space. Furthermore, we introduce a highly flexible encoding of such trees that forms a parameterized family of data hierarchies. We discuss how different parameter choices lead to different trade-offs in practice, and show how specific choices result in known data representation schemes such as ZFP, IDX, and JPEG2000. Finally, we provide system-level details and empirical evidence on how such hierarchies facilitate common approximate queries with minimal data movement and time, using real-world data sets ranging from a few gigabytes to nearlya terabyte in size. Experiments suggest that our new strategy of combining reductions in resolution and precision is competitive with state-of-the-art compression techniques with respect to data quality, while being significantly more flexible and orders of magnitude faster, and requiring significantly reduced resources</p>
+		<p>We present a technique that leverages ray tracing hardware available in recent Nvidia RTX GPUs to solve a problem other than classical ray tracing. Specifically, we demonstrate how to use these units to accelerate the point location of general unstructured elements consisting of both planar and bilinear faces. This unstructured mesh point location problem has previously been challenging to accelerate on GPU architectures; yet, the performance of these queries is crucial to many unstructured volume rendering and compute applications. Starting with a CUDA reference method, we describe and evaluate three approaches that reformulate these point queries to incrementally map algorithmic complexity to these new hardware ray tracing units. Each variant replaces the simpler problem of point queries with a more complex one of ray queries. Initial variants exploit ray tracing cores for accelerated BVH traversal, and subsequent variants use ray-triangle intersections and per-face metadata to detect point-in-element intersections. Although these later variants are more algorithmically complex, they are significantly faster than the reference method thanks to hardware acceleration. Using our approach, we improve the performance of an unstructured volume renderer by up to 4× for tetrahedral meshes and up to 15× for general bilinear element meshes, matching, or out-performing state-of-the-art solutions while simultaneously improving on robustness and ease-of-implementation. </p>
 	</div>
 	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">Downloads</h2>
@@ -117,9 +117,9 @@
 		list of entries. One main supplemental video could be included though in the main page.-->
 		<dl>
 			<dt>Publication</dt>
-			<dd><a href="http://sci.utah.edu/~will/papers/varprec-vis20.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			<dd><a href="http://sci.utah.edu/~will/papers/rtx-points-tvcg20.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
 			
-			<dd><a href="https://dx.doi.org/10.1109/TVCG.2020.3030381">
+			<dd><a href="https://dx.doi.org/10.1109/TVCG.2020.3042930">
 				<i class="fas fa-external-link-alt"></i> Publisher's Version</a>
 			</dd>
 			
@@ -129,21 +129,13 @@
 	
 	
 	<div class="col-12 mt-2">
-		<h2 class="border-bottom border-secondary">Presentation Video</h2>
-		<div class="embed-responsive embed-responsive-16by9">
-			<iframe class="embed-responsive-item" allowfullscreen src="https://www.youtube.com/embed/gSQglICXNd0?start=5950">
-			</iframe>
-		</div>
-	</div>
-	
-	<div class="col-12 mt-2">
 		<h2 class="border-bottom border-secondary">BibTeX</h2>
-		<code>@article{hoang_efficient_2021,<br />
- author={Hoang, Duong and Summa, Brian and Bhatia, Harsh and Lindstrom, Peter and Klacansky, Pavol and Usher, Will and Bremer, Peer-Timo and Pascucci, Valerio},<br />
+		<code>@article{morrical_rtxpoints_2020,<br />
+ author={Morrical, Nate and Wald, Ingo and Usher, Will and Pascucci, Valerio},<br />
  journal={{IEEE} {Transactions} on {Visualization} and {Computer} {Graphics}},<br />
- title={{Efficient} and {Flexible} {Hierarchical} {Data} {Layouts} for a {Unified} {Encoding} of {Scalar} {Field} {Precision} and {Resolution}},<br />
- doi={10.1109/TVCG.2020.3030381},<br />
- year={2021},<br />
+ title={{Accelerating} {Unstructured} {Mesh} {Point} {Location} with {RT} {Cores}},<br />
+ doi={10.1109/TVCG.2020.3042930},<br />
+ year={2020},<br />
 }</code>
 	</div>
 </div>
