@@ -5,9 +5,42 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Thu, 10 Dec 2020 10:19:13 -0700</lastBuildDate>
-		<pubDate>Thu, 10 Dec 2020 10:19:13 -0700</pubDate>
+		<lastBuildDate>Sun, 20 Dec 2020 18:56:36 -0700</lastBuildDate>
+		<pubDate>Sun, 20 Dec 2020 18:56:36 -0700</pubDate>
 		<ttl>60</ttl>
+		
+		<item>
+			<title>A Dive into Ray Tracing Performance on the Apple M1</title>
+			<description>
+&lt;p&gt;The Apple M1 available in the MacBook Air, MacBook Pro 13”, and Mac Mini has
+been the focus of a ton of benchmarking writeups and blog posts about
+the new chip. The performance overall, and especially performance/watt,
+that Apple has achieved with the chip is very impressive.
+As a ray tracing person, what caught my eye the most was the
+performance AnandTech reported in their
+&lt;a href=&quot;https://www.anandtech.com/show/16252/mac-mini-apple-m1-tested/2&quot;&gt;CineBench benchmarks&lt;/a&gt;.
+These scores were 1.6x higher than I got on my old Haswell desktop and 2x
+higher than my new Tiger Lake laptop!
+I had also been interested in trying out the new
+&lt;a href=&quot;https://developer.apple.com/videos/play/wwdc2020/10012/&quot;&gt;ray tracing API for Metal&lt;/a&gt;
+that was announced at WWDC this year,
+which bears some resemblance to the DirectX, Vulkan, and OptiX GPU ray tracing APIs.
+So, I decided to pick up a Mac Mini to do some testing
+on my own interactive path tracing project,
+&lt;a href=&quot;https://github.com/Twinklebear/ChameleonRT&quot;&gt;ChameleonRT&lt;/a&gt;,
+and to get it running on the new Metal ray tracing API.
+In this post, we’ll take a look at the new Metal ray tracing
+API to see how it lines up with DirectX, Vulkan, OptiX and Embree,
+then we’ll make some fair (and some extremely unfair) ray tracing
+performance comparisons against the M1.&lt;/p&gt;
+
+
+				&lt;a href=&quot;https://www.willusher.io//graphics/2020/12/20/rt-dive-m1&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io//graphics/2020/12/20/rt-dive-m1</link>
+			<guid>https://www.willusher.io//graphics/2020/12/20/rt-dive-m1</guid>
+			<pubDate>Sun, 20 Dec 2020 00:00:00 -0700</pubDate>
+		</item>
 		
 		<item>
 			<title>Hardware Accelerated Video Encoding on the Raspberry Pi 4 on Ubuntu 20.04 64-bit</title>

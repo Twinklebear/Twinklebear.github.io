@@ -92,6 +92,39 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2020/12/20/rt-dive-m1"><h3>A Dive into Ray Tracing Performance on the Apple M1</h3></a>
+		<b>20 Dec 2020</b>
+		
+<p>The Apple M1 available in the MacBook Air, MacBook Pro 13”, and Mac Mini has
+been the focus of a ton of benchmarking writeups and blog posts about
+the new chip. The performance overall, and especially performance/watt,
+that Apple has achieved with the chip is very impressive.
+As a ray tracing person, what caught my eye the most was the
+performance AnandTech reported in their
+<a href="https://www.anandtech.com/show/16252/mac-mini-apple-m1-tested/2">CineBench benchmarks</a>.
+These scores were 1.6x higher than I got on my old Haswell desktop and 2x
+higher than my new Tiger Lake laptop!
+I had also been interested in trying out the new
+<a href="https://developer.apple.com/videos/play/wwdc2020/10012/">ray tracing API for Metal</a>
+that was announced at WWDC this year,
+which bears some resemblance to the DirectX, Vulkan, and OptiX GPU ray tracing APIs.
+So, I decided to pick up a Mac Mini to do some testing
+on my own interactive path tracing project,
+<a href="https://github.com/Twinklebear/ChameleonRT">ChameleonRT</a>,
+and to get it running on the new Metal ray tracing API.
+In this post, we’ll take a look at the new Metal ray tracing
+API to see how it lines up with DirectX, Vulkan, OptiX and Embree,
+then we’ll make some fair (and some extremely unfair) ray tracing
+performance comparisons against the M1.</p>
+
+
+
+		<a href="/graphics/2020/12/20/rt-dive-m1">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/general/2020/11/15/hw-accel-encoding-rpi4"><h3>Hardware Accelerated Video Encoding on the Raspberry Pi 4 on Ubuntu 20.04 64-bit</h3></a>
 		<b>15 Nov 2020</b>
 		
@@ -180,31 +213,6 @@ I recommend reading that first, as we’ll continue directly off the code writte
 
 
 		<a href="/graphics/2020/06/20/0-to-gltf-bind-groups">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/graphics/2020/06/15/0-to-gltf-triangle"><h3>From 0 to glTF with WebGPU: The First Triangle</h3></a>
-		<b>15 Jun 2020</b>
-		
-<p>WebGPU is a modern graphics API for the web, in development by the
-major browser vendors. When compared to WebGL, WebGPU provides more direct
-control over the GPU to allow applications to leverage the hardware
-more efficiently, similar to Vulkan and DirectX 12.
-WebGPU also exposes additional GPU capabilities not available in WebGL, such as compute
-shaders and storage buffers, enabling powerful GPU compute applications
-to run on the web. As with the switch from OpenGL to Vulkan, WebGPU
-exposes more complexity to the user than WebGL, though the API strikes
-a good balance between complexity and usability, and overall is quite nice to work with.
-In this series, we’ll learn the key aspects of WebGPU from the ground up,
-with the goal of going from zero to a basic glTF model renderer.
-This post marks our initial step on this journey, where we’ll setup
-a WebGPU context and get a triangle on the screen.</p>
-
-
-
-		<a href="/graphics/2020/06/15/0-to-gltf-triangle">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="mt-2 mx-auto col-8 border-bottom border-secondary">
 		</div>
 	</div>

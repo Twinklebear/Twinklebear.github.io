@@ -55,6 +55,7 @@ https://www.willusher.io//publications/isp-jsfi
 https://www.willusher.io//publications/vtkm
 https://www.willusher.io//publications/pkd
 
+https://www.willusher.io//graphics/2020/12/20/rt-dive-m1
 https://www.willusher.io//general/2020/11/15/hw-accel-encoding-rpi4
 https://www.willusher.io//general/2020/11/13/vis2020-streaming-infrastructure
 https://www.willusher.io//graphics/2020/06/20/0-to-gltf-bind-groups
