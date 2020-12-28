@@ -94,6 +94,7 @@
 
 <div class="row justify-content-center">
 	<div class="col-9">
+        <p>December 30, 2014</p>
 		
 <p>I’ve decided to port over my physically based ray tracer <a href="https://github.com/Twinklebear/tray">tray</a>
 to <a href="http://www.rust-lang.org/">Rust</a> to finally try out the language with a decent sized project.
@@ -116,7 +117,7 @@ sphere and save the image.</p>
 <p>I started by porting the linear algebra module used by tray over, since almost everything else
 we do in the ray tracer will need basic linear algebra operations. This was pretty straightforward
 but I did run into a few minor annoyances with things in the current state of Rust,
-<code>rustc 0.13.0-nightly (636663172 2014-12-28 16:21:58 +0000)</code>, namely: lack of function overloading
+<code class="language-plaintext highlighter-rouge">rustc 0.13.0-nightly (636663172 2014-12-28 16:21:58 +0000)</code>, namely: lack of function overloading
 , default parameters and operator overloading for both left and right multiplication.</p>
 
 <h4 id="function-overloading">Function Overloading</h4>
@@ -125,27 +126,27 @@ make things a bit more ergonomic. I first ran into this when implementing my vec
 tray I have overloads for the constructor so that it can be constructed with x, y and z all set
 independently or by setting them all to the same value, as below.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="n">Vector</span><span class="p">(</span><span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y</span><span class="p">,</span> <span class="kt">float</span> <span class="n">z</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">z</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="p">{}</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">Vector</span><span class="p">(</span><span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y</span><span class="p">,</span> <span class="kt">float</span> <span class="n">z</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">z</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="p">{}</span>
 <span class="n">Vector</span><span class="p">(</span><span class="kt">float</span> <span class="n">x</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">z</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{}</span></code></pre></figure>
 
 <p>This is convenient as there are many times when you simply want a vector that’s initialized
 to all 0 or 1 for example. Since function overloading isn’t currently supported in Rust
-these two methods require different names, I chose <code>broadcast</code> for my single value constructor.</p>
+these two methods require different names, I chose <code class="language-plaintext highlighter-rouge">broadcast</code> for my single value constructor.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">x</span>: <span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>: <span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">z</span>: <span class="kt">f32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">x</span>: <span class="nc">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>: <span class="nc">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span>: <span class="nc">z</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">broadcast</span><span class="p">(</span><span class="n">x</span>: <span class="kt">f32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">x</span>: <span class="nc">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>: <span class="nc">x</span><span class="p">,</span><span class="w"> </span><span class="n">z</span>: <span class="nc">x</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">f32</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">f32</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Vector</span> <span class="p">{</span>
+    <span class="n">Vector</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">z</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">pub</span> <span class="k">fn</span> <span class="nf">broadcast</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Vector</span> <span class="p">{</span>
+    <span class="n">Vector</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">x</span> <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
-<p>I’d really prefer to just have an overload of <code>new(x: f32) -&gt; Vector</code> which performed the same
-construction that <code>broadcast</code> does currently, although this is a relatively minor annoyance.</p>
+<p>I’d really prefer to just have an overload of <code class="language-plaintext highlighter-rouge">new(x: f32) -&gt; Vector</code> which performed the same
+construction that <code class="language-plaintext highlighter-rouge">broadcast</code> does currently, although this is a relatively minor annoyance.</p>
 
 <h4 id="default-parameters">Default Parameters</h4>
 <p>This relates closely to function overloading in that it also simplifies commonly written calls, eg. my
 C++ vector constructors also default to set the values to 0, so constructing a vector of all 0
-values is simply <code>Vector{}</code>. This doesn’t seem to be currently in Rust, but is another (somewhat minor)
+values is simply <code class="language-plaintext highlighter-rouge">Vector{}</code>. This doesn’t seem to be currently in Rust, but is another (somewhat minor)
 feature that would be nice to have.</p>
 
 <h4 id="overloading-left-and-right-multiply">Overloading Left and Right Multiply</h4>
@@ -159,50 +160,50 @@ Below is my vector * scalar overload, it’s two extra lines than in C++ but is 
 mentioned that unsupported left-multiply overloading is a <a href="https://github.com/rust-lang/rust/issues/19035">bug</a>
 which may be getting fixed in <a href="https://github.com/rust-lang/rust/pull/19434">19434</a>.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">impl</span><span class="w"> </span><span class="n">Mul</span><span class="o">&lt;</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">Vector</span><span class="o">&gt;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">fn</span> <span class="nf">mul</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">rhs</span>: <span class="kt">f32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">x</span>: <span class="nc">self</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>: <span class="nc">self</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span><span class="w"> </span><span class="n">z</span>: <span class="nc">self</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">impl</span> <span class="nb">Mul</span><span class="o">&lt;</span><span class="nb">f32</span><span class="p">,</span> <span class="n">Vector</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">Vector</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">mul</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Vector</span> <span class="p">{</span>
+        <span class="n">Vector</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="k">self</span><span class="py">.x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="k">self</span><span class="py">.y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="k">self</span><span class="py">.z</span> <span class="o">*</span> <span class="n">rhs</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <p><strong>Edit (5/9/15)</strong>: Overloading left and right multiply is now supported in Rust. Additionally the method
 for writing overloaded operators has changed significantly with the addition of associated types. The
-current implementation of right and left multiply for <code>Vector</code> are now:</p>
+current implementation of right and left multiply for <code class="language-plaintext highlighter-rouge">Vector</code> are now:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="c1">// Multiply a vector by a f32 on the right, eg. `vec * 2.0`</span>
-<span class="k">impl</span><span class="w"> </span><span class="n">Mul</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">type</span> <span class="nc">Output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Vector</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="sd">/// Scale the vector by some value</span>
-<span class="w">    </span><span class="k">fn</span> <span class="nf">mul</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">rhs</span>: <span class="kt">f32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">x</span>: <span class="nc">self</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>: <span class="nc">self</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span><span class="w"> </span><span class="n">z</span>: <span class="nc">self</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// Multiply a vector by a f32 on the right, eg. `vec * 2.0`</span>
+<span class="k">impl</span> <span class="nb">Mul</span><span class="o">&lt;</span><span class="nb">f32</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">Vector</span> <span class="p">{</span>
+    <span class="k">type</span> <span class="n">Output</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">;</span>
+    <span class="c">/// Scale the vector by some value</span>
+    <span class="k">fn</span> <span class="nf">mul</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Vector</span> <span class="p">{</span>
+        <span class="n">Vector</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="k">self</span><span class="py">.x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="k">self</span><span class="py">.y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="k">self</span><span class="py">.z</span> <span class="o">*</span> <span class="n">rhs</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="c1">// Multiply a f32 by a vector on the right, eg. `2.0 * vec`</span>
-<span class="k">impl</span><span class="w"> </span><span class="n">Mul</span><span class="o">&lt;</span><span class="n">Vector</span><span class="o">&gt;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">type</span> <span class="nc">Output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Vector</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="sd">/// Scale the vector by some value</span>
-<span class="w">    </span><span class="k">fn</span> <span class="nf">mul</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">rhs</span>: <span class="nc">Vector</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">Vector</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">x</span>: <span class="nc">self</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>: <span class="nc">self</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span>: <span class="nc">self</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<span class="c">// Multiply a f32 by a vector on the right, eg. `2.0 * vec`</span>
+<span class="k">impl</span> <span class="nb">Mul</span><span class="o">&lt;</span><span class="n">Vector</span><span class="o">&gt;</span> <span class="k">for</span> <span class="nb">f32</span> <span class="p">{</span>
+    <span class="k">type</span> <span class="n">Output</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">;</span>
+    <span class="c">/// Scale the vector by some value</span>
+    <span class="k">fn</span> <span class="nf">mul</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Vector</span> <span class="p">{</span>
+        <span class="n">Vector</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="k">self</span> <span class="o">*</span> <span class="n">rhs</span><span class="py">.x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="k">self</span> <span class="o">*</span> <span class="n">rhs</span><span class="py">.y</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="k">self</span> <span class="o">*</span> <span class="n">rhs</span><span class="py">.z</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>Because operator overloading is done through traits we can set constraints on generic
 functions to require that the types being worked on implement certain operations. This makes
 the function clearer than in C++ (eg. what types it takes) and also gives much better compilation
 errors when types not implementing the required operations are passed. For an extremely simple
-comparison lets look at the C++ and Rust implementations of <code>lerp</code>.</p>
+comparison lets look at the C++ and Rust implementations of <code class="language-plaintext highlighter-rouge">lerp</code>.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="n">T</span> <span class="n">lerp</span><span class="p">(</span><span class="kt">float</span> <span class="n">t</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">){</span>
-    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.f</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">t</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="n">T</span> <span class="nf">lerp</span><span class="p">(</span><span class="kt">float</span> <span class="n">t</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span><span class="n">f</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">t</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
 <p>If we misuse the lerp implementation in C++ we get a decent amount of errors. gcc-4.9
 is quite clear about what went wrong, but these errors are shown as occuring inside the
 function call (since that’s the point of error) and would be harder to parse for more complex functions.</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text"><span></span>test.cpp: In instantiation of ‘T lerp(float, const T&amp;, const T&amp;) [with T = Foo]’:
+<figure class="highlight"><pre><code class="language-text" data-lang="text">test.cpp: In instantiation of ‘T lerp(float, const T&amp;, const T&amp;) [with T = Foo]’:
 test.cpp:10:32:   required from here
 test.cpp:3:30: error: no match for ‘operator*’ (operand types are ‘float’ and ‘const Foo’)
      return (1.f - t) * a + t * b;
@@ -216,23 +217,23 @@ test.cpp:4:1: warning: control reaches end of non-void function [-Wreturn-type]
  ^</code></pre></figure>
 
 <p>As a user glancing through some template code in C++ it may not be clear what operations and functions
-the type must provide (although for a simple <code>lerp</code> it is). Rust solves this by allowing you
-to specify requirements on the traits implemented by the types. In <code>lerp</code> we need to be able
+the type must provide (although for a simple <code class="language-plaintext highlighter-rouge">lerp</code> it is). Rust solves this by allowing you
+to specify requirements on the traits implemented by the types. In <code class="language-plaintext highlighter-rouge">lerp</code> we need to be able
 to multiply the types by floats, add the types to each other and make a copy of them to return.
 Specifying these requirements up front makes the function interface much clearer:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">lerp</span><span class="o">&lt;</span><span class="n">T</span>: <span class="nc">Mul</span><span class="o">&lt;</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Add</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">Copy</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">t</span>: <span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">a</span>: <span class="kp">&amp;</span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">b</span>: <span class="kp">&amp;</span><span class="nc">T</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">T</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">t</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="n">lerp</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="nb">Mul</span><span class="o">&lt;</span><span class="nb">f32</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">+</span> <span class="nb">Add</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">+</span> <span class="nb">Copy</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="nb">f32</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">T</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">T</span> <span class="p">{</span>
+    <span class="o">*</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="o">*</span><span class="n">b</span> <span class="o">*</span> <span class="n">t</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>If we misuse the lerp implementation in Rust we get some pretty clear and helpful errors,
 telling us why the error occured and what we should do to resolve it. The error messages also
 point us to the location of the bad call, which is much more useful than being pointed at a problem
 inside some template function.
-Note that in C++ we also didn’t get any errors about the lack of <code>operator+</code>, which we’d get next
-if we fixed our missing <code>operator*</code>.</p>
+Note that in C++ we also didn’t get any errors about the lack of <code class="language-plaintext highlighter-rouge">operator+</code>, which we’d get next
+if we fixed our missing <code class="language-plaintext highlighter-rouge">operator*</code>.</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text"><span></span>tray_rust/src/main.rs:11:15: 11:27 error: the trait `core::kinds::Copy` is not implemented for the type `Foo`
+<figure class="highlight"><pre><code class="language-text" data-lang="text">tray_rust/src/main.rs:11:15: 11:27 error: the trait `core::kinds::Copy` is not implemented for the type `Foo`
 tray_rust/src/main.rs:11     let awd = linalg::lerp(0.5, &amp;Foo, &amp;Foo);
                                                                 ^~~~~~~~~~~~
 tray_rust/src/main.rs:11:15: 11:27 note: the trait `core::kinds::Copy` must be implemented because it is required by `tray_rust::linalg::lerp`
@@ -251,11 +252,11 @@ tray_rust/src/main.rs:11:15: 11:27 note: the trait `core::ops::Mul` must be impl
 tray_rust/src/main.rs:11     let awd = linalg::lerp(0.5, &amp;Foo, &amp;Foo);</code></pre></figure>
 
 <p>C++ also provides default implementations of the copy constructor for types while Rust does not,
-thus in Rust we must require that <code>Copy</code> is implemented for the type. I think Rust’s decision to not 
+thus in Rust we must require that <code class="language-plaintext highlighter-rouge">Copy</code> is implemented for the type. I think Rust’s decision to not 
 provide copy by default is a good one as it can cause trouble if you forget to delete the
 copy constructor and copy-assign operators in C++ and your
 type should not be copied. For most types that should be copyable that I’ve worked with so far
-it’s simple enough to just use a compiler generated implementation via <code>#[deriving(Copy)]</code>.</p>
+it’s simple enough to just use a compiler generated implementation via <code class="language-plaintext highlighter-rouge">#[deriving(Copy)]</code>.</p>
 
 <h2 id="rusts-module-system">Rust’s Module System</h2>
 <p>In tray I chose to split up the various components of the ray tracer into their own libraries
@@ -265,51 +266,51 @@ independent modules. I had some difficulty initially understanding how to work w
 and how inter-module dependencies worked but after reading through the
 <a href="http://doc.rust-lang.org/guide-crates.html">guide</a> the end result is very nice. tray_rust is organized
 with most functionality implemented in separate modules that are
-built into a library and used by <code>main.rs</code> to render the image.</p>
+built into a library and used by <code class="language-plaintext highlighter-rouge">main.rs</code> to render the image.</p>
 
-<p>Under <code>src</code> I have the default executable and library files, <code>main.rs</code> and <code>lib.rs</code>. Also under <code>src</code>
-are the various module subdirectories, eg. <code>linalg</code> for the linear algebra module, each containing
-a <code>mod.rs</code> which defines some module level functions and re-exports the sub-modules implementing
-other functionality, such as the <code>vector</code> module in <code>linalg</code>. The end result of this is that I can
-have a very simple <code>lib.rs</code> which just publicly exports the various modules:</p>
+<p>Under <code class="language-plaintext highlighter-rouge">src</code> I have the default executable and library files, <code class="language-plaintext highlighter-rouge">main.rs</code> and <code class="language-plaintext highlighter-rouge">lib.rs</code>. Also under <code class="language-plaintext highlighter-rouge">src</code>
+are the various module subdirectories, eg. <code class="language-plaintext highlighter-rouge">linalg</code> for the linear algebra module, each containing
+a <code class="language-plaintext highlighter-rouge">mod.rs</code> which defines some module level functions and re-exports the sub-modules implementing
+other functionality, such as the <code class="language-plaintext highlighter-rouge">vector</code> module in <code class="language-plaintext highlighter-rouge">linalg</code>. The end result of this is that I can
+have a very simple <code class="language-plaintext highlighter-rouge">lib.rs</code> which just publicly exports the various modules:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">mod</span> <span class="nn">linalg</span><span class="p">;</span><span class="w"></span>
-<span class="k">pub</span><span class="w"> </span><span class="k">mod</span> <span class="nn">film</span><span class="p">;</span><span class="w"></span>
-<span class="k">pub</span><span class="w"> </span><span class="k">mod</span> <span class="nn">geometry</span><span class="p">;</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">mod</span> <span class="n">linalg</span><span class="p">;</span>
+<span class="k">pub</span> <span class="k">mod</span> <span class="n">film</span><span class="p">;</span>
+<span class="k">pub</span> <span class="k">mod</span> <span class="n">geometry</span><span class="p">;</span></code></pre></figure>
 
-<p>In <code>main.rs</code> I can then tell Rust I need to build and link against the default library crate for
-the executable, <code>tray_rust</code> which is defined by <code>lib.rs</code>, and use the modules:</p>
+<p>In <code class="language-plaintext highlighter-rouge">main.rs</code> I can then tell Rust I need to build and link against the default library crate for
+the executable, <code class="language-plaintext highlighter-rouge">tray_rust</code> which is defined by <code class="language-plaintext highlighter-rouge">lib.rs</code>, and use the modules:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">extern</span><span class="w"> </span><span class="k">crate</span><span class="w"> </span><span class="n">tray_rust</span><span class="p">;</span><span class="w"></span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">tray_rust</span><span class="p">;</span>
 
-<span class="k">use</span><span class="w"> </span><span class="n">tray_rust</span>::<span class="n">linalg</span><span class="p">;</span><span class="w"></span>
+<span class="k">use</span> <span class="nn">tray_rust</span><span class="p">::</span><span class="n">linalg</span><span class="p">;</span>
 
-<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">linalg</span>::<span class="n">Vector</span>::<span class="n">new</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">3.0</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;Hello! {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">v</span> <span class="o">=</span> <span class="nn">linalg</span><span class="p">::</span><span class="nn">Vector</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">);</span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Hello! {}"</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>Inter-module dependencies and circular dependencies are also handled very nicely. In the geometry module
-if I need access to some of the types in <code>linalg</code> I can simply <code>use linalg;</code> and not need to worry about
+if I need access to some of the types in <code class="language-plaintext highlighter-rouge">linalg</code> I can simply <code class="language-plaintext highlighter-rouge">use linalg;</code> and not need to worry about
 dealing with fiddly link order requirements. Circular dependencies
 aren’t a problem at all, which is nice coming from C++ where they can be a bit annoying, requiring
 forward declarations and such.</p>
 
 <h4 id="re-exporting-from-modules">Re-exporting From Modules</h4>
 <p>I initially struggled with the sheer amount of typing required for some of the nested modules. Since my
-<code>Vector</code> struct is in the <code>vector</code> module within the <code>linalg</code> module to access it I would have to type
-<code>linalg::vector::Vector</code>, which is a mouthful. While important to avoid naming conflicts I thought this
+<code class="language-plaintext highlighter-rouge">Vector</code> struct is in the <code class="language-plaintext highlighter-rouge">vector</code> module within the <code class="language-plaintext highlighter-rouge">linalg</code> module to access it I would have to type
+<code class="language-plaintext highlighter-rouge">linalg::vector::Vector</code>, which is a mouthful. While important to avoid naming conflicts I thought this
 was pretty excessive and after some googling stumbled onto <a href="http://stackoverflow.com/questions/22596920/rust-splitting-a-single-module-across-several-files">re-exporting from modules</a>. This lets
-us re-export the <code>Vector</code> type from the <code>linalg</code> module allowing us to use it as <code>linalg::Vector</code>,
+us re-export the <code class="language-plaintext highlighter-rouge">Vector</code> type from the <code class="language-plaintext highlighter-rouge">linalg</code> module allowing us to use it as <code class="language-plaintext highlighter-rouge">linalg::Vector</code>,
 which I think is more than enough to avoid name conflicts. This is done in the linalg module file,
-<code>linalg/mod.rs</code> where we export the various sub-modules and re-export their types:</p>
+<code class="language-plaintext highlighter-rouge">linalg/mod.rs</code> where we export the various sub-modules and re-export their types:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="bp">self</span>::<span class="n">vector</span>::<span class="n">Vector</span><span class="p">;</span><span class="w"></span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">use</span> <span class="k">self</span><span class="p">::</span><span class="nn">vector</span><span class="p">::</span><span class="n">Vector</span><span class="p">;</span>
 
-<span class="k">pub</span><span class="w"> </span><span class="k">mod</span> <span class="nn">vector</span><span class="p">;</span><span class="w"></span></code></pre></figure>
+<span class="k">pub</span> <span class="k">mod</span> <span class="n">vector</span><span class="p">;</span></code></pre></figure>
 
 <h2 id="working-with-traits">Working With Traits</h2>
-<p>In my C++ ray tracer geometry is defined by an interface that provides methods such as <code>intersect</code> which
+<p>In my C++ ray tracer geometry is defined by an interface that provides methods such as <code class="language-plaintext highlighter-rouge">intersect</code> which
 tests a ray for intersection with some piece of geometry, making it very easy to add new geometry types
 to the ray tracer by implementing the interface. Additionally we separate the definition of some
 geometry with its occurance in the
@@ -318,22 +319,22 @@ transformations, a method known as instancing. To keep things simple when implem
 volume hierarchy our instance type also implements the geometry interface, simply transformating the
 ray into object space and then calling the geometry’s intersect method.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">class</span> <span class="nc">Geometry</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">class</span> <span class="nc">Geometry</span> <span class="p">{</span>
+<span class="nl">public:</span>
     <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">intersect</span><span class="p">(</span><span class="n">Ray</span> <span class="o">&amp;</span><span class="n">ray</span><span class="p">,</span> <span class="n">DifferentialGeometry</span> <span class="o">&amp;</span><span class="n">dg</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
 
 <p>This technique carries over directly to Rust in the form of traits. Instead of providing a base class
-with pure virtual methods like we’d do in C++ we define a <code>Geometry</code> trait that provides these
+with pure virtual methods like we’d do in C++ we define a <code class="language-plaintext highlighter-rouge">Geometry</code> trait that provides these
 same methods and write implementations for our geometry such as our Sphere type.
 Below is the geometry trait implemented by the various scene geometry types in tray_rust.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Geometry</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">ray</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">linalg</span>::<span class="n">Ray</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Option</span><span class="o">&lt;</span><span class="n">DifferentialGeometry</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">trait</span> <span class="n">Geometry</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nn">linalg</span><span class="p">::</span><span class="n">Ray</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">DifferentialGeometry</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
 
-<p><code>intersect</code> has an interesting return type, which lets me talk about another cool feature of Rust: no
-null pointers! Instead Rust defines an <code>Option&lt;T&gt;</code> type which can be either <code>Some(T)</code> or <code>None</code> and
+<p><code class="language-plaintext highlighter-rouge">intersect</code> has an interesting return type, which lets me talk about another cool feature of Rust: no
+null pointers! Instead Rust defines an <code class="language-plaintext highlighter-rouge">Option&lt;T&gt;</code> type which can be either <code class="language-plaintext highlighter-rouge">Some(T)</code> or <code class="language-plaintext highlighter-rouge">None</code> and
 both cases must be considered. In C++ (and C, Java, etc) it’s easy to ignore the possibility that
 a pointer may be null resulting in seg faults, null pointer exceptions and more. Rust avoids the <a href="http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare">billion
 dollar mistake</a>
@@ -341,44 +342,44 @@ by forcing you to not be <a href="http://arthurtw.github.io/2014/12/21/rust-anti
 
 <p>In my C++ version I would take the DifferentialGeometry as a mutable reference and return a
 bool if the ray intersected the object, filling out the differential geometry with the hit info if it
-hit. In Rust this is expressed much cleaner, if there’s a hit we return <code>Some(DifferentialGeometry)</code>
-otherwise we simply return <code>None</code>. The DifferentialGeometry also needs to send back information about
+hit. In Rust this is expressed much cleaner, if there’s a hit we return <code class="language-plaintext highlighter-rouge">Some(DifferentialGeometry)</code>
+otherwise we simply return <code class="language-plaintext highlighter-rouge">None</code>. The DifferentialGeometry also needs to send back information about
 the instance and geometry that was hit, leading to the next topic: lifetimes in Rust.</p>
 
 <h2 id="lifetimes-in-rust">Lifetimes in Rust</h2>
 <p>The concept and enforcement of <a href="http://doc.rust-lang.org/guide-ownership.html">ownership</a> in Rust
 was one of the features that initially got me interested in the language. For the most part lifetimes
 are implicit in the language, however sometimes the compiler needs some assistance deducing lifetimes
-for some variables. I first encountered this when writing my <code>DifferentialGeometry</code> struct which needs
-to return back references to the hit <code>Geometry</code> and <code>Instance</code> so we can shade the hit point properly.
+for some variables. I first encountered this when writing my <code class="language-plaintext highlighter-rouge">DifferentialGeometry</code> struct which needs
+to return back references to the hit <code class="language-plaintext highlighter-rouge">Geometry</code> and <code class="language-plaintext highlighter-rouge">Instance</code> so we can shade the hit point properly.
 In order to verify the code is valid the compiler needs to check that the geometry and instance
 referenced by the differential geometry will not be outlived by the differential geometry, as this
 would result in dangling references. To specify this separate lifetime on a struct we’d write:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">DifferentialGeometry</span><span class="o">&lt;</span><span class="na">&#39;a</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// This isn&#39;t quite correct yet!</span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">geom</span>: <span class="kp">&amp;</span><span class="na">&#39;a</span><span class="w"> </span><span class="n">Geometry</span><span class="p">,</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">DifferentialGeometry</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c">// This isn't quite correct yet!</span>
+    <span class="k">pub</span> <span class="n">geom</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="n">Geometry</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
 
 <h4 id="error-explicit-lifetime-bound-required">Error: Explicit Lifetime Bound Required</h4>
-<p>Writing the above <code>geom</code> member resulted in the most difficult error message I encountered
+<p>Writing the above <code class="language-plaintext highlighter-rouge">geom</code> member resulted in the most difficult error message I encountered
 so far in Rust. Attempting to compile the above results in:</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text"><span></span>src/geometry/differential_geometry.rs:17:19: 17:27 error: explicit lifetime bound required
-src/geometry/differential_geometry.rs:17     pub geom: &amp;&#39;a Geometry,
+<figure class="highlight"><pre><code class="language-text" data-lang="text">src/geometry/differential_geometry.rs:17:19: 17:27 error: explicit lifetime bound required
+src/geometry/differential_geometry.rs:17     pub geom: &amp;'a Geometry,
                                                            ^~~~~~~~</code></pre></figure>
 
 <p>The message is actually quite clear, if I knew what an explicit lifetime bound was. However it
 doesn’t seem to be mentioned in the guides which is what made resolving this error
 much more challenging than previous ones. After a decent amount of googling I
-found that while the way I wrote <code>geom</code> is correct for a regular struct a trait
+found that while the way I wrote <code class="language-plaintext highlighter-rouge">geom</code> is correct for a regular struct a trait
 requires an explicit lifetime bound since the type of data being referenced is unknown (we only know
 it implements the trait). This is resolved by bounding the lifetime with
-<code>Geometry + 'a</code> and the correct form is:</p>
+<code class="language-plaintext highlighter-rouge">Geometry + 'a</code> and the correct form is:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">DifferentialGeometry</span><span class="o">&lt;</span><span class="na">&#39;a</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">geom</span>: <span class="kp">&amp;</span><span class="na">&#39;a</span><span class="w"> </span><span class="p">(</span><span class="n">Geometry</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="na">&#39;a</span><span class="p">),</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">DifferentialGeometry</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">geom</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="p">(</span><span class="n">Geometry</span> <span class="o">+</span> <span class="nv">'a</span><span class="p">),</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>I’d like to find some more information on what exactly this means, such as
 what a lifetime bound tells the compiler and how it’s used. Unfortunately I didn’t have much luck finding
@@ -387,7 +388,7 @@ information on this, if anyone has some links please do let me know.</p>
 <p><strong>Edit (12/31/14)</strong>: <a href="https://twitter.com/JakeGoulding">@JakeGoulding</a> pointed me to one of his answers
 on <a href="http://stackoverflow.com/questions/27675554/type-definition-with-a-trait-differences-of-specifying-an-explicit-lifetime-bou/27678350#27678350">stack overflow</a> which I found to be helpful.
 Another <a href="http://stackoverflow.com/questions/26212397/rust-lang-references-to-traits-in-structs/26213294#26213294">answer</a> linked in the thread also has a really nice explanation. As a result of reading the
-answers I’ve changed the geom member’s type to <code>&amp;'a (Geometry + 'static)</code> to require the object
+answers I’ve changed the geom member’s type to <code class="language-plaintext highlighter-rouge">&amp;'a (Geometry + 'static)</code> to require the object
 implementing the trait that we’re referring to be a struct, since we won’t be implementing Geometry
 for reference types.</p>
 
@@ -401,36 +402,36 @@ we don’t know which at the time of hitting the geometry itself, we need to go 
 the instance that called the geometry’s intersect method.
 This results in the DifferentialGeometry struct being written as:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">DifferentialGeometry</span><span class="o">&lt;</span><span class="na">&#39;a</span><span class="p">,</span><span class="w"> </span><span class="na">&#39;b</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">p</span>: <span class="nc">Point</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">n</span>: <span class="nc">Normal</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">ng</span>: <span class="nc">Normal</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">geom</span>: <span class="kp">&amp;</span><span class="na">&#39;a</span><span class="w"> </span><span class="p">(</span><span class="n">Geometry</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="na">&#39;a</span><span class="p">),</span><span class="w"></span>
-<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">instance</span>: <span class="nb">Option</span><span class="o">&lt;&amp;</span><span class="na">&#39;b</span><span class="w"> </span><span class="n">Instance</span><span class="o">&lt;</span><span class="na">&#39;b</span><span class="o">&gt;&gt;</span><span class="p">,</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">DifferentialGeometry</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">,</span> <span class="nv">'b</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="n">p</span><span class="p">:</span> <span class="n">Point</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">n</span><span class="p">:</span> <span class="n">Normal</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">ng</span><span class="p">:</span> <span class="n">Normal</span><span class="p">,</span>
+    <span class="k">pub</span> <span class="n">geom</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="p">(</span><span class="n">Geometry</span> <span class="o">+</span> <span class="nv">'a</span><span class="p">),</span>
+    <span class="k">pub</span> <span class="n">instance</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;&amp;</span><span class="nv">'b</span> <span class="n">Instance</span><span class="o">&lt;</span><span class="nv">'b</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
 
-<p>Within the Sphere’s implementation of <code>Geometry::intersect</code> we know the geometry and hit information
+<p>Within the Sphere’s implementation of <code class="language-plaintext highlighter-rouge">Geometry::intersect</code> we know the geometry and hit information
 but not the instance and thus if the sphere is intersected we return:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="nb">Some</span><span class="p">(</span><span class="n">DifferentialGeometry</span>::<span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="nb">None</span><span class="p">))</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="nf">Some</span><span class="p">(</span><span class="nn">DifferentialGeometry</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="k">self</span><span class="p">,</span> <span class="nb">None</span><span class="p">))</span></code></pre></figure>
 
 <p>Then in the instance using the geometry we see that it was hit and transform
 the DifferentialGeometry back into world space and set the instance:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">impl</span><span class="o">&lt;</span><span class="na">&#39;a</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Geometry</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Instance</span><span class="o">&lt;</span><span class="na">&#39;a</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">ray</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">linalg</span>::<span class="n">Ray</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Option</span><span class="o">&lt;</span><span class="n">DifferentialGeometry</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">local</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">inv_transform</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">*</span><span class="n">ray</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">dg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">match</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">geom</span><span class="p">.</span><span class="n">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">local</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nb">Some</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">dg</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nb">None</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">None</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="p">};</span><span class="w"></span>
-<span class="w">        </span><span class="n">ray</span><span class="p">.</span><span class="n">max_t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">local</span><span class="p">.</span><span class="n">max_t</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">dg</span><span class="p">.</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">transform</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dg</span><span class="p">.</span><span class="n">p</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">dg</span><span class="p">.</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">transform</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dg</span><span class="p">.</span><span class="n">n</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">dg</span><span class="p">.</span><span class="n">ng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">transform</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dg</span><span class="p">.</span><span class="n">ng</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">dg</span><span class="p">.</span><span class="n">instance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Some</span><span class="p">(</span><span class="bp">self</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="nb">Some</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">impl</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="n">Geometry</span> <span class="k">for</span> <span class="n">Instance</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nn">linalg</span><span class="p">::</span><span class="n">Ray</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">DifferentialGeometry</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">local</span> <span class="o">=</span> <span class="k">self</span><span class="py">.inv_transform</span> <span class="o">*</span> <span class="o">*</span><span class="n">ray</span><span class="p">;</span>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">dg</span> <span class="o">=</span> <span class="k">match</span> <span class="k">self</span><span class="py">.geom</span><span class="nf">.intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">local</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nf">Some</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="n">dg</span><span class="p">,</span>
+            <span class="nb">None</span> <span class="k">=&gt;</span> <span class="k">return</span> <span class="nb">None</span><span class="p">,</span>
+        <span class="p">};</span>
+        <span class="n">ray</span><span class="py">.max_t</span> <span class="o">=</span> <span class="n">local</span><span class="py">.max_t</span><span class="p">;</span>
+        <span class="n">dg</span><span class="py">.p</span> <span class="o">=</span> <span class="k">self</span><span class="py">.transform</span> <span class="o">*</span> <span class="n">dg</span><span class="py">.p</span><span class="p">;</span>
+        <span class="n">dg</span><span class="py">.n</span> <span class="o">=</span> <span class="k">self</span><span class="py">.transform</span> <span class="o">*</span> <span class="n">dg</span><span class="py">.n</span><span class="p">;</span>
+        <span class="n">dg</span><span class="py">.ng</span> <span class="o">=</span> <span class="k">self</span><span class="py">.transform</span> <span class="o">*</span> <span class="n">dg</span><span class="py">.ng</span><span class="p">;</span>
+        <span class="n">dg</span><span class="py">.instance</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="k">self</span><span class="p">);</span>
+        <span class="nf">Some</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span>
+    <span class="p">}</span></code></pre></figure>
 
 <p>One option is to give Instance its own intersect method and have the Geometry intersect function
 just return back the hit point information and have the Instance fill out the geometry and instance
@@ -442,23 +443,23 @@ intersection testing.</p>
 <p>As far as the end user of the intersect call is concerned there will always be a geometry and instance
 reference on the DifferentialGeometry returned but I’m not sure how to express this. Another possibility
 would be to have another Intersection type which didn’t have the option and could be constructed
-from an <code>Option&lt;DifferentialGeometry&gt;</code> and would return <code>None</code> if the DifferentialGeometry or the
-instance was <code>None</code> (although the latter wouldn’t happen), otherwise it would unwrap the instance
-member’s option and return <code>Some&lt;Intersection&gt;</code>. I’ll probably look into implementing this as the
+from an <code class="language-plaintext highlighter-rouge">Option&lt;DifferentialGeometry&gt;</code> and would return <code class="language-plaintext highlighter-rouge">None</code> if the DifferentialGeometry or the
+instance was <code class="language-plaintext highlighter-rouge">None</code> (although the latter wouldn’t happen), otherwise it would unwrap the instance
+member’s option and return <code class="language-plaintext highlighter-rouge">Some&lt;Intersection&gt;</code>. I’ll probably look into implementing this as the
 cleanest solution I can think of even though it’s really just a band-aid. If anyone has some ideas
 or suggestions, please leave a comment or get in touch on <a href="https://twitter.com/_wusher">Twitter</a>
 or IRC (I’m Twinklebear on freenode and moznet).</p>
 
 <h2 id="testing">Testing</h2>
-<p>Rust also has built in support for specifying <a href="http://doc.rust-lang.org/guide-testing.html">tests and benchmarks</a> by placing <code>#[test]</code> or <code>#[bench]</code> attributes respectively. These are then run using
-<a href="https://crates.io/">Cargo</a> with <code>cargo test</code> or <code>cargo bench</code>. This built in support makes it very 
+<p>Rust also has built in support for specifying <a href="http://doc.rust-lang.org/guide-testing.html">tests and benchmarks</a> by placing <code class="language-plaintext highlighter-rouge">#[test]</code> or <code class="language-plaintext highlighter-rouge">#[bench]</code> attributes respectively. These are then run using
+<a href="https://crates.io/">Cargo</a> with <code class="language-plaintext highlighter-rouge">cargo test</code> or <code class="language-plaintext highlighter-rouge">cargo bench</code>. This built in support makes it very 
 easy to write and run unit and integration tests for your code and is really convenient coming from
 C++ where testing is done through third party libraries.</p>
 
 <h2 id="rustdoc">Rustdoc</h2>
 <p>Rust comes with a built in <a href="http://doc.rust-lang.org/rustdoc.html">documentation generation tool</a>
 that makes it really easy to have nice documentation for both the language and user libraries by
-just running <code>cargo doc</code> on your crate. Since the generated doc site is all static pages it’s simple
+just running <code class="language-plaintext highlighter-rouge">cargo doc</code> on your crate. Since the generated doc site is all static pages it’s simple
 to host them on <a href="https://pages.github.com/">Github pages</a> or browse them locally.
 For example here is the rustdoc for this <a href="http://www.willusher.io/tray_rust/tray_rust/">project</a>.
 Good documentation is critical for any library or decent sized project and having it standardized
@@ -467,41 +468,41 @@ language like this will hopefully improve the overall quality of documentation f
 
 <h2 id="putting-it-all-together">Putting it all Together</h2>
 <p>Now that we’ve got modules to handle <a href="https://github.com/Twinklebear/tray_rust/tree/master/src/linalg">linear algebra</a>, <a href="https://github.com/Twinklebear/tray_rust/tree/master/src/geometry">geometry</a> and <a href="https://github.com/Twinklebear/tray_rust/tree/master/src/film">camera/image operations</a> we have everything
-we need to render a sphere! In <code>main.rs</code> we create our render
+we need to render a sphere! In <code class="language-plaintext highlighter-rouge">main.rs</code> we create our render
 target, camera and sphere then attach the sphere to an instance and loop over the pixels in the image,
 firing rays through each and checking for intersections:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">extern</span><span class="w"> </span><span class="k">crate</span><span class="w"> </span><span class="n">tray_rust</span><span class="p">;</span><span class="w"></span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">tray_rust</span><span class="p">;</span>
 
-<span class="k">use</span><span class="w"> </span><span class="n">tray_rust</span>::<span class="n">linalg</span><span class="p">;</span><span class="w"></span>
-<span class="k">use</span><span class="w"> </span><span class="n">tray_rust</span>::<span class="n">film</span><span class="p">;</span><span class="w"></span>
-<span class="k">use</span><span class="w"> </span><span class="n">tray_rust</span>::<span class="n">geometry</span><span class="p">;</span><span class="w"></span>
-<span class="k">use</span><span class="w"> </span><span class="n">tray_rust</span>::<span class="n">geometry</span>::<span class="n">Geometry</span><span class="p">;</span><span class="w"></span>
+<span class="k">use</span> <span class="nn">tray_rust</span><span class="p">::</span><span class="n">linalg</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">tray_rust</span><span class="p">::</span><span class="n">film</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">tray_rust</span><span class="p">::</span><span class="n">geometry</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">tray_rust</span><span class="p">::</span><span class="nn">geometry</span><span class="p">::</span><span class="n">Geometry</span><span class="p">;</span>
 
-<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">800</span><span class="n">u</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">600</span><span class="n">u</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">rt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">film</span>::<span class="n">RenderTarget</span>::<span class="n">new</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">camera</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">film</span>::<span class="n">Camera</span>::<span class="n">new</span><span class="p">(</span><span class="n">linalg</span>::<span class="n">Transform</span>::<span class="n">look_at</span><span class="p">(</span><span class="w"></span>
-<span class="w">        </span><span class="o">&amp;</span><span class="n">linalg</span>::<span class="n">Point</span>::<span class="n">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">10.0</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">linalg</span>::<span class="n">Point</span>::<span class="n">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">),</span><span class="w"></span>
-<span class="w">        </span><span class="o">&amp;</span><span class="n">linalg</span>::<span class="n">Vector</span>::<span class="n">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)),</span><span class="w"> </span><span class="mf">40.0</span><span class="p">,</span><span class="w"> </span><span class="n">rt</span><span class="p">.</span><span class="n">dimensions</span><span class="p">());</span><span class="w"></span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">sphere</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geometry</span>::<span class="n">Sphere</span>::<span class="n">new</span><span class="p">(</span><span class="mf">1.5</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">instance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geometry</span>::<span class="n">Instance</span>::<span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sphere</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="n">linalg</span>::<span class="n">Transform</span>::<span class="n">translate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">linalg</span>::<span class="n">Vector</span>::<span class="n">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)));</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">px</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">ray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">camera</span><span class="p">.</span><span class="n">generate_ray</span><span class="p">(</span><span class="n">px</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="k">match</span><span class="w"> </span><span class="n">instance</span><span class="p">.</span><span class="n">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">ray</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="nb">Some</span><span class="p">(</span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">rt</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">px</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">px</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">film</span>::<span class="n">Colorf</span>::<span class="n">broadcast</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)),</span><span class="w"></span>
-<span class="w">                </span><span class="nb">None</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{},</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="n">film</span>::<span class="n">write_ppm</span><span class="p">(</span><span class="s">&quot;out.ppm&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">rt</span><span class="p">.</span><span class="n">get_render</span><span class="p">().</span><span class="n">as_slice</span><span class="p">());</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">800u</span><span class="p">;</span>
+    <span class="k">let</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">600u</span><span class="p">;</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">rt</span> <span class="o">=</span> <span class="nn">film</span><span class="p">::</span><span class="nn">RenderTarget</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+    <span class="k">let</span> <span class="n">camera</span> <span class="o">=</span> <span class="nn">film</span><span class="p">::</span><span class="nn">Camera</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">linalg</span><span class="p">::</span><span class="nn">Transform</span><span class="p">::</span><span class="nf">look_at</span><span class="p">(</span>
+        <span class="o">&amp;</span><span class="nn">linalg</span><span class="p">::</span><span class="nn">Point</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">),</span> <span class="o">&amp;</span><span class="nn">linalg</span><span class="p">::</span><span class="nn">Point</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+        <span class="o">&amp;</span><span class="nn">linalg</span><span class="p">::</span><span class="nn">Vector</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)),</span> <span class="mf">40.0</span><span class="p">,</span> <span class="n">rt</span><span class="nf">.dimensions</span><span class="p">());</span>
+    <span class="k">let</span> <span class="n">sphere</span> <span class="o">=</span> <span class="nn">geometry</span><span class="p">::</span><span class="nn">Sphere</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mf">1.5</span><span class="p">);</span>
+    <span class="k">let</span> <span class="n">instance</span> <span class="o">=</span> <span class="nn">geometry</span><span class="p">::</span><span class="nn">Instance</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sphere</span><span class="p">,</span>
+        <span class="nn">linalg</span><span class="p">::</span><span class="nn">Transform</span><span class="p">::</span><span class="nf">translate</span><span class="p">(</span><span class="o">&amp;</span><span class="nn">linalg</span><span class="p">::</span><span class="nn">Vector</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)));</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="n">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="n">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="n">px</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="k">as</span> <span class="nb">f32</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="k">as</span> <span class="nb">f32</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">);</span>
+            <span class="k">let</span> <span class="k">mut</span> <span class="n">ray</span> <span class="o">=</span> <span class="n">camera</span><span class="nf">.generate_ray</span><span class="p">(</span><span class="n">px</span><span class="p">);</span>
+            <span class="k">match</span> <span class="n">instance</span><span class="nf">.intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">ray</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nf">Some</span><span class="p">(</span><span class="mi">_</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="n">rt</span><span class="nf">.write</span><span class="p">(</span><span class="n">px</span><span class="na">.0</span><span class="p">,</span> <span class="n">px</span><span class="na">.1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nn">film</span><span class="p">::</span><span class="nn">Colorf</span><span class="p">::</span><span class="nf">broadcast</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)),</span>
+                <span class="nb">None</span> <span class="k">=&gt;</span> <span class="p">{},</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nn">film</span><span class="p">::</span><span class="nf">write_ppm</span><span class="p">(</span><span class="s">"out.ppm"</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">rt</span><span class="nf">.get_render</span><span class="p">()</span><span class="nf">.as_slice</span><span class="p">());</span>
+<span class="p">}</span></code></pre></figure>
 
-<p>The executable and library modules are built and the executable run with <code>cargo run</code>.
+<p>The executable and library modules are built and the executable run with <code class="language-plaintext highlighter-rouge">cargo run</code>.
 While the resulting image isn’t very impressive, we’re well on our way to writing a flexible
 physically based ray tracer.</p>
 
@@ -529,9 +530,6 @@ The code for the Rust ray tracer is MIT licensed and available on <a href="https
 
 
 		<hr>
-		<div class="col-12">
-			<p>Published: 30 December 2014</p>
-		</div>
 		<div class="col-12 row">
 			
 			<div class="col-md-6 justify-content-left">

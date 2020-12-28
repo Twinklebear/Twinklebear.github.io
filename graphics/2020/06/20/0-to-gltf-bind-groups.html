@@ -94,6 +94,7 @@
 
 <div class="row justify-content-center">
 	<div class="col-9">
+        <p>June 20, 2020</p>
 		
 <p>In this second post of the series we’ll learn about Bind Groups,
 which let us pass buffers and textures to our shaders.
@@ -157,25 +158,25 @@ or shader writeable buffers.</p>
 to as sets. Each bind group bound to a set contains some number of parameter bindings,
 which are mapped to the corresponding parameters in the shader.
 Uniform shader parameters in GLSL are annotated with the corresponding set and binding which will
-provide the underlying data for the parameter, using the <code>layout</code> qualifier.
+provide the underlying data for the parameter, using the <code class="language-plaintext highlighter-rouge">layout</code> qualifier.
 Here we’ll have a single set, set 0, which binds the uniform buffer containing our
 transform matrix to binding 0.
 The updated vertex shader that applies the transform passed through the uniform
 buffer to our vertices is shown below.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span></span><span class="cp">#version 450 core</span>
-
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec4</span> <span class="n">pos</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="cp">#version 450 core
+</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec4</span> <span class="n">pos</span><span class="p">;</span>
 <span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="kt">vec4</span> <span class="n">vcolor</span><span class="p">;</span>
 
-<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">out</span> <span class="kt">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">out</span> <span class="kt">vec4</span> <span class="n">fcolor</span><span class="p">;</span>
 
 <span class="c1">// Our uniform buffer containing the projection * view matrix</span>
-<span class="k">layout</span><span class="p">(</span><span class="n">set</span> <span class="o">=</span> <span class="mo">0</span><span class="p">,</span> <span class="n">binding</span> <span class="o">=</span> <span class="mo">0</span><span class="p">,</span> <span class="n">std140</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">ViewParams</span> <span class="p">{</span>
+<span class="k">layout</span><span class="p">(</span><span class="n">set</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">binding</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">std140</span><span class="p">)</span> <span class="k">uniform</span> <span class="n">ViewParams</span> <span class="p">{</span>
     <span class="kt">mat4</span> <span class="n">proj_view</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="kt">void</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">fcolor</span> <span class="o">=</span> <span class="n">vcolor</span><span class="p">;</span>
     <span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">proj_view</span> <span class="o">*</span> <span class="n">pos</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
@@ -187,10 +188,10 @@ As discussed last time, by fixing the
 configuration of inputs to the pipeline, the GPU can better optimize execution of
 the pipeline.
 The layouts of the bind groups which will be used in the pipeline
-are specified through an array of <a href="https://gpuweb.github.io/gpuweb/#bind-group-layout"><code>GPUBindGroupLayout</code></a>
-objects which are passed to <a href="https://gpuweb.github.io/gpuweb/#device-create-pipeline-layout"><code>createPipelineLayout</code></a>
-through the <code>bindGroupLayouts</code> member.
-The index of a bind group layout in the pipeline layout’s <code>bindGroupLayouts</code> array
+are specified through an array of <a href="https://gpuweb.github.io/gpuweb/#bind-group-layout"><code class="language-plaintext highlighter-rouge">GPUBindGroupLayout</code></a>
+objects which are passed to <a href="https://gpuweb.github.io/gpuweb/#device-create-pipeline-layout"><code class="language-plaintext highlighter-rouge">createPipelineLayout</code></a>
+through the <code class="language-plaintext highlighter-rouge">bindGroupLayouts</code> member.
+The index of a bind group layout in the pipeline layout’s <code class="language-plaintext highlighter-rouge">bindGroupLayouts</code> array
 is its set number in GLSL. The actual data associated with the binding points
 of each layout is specified separately, allowing re-use of the pipeline and
 layout with different inputs.
@@ -206,7 +207,7 @@ The bind group and pipeline layout which we’ll use in this post is illustrated
 	</i></figcaption>
 </figure>
 
-<p>The bind group layout is created through <a href="https://gpuweb.github.io/gpuweb/#GPUDevice-createBindGroupLayout"><code>createBindGroupLayout</code></a>,
+<p>The bind group layout is created through <a href="https://gpuweb.github.io/gpuweb/#GPUDevice-createBindGroupLayout"><code class="language-plaintext highlighter-rouge">createBindGroupLayout</code></a>,
 which takes a list of entries that the corresponding bind group used during rendering must contain.
 Each <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpubindgrouplayoutentry">entry</a> specifies the type
 of the parameter, which shader stages will be able to
@@ -215,20 +216,20 @@ After creating the bind group layout we use it to create our pipeline layout,
 specifying that pipelines created using the layout (i.e., our rendering pipeline)
 will use bind groups matching the bind group layouts specified.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Create the bind group layout</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create the bind group layout</span>
 <span class="kd">var</span> <span class="nx">bindGroupLayout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBindGroupLayout</span><span class="p">({</span>
-    <span class="nx">entries</span><span class="o">:</span> <span class="p">[</span>
+    <span class="na">entries</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="nx">binding</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="c1">// One or more stage flags, or&#39;d together</span>
-            <span class="nx">visibility</span><span class="o">:</span> <span class="nx">GPUShaderStage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">,</span>
-            <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;uniform-buffer&quot;</span>
+            <span class="na">binding</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="c1">// One or more stage flags, or'd together</span>
+            <span class="na">visibility</span><span class="p">:</span> <span class="nx">GPUShaderStage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uniform-buffer</span><span class="dl">"</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">});</span>
 
 <span class="c1">// Create the pipeline layout, specifying which bind group layouts will be used</span>
-<span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span><span class="nx">bindGroupLayouts</span><span class="o">:</span> <span class="p">[</span><span class="nx">bindGroupLayout</span><span class="p">]});</span></code></pre></figure>
+<span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span><span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[</span><span class="nx">bindGroupLayout</span><span class="p">]});</span></code></pre></figure>
 
 <h2 id="creating-a-uniform-buffer-and-bind-group">Creating a Uniform Buffer and Bind Group</h2>
 
@@ -237,30 +238,30 @@ as a uniform buffer (in our bind group), and a copy destination buffer.
 The latter usage will allow us to update the buffer’s data each frame
 by copying in a new view transform.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Create a buffer to store the view parameters</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create a buffer to store the view parameters</span>
 <span class="kd">var</span> <span class="nx">viewParamsBuffer</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
-    <span class="nx">size</span><span class="o">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
-    <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">UNIFORM</span> <span class="o">|</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_DST</span>
+    <span class="na">size</span><span class="p">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">UNIFORM</span> <span class="o">|</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_DST</span>
 <span class="p">});</span></code></pre></figure>
 
-<p>The <a href="https://gpuweb.github.io/gpuweb/#gpu-bind-group"><code>GPUBindGroup</code></a> specifies the
+<p>The <a href="https://gpuweb.github.io/gpuweb/#gpu-bind-group"><code class="language-plaintext highlighter-rouge">GPUBindGroup</code></a> specifies the
 actual buffers or textures which will be passed to the shaders. During
 rendering, each bind group is bound to the index of its corresponding layout in
-the pipeline’s <code>bindGroupLayouts</code> array.
+the pipeline’s <code class="language-plaintext highlighter-rouge">bindGroupLayouts</code> array.
 The bind group using our bind group layout passes our view parameter buffer at binding 0, matching the layout.
 For bind groups with multiple entries, the order of the entries specified in the
 layout and bind group do not
 need to match; however, for each binding index specified in the layout,
 a matching binding must be specified in the bind group.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Create a bind group which places our view params buffer at binding 0</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create a bind group which places our view params buffer at binding 0</span>
 <span class="kd">var</span> <span class="nx">bindGroup</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBindGroup</span><span class="p">({</span>
-    <span class="nx">layout</span><span class="o">:</span> <span class="nx">bindGroupLayout</span><span class="p">,</span>
-    <span class="nx">entries</span><span class="o">:</span> <span class="p">[</span>
+    <span class="na">layout</span><span class="p">:</span> <span class="nx">bindGroupLayout</span><span class="p">,</span>
+    <span class="na">entries</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="nx">binding</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="nx">resource</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">buffer</span><span class="o">:</span> <span class="nx">viewParamsBuffer</span>
+            <span class="na">binding</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="na">resource</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">buffer</span><span class="p">:</span> <span class="nx">viewParamsBuffer</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">]</span>
@@ -280,7 +281,7 @@ If you have your own preferred camera and controller code, you can also use that
 all we’ll need in the end is to update the view transform based on
 the user’s inputs.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="c1">// Create an Arcball camera and view projection matrix</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create an Arcball camera and view projection matrix</span>
 <span class="kd">var</span> <span class="nx">camera</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ArcballCamera</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
     <span class="mf">0.5</span><span class="p">,</span> <span class="p">[</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">]);</span>
 
@@ -309,36 +310,36 @@ the user’s inputs.</p>
 <p>With everything set up, all that’s left to do each frame is upload
 the new view transform, set our bind group, and render!
 After computing the combined projection and view matrix using
-the updated view transform (stored in <code>camera.camera</code>), we create a
+the updated view transform (stored in <code class="language-plaintext highlighter-rouge">camera.camera</code>), we create a
 mapped staging buffer to upload the transform to the GPU.
-In WebGPU, the <code>MAP_READ</code> and <code>MAP_WRITE</code> usage modes cannot be combined
-with any modes other than <code>COPY_DST</code> and <code>COPY_SRC</code>, respectively,
+In WebGPU, the <code class="language-plaintext highlighter-rouge">MAP_READ</code> and <code class="language-plaintext highlighter-rouge">MAP_WRITE</code> usage modes cannot be combined
+with any modes other than <code class="language-plaintext highlighter-rouge">COPY_DST</code> and <code class="language-plaintext highlighter-rouge">COPY_SRC</code>, respectively,
 and thus we cannot map back our view parameters buffer to write to it directly.
 For simplicity, each frame we’ll just create a new mapped buffer to
-upload our view transform. We set this buffer’s usage as <code>COPY_SRC</code>,
+upload our view transform. We set this buffer’s usage as <code class="language-plaintext highlighter-rouge">COPY_SRC</code>,
 meaning that we’ll use it to copy data from it into another buffer,
 i.e., into our uniform buffer.
 We then copy the uploaded view matrix into our uniform buffer
-by enqueuing a <a href="https://gpuweb.github.io/gpuweb/#GPUCommandEncoder-copyBufferToBuffer"><code>copyBufferToBuffer</code></a>
+by enqueuing a <a href="https://gpuweb.github.io/gpuweb/#GPUCommandEncoder-copyBufferToBuffer"><code class="language-plaintext highlighter-rouge">copyBufferToBuffer</code></a>
 command on the command encoder before beginning our rendering pass.
 In the rendering pass, we set the bind group to be used before rendering our triangle
-by calling <a href="https://gpuweb.github.io/gpuweb/#dom-gpuprogrammablepassencoder-setbindgroup"><code>setBindGroup</code></a>
+by calling <a href="https://gpuweb.github.io/gpuweb/#dom-gpuprogrammablepassencoder-setbindgroup"><code class="language-plaintext highlighter-rouge">setBindGroup</code></a>
 on the render pass, specifying the bind group set number to place our bind group at.
 After the command buffer is run we’ll have our triangle rendered with our
 view transform applied, as shown below!</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span></span><span class="kd">var</span> <span class="nx">frame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">frame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">renderPassDesc</span><span class="p">.</span><span class="nx">colorAttachments</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">attachment</span> <span class="o">=</span>
         <span class="nx">swapChain</span><span class="p">.</span><span class="nx">getCurrentTexture</span><span class="p">().</span><span class="nx">createView</span><span class="p">();</span>
 
     <span class="c1">// Compute and upload the combined projection and view matrix</span>
     <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">mul</span><span class="p">(</span><span class="nx">projView</span><span class="p">,</span> <span class="nx">projection</span><span class="p">,</span> <span class="nx">camera</span><span class="p">.</span><span class="nx">camera</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">upload</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
-        <span class="nx">size</span><span class="o">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
-        <span class="nx">usage</span><span class="o">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_SRC</span><span class="p">,</span>
-        <span class="nx">mappedAtCreation</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="na">size</span><span class="p">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_SRC</span><span class="p">,</span>
+        <span class="na">mappedAtCreation</span><span class="p">:</span> <span class="kc">true</span>
     <span class="p">});</span>
-    <span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">upload</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="nx">set</span><span class="p">(</span><span class="nx">projView</span><span class="p">);</span>
+    <span class="k">new</span> <span class="nb">Float32Array</span><span class="p">(</span><span class="nx">upload</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="kd">set</span><span class="p">(</span><span class="nx">projView</span><span class="p">);</span>
     <span class="nx">upload</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span>
 
     <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createCommandEncoder</span><span class="p">();</span>
@@ -393,14 +394,11 @@ or get in touch via <a href="https://twitter.com/_wusher">Twitter</a> or email.<
 
 <h2 id="update-824">Update 8/24</h2>
 
-<p>Updated from <code>device.createBufferMapped</code> to <code>device.createBuffer</code> with the <code>mappedAtCreation</code> parameter set.
+<p>Updated from <code class="language-plaintext highlighter-rouge">device.createBufferMapped</code> to <code class="language-plaintext highlighter-rouge">device.createBuffer</code> with the <code class="language-plaintext highlighter-rouge">mappedAtCreation</code> parameter set.
 See the <a href="https://hackmd.io/szV68rOVQ56GYzPJMBko8A#PSA-for-Chromium--Dawn-WebGPU-API-updates-2020-07-28">corresponding Dawn PSA about these changes in Chrome and WebGPU</a>.</p>
 
 
 		<hr>
-		<div class="col-12">
-			<p>Published: 20 June 2020</p>
-		</div>
 		<div class="col-12 row">
 			
 			<div class="col-md-6 justify-content-left">

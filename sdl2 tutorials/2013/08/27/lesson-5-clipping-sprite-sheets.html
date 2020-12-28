@@ -102,7 +102,7 @@ each time but rather just which subsection of the texture.</p>
 
 <!--more-->
 
-<p>In this lesson we’ll see how to select subsections of textures using <a href="http://wiki.libsdl.org/SDL_RenderCopy"><code>SDL_RenderCopy</code></a> and also see a bit on detecting specific key press events, which we’ll use to pick which section of 
+<p>In this lesson we’ll see how to select subsections of textures using <a href="http://wiki.libsdl.org/SDL_RenderCopy"><code class="language-plaintext highlighter-rouge">SDL_RenderCopy</code></a> and also see a bit on detecting specific key press events, which we’ll use to pick which section of 
 the texture to draw. The sprite sheet will contain four different colored circles:</p>
 
 <p><a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson5/image.png">
@@ -119,7 +119,7 @@ started!</p>
 
 <h2 id="selecting-a-subsection-of-an-image">Selecting a Subsection of an Image</h2>
 <p>Selecting the subsection of the texture that we want to draw is very easy with SDL. In Lesson 4, the remaining NULL
-parameter that we’re passing to <a href="http://wiki.libsdl.org/SDL_RenderCopy"><code>SDL_RenderCopy</code></a> is the source rect, 
+parameter that we’re passing to <a href="http://wiki.libsdl.org/SDL_RenderCopy"><code class="language-plaintext highlighter-rouge">SDL_RenderCopy</code></a> is the source rect, 
 which specifies the section of the texture we want to draw. When passing NULL we specify that we want the entire texture, 
 but we can easily add a clip rect and start drawing only portions of the texture. To do this we’ll be making 
 some modifications to our renderTexture function to make it able to take a desired clipping rect, but still
@@ -128,21 +128,21 @@ keep some of the shorter syntax and conveniences from before.</p>
 <h2 id="modifying-rendertexture">Modifying renderTexture</h2>
 <p>To keep from tacking on more and more parameters to our renderTexture function and still maintain the convenience
 the defaults provided we’ll split it up into two functions. One is practically an identical call
-to <code>SDL_RenderCopy</code> but provides the clip parameter with a default <code>nullptr</code> value. This version of renderTexture will take 
+to <code class="language-plaintext highlighter-rouge">SDL_RenderCopy</code> but provides the clip parameter with a default <code class="language-plaintext highlighter-rouge">nullptr</code> value. This version of renderTexture will take 
 the destination as rect instead, which we can setup ourselves or have constructed by one of our other specialized 
 renderTexture functions. The new base rendering function becomes very simple.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="cm">/**</span>
-<span class="cm">* Draw an SDL_Texture to an SDL_Renderer at some destination rect</span>
-<span class="cm">* taking a clip of the texture if desired</span>
-<span class="cm">* @param tex The source texture we want to draw</span>
-<span class="cm">* @param ren The renderer we want to draw to</span>
-<span class="cm">* @param dst The destination rectangle to render the texture to</span>
-<span class="cm">* @param clip The sub-section of the texture to draw (clipping rect)</span>
-<span class="cm">*		default of nullptr draws the entire texture</span>
-<span class="cm">*/</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/**
+* Draw an SDL_Texture to an SDL_Renderer at some destination rect
+* taking a clip of the texture if desired
+* @param tex The source texture we want to draw
+* @param ren The renderer we want to draw to
+* @param dst The destination rectangle to render the texture to
+* @param clip The sub-section of the texture to draw (clipping rect)
+*		default of nullptr draws the entire texture
+*/</span>
 <span class="kt">void</span> <span class="nf">renderTexture</span><span class="p">(</span><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">,</span> <span class="n">SDL_Rect</span> <span class="n">dst</span><span class="p">,</span>
-	<span class="n">SDL_Rect</span> <span class="o">*</span><span class="n">clip</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">)</span>
+	<span class="n">SDL_Rect</span> <span class="o">*</span><span class="n">clip</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="n">SDL_RenderCopy</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">tex</span><span class="p">,</span> <span class="n">clip</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dst</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
@@ -152,30 +152,30 @@ renderTexture functions. The new base rendering function becomes very simple.</p
 <p>It was also really nice when we didn’t need to create an SDL_Rect for our destination but could just provide
 an x and y position and have our rendering function fill in the width and height of the texture. We’ll create
 an overloaded version of renderTexture that will do this, with some tweaks to handle clipping. We’ll add
-the clip rect as a parameter with <code>nullptr</code> as a default value and in the case that a clip was passed, we’ll use 
+the clip rect as a parameter with <code class="language-plaintext highlighter-rouge">nullptr</code> as a default value and in the case that a clip was passed, we’ll use 
 the clip’s width and height instead of the texture’s width and height. This way we won’t stretch a small
 sprite to be the size of its potentially very large sprite sheet when it’s drawn. This function is a modification of 
 our original renderTexture function, and should look pretty similar.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="cm">/**</span>
-<span class="cm">* Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving</span>
-<span class="cm">* the texture&#39;s width and height and taking a clip of the texture if desired</span>
-<span class="cm">* If a clip is passed, the clip&#39;s width and height will be used instead of</span>
-<span class="cm">*	the texture&#39;s</span>
-<span class="cm">* @param tex The source texture we want to draw</span>
-<span class="cm">* @param ren The renderer we want to draw to</span>
-<span class="cm">* @param x The x coordinate to draw to</span>
-<span class="cm">* @param y The y coordinate to draw to</span>
-<span class="cm">* @param clip The sub-section of the texture to draw (clipping rect)</span>
-<span class="cm">*		default of nullptr draws the entire texture</span>
-<span class="cm">*/</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/**
+* Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
+* the texture's width and height and taking a clip of the texture if desired
+* If a clip is passed, the clip's width and height will be used instead of
+*	the texture's
+* @param tex The source texture we want to draw
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
+* @param clip The sub-section of the texture to draw (clipping rect)
+*		default of nullptr draws the entire texture
+*/</span>
 <span class="kt">void</span> <span class="nf">renderTexture</span><span class="p">(</span><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span>
-	<span class="n">SDL_Rect</span> <span class="o">*</span><span class="n">clip</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">)</span>
+	<span class="n">SDL_Rect</span> <span class="o">*</span><span class="n">clip</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="n">SDL_Rect</span> <span class="n">dst</span><span class="p">;</span>
 	<span class="n">dst</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
 	<span class="n">dst</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
-	<span class="k">if</span> <span class="p">(</span><span class="n">clip</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">clip</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">dst</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">clip</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
 		<span class="n">dst</span><span class="p">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">clip</span><span class="o">-&gt;</span><span class="n">h</span><span class="p">;</span>
 	<span class="p">}</span>
@@ -199,8 +199,8 @@ clip width and height, which is uniform (100x100). Finally we pick a clip to sta
 <p>We also would like to draw our clips in the center of the screen, so we compute those x and y coordinates using
 the clip’s width and height instead of the texture’s.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="c1">//iW and iH are the clip width and height</span>
-<span class="c1">//We&#39;ll be drawing only clips so get a center position for the w/h of a clip</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//iW and iH are the clip width and height</span>
+<span class="c1">//We'll be drawing only clips so get a center position for the w/h of a clip</span>
 <span class="kt">int</span> <span class="n">iW</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">iH</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">SCREEN_WIDTH</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">iW</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">SCREEN_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">iH</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
@@ -225,36 +225,36 @@ the clips easily.</p>
 <h2 id="changing-clips-based-on-input">Changing Clips Based on Input</h2>
 <p>In order to examine all the clips we’ve created we’ll add some key input handling to our event loop and will
 make the keys 1-4 select which clip we want to display. To determine if a key press happened we can check
-if our event is of the type <code>SDL_KEYDOWN</code> and if it is we can check if the key pressed was one of the keys we’re interested
-in by checking the keycode information in the event, <code>e.key.keysym.sym</code>.
+if our event is of the type <code class="language-plaintext highlighter-rouge">SDL_KEYDOWN</code> and if it is we can check if the key pressed was one of the keys we’re interested
+in by checking the keycode information in the event, <code class="language-plaintext highlighter-rouge">e.key.keysym.sym</code>.
 A full list of <a href="http://wiki.libsdl.org/SDL_EventType">event types</a>, <a href="http://wiki.libsdl.org/SDL_Keycode">key codes</a>
-and other <a href="http://wiki.libsdl.org/SDL_Event"><code>SDL_Event</code></a> information is available in the wiki.</p>
+and other <a href="http://wiki.libsdl.org/SDL_Event"><code class="language-plaintext highlighter-rouge">SDL_Event</code></a> information is available in the wiki.</p>
 
 <p>When we receive the key input we’re interested in we’ll need to update the value of useClip to match the clip
 we want to draw. With these additions our event loop will become:</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">while</span> <span class="p">(</span><span class="n">SDL_PollEvent</span><span class="p">(</span><span class="o">&amp;</span><span class="n">e</span><span class="p">)){</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">while</span> <span class="p">(</span><span class="n">SDL_PollEvent</span><span class="p">(</span><span class="o">&amp;</span><span class="n">e</span><span class="p">)){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDL_QUIT</span><span class="p">)</span>
 		<span class="n">quit</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 	<span class="c1">//Use number input to select which clip should be drawn</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDL_KEYDOWN</span><span class="p">){</span>
 		<span class="k">switch</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">key</span><span class="p">.</span><span class="n">keysym</span><span class="p">.</span><span class="n">sym</span><span class="p">){</span>
-			<span class="k">case</span> <span class="nl">SDLK_1</span><span class="p">:</span>
+			<span class="k">case</span> <span class="n">SDLK_1</span><span class="p">:</span>
 				<span class="n">useClip</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 				<span class="k">break</span><span class="p">;</span>
-			<span class="k">case</span> <span class="nl">SDLK_2</span><span class="p">:</span>
+			<span class="k">case</span> <span class="n">SDLK_2</span><span class="p">:</span>
 				<span class="n">useClip</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 				<span class="k">break</span><span class="p">;</span>
-			<span class="k">case</span> <span class="nl">SDLK_3</span><span class="p">:</span>
+			<span class="k">case</span> <span class="n">SDLK_3</span><span class="p">:</span>
 				<span class="n">useClip</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 				<span class="k">break</span><span class="p">;</span>
-			<span class="k">case</span> <span class="nl">SDLK_4</span><span class="p">:</span>
+			<span class="k">case</span> <span class="n">SDLK_4</span><span class="p">:</span>
 				<span class="n">useClip</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 				<span class="k">break</span><span class="p">;</span>
-			<span class="k">case</span> <span class="nl">SDLK_ESCAPE</span><span class="p">:</span>
+			<span class="k">case</span> <span class="n">SDLK_ESCAPE</span><span class="p">:</span>
 				<span class="n">quit</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 				<span class="k">break</span><span class="p">;</span>
-			<span class="k">default</span><span class="o">:</span>
+			<span class="nl">default:</span>
 				<span class="k">break</span><span class="p">;</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
@@ -267,7 +267,7 @@ we want to draw. With these additions our event loop will become:</p>
 version of renderTexture to draw the clip without any extra scaling and passing in the clip we want to use
 (the one at useClip).</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="n">SDL_RenderClear</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">SDL_RenderClear</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span>
 <span class="n">renderTexture</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">clips</span><span class="p">[</span><span class="n">useClip</span><span class="p">]);</span>
 <span class="n">SDL_RenderPresent</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span></code></pre></figure>
 

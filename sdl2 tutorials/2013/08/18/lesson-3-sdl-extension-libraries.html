@@ -127,55 +127,55 @@ You’ll also need to copy the SDL2_image, zlib and any image format dlls (such 
 
 <h4 id="cmake">Cmake</h4>
 <p>Grab the appropriate module from <a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/cmake">the repo</a>
-and add it to your CMake modules directory (<code>cmake/</code>). You can then look up the new extension library using the same
-<code>find_package</code> method used to find SDL2 and include <code>SDL_image.h</code> in your source file.</p>
+and add it to your CMake modules directory (<code class="language-plaintext highlighter-rouge">cmake/</code>). You can then look up the new extension library using the same
+<code class="language-plaintext highlighter-rouge">find_package</code> method used to find SDL2 and include <code class="language-plaintext highlighter-rouge">SDL_image.h</code> in your source file.</p>
 
-<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">SDL2_image</span> <span class="s">REQUIRED</span><span class="p">)</span>
-<span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">SDL2_IMAGE_INCLUDE_DIR</span><span class="o">}</span><span class="p">)</span>
-<span class="c"># Link this lesson against SDL2 and SDL2_image</span>
-<span class="nb">add_executable</span><span class="p">(</span><span class="s">Lesson3</span> <span class="s">src/main.cpp</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">Lesson3</span> <span class="o">${</span><span class="nv">SDL2_LIBRARY</span><span class="o">}</span> <span class="o">${</span><span class="nv">SDL2_IMAGE_LIBRARY</span><span class="o">}</span><span class="p">)</span>
-<span class="c"># Install target is the same as before</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-cmake" data-lang="cmake"><span class="nb">find_package</span><span class="p">(</span>SDL2_image REQUIRED<span class="p">)</span>
+<span class="nb">include_directories</span><span class="p">(</span><span class="si">${</span><span class="nv">SDL2_IMAGE_INCLUDE_DIR</span><span class="si">}</span><span class="p">)</span>
+<span class="c1"># Link this lesson against SDL2 and SDL2_image</span>
+<span class="nb">add_executable</span><span class="p">(</span>Lesson3 src/main.cpp<span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span>Lesson3 <span class="si">${</span><span class="nv">SDL2_LIBRARY</span><span class="si">}</span> <span class="si">${</span><span class="nv">SDL2_IMAGE_LIBRARY</span><span class="si">}</span><span class="p">)</span>
+<span class="c1"># Install target is the same as before</span></code></pre></figure>
 
 <p><br /></p>
 
 <h4 id="visual-studio">Visual Studio</h4>
-<p>Include <code>SDL_image.h</code> and add <code>SDL2_image.lib</code> to your linker dependencies.</p>
+<p>Include <code class="language-plaintext highlighter-rouge">SDL_image.h</code> and add <code class="language-plaintext highlighter-rouge">SDL2_image.lib</code> to your linker dependencies.</p>
 
 <h4 id="gcc-or-clang-on-linux-and-mingw-on-windows">GCC or Clang on Linux and MinGW on Windows</h4>
-<p>Include <code>SDL2/SDL_image.h</code> and add <code>-lSDL2_image</code> to the <code>SDLLIB</code> variable in your makefile.</p>
+<p>Include <code class="language-plaintext highlighter-rouge">SDL2/SDL_image.h</code> and add <code class="language-plaintext highlighter-rouge">-lSDL2_image</code> to the <code class="language-plaintext highlighter-rouge">SDLLIB</code> variable in your makefile.</p>
 
 <h4 id="clang-on-mac">Clang on Mac</h4>
-<p>Include <code>SDL2_image/SDL_image.h</code> and add <code>-framework SDL2_image</code> to the <code>SDL</code> variable in your makefile.</p>
+<p>Include <code class="language-plaintext highlighter-rouge">SDL2_image/SDL_image.h</code> and add <code class="language-plaintext highlighter-rouge">-framework SDL2_image</code> to the <code class="language-plaintext highlighter-rouge">SDL</code> variable in your makefile.</p>
 
 <h2 id="setting-up-tile-properties">Setting up Tile Properties</h2>
 <p>In this lesson we’ll see how to load images with SDL_image along with looking into scaling our textures when
 they’re drawn and come up with a method to place tiles based on the window size and the tile size. To do this
 we’ll need to define a tile size constant, which we’ll add below our window constants.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">const</span> <span class="kt">int</span> <span class="n">SCREEN_WIDTH</span>  <span class="o">=</span> <span class="mi">640</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">const</span> <span class="kt">int</span> <span class="n">SCREEN_WIDTH</span>  <span class="o">=</span> <span class="mi">640</span><span class="p">;</span>
 <span class="k">const</span> <span class="kt">int</span> <span class="n">SCREEN_HEIGHT</span> <span class="o">=</span> <span class="mi">480</span><span class="p">;</span>
-<span class="c1">//We&#39;ll just be using square tiles for now</span>
+<span class="c1">//We'll just be using square tiles for now</span>
 <span class="k">const</span> <span class="kt">int</span> <span class="n">TILE_SIZE</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span></code></pre></figure>
 
 <p><br /></p>
 
 <h2 id="loading-textures-with-sdl_image">Loading Textures with SDL_image</h2>
 <p>SDL_image lets us load multiple types of images along with allowing us to load them directly to an SDL_Texture
-with <code>IMG_LoadTexture</code>. With this function almost all of our <code>loadTexture</code> code can be replaced and now
-we call <code>IMG_LoadTexture</code> to load the texture, check for errors and return. 
-We can still use <code>logSDLError</code> to log errors from the SDL_image library as the <a href="http://www.libsdl.org/projects/SDL_image/docs/SDL_image.html#SEC45"><code>IMG_GetError</code></a> function is just a <a href="http://hg.libsdl.org/SDL_image/file/fa3faec630de/SDL_image.h#l137">define</a> of <code>SDL_GetError</code>.</p>
+with <code class="language-plaintext highlighter-rouge">IMG_LoadTexture</code>. With this function almost all of our <code class="language-plaintext highlighter-rouge">loadTexture</code> code can be replaced and now
+we call <code class="language-plaintext highlighter-rouge">IMG_LoadTexture</code> to load the texture, check for errors and return. 
+We can still use <code class="language-plaintext highlighter-rouge">logSDLError</code> to log errors from the SDL_image library as the <a href="http://www.libsdl.org/projects/SDL_image/docs/SDL_image.html#SEC45"><code class="language-plaintext highlighter-rouge">IMG_GetError</code></a> function is just a <a href="http://hg.libsdl.org/SDL_image/file/fa3faec630de/SDL_image.h#l137">define</a> of <code class="language-plaintext highlighter-rouge">SDL_GetError</code>.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="cm">/**</span>
-<span class="cm">* Loads an image into a texture on the rendering device</span>
-<span class="cm">* @param file The image file to load</span>
-<span class="cm">* @param ren The renderer to load the texture onto</span>
-<span class="cm">* @return the loaded texture, or nullptr if something went wrong.</span>
-<span class="cm">*/</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/**
+* Loads an image into a texture on the rendering device
+* @param file The image file to load
+* @param ren The renderer to load the texture onto
+* @return the loaded texture, or nullptr if something went wrong.
+*/</span>
 <span class="n">SDL_Texture</span><span class="o">*</span> <span class="nf">loadTexture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">){</span>
 	<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">texture</span> <span class="o">=</span> <span class="n">IMG_LoadTexture</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">file</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-	<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">){</span>
-		<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">&quot;LoadTexture&quot;</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
+		<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"LoadTexture"</span><span class="p">);</span>
 	<span class="p">}</span>
 	<span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
@@ -187,22 +187,22 @@ We can still use <code>logSDLError</code> to log errors from the SDL_image libra
 destination rectangle that differ from the texture’s width and height. However it’s also common to 
 draw the textures without any scaling applied and it’d be a real pain if we had to specify the width
 and height each time we wanted to draw without scaling. 
-To get around this we’ll create two versions of <code>renderTexture</code>.
+To get around this we’ll create two versions of <code class="language-plaintext highlighter-rouge">renderTexture</code>.
 One will take the width and height along with the other parameters while another version will mirror our original
 and will use the texture’s width and height for the destination.</p>
 
 <p>To set the texture’s width and height for drawing we simply write the width and height we want to the destination rect’s width and height fields instead of getting them from the texture.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="cm">/**</span>
-<span class="cm">* Draw an SDL_Texture to an SDL_Renderer at position x, y, with some desired</span>
-<span class="cm">* width and height</span>
-<span class="cm">* @param tex The source texture we want to draw</span>
-<span class="cm">* @param ren The renderer we want to draw to</span>
-<span class="cm">* @param x The x coordinate to draw to</span>
-<span class="cm">* @param y The y coordinate to draw to</span>
-<span class="cm">* @param w The width of the texture to draw</span>
-<span class="cm">* @param h The height of the texture to draw</span>
-<span class="cm">*/</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/**
+* Draw an SDL_Texture to an SDL_Renderer at position x, y, with some desired
+* width and height
+* @param tex The source texture we want to draw
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
+* @param w The width of the texture to draw
+* @param h The height of the texture to draw
+*/</span>
 <span class="kt">void</span> <span class="nf">renderTexture</span><span class="p">(</span><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">){</span>
 	<span class="c1">//Setup the destination rectangle to be at the position we want</span>
 	<span class="n">SDL_Rect</span> <span class="n">dst</span><span class="p">;</span>
@@ -216,16 +216,16 @@ and will use the texture’s width and height for the destination.</p>
 <p><br /></p>
 
 <p>We’ll also create a function that provides the old functionality of drawing the texture without any scaling. This
-function will just get the width and height from the texture then call our new <code>renderTexture</code> function.</p>
+function will just get the width and height from the texture then call our new <code class="language-plaintext highlighter-rouge">renderTexture</code> function.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="cm">/**</span>
-<span class="cm">* Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving</span>
-<span class="cm">* the texture&#39;s width and height</span>
-<span class="cm">* @param tex The source texture we want to draw</span>
-<span class="cm">* @param ren The renderer we want to draw to</span>
-<span class="cm">* @param x The x coordinate to draw to</span>
-<span class="cm">* @param y The y coordinate to draw to</span>
-<span class="cm">*/</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/**
+* Draw an SDL_Texture to an SDL_Renderer at position x, y, preserving
+* the texture's width and height
+* @param tex The source texture we want to draw
+* @param ren The renderer we want to draw to
+* @param x The x coordinate to draw to
+* @param y The y coordinate to draw to
+*/</span>
 <span class="kt">void</span> <span class="nf">renderTexture</span><span class="p">(</span><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
 	<span class="kt">int</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>
 	<span class="n">SDL_QueryTexture</span><span class="p">(</span><span class="n">tex</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">w</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">h</span><span class="p">);</span>
@@ -239,12 +239,12 @@ function will just get the width and height from the texture then call our new <
 subsystem, however this will cause some delay in loading the image since SDL_image will have to perform
 its initialization setup first. If you’d like to initialize SDL_image earlier
 to avoid the delay when loading an image type for the first time you can do so with 
-<a href="http://www.libsdl.org/projects/SDL_image/docs/SDL_image.html#SEC8"><code>IMG_Init</code></a>. <code>IMG_Init</code> will return
+<a href="http://www.libsdl.org/projects/SDL_image/docs/SDL_image.html#SEC8"><code class="language-plaintext highlighter-rouge">IMG_Init</code></a>. <code class="language-plaintext highlighter-rouge">IMG_Init</code> will return
 a bitmask of all the currently initialized image loaders, so we’ll perform an and with the flags we passed
 to see if initialization was successful. Here we only initialize the PNG loader since that’s all we’ll need for this lesson. This initialization should be done after initializing SDL.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">if</span> <span class="p">((</span><span class="n">IMG_Init</span><span class="p">(</span><span class="n">IMG_INIT_PNG</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">IMG_INIT_PNG</span><span class="p">)</span> <span class="o">!=</span> <span class="n">IMG_INIT_PNG</span><span class="p">){</span>
-	<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">&quot;IMG_Init&quot;</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">if</span> <span class="p">((</span><span class="n">IMG_Init</span><span class="p">(</span><span class="n">IMG_INIT_PNG</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">IMG_INIT_PNG</span><span class="p">)</span> <span class="o">!=</span> <span class="n">IMG_INIT_PNG</span><span class="p">){</span>
+	<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"IMG_Init"</span><span class="p">);</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
 	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
@@ -270,14 +270,14 @@ We’ll also demonstrate that PNG transparency is preserved by using a foregroun
 	</a>
 </figure>
 
-<p>The images are loaded exactly the same with our <code>loadTexture</code> function. Be sure to update the file paths to match
+<p>The images are loaded exactly the same with our <code class="language-plaintext highlighter-rouge">loadTexture</code> function. Be sure to update the file paths to match
 your project structure.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">resPath</span> <span class="o">=</span> <span class="n">getResourcePath</span><span class="p">(</span><span class="s">&quot;Lesson3&quot;</span><span class="p">);</span>
-<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">background</span> <span class="o">=</span> <span class="n">loadTexture</span><span class="p">(</span><span class="n">resPath</span> <span class="o">+</span> <span class="s">&quot;background.png&quot;</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
-<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="n">loadTexture</span><span class="p">(</span><span class="n">resPath</span> <span class="o">+</span> <span class="s">&quot;image.png&quot;</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">resPath</span> <span class="o">=</span> <span class="n">getResourcePath</span><span class="p">(</span><span class="s">"Lesson3"</span><span class="p">);</span>
+<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">background</span> <span class="o">=</span> <span class="n">loadTexture</span><span class="p">(</span><span class="n">resPath</span> <span class="o">+</span> <span class="s">"background.png"</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
+<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="n">loadTexture</span><span class="p">(</span><span class="n">resPath</span> <span class="o">+</span> <span class="s">"image.png"</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
 <span class="c1">//Make sure they both loaded ok</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">background</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">image</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">){</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">background</span> <span class="o">==</span> <span class="nb">nullptr</span> <span class="o">||</span> <span class="n">image</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 	<span class="n">cleanup</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">window</span><span class="p">);</span>
 	<span class="n">IMG_Quit</span><span class="p">();</span>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
@@ -291,30 +291,30 @@ your project structure.</p>
 positions out by hand would be a real pain. Instead let’s generate the tile draw positions to fill the screen
 by using some math!</p>
 
-<p>We can determine how many tiles each row will need by dividing the <code>SCREEN_WIDTH</code> by the <code>TILE_SIZE</code>. To determine
-the number of tiles per column we can do the same thing but for the <code>SCREEN_HEIGHT</code>. Since we’ll be filling a square
-area of tiles the total number of tiles will be <code>tiles_per_row * tiles_per_col</code>. We could use a single for 
+<p>We can determine how many tiles each row will need by dividing the <code class="language-plaintext highlighter-rouge">SCREEN_WIDTH</code> by the <code class="language-plaintext highlighter-rouge">TILE_SIZE</code>. To determine
+the number of tiles per column we can do the same thing but for the <code class="language-plaintext highlighter-rouge">SCREEN_HEIGHT</code>. Since we’ll be filling a square
+area of tiles the total number of tiles will be <code class="language-plaintext highlighter-rouge">tiles_per_row * tiles_per_col</code>. We could use a single for 
 loop to run through all the tiles, or nested for loops to fill each tile in a row for each row. I’ve chosen to go with a single loop.</p>
 
 <p>In the loop we compute the x and y indices of the tile to determine where it should be placed. Since we’re drawing
 row by row in this method the x index will repeat each row, while the y index will increment after each row is filled
 and we move down to the next row.
 Thus we can calculate the x index using the absolute tile index modded with the number of tiles per row:
-<code>x = tile_idx % tiles_per_row</code>.</p>
+<code class="language-plaintext highlighter-rouge">x = tile_idx % tiles_per_row</code>.</p>
 
-<p>For example, if we were drawing a 2x2 grid of tiles we’d expect tile 0 to have the same x index as tile 2, which with this method it will: <code>0 % 2 == 0</code> and <code>2 % 2 == 0</code>.</p>
+<p>For example, if we were drawing a 2x2 grid of tiles we’d expect tile 0 to have the same x index as tile 2, which with this method it will: <code class="language-plaintext highlighter-rouge">0 % 2 == 0</code> and <code class="language-plaintext highlighter-rouge">2 % 2 == 0</code>.</p>
 
-<p>The y index should increase after an entire row of tiles has been placed, so every <code>tiles_per_row</code> tiles. Since we’re using integers
-we can take advantage of integer truncation and compute this as <code>y = tile_idx / tiles_per_row</code>. So on our 2x2
-grid example: row 0 will have tiles 0 and 1: <code>0/2 == 0</code> and <code>1/2 == 0</code>, 
-and row 1 will have tiles 2 and 3: <code>2/2 == 1</code> and <code>3/2 == 1</code> giving the correct y indices.</p>
+<p>The y index should increase after an entire row of tiles has been placed, so every <code class="language-plaintext highlighter-rouge">tiles_per_row</code> tiles. Since we’re using integers
+we can take advantage of integer truncation and compute this as <code class="language-plaintext highlighter-rouge">y = tile_idx / tiles_per_row</code>. So on our 2x2
+grid example: row 0 will have tiles 0 and 1: <code class="language-plaintext highlighter-rouge">0/2 == 0</code> and <code class="language-plaintext highlighter-rouge">1/2 == 0</code>, 
+and row 1 will have tiles 2 and 3: <code class="language-plaintext highlighter-rouge">2/2 == 1</code> and <code class="language-plaintext highlighter-rouge">3/2 == 1</code> giving the correct y indices.</p>
 
 <p>All that’s left to do is convert the indices into the pixel coordinates of the tile, which is done by multiplying
 the x and y indices by the tile size, and our tiling loop is done!</p>
 
 <p><strong>Note:</strong> All of this rendering code will be placed within our main loop, similar to lesson 1.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="c1">//Determine how many tiles we&#39;ll need to fill the screen</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//Determine how many tiles we'll need to fill the screen</span>
 <span class="kt">int</span> <span class="n">xTiles</span> <span class="o">=</span> <span class="n">SCREEN_WIDTH</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">yTiles</span> <span class="o">=</span> <span class="n">SCREEN_HEIGHT</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">;</span>
 
@@ -331,7 +331,7 @@ the x and y indices by the tile size, and our tiling loop is done!</p>
 <h2 id="drawing-the-foreground">Drawing the Foreground</h2>
 <p>Our foreground image is drawn the same as before, centered in the screen.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="kt">int</span> <span class="n">iW</span><span class="p">,</span> <span class="n">iH</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">int</span> <span class="n">iW</span><span class="p">,</span> <span class="n">iH</span><span class="p">;</span>
 <span class="n">SDL_QueryTexture</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">iW</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">iH</span><span class="p">);</span>
 <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">SCREEN_WIDTH</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">iW</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
 <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">SCREEN_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">iH</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
@@ -341,16 +341,16 @@ the x and y indices by the tile size, and our tiling loop is done!</p>
 
 <p>We’ll then present the renderer and wait a few seconds before exiting just as we did in Lesson 2.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="n">SDL_RenderPresent</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">SDL_RenderPresent</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span>
 <span class="n">SDL_Delay</span><span class="p">(</span><span class="mi">2000</span><span class="p">);</span></code></pre></figure>
 
 <p><br /></p>
 
 <h2 id="cleaning-up">Cleaning Up</h2>
 <p>Clean up is the same as in lesson 2 with one added line to quit SDL_image by calling 
-<a href="http://www.libsdl.org/projects/SDL_image/docs/SDL_image.html#SEC9"><code>IMG_Quit</code></a>.</p>
+<a href="http://www.libsdl.org/projects/SDL_image/docs/SDL_image.html#SEC9"><code class="language-plaintext highlighter-rouge">IMG_Quit</code></a>.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="n">cleanup</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">window</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">cleanup</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">window</span><span class="p">);</span>
 <span class="n">IMG_Quit</span><span class="p">();</span>
 <span class="n">SDL_Quit</span><span class="p">();</span></code></pre></figure>
 

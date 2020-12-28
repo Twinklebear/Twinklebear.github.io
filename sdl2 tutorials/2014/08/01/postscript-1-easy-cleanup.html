@@ -97,11 +97,11 @@
 		
 <p>In this quick postscript we’ll look into a simple way to clean up our various SDL resources with variadic templates
 and template specialization. This will let us clean up all our resources with a single simple call:
-<code>cleanup(texA, texB, renderer, window)</code> instead of calling all the corresponding <code>SDL_Destroy/Free*</code> functions,
+<code class="language-plaintext highlighter-rouge">cleanup(texA, texB, renderer, window)</code> instead of calling all the corresponding <code class="language-plaintext highlighter-rouge">SDL_Destroy/Free*</code> functions,
 saving ourselves a lot of typing.</p>
 
-<p>We’ll do this by creating a variadic function <code>cleanup</code> that will take the list of SDL resources to be free’d and then
-define specializations of it for each resource we’ll be passing, eg. for <code>SDL_Window</code>, <code>SDL_Renderer</code>, <code>SDL_Texture</code>
+<p>We’ll do this by creating a variadic function <code class="language-plaintext highlighter-rouge">cleanup</code> that will take the list of SDL resources to be free’d and then
+define specializations of it for each resource we’ll be passing, eg. for <code class="language-plaintext highlighter-rouge">SDL_Window</code>, <code class="language-plaintext highlighter-rouge">SDL_Renderer</code>, <code class="language-plaintext highlighter-rouge">SDL_Texture</code>
 and so on.</p>
 
 <!--more-->
@@ -115,54 +115,54 @@ calls one of our specialized cleanup functions and then recurses to iterate thro
 Since the code for this functionality is so short I’ve left the detailed explanations in the comments, so be sure to
 read through them.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="cp">#ifndef CLEANUP_H</span>
-<span class="cp">#define CLEANUP_H</span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;SDL.h&gt;</span><span class="cp"></span>
-
-<span class="cm">/*</span>
-<span class="cm"> * Recurse through the list of arguments to clean up, cleaning up</span>
-<span class="cm"> * the first one in the list each iteration.</span>
-<span class="cm"> */</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
-<span class="kt">void</span> <span class="n">cleanup</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span><span class="n">t</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">){</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#ifndef CLEANUP_H
+#define CLEANUP_H
+</span>
+<span class="cp">#include &lt;utility&gt;
+#include &lt;SDL.h&gt;
+</span>
+<span class="cm">/*
+ * Recurse through the list of arguments to clean up, cleaning up
+ * the first one in the list each iteration.
+ */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="nf">cleanup</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span><span class="n">t</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">){</span>
 	<span class="c1">//Cleanup the first item in the list</span>
 	<span class="n">cleanup</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
 	<span class="c1">//Recurse to clean up the remaining arguments</span>
 	<span class="n">cleanup</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
 <span class="p">}</span>
-<span class="cm">/*</span>
-<span class="cm"> * These specializations serve to free the passed argument and also provide the</span>
-<span class="cm"> * base cases for the recursive call above, eg. when args is only a single item</span>
-<span class="cm"> * one of the specializations below will be called by</span>
-<span class="cm"> * cleanup(std::forward&lt;Args&gt;(args)...), ending the recursion</span>
-<span class="cm"> * We also make it safe to pass nullptrs to handle situations where we</span>
-<span class="cm"> * don&#39;t want to bother finding out which values failed to load (and thus are null)</span>
-<span class="cm"> * but rather just want to clean everything up and let cleanup sort it out</span>
-<span class="cm"> */</span>
-<span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="cm">/*
+ * These specializations serve to free the passed argument and also provide the
+ * base cases for the recursive call above, eg. when args is only a single item
+ * one of the specializations below will be called by
+ * cleanup(std::forward&lt;Args&gt;(args)...), ending the recursion
+ * We also make it safe to pass nullptrs to handle situations where we
+ * don't want to bother finding out which values failed to load (and thus are null)
+ * but rather just want to clean everything up and let cleanup sort it out
+ */</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
 <span class="kr">inline</span> <span class="kt">void</span> <span class="n">cleanup</span><span class="o">&lt;</span><span class="n">SDL_Window</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SDL_Window</span> <span class="o">*</span><span class="n">win</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">win</span><span class="p">){</span>
 		<span class="k">return</span><span class="p">;</span>
 	<span class="p">}</span>
 	<span class="n">SDL_DestroyWindow</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
 <span class="kr">inline</span> <span class="kt">void</span> <span class="n">cleanup</span><span class="o">&lt;</span><span class="n">SDL_Renderer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ren</span><span class="p">){</span>
 		<span class="k">return</span><span class="p">;</span>
 	<span class="p">}</span>
 	<span class="n">SDL_DestroyRenderer</span><span class="p">(</span><span class="n">ren</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
 <span class="kr">inline</span> <span class="kt">void</span> <span class="n">cleanup</span><span class="o">&lt;</span><span class="n">SDL_Texture</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">tex</span><span class="p">){</span>
 		<span class="k">return</span><span class="p">;</span>
 	<span class="p">}</span>
 	<span class="n">SDL_DestroyTexture</span><span class="p">(</span><span class="n">tex</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
 <span class="kr">inline</span> <span class="kt">void</span> <span class="n">cleanup</span><span class="o">&lt;</span><span class="n">SDL_Surface</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SDL_Surface</span> <span class="o">*</span><span class="n">surf</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">surf</span><span class="p">){</span>
 		<span class="k">return</span><span class="p">;</span>
@@ -176,12 +176,12 @@ read through them.</p>
 
 <h2 id="using-the-variadic-cleanup-function">Using the Variadic Cleanup Function</h2>
 <p>To see the usefulness of this cleanup utility let’s see how it compresses our calls to the various
-<code>SDL_Destroy/Free*</code> functions throughout <a href="/sdl2%20tutorials/2013/08/17/lesson-1-hello-world">Lesson 1</a>.
+<code class="language-plaintext highlighter-rouge">SDL_Destroy/Free*</code> functions throughout <a href="/sdl2%20tutorials/2013/08/17/lesson-1-hello-world">Lesson 1</a>.
 In lesson 1 if we found that our bitmap or texture wasn’t created successfully we’d need to destroy
-the renderer and window before quitting out of SDL and exiting with a failure code. With <code>cleanup</code>
+the renderer and window before quitting out of SDL and exiting with a failure code. With <code class="language-plaintext highlighter-rouge">cleanup</code>
 we can compress these two lines down to a single call.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="c1">//We compress these two lines down</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//We compress these two lines down</span>
 <span class="c1">//SDL_DestroyRenderer(ren);</span>
 <span class="c1">//SDL_DestroyWindow(win);</span>
 <span class="c1">//to a single cleanup call:</span>
@@ -190,9 +190,9 @@ we can compress these two lines down to a single call.</p>
 <p><br /></p>
 
 <p>We can also compress the three lines used to free all the resources (texture, renderer and window) at the end of
-Lesson 1 down into a single <code>cleanup</code> call, passing all the resources we want to free.</p>
+Lesson 1 down into a single <code class="language-plaintext highlighter-rouge">cleanup</code> call, passing all the resources we want to free.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="c1">//We compress these three lines down</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//We compress these three lines down</span>
 <span class="c1">//SDL_DestroyTexture(tex);</span>
 <span class="c1">//SDL_DestroyRenderer(ren);</span>
 <span class="c1">//SDL_DestroyWindow(win);</span>
@@ -201,10 +201,10 @@ Lesson 1 down into a single <code>cleanup</code> call, passing all the resources
 
 <p><br /></p>
 
-<p><code>cleanup</code> can also be used as a drop-in replacement for the various <code>SDL_Destroy/Free*</code> functions, although this
+<p><code class="language-plaintext highlighter-rouge">cleanup</code> can also be used as a drop-in replacement for the various <code class="language-plaintext highlighter-rouge">SDL_Destroy/Free*</code> functions, although this
 doesn’t really give us much benefit as far as compressing lines goes.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span></span><span class="c1">//Cleanup can also swap in for direct calls turning</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//Cleanup can also swap in for direct calls turning</span>
 <span class="c1">//SDL_FreeSurface(bmp);</span>
 <span class="c1">//into</span>
 <span class="n">cleanup</span><span class="p">(</span><span class="n">bmp</span><span class="p">);</span></code></pre></figure>
@@ -212,8 +212,8 @@ doesn’t really give us much benefit as far as compressing lines goes.</p>
 <p><br /></p>
 
 <h2 id="end-of-postscript">End of Postscript</h2>
-<p>That’s all for this postscript, try out <code>cleanup</code> yourself by converting your code from Lesson 1 to use it instead of
-calling all the <code>SDL_Destroy/Free*</code> functions manually. If you run into any issues or have any questions
+<p>That’s all for this postscript, try out <code class="language-plaintext highlighter-rouge">cleanup</code> yourself by converting your code from Lesson 1 to use it instead of
+calling all the <code class="language-plaintext highlighter-rouge">SDL_Destroy/Free*</code> functions manually. If you run into any issues or have any questions
 please post a comment below.</p>
 
 <p>I’ll see you again soon in

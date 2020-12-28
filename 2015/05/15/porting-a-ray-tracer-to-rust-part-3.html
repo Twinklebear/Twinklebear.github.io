@@ -94,6 +94,7 @@
 
 <div class="row justify-content-center">
 	<div class="col-9">
+        <p>May 15, 2015</p>
 		
 <p>It’s been a little while since my last post on tray_rust as I’ve been a busy with classes, but I’ve
 had a bit of free time to implement some extremely cool features. In this post we’ll look at porting over
@@ -225,24 +226,24 @@ the caller can run eg. intersection tests. Additionally we’d like to return wh
 (eg. this is information about the nearest hit triangle) and we’d like it to be possible for this function to be inlined as it will be
 called a lot in our rendering loop. Using Rust’s traits we can meet all these demands handily.</p>
 
-<p>We’ll start by putting together a <code>Boundable</code> trait for types that can report their bounds in space:</p>
+<p>We’ll start by putting together a <code class="language-plaintext highlighter-rouge">Boundable</code> trait for types that can report their bounds in space:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="c1">// Trait implemented by scene objects that can report an AABB describing their bounds</span>
-<span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Boundable</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Get an AABB reporting the object&#39;s bounds in space</span>
-<span class="w">    </span><span class="k">fn</span> <span class="nf">bounds</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">BBox</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// Trait implemented by scene objects that can report an AABB describing their bounds</span>
+<span class="k">pub</span> <span class="k">trait</span> <span class="n">Boundable</span> <span class="p">{</span>
+    <span class="c">// Get an AABB reporting the object's bounds in space</span>
+    <span class="k">fn</span> <span class="nf">bounds</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">BBox</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>Now we can put a constraint on the types that our BVH will accept:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">BVH</span><span class="o">&lt;</span><span class="n">T</span>: <span class="nc">Boundable</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">geometry</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">BVH</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Boundable</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">geometry</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">}</span>
 
-<span class="k">impl</span><span class="o">&lt;</span><span class="n">T</span>: <span class="nc">Boundable</span><span class="o">&gt;</span><span class="w"> </span><span class="n">BVH</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="p">...</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<span class="k">impl</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Boundable</span><span class="o">&gt;</span> <span class="n">BVH</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>Finally we can put together our intersection function for the BVH. This function will take a mutably borrowed ray and traverse it through the BVH,
 calling the user’s function on objects within leaf nodes that the ray enters, the user’s function will then return an Option type indicating if an
@@ -256,17 +257,17 @@ the caller’s function and we take it by value the compiler can even inline cal
 may be returning a reference to objects in the BVH in R and the compiler needs to know these references will be valid after
 the call. This actually turned out to be a tough error to work through and the Rust IRC channel was very helpful.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">intersect</span><span class="o">&lt;</span><span class="na">&#39;a</span><span class="p">,</span><span class="w"> </span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="na">&#39;a</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">ray</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">Ray</span><span class="p">,</span><span class="w"> </span><span class="n">f</span>: <span class="nc">F</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"></span>
-<span class="w">        </span><span class="k">where</span><span class="w"> </span><span class="n">F</span>: <span class="nb">Fn</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">Ray</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="na">&#39;a</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="n">intersect</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">R</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">'a</span> <span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span>
+        <span class="k">where</span> <span class="n">F</span><span class="p">:</span> <span class="nf">Fn</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span></code></pre></figure>
 
 <p>Now to traverse geometry in the BVH and intersect the instances or triangles within is as simple as passing a closure! For example,
-here’s the intersect call of a <code>BVH&lt;Instance&gt;</code> in scene.rs. Here our Fn takes a &amp;mut Ray and &amp;Instance and returns an Option<Intersection>
+here’s the intersect call of a <code class="language-plaintext highlighter-rouge">BVH&lt;Instance&gt;</code> in scene.rs. Here our Fn takes a &amp;mut Ray and &amp;Instance and returns an Option<Intersection>
 which represents the closest intersection with an instance found. The BVH will then traverse the hierarchy and call our function
 on the geometry in each leaf node that our ray enters.</Intersection></p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">ray</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">Ray</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Intersection</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="bp">self</span><span class="p">.</span><span class="n">bvh</span><span class="p">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span><span class="w"> </span><span class="o">|</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">|</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">r</span><span class="p">))</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Intersection</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">self</span><span class="py">.bvh</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span> <span class="p">|</span><span class="n">r</span><span class="p">,</span> <span class="n">i</span><span class="p">|</span> <span class="n">i</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+<span class="p">}</span></code></pre></figure>
 
 <h3 id="lifetime-errors-can-be-challenging-to-decipher">Lifetime Errors can be Challenging to Decipher</h3>
 <p>The hardest problems I encountered when writing the traversal were lifetime errors encountered in the course of trying
@@ -278,7 +279,7 @@ to see the compiler error yourself (this may change as the compiler on playpen i
 to make sense of the error I asked folks on the Rust IRC, who have always been
 extremely helpful. They pointed out that I need to tie the lifetime of the &amp;T passed to the caller’s Fn
 with the lifetime of the BVH itself, thus indicating to the compiler that the reference will be valid as
-long as the BVH is alive. This is done with the <code>'a</code> lifetime annotations in the intersect function signature.</p>
+long as the BVH is alive. This is done with the <code class="language-plaintext highlighter-rouge">'a</code> lifetime annotations in the intersect function signature.</p>
 
 <p>Without the help of people in IRC this probably would have taken much longer to figure out (if I could have figured it
 out at all). Since Rust is a very young language the documentation and compiler are still being worked on and I think
@@ -299,18 +300,18 @@ to store the Arc to each Vec this implementation is actually safe to use in gene
 I use a standard triangle intersection test from PBRT and after building
 a BVH on the mesh’s triangles we end up with a very simple mesh type. The struct is just a BVH containing its triangles:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Mesh</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">bvh</span>: <span class="nc">BVH</span><span class="o">&lt;</span><span class="n">Triangle</span><span class="o">&gt;</span><span class="p">,</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">Mesh</span> <span class="p">{</span>
+    <span class="n">bvh</span><span class="p">:</span> <span class="n">BVH</span><span class="o">&lt;</span><span class="n">Triangle</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>Testing the triangles of the mesh for intersection is the same as testing for intersections against Instances
-of geometry, but instead we return an <code>Option&lt;DifferentialGeometry&gt;</code>.</p>
+of geometry, but instead we return an <code class="language-plaintext highlighter-rouge">Option&lt;DifferentialGeometry&gt;</code>.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span></span><span class="k">impl</span><span class="w"> </span><span class="n">Geometry</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Mesh</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">ray</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">linalg</span>::<span class="n">Ray</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Option</span><span class="o">&lt;</span><span class="n">DifferentialGeometry</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">bvh</span><span class="p">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span><span class="w"> </span><span class="o">|</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">|</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">r</span><span class="p">))</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">impl</span> <span class="n">Geometry</span> <span class="k">for</span> <span class="n">Mesh</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nn">linalg</span><span class="p">::</span><span class="n">Ray</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">DifferentialGeometry</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.bvh</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span> <span class="p">|</span><span class="n">r</span><span class="p">,</span> <span class="n">i</span><span class="p">|</span> <span class="n">i</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <h3 id="publishing-crates-on-cargo">Publishing Crates on Cargo</h3>
 <p>Now that we can quickly intersect rays against triangle meshes lets load up some models and render them! The
@@ -325,8 +326,8 @@ Cargo is very smooth.</p>
 OBJ loader I use in my C++ projects, <a href="https://github.com/syoyo/tinyobjloader">tinyobjloader</a>. To figure out how
 to publish the crate online I followed <a href="http://doc.crates.io/crates-io.html#publishing-crates">the guide on publishing</a>
 and <a href="https://crates.io/crates/tobj">here it is</a>! Adding this library as dependency to tray_rust can be done
-by adding <code>tobj = "0.0.8"</code> to the <code>[dependencies]</code> list in the project’s Cargo.toml and the crate will be downloaded and available for use
-via <code>extern crate tobj;</code>.</p>
+by adding <code class="language-plaintext highlighter-rouge">tobj = "0.0.8"</code> to the <code class="language-plaintext highlighter-rouge">[dependencies]</code> list in the project’s Cargo.toml and the crate will be downloaded and available for use
+via <code class="language-plaintext highlighter-rouge">extern crate tobj;</code>.</p>
 
 <p>For some extra fun I used the Travis-CI integration discussed in Huon’s “Travis on the Train” series
 (<a href="http://huonw.github.io/blog/2015/04/helping-travis-catch-the-rustc-train/">part 1</a>,
@@ -354,7 +355,7 @@ where components are scaled by (1500, 1500, 1500 / 1.66) for (R, G, B) in the fi
 in the files are stored in little Endian double precision and in chunks, so all the red values come first, followed by green and then blue.
 To load these binary files I made use of the <a href="https://crates.io/crates/byteorder">byteorder crate</a>, which brings up another cool feature of Rust:
 extension traits. It’s possible for libraries to add new traits to existing types, extending them with new methods. This is kept in check
-by only having traits be in scope if you use them, eg. <code>use my_lib::CoolTrait</code> will make CoolTrait’s methods available on implementing types.
+by only having traits be in scope if you use them, eg. <code class="language-plaintext highlighter-rouge">use my_lib::CoolTrait</code> will make CoolTrait’s methods available on implementing types.
 The byteorder crate extends methods on types that implement <a href="http://doc.rust-lang.org/std/io/trait.Read.html">Read</a> with
 <a href="http://burntsushi.net/rustdoc/byteorder/trait.ReadBytesExt.html">ReadBytesExt</a>
 (see the Implementors section at the bottom) to add on typed binary io methods. This makes integrating new libraries with
@@ -427,9 +428,6 @@ The code for the Rust ray tracer is MIT licensed and available on <a href="https
 
 
 		<hr>
-		<div class="col-12">
-			<p>Published: 15 May 2015</p>
-		</div>
 		<div class="col-12 row">
 			
 			<div class="col-md-6 justify-content-left">
