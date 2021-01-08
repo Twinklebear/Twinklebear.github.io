@@ -173,7 +173,7 @@ and just use the primary ray group for the hit group, since we know it will neve
     <span class="o">|</span> <span class="n">RAY_FLAG_SKIP_CLOSEST_HIT_SHADER</span><span class="p">,</span>
     <span class="mh">0xff</span><span class="p">,</span>
     <span class="n">PRIMARY_RAY_TYPE</span><span class="p">,</span> <span class="c1">// Note: HG never called</span>
-    <span class="n">NUM_RAY_TYPES</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>                <span class="c1">// No HG's so we set HG stride = 1</span>
     <span class="n">OCCLUSION_RAY_TYPE</span><span class="p">,</span>
     <span class="n">shadow_ray</span><span class="p">,</span>
     <span class="n">shadow_hit</span><span class="p">);</span>
