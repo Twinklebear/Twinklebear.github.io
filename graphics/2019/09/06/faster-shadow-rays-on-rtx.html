@@ -161,12 +161,12 @@ and just use the primary ray group for the hit group, since we know it will neve
 
 <p>For example, in DXR/HLSL this would look like:</p>
 
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">ShadowPayload</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">OcclusionHitInfo</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">hit</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="c1">// Trace the shadow ray, assuming it is occluded</span>
-<span class="n">shadow_hit</span><span class="p">.</span><span class="n">hit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">occlusion_hit</span><span class="p">.</span><span class="n">hit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="n">TraceRay</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span>
     <span class="n">RAY_FLAG_FORCE_OPAQUE</span>
     <span class="o">|</span> <span class="n">RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH</span>
@@ -181,8 +181,8 @@ and just use the primary ray group for the hit group, since we know it will neve
 <span class="c1">// The shadow ray miss shader marks the ray as not occluded if</span>
 <span class="c1">// no hit was encountered</span>
 <span class="p">[</span><span class="n">shader</span><span class="p">(</span><span class="s">"miss"</span><span class="p">)]</span>
-<span class="kt">void</span> <span class="nf">ShadowMiss</span><span class="p">(</span><span class="n">inout</span> <span class="n">ShadowHitInfo</span> <span class="n">shadow_hit</span> <span class="o">:</span> <span class="n">SV_RayPayload</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">shadow_hit</span><span class="p">.</span><span class="n">hit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">ShadowMiss</span><span class="p">(</span><span class="n">inout</span> <span class="n">OcclusionHitInfo</span> <span class="n">occlusion</span> <span class="o">:</span> <span class="n">SV_RayPayload</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">occlusion</span><span class="p">.</span><span class="n">hit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
 <h3 id="benchmarks">Benchmarks</h3>
