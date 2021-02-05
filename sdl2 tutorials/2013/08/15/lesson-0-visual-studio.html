@@ -122,7 +122,7 @@ edit panel through the down arrow at the right side of the box.</p>
 <br /></p>
 
 <p>Add a new folder to this window and navigate to your SDL include directory. If you put
-your SDL development files under <code class="language-plaintext highlighter-rouge">C:\</code> your include directories panel will look like this
+your SDL development files under <code class="highlighter-rouge">C:\</code> your include directories panel will look like this
 after you’ve selected the include directory correctly.</p>
 
 <p><br />
@@ -136,7 +136,7 @@ after you’ve selected the include directory correctly.</p>
 and open the <strong>General</strong> page. To add the library path select <strong>Additional Library Directories</strong>
 and add the lib path, selecting either the 32bit (x86) or 64bit (x64) version of the library.
 I’ve chosen to use the 32bit version for this tutorial series. After setting the
-path your entry should look like this if SDL is under <code class="language-plaintext highlighter-rouge">C:\</code> and you chose the 32bit libraries.</p>
+path your entry should look like this if SDL is under <code class="highlighter-rouge">C:\</code> and you chose the 32bit libraries.</p>
 
 <p><br />
 <a href="/assets/img/lesson_0_vs/library_path_set.png">
@@ -146,7 +146,7 @@ path your entry should look like this if SDL is under <code class="language-plai
 
 <h2 id="adding-the-library-dependencies">Adding the Library Dependencies</h2>
 <p>Now we’ll add the libraries themselves as dependencies. Switch to the <strong>Input</strong> page and open
-the <strong>Additional Dependencies</strong> entry’s edit panel and add <code class="language-plaintext highlighter-rouge">SDL2.lib; SDL2main.lib</code>.
+the <strong>Additional Dependencies</strong> entry’s edit panel and add <code class="highlighter-rouge">SDL2.lib; SDL2main.lib</code>.
 Once you’ve done this your Input page should look like so:</p>
 
 <p><br />
@@ -175,7 +175,7 @@ applications be sure to select Windows so your users don’t have a console wind
 <a href="https://wiki.libsdl.org/SDL_Init">initialize</a> the SDL video subsystem, check for any
 <a href="https://wiki.libsdl.org/SDL_GetError">errors</a> and then <a href="https://wiki.libsdl.org/SDL_Quit">quit</a>.
 Before we can run this program we’ll need to copy the
-SDL binary into our executable’s directory. <code class="language-plaintext highlighter-rouge">SDL2.dll</code> can be found in the lib directory
+SDL binary into our executable’s directory. <code class="highlighter-rouge">SDL2.dll</code> can be found in the lib directory
 of your SDL folder under lib/(x86/x64), use the one for the architecture you linked against.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;

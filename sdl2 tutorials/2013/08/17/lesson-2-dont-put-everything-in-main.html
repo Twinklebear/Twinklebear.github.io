@@ -112,8 +112,8 @@ deciding how to position our images.</p>
 <h2 id="the-sdl-error-logger">The SDL Error Logger</h2>
 <p>Throughout lesson 1 we had a lot of repeated code used to print out error messages that was almost the same
 for each error, except for some different information about which function went wrong. We can improve on this
-with a more generic error logging function that can take any <code class="language-plaintext highlighter-rouge">std::ostream</code> to write to, a message to print
-and will write out the message along with the error message from <code class="language-plaintext highlighter-rouge">SDL_GetError</code> to the stream.</p>
+with a more generic error logging function that can take any <code class="highlighter-rouge">std::ostream</code> to write to, a message to print
+and will write out the message along with the error message from <code class="highlighter-rouge">SDL_GetError</code> to the stream.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/**
 * Log an SDL error with some error message to the output stream of our choice
@@ -128,16 +128,16 @@ and will write out the message along with the error message from <code class="la
 
 <h2 id="the-texture-loading-function">The Texture Loading Function</h2>
 <p>To wrap up the texture loading from lesson 1 we’ll create a function that takes a filepath to a BMP
-to load and the renderer to load the texture onto and returns the loaded <code class="language-plaintext highlighter-rouge">SDL_Texture*</code>.
+to load and the renderer to load the texture onto and returns the loaded <code class="highlighter-rouge">SDL_Texture*</code>.
 It’s also important that this function perform the same error checking we had previously and still return a
-<code class="language-plaintext highlighter-rouge">nullptr</code> in case of an error so that we know something went wrong. We’ll define the function <code class="language-plaintext highlighter-rouge">loadTexture</code>
+<code class="highlighter-rouge">nullptr</code> in case of an error so that we know something went wrong. We’ll define the function <code class="highlighter-rouge">loadTexture</code>
 to do this for us.</p>
 
-<p>First we initialize an <code class="language-plaintext highlighter-rouge">SDL_Texture*</code> to <code class="language-plaintext highlighter-rouge">nullptr</code> so that in case of an error a valid 
-<code class="language-plaintext highlighter-rouge">nullptr</code> is returned instead of a dangling pointer. Next we’ll load up the BMP as before and check for errors,
-using our new <code class="language-plaintext highlighter-rouge">logSDLError</code> function to print out any errors that occurred. If the surface loads ok we then
+<p>First we initialize an <code class="highlighter-rouge">SDL_Texture*</code> to <code class="highlighter-rouge">nullptr</code> so that in case of an error a valid 
+<code class="highlighter-rouge">nullptr</code> is returned instead of a dangling pointer. Next we’ll load up the BMP as before and check for errors,
+using our new <code class="highlighter-rouge">logSDLError</code> function to print out any errors that occurred. If the surface loads ok we then
 create the texture from the surface and perform an error check on that. If everything goes ok we get back
-a valid pointer, if not we’ll get back a <code class="language-plaintext highlighter-rouge">nullptr</code> and the error messages will show up in our log.</p>
+a valid pointer, if not we’ll get back a <code class="highlighter-rouge">nullptr</code> and the error messages will show up in our log.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/**
 * Loads a BMP image into a texture on the rendering device
@@ -146,15 +146,19 @@ a valid pointer, if not we’ll get back a <code class="language-plaintext highl
 * @return the loaded texture, or nullptr if something went wrong.
 */</span>
 <span class="n">SDL_Texture</span><span class="o">*</span> <span class="nf">loadTexture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">file</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">){</span>
-	<span class="c1">//Initialize to nullptr to avoid dangling pointer issues</span>
+	<span class="c1">//Initialize to nullptr to avoid dangling pointer issues
+</span>
 	<span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">texture</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span>
-	<span class="c1">//Load the image</span>
+	<span class="c1">//Load the image
+</span>
 	<span class="n">SDL_Surface</span> <span class="o">*</span><span class="n">loadedImage</span> <span class="o">=</span> <span class="n">SDL_LoadBMP</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
-	<span class="c1">//If the loading went ok, convert to texture and return the texture</span>
+	<span class="c1">//If the loading went ok, convert to texture and return the texture
+</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">loadedImage</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">texture</span> <span class="o">=</span> <span class="n">SDL_CreateTextureFromSurface</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">loadedImage</span><span class="p">);</span>
 		<span class="n">SDL_FreeSurface</span><span class="p">(</span><span class="n">loadedImage</span><span class="p">);</span>
-		<span class="c1">//Make sure converting went ok too</span>
+		<span class="c1">//Make sure converting went ok too
+</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 			<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"CreateTextureFromSurface"</span><span class="p">);</span>
 		<span class="p">}</span>
@@ -170,17 +174,17 @@ a valid pointer, if not we’ll get back a <code class="language-plaintext highl
 <h2 id="the-texture-rendering-function">The Texture Rendering Function</h2>
 <p>In this lesson we’re going to be drawing textures at some x,y coordinate while preserving their initial
 width and height. To do this we’ll need to create a destination rectangle to pass to 
-<a href="http://wiki.libsdl.org/moin.fcg/SDL_RenderCopy"><code class="language-plaintext highlighter-rouge">SDL_RenderCopy</code></a> and get the texture’s width and height with 
-<a href="http://wiki.libsdl.org/moin.fcg/SDL_QueryTexture"><code class="language-plaintext highlighter-rouge">SDL_QueryTexture</code></a> so that its size will be 
+<a href="http://wiki.libsdl.org/moin.fcg/SDL_RenderCopy"><code class="highlighter-rouge">SDL_RenderCopy</code></a> and get the texture’s width and height with 
+<a href="http://wiki.libsdl.org/moin.fcg/SDL_QueryTexture"><code class="highlighter-rouge">SDL_QueryTexture</code></a> so that its size will be 
 preserved when rendering. This is a lot to do each time we want to draw, so we’ll create a 
-function, <code class="language-plaintext highlighter-rouge">renderTexture</code>, that will take the x and y coordinates to draw to, the texture
+function, <code class="highlighter-rouge">renderTexture</code>, that will take the x and y coordinates to draw to, the texture
 and the renderer and will setup the destination rectangle correctly and draw the texture.</p>
 
-<p>The destination rectangle is a <a href="http://wiki.libsdl.org/moin.fcg/SDL_Rect"><code class="language-plaintext highlighter-rouge">SDL_Rect</code></a> with the x and y
+<p>The destination rectangle is a <a href="http://wiki.libsdl.org/moin.fcg/SDL_Rect"><code class="highlighter-rouge">SDL_Rect</code></a> with the x and y
 set to the pixel location on the screen we want the texture’s top left corner to be at
 and the width and height set to the
-texture’s width and height. The width and height values are retrieved through <code class="language-plaintext highlighter-rouge">SDL_QueryTexture</code>.
-We then render the texture at the destination rectangle and pass <code class="language-plaintext highlighter-rouge">NULL</code> as the source
+texture’s width and height. The width and height values are retrieved through <code class="highlighter-rouge">SDL_QueryTexture</code>.
+We then render the texture at the destination rectangle and pass <code class="highlighter-rouge">NULL</code> as the source
 rectangle since we still want to draw the entire texture. You can also set your own width and height 
 values to shrink or stretch the texture as desired.</p>
 
@@ -193,11 +197,13 @@ values to shrink or stretch the texture as desired.</p>
 * @param y The y coordinate to draw to
 */</span>
 <span class="kt">void</span> <span class="nf">renderTexture</span><span class="p">(</span><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
-	<span class="c1">//Setup the destination rectangle to be at the position we want</span>
+	<span class="c1">//Setup the destination rectangle to be at the position we want
+</span>
 	<span class="n">SDL_Rect</span> <span class="n">dst</span><span class="p">;</span>
 	<span class="n">dst</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
 	<span class="n">dst</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
-	<span class="c1">//Query the texture to get its width and height to use</span>
+	<span class="c1">//Query the texture to get its width and height to use
+</span>
 	<span class="n">SDL_QueryTexture</span><span class="p">(</span><span class="n">tex</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dst</span><span class="p">.</span><span class="n">w</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dst</span><span class="p">.</span><span class="n">h</span><span class="p">);</span>
 	<span class="n">SDL_RenderCopy</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">tex</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dst</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
@@ -205,7 +211,7 @@ values to shrink or stretch the texture as desired.</p>
 <p><br /></p>
 
 <h2 id="creating-the-window-and-renderer">Creating the Window and Renderer</h2>
-<p>We initialize SDL and create our window and renderer the same as in lesson 1 but now we use our <code class="language-plaintext highlighter-rouge">logSDLError</code>
+<p>We initialize SDL and create our window and renderer the same as in lesson 1 but now we use our <code class="highlighter-rouge">logSDLError</code>
 function to print out any errors that occurred and use the constants we defined earlier as the screen width
 and height.</p>
 
@@ -250,7 +256,7 @@ use your own BMP images.</p>
 </figure>
 <p><br /></p>
 
-<p>We’ll load the textures using our <code class="language-plaintext highlighter-rouge">loadTexture</code> function and exit if either fails to load. You should update
+<p>We’ll load the textures using our <code class="highlighter-rouge">loadTexture</code> function and exit if either fails to load. You should update
 the filepaths to match your project structure.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">resPath</span> <span class="o">=</span> <span class="n">getResourcePath</span><span class="p">(</span><span class="s">"Lesson2"</span><span class="p">);</span>
@@ -266,15 +272,15 @@ the filepaths to match your project structure.</p>
 
 <h2 id="the-sdl-coordinate-system-and-drawing-order">The SDL Coordinate System and Drawing Order</h2>
 <p>The coordinate system used by SDL to place images on the screen has 0,0 at the top-left corner of the window
-and <code class="language-plaintext highlighter-rouge">SCREEN_WIDTH,SCREEN_HEIGHT</code> at the bottom-right corner. Textures are drawn back to front, with each call
-to <code class="language-plaintext highlighter-rouge">SDL_RenderCopy</code> drawing the new texture on top of the current scene, so we’ll want to draw our background
+and <code class="highlighter-rouge">SCREEN_WIDTH,SCREEN_HEIGHT</code> at the bottom-right corner. Textures are drawn back to front, with each call
+to <code class="highlighter-rouge">SDL_RenderCopy</code> drawing the new texture on top of the current scene, so we’ll want to draw our background
 tiles first and then draw our foreground image.</p>
 
 <h2 id="drawing-a-tiled-background">Drawing a Tiled Background</h2>
 <p>Our background image is 320x240 pixels and we’d like to tile it so that it fills the entire window, which is
 640x480 pixels so we’ll need to draw the image four times. Each tile will be scooted over by either
 the texture width, height or both depending on the location we want it at so that the tile edges all line up. 
-We can retrieve the texture’s width through <code class="language-plaintext highlighter-rouge">SDL_QueryTexture</code> like we did in <code class="language-plaintext highlighter-rouge">renderTexture</code> 
+We can retrieve the texture’s width through <code class="highlighter-rouge">SDL_QueryTexture</code> like we did in <code class="highlighter-rouge">renderTexture</code> 
 and then draw each tile, adjusting each draw over and down as needed.</p>
 
 <p><strong>Exercise Problem:</strong> While it’s not so bad to type out the draw positions for just four tiles
