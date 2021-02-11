@@ -96,12 +96,12 @@
 	<div class="col-md-10">
 		
 <p>To build the projects on Linux we’ll be using a simple makefile that will setup the include and library
-dependencies for us. The makefile assumes that your SDL libraries are installed under <code class="highlighter-rouge">/usr/local/lib</code>
-and the headers are under <code class="highlighter-rouge">/usr/local/include</code>. These are the install locations if you built the
+dependencies for us. The makefile assumes that your SDL libraries are installed under <code class="language-plaintext highlighter-rouge">/usr/local/lib</code>
+and the headers are under <code class="language-plaintext highlighter-rouge">/usr/local/include</code>. These are the install locations if you built the
 project through cmake, some more detail on building from source can be found <a href="http://twinklebear.github.io/sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line/#comment-1053605032">here</a>. 
 If you’ve installed it through your package manager or placed the libraries 
 and headers elsewhere you may need to change these paths to match your installation. You can also check the output
-of <code class="highlighter-rouge">sdl2-config</code> with the <code class="highlighter-rouge">--cflags</code> and <code class="highlighter-rouge">--libs</code> switches to locate your install, assuming you haven’t moved it.</p>
+of <code class="language-plaintext highlighter-rouge">sdl2-config</code> with the <code class="language-plaintext highlighter-rouge">--cflags</code> and <code class="language-plaintext highlighter-rouge">--libs</code> switches to locate your install, assuming you haven’t moved it.</p>
 
 <p>If you’re unfamiliar with Makefiles a basic introduction can be found <a href="http://mrbook.org/blog/tutorials/make/">here</a>.</p>
 
@@ -120,19 +120,15 @@ of <code class="highlighter-rouge">sdl2-config</code> with the <code class="high
 <span class="nv">LDFLAGS</span> <span class="o">=</span> <span class="nv">$(SDL_LIB)</span>
 <span class="nv">EXE</span> <span class="o">=</span> SDL_Lesson0
 
-<span class="nl">all</span><span class="o">:</span> <span class="nf">$(EXE)
-</span>
+<span class="nl">all</span><span class="o">:</span> <span class="nf">$(EXE)</span>
 
-<span class="nl">$(EXE)</span><span class="o">:</span> <span class="nf">main.o
-</span>
+<span class="nl">$(EXE)</span><span class="o">:</span> <span class="nf">main.o</span>
 	<span class="nv">$(CXX)</span> <span class="nv">$&lt;</span> <span class="nv">$(LDFLAGS)</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
-<span class="nl">main.o</span><span class="o">:</span> <span class="nf">main.cpp
-</span>
+<span class="nl">main.o</span><span class="o">:</span> <span class="nf">main.cpp</span>
 	<span class="nv">$(CXX)</span> <span class="nv">$(CXXFLAGS)</span> <span class="nv">$&lt;</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
-<span class="nl">clean</span><span class="o">:</span><span class="nf">
-</span>
+<span class="nl">clean</span><span class="o">:</span>
 	<span class="nb">rm</span> <span class="k">*</span>.o <span class="o">&amp;&amp;</span> <span class="nb">rm</span> <span class="nv">$(EXE)</span></code></pre></figure>
 
 <p><br /></p>
@@ -141,7 +137,7 @@ of <code class="highlighter-rouge">sdl2-config</code> with the <code class="high
 <p>The program we’re building for this lesson is a simple sanity check for SDL. It will 
 <a href="https://wiki.libsdl.org/SDL_Init">initialize</a> the SDL video subsystem, check for any
 <a href="https://wiki.libsdl.org/SDL_GetError">errors</a> and then <a href="https://wiki.libsdl.org/SDL_Quit">quit</a>.
-The source file should be titled <code class="highlighter-rouge">main.cpp</code>, or you can change the main.o build dependency
+The source file should be titled <code class="language-plaintext highlighter-rouge">main.cpp</code>, or you can change the main.o build dependency
 in the makefile to match your source file.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;

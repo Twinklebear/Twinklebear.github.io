@@ -113,24 +113,24 @@ loaded and the clips calculation and drawing will be replaced with what we learn
 <p>SDL_ttf provides a few different ways for rendering text with varying speed/quality trade-offs, along with the
 ability to render UTF8 and Unicode strings and glyphs. The <a href="http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_42.html#SEC42">documentation</a> provides a nice overview of the different rendering methods available, so it’s worth reading
 and knowing when you’d want to use which one depending on your speed/quality requirements. For this lesson
-we’ll be using <code class="highlighter-rouge">TTF_RenderText_Blended</code> since we don’t really have any time constraints and would like our
-text to be stylin’. The various render text functions also take an RGB <a href="http://wiki.libsdl.org/SDL_Color"><code class="highlighter-rouge">SDL_Color</code></a>
+we’ll be using <code class="language-plaintext highlighter-rouge">TTF_RenderText_Blended</code> since we don’t really have any time constraints and would like our
+text to be stylin’. The various render text functions also take an RGB <a href="http://wiki.libsdl.org/SDL_Color"><code class="language-plaintext highlighter-rouge">SDL_Color</code></a>
 which we can use to pick the text color to draw.</p>
 
 <p>Unfortunately SDL_ttf can only render to a surface so we’ll have to run an additional
 step after rendering the text to create a texture from it that we can draw with our renderer. Of course we’ll also
-need to load a font to use, which is done with <a href="http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_14.html#SEC14"><code class="highlighter-rouge">TTF_OpenFont</code></a>, where we can also specify the font size that we want.</p>
+need to load a font to use, which is done with <a href="http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_14.html#SEC14"><code class="language-plaintext highlighter-rouge">TTF_OpenFont</code></a>, where we can also specify the font size that we want.</p>
 
-<h2 id="writing-our-rendertext-function">Writing Our <code class="highlighter-rouge">renderText</code> Function</h2>
-<p>To make this easy for ourselves we’ll create a function <code class="highlighter-rouge">renderText</code> that will take a message, font file containing
+<h2 id="writing-our-rendertext-function">Writing Our <code class="language-plaintext highlighter-rouge">renderText</code> Function</h2>
+<p>To make this easy for ourselves we’ll create a function <code class="language-plaintext highlighter-rouge">renderText</code> that will take a message, font file containing
 the TTF font we want to use, the color and size we want and the renderer to load the final texture into. The
 function will then open the font, render the text, convert it to a texture and return the texture. Since there
 could be some problems along the way we’ll also need to check each of our library calls for errors and handle
-them appropriately, i.e. clean up any resources, log the error and return <code class="highlighter-rouge">nullptr</code> so we know something bad happened.
-SDL_ttf will report any of its errors through <code class="highlighter-rouge">SDL_GetError</code> so we can continue to use <code class="highlighter-rouge">logSDLError</code>
+them appropriately, i.e. clean up any resources, log the error and return <code class="language-plaintext highlighter-rouge">nullptr</code> so we know something bad happened.
+SDL_ttf will report any of its errors through <code class="language-plaintext highlighter-rouge">SDL_GetError</code> so we can continue to use <code class="language-plaintext highlighter-rouge">logSDLError</code>
 for error logging.</p>
 
-<p>With those requirements in mind, let’s write our <code class="highlighter-rouge">renderText</code> function:</p>
+<p>With those requirements in mind, let’s write our <code class="language-plaintext highlighter-rouge">renderText</code> function:</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/**
 * Render the message we want to display to a texture for drawing
@@ -144,17 +144,14 @@ for error logging.</p>
 <span class="n">SDL_Texture</span><span class="o">*</span> <span class="nf">renderText</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">fontFile</span><span class="p">,</span>
 	<span class="n">SDL_Color</span> <span class="n">color</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fontSize</span><span class="p">,</span> <span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">renderer</span><span class="p">)</span>
 <span class="p">{</span>
-	<span class="c1">//Open the font
-</span>
+	<span class="c1">//Open the font</span>
 	<span class="n">TTF_Font</span> <span class="o">*</span><span class="n">font</span> <span class="o">=</span> <span class="n">TTF_OpenFont</span><span class="p">(</span><span class="n">fontFile</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">fontSize</span><span class="p">);</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">font</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"TTF_OpenFont"</span><span class="p">);</span>
 		<span class="k">return</span> <span class="nb">nullptr</span><span class="p">;</span>
 	<span class="p">}</span>	
-	<span class="c1">//We need to first render to a surface as that's what TTF_RenderText
-</span>
-	<span class="c1">//returns, then load that surface into a texture
-</span>
+	<span class="c1">//We need to first render to a surface as that's what TTF_RenderText</span>
+	<span class="c1">//returns, then load that surface into a texture</span>
 	<span class="n">SDL_Surface</span> <span class="o">*</span><span class="n">surf</span> <span class="o">=</span> <span class="n">TTF_RenderText_Blended</span><span class="p">(</span><span class="n">font</span><span class="p">,</span> <span class="n">message</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">color</span><span class="p">);</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">surf</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">TTF_CloseFont</span><span class="p">(</span><span class="n">font</span><span class="p">);</span>
@@ -165,8 +162,7 @@ for error logging.</p>
 	<span class="k">if</span> <span class="p">(</span><span class="n">texture</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">){</span>
 		<span class="n">logSDLError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">"CreateTexture"</span><span class="p">);</span>
 	<span class="p">}</span>
-	<span class="c1">//Clean up the surface and font
-</span>
+	<span class="c1">//Clean up the surface and font</span>
 	<span class="n">SDL_FreeSurface</span><span class="p">(</span><span class="n">surf</span><span class="p">);</span>
 	<span class="n">TTF_CloseFont</span><span class="p">(</span><span class="n">font</span><span class="p">);</span>
 	<span class="k">return</span> <span class="n">texture</span><span class="p">;</span>
@@ -178,12 +174,12 @@ for error logging.</p>
 <p>An important thing to note here is that each time we want to render a message we re-open and close the font, which is
 ok for this case since we’re only rendering one message a single time, but if we wanted to render a lot of text
 and/or render text frequently it would be a much better idea to keep the font open for as long as we needed it.
-Our version of <code class="highlighter-rouge">renderText</code> for this more common use case would take a <code class="highlighter-rouge">TTF_Font*</code> instead of the font file name,
+Our version of <code class="language-plaintext highlighter-rouge">renderText</code> for this more common use case would take a <code class="language-plaintext highlighter-rouge">TTF_Font*</code> instead of the font file name,
 and wouldn’t open or close the font, as the font’s lifetime would be managed separately.</p>
 
 <h2 id="initializing-sdl_ttf">Initializing SDL_ttf</h2>
 <p>As with SDL we need to initialize the library before we can use it. This is done via
-<a href="http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_8.html#SEC8"><code class="highlighter-rouge">TTF_Init</code></a> which will return 0 on success. To
+<a href="http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_8.html#SEC8"><code class="language-plaintext highlighter-rouge">TTF_Init</code></a> which will return 0 on success. To
 initialize SDL_ttf we just call this function after initializing SDL and check the return value to make sure it went ok.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">if</span> <span class="p">(</span><span class="n">TTF_Init</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
@@ -194,17 +190,15 @@ initialize SDL_ttf we just call this function after initializing SDL and check t
 
 <p><br /></p>
 
-<h2 id="using-rendertext">Using <code class="highlighter-rouge">renderText</code></h2>
-<p>With our handy <code class="highlighter-rouge">renderText</code> function we can render our message with a very simple call. For this lesson I’ve chosen
+<h2 id="using-rendertext">Using <code class="language-plaintext highlighter-rouge">renderText</code></h2>
+<p>With our handy <code class="language-plaintext highlighter-rouge">renderText</code> function we can render our message with a very simple call. For this lesson I’ve chosen
 to render “TTF fonts are cool!” in white at a font size of 64 using the terrible font I made earlier. We can
 then query the width and height the same as for any other texture and compute the x/y coordinates to draw the
 message centered in the window.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">resPath</span> <span class="o">=</span> <span class="n">getResourcePath</span><span class="p">(</span><span class="s">"Lesson6"</span><span class="p">);</span>
-<span class="c1">//We'll render the string "TTF fonts are cool!" in white
-</span>
-<span class="c1">//Color is in RGBA format
-</span>
+<span class="c1">//We'll render the string "TTF fonts are cool!" in white</span>
+<span class="c1">//Color is in RGBA format</span>
 <span class="n">SDL_Color</span> <span class="n">color</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span> <span class="p">};</span>
 <span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="n">renderText</span><span class="p">(</span><span class="s">"TTF fonts are cool!"</span><span class="p">,</span> <span class="n">resPath</span> <span class="o">+</span> <span class="s">"sample.ttf"</span><span class="p">,</span>
 	<span class="n">color</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">renderer</span><span class="p">);</span>
@@ -214,8 +208,7 @@ message centered in the window.</p>
 	<span class="n">SDL_Quit</span><span class="p">();</span>
 	<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="c1">//Get the texture w/h so we can center it in the screen
-</span>
+<span class="c1">//Get the texture w/h so we can center it in the screen</span>
 <span class="kt">int</span> <span class="n">iW</span><span class="p">,</span> <span class="n">iH</span><span class="p">;</span>
 <span class="n">SDL_QueryTexture</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">iW</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">iH</span><span class="p">);</span>
 <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">SCREEN_WIDTH</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">iW</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
@@ -224,15 +217,12 @@ message centered in the window.</p>
 <p><br /></p>
 
 <h2 id="drawing-the-text">Drawing the Text</h2>
-<p>Finally we can draw the texture as we’ve done before with our <code class="highlighter-rouge">renderTexture</code> function.</p>
+<p>Finally we can draw the texture as we’ve done before with our <code class="language-plaintext highlighter-rouge">renderTexture</code> function.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//Note: This is within the program's main loop
-</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//Note: This is within the program's main loop</span>
 <span class="n">SDL_RenderClear</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span>
-<span class="c1">//We can draw our message as we do any other texture, since it's been
-</span>
-<span class="c1">//rendered to a texture
-</span>
+<span class="c1">//We can draw our message as we do any other texture, since it's been</span>
+<span class="c1">//rendered to a texture</span>
 <span class="n">renderTexture</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
 <span class="n">SDL_RenderPresent</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span></code></pre></figure>
 

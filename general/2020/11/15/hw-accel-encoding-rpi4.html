@@ -112,19 +112,19 @@ that I put together to monitor the progress of the encoding tasks.</p>
 <h1 id="setting-up-ffmpeg">Setting up FFmpeg</h1>
 
 <p>Some initial searching about what encoder to pick in FFmpeg for hardware accelerated
-encoding on the Raspberry Pi pointed me to the <code class="highlighter-rouge">h264_omx</code> encoder. Unfortunately,
-if you try running this on a 64-bit OS you’ll get errors that <code class="highlighter-rouge">libOMX_Core.so</code>
-and <code class="highlighter-rouge">libOmxCore.so</code> weren’t found. Even after installing <code class="highlighter-rouge">libomxil-bellagio-dev</code>
+encoding on the Raspberry Pi pointed me to the <code class="language-plaintext highlighter-rouge">h264_omx</code> encoder. Unfortunately,
+if you try running this on a 64-bit OS you’ll get errors that <code class="language-plaintext highlighter-rouge">libOMX_Core.so</code>
+and <code class="language-plaintext highlighter-rouge">libOmxCore.so</code> weren’t found. Even after installing <code class="language-plaintext highlighter-rouge">libomxil-bellagio-dev</code>
 these continue to not be found, as this package provides different libraries
 than the OMX ones being searched for. It’s possible that making a symlink here
 would work, but I didn’t test that (it seems a bit iffy). However, it sounds
-like the <code class="highlighter-rouge">h264_omx</code> encoder is <a href="https://github.com/raspberrypi/firmware/issues/1366#issuecomment-612902082">considered deprecated</a>
+like the <code class="language-plaintext highlighter-rouge">h264_omx</code> encoder is <a href="https://github.com/raspberrypi/firmware/issues/1366#issuecomment-612902082">considered deprecated</a>
 and won’t be supported on 64-bit OS’s.</p>
 
-<p>Instead, FFmpeg provides the <code class="highlighter-rouge">h264_v4l2m2m</code> for hardware accelerated encoding/decoding
+<p>Instead, FFmpeg provides the <code class="language-plaintext highlighter-rouge">h264_v4l2m2m</code> for hardware accelerated encoding/decoding
 which is supported on the Raspberry Pi 4 and a 64-bit OS. It seems like the v4l2m2m API
 is the new API that folks are moving forward with. However, if you install ffmpeg from apt and use
-the <code class="highlighter-rouge">h264_v4l2m2m</code> encoder, the results are not very good:</p>
+the <code class="language-plaintext highlighter-rouge">h264_v4l2m2m</code> encoder, the results are not very good:</p>
 
 <div class="col-12 mb-2 text-center">
     <img class="img-fluid" src="https://i.imgur.com/WeWZzwW.png" />
@@ -142,46 +142,30 @@ source. First, we can grab the source for 4.3 from Github:</p>
 <p>Then follow the <a href="https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu">build guide for Ubuntu</a>.
 Since this will replace your install of ffmpeg, you’ll also want to setup the third party libraries
 mentioned in the guide to get support for libx264/265 CPU encoding and any others you want.
-As with the guide, I recommend not installing to <code class="highlighter-rouge">/bin/</code> to avoid conflicts with the system package manager.
-Instead you can install to <code class="highlighter-rouge">~/bin/</code> as in the guide, or in the repo directory (as I do here),
-and add the directory with the binaries for <code class="highlighter-rouge">ffmpeg</code> and <code class="highlighter-rouge">ffprobe</code> to your <code class="highlighter-rouge">$PATH</code>.
+As with the guide, I recommend not installing to <code class="language-plaintext highlighter-rouge">/bin/</code> to avoid conflicts with the system package manager.
+Instead you can install to <code class="language-plaintext highlighter-rouge">~/bin/</code> as in the guide, or in the repo directory (as I do here),
+and add the directory with the binaries for <code class="language-plaintext highlighter-rouge">ffmpeg</code> and <code class="language-plaintext highlighter-rouge">ffprobe</code> to your <code class="language-plaintext highlighter-rouge">$PATH</code>.
 My configure command is below:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./configure <span class="nt">--prefix</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/install <span class="se">\
-</span>
-    <span class="nt">--enable-gpl</span> <span class="se">\
-</span>
-    <span class="nt">--enable-nonfree</span> <span class="se">\
-</span>
-    <span class="nt">--arch</span><span class="o">=</span>aarch64 <span class="se">\
-</span>
-    <span class="nt">--enable-libaom</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libass</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libfdk-aac</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libfreetype</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libmp3lame</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libopus</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libvorbis</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libvpx</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libx264</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libx265</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libxml2</span> <span class="se">\
-</span>
-    <span class="nt">--enable-libwebp</span> <span class="se">\
-</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./configure <span class="nt">--prefix</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/install <span class="se">\</span>
+    <span class="nt">--enable-gpl</span> <span class="se">\</span>
+    <span class="nt">--enable-nonfree</span> <span class="se">\</span>
+    <span class="nt">--arch</span><span class="o">=</span>aarch64 <span class="se">\</span>
+    <span class="nt">--enable-libaom</span> <span class="se">\</span>
+    <span class="nt">--enable-libass</span> <span class="se">\</span>
+    <span class="nt">--enable-libfdk-aac</span> <span class="se">\</span>
+    <span class="nt">--enable-libfreetype</span> <span class="se">\</span>
+    <span class="nt">--enable-libmp3lame</span> <span class="se">\</span>
+    <span class="nt">--enable-libopus</span> <span class="se">\</span>
+    <span class="nt">--enable-libvorbis</span> <span class="se">\</span>
+    <span class="nt">--enable-libvpx</span> <span class="se">\</span>
+    <span class="nt">--enable-libx264</span> <span class="se">\</span>
+    <span class="nt">--enable-libx265</span> <span class="se">\</span>
+    <span class="nt">--enable-libxml2</span> <span class="se">\</span>
+    <span class="nt">--enable-libwebp</span> <span class="se">\</span>
     <span class="nt">--enable-libdrm</span></code></pre></figure>
 
-<p>With FFmpeg 4.3 built and in our path, we can try again with the <code class="highlighter-rouge">h264_v4l2m2m</code> encoder.</p>
+<p>With FFmpeg 4.3 built and in our path, we can try again with the <code class="language-plaintext highlighter-rouge">h264_v4l2m2m</code> encoder.</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">ffmpeg <span class="nt">-i</span> video.mp4 <span class="nt">-c</span>:v h264_v4l2m2m <span class="nt">-b</span>:v 8M <span class="nt">-c</span>:a copy test.mp4</code></pre></figure>
 
@@ -244,16 +228,16 @@ can increase or decrease as desired by editing <a href="https://github.com/Twink
 <span class="k">elif</span> <span class="n">info</span><span class="p">[</span><span class="s">"height"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">480</span><span class="p">:</span>
     <span class="n">bitrate</span> <span class="o">=</span> <span class="s">"5M"</span></code></pre></figure>
 
-<p>You can also change the encoder used to select a different hardware encoder (e.g., <code class="highlighter-rouge">h264_nvenc</code> on Nvidia GPUs,
-<code class="highlighter-rouge">h264_qsv</code> on Intel GPUs, etc.) by changing the value of <code class="highlighter-rouge">c:v</code> in the <a href="https://github.com/Twinklebear/fbed/blob/main/fbed.py#L58-L67"><code class="highlighter-rouge">encoding_args</code></a>
+<p>You can also change the encoder used to select a different hardware encoder (e.g., <code class="language-plaintext highlighter-rouge">h264_nvenc</code> on Nvidia GPUs,
+<code class="language-plaintext highlighter-rouge">h264_qsv</code> on Intel GPUs, etc.) by changing the value of <code class="language-plaintext highlighter-rouge">c:v</code> in the <a href="https://github.com/Twinklebear/fbed/blob/main/fbed.py#L58-L67"><code class="language-plaintext highlighter-rouge">encoding_args</code></a>
 to your desired encoder. You can also pass additional arguments to the encoder by adding them here.
-If you’re on the RPi4 using <code class="highlighter-rouge">h264_v4l2m2m</code> I recommend leaving the <code class="highlighter-rouge">num_output_buffers</code> and
-<code class="highlighter-rouge">num_capture_buffers</code> as I’ve set them, which raises their values above the defaults of 16 and 4 respectively.
+If you’re on the RPi4 using <code class="language-plaintext highlighter-rouge">h264_v4l2m2m</code> I recommend leaving the <code class="language-plaintext highlighter-rouge">num_output_buffers</code> and
+<code class="language-plaintext highlighter-rouge">num_capture_buffers</code> as I’ve set them, which raises their values above the defaults of 16 and 4 respectively.
 When running parallel encodes of 720p and smaller videos I would get warnings from ffmpeg that the
 capture buffers where flushed out to user space, and to consider increasing them. These are set
 high enough that I don’t seem to get these warnings, though will cause the memory capacity of the encoder to
 be exceeded if trying to do multiple 1080p streams in parallel. In that case you’d want to set them to half their current value (i.e.,
-to 16 and 8 respectively). Do not modify or remove the <code class="highlighter-rouge">progress</code> parameter, as this is required by the dashboard
+to 16 and 8 respectively). Do not modify or remove the <code class="language-plaintext highlighter-rouge">progress</code> parameter, as this is required by the dashboard
 to get progress information from FFmpeg, discussed below.</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">encoding_args</span> <span class="o">=</span> <span class="p">{</span>
@@ -264,16 +248,16 @@ to get progress information from FFmpeg, discussed below.</p>
     <span class="s">"num_capture_buffers"</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
     <span class="s">"b:v"</span><span class="p">:</span> <span class="n">bitrate</span><span class="p">,</span>
     <span class="s">"c:a"</span><span class="p">:</span> <span class="s">"copy"</span><span class="p">,</span>
-    <span class="s">"progress"</span><span class="p">:</span> <span class="n">f</span><span class="s">"pipe:{self.pipe_write}"</span>
+    <span class="s">"progress"</span><span class="p">:</span> <span class="sa">f</span><span class="s">"pipe:</span><span class="si">{</span><span class="bp">self</span><span class="p">.</span><span class="n">pipe_write</span><span class="si">}</span><span class="s">"</span>
 <span class="p">}</span></code></pre></figure>
 
 <h2 id="monitoring-ffmpegs-progress">Monitoring FFmpeg’s Progress</h2>
 
 <p>The aspect of FBED that’s probably most interesting to other folks writing scripts using FFmpeg
-is how the progress monitoring works. This is done using FFmpeg’s <a href="https://ffmpeg.org/ffmpeg.html#Main-options"><code class="highlighter-rouge">-progress</code></a>
+is how the progress monitoring works. This is done using FFmpeg’s <a href="https://ffmpeg.org/ffmpeg.html#Main-options"><code class="language-plaintext highlighter-rouge">-progress</code></a>
 argument which has FFmpeg output program-friendly progress information. An example of this
 output is shown below.
-The Python script gets this output by opening a pipe with <code class="highlighter-rouge">os.pipe()</code> and
+The Python script gets this output by opening a pipe with <code class="language-plaintext highlighter-rouge">os.pipe()</code> and
 passing the write end of this pipe to the FFmpeg subprocess. The script then
 reads from the read end of the pipe every second to get the latest progress message to update the UI.</p>
 
@@ -289,19 +273,19 @@ drop_frames=0
 speed=4.48x
 progress=continue</code></pre></figure>
 
-<p>The output we need for monitoring progress for the dashboard are <code class="highlighter-rouge">out_time</code> and <code class="highlighter-rouge">speed</code>.
-The <code class="highlighter-rouge">out_time</code> is the current
-time point in the video that FFmpeg is encoding, <code class="highlighter-rouge">speed</code> is how fast relative to regular playback
+<p>The output we need for monitoring progress for the dashboard are <code class="language-plaintext highlighter-rouge">out_time</code> and <code class="language-plaintext highlighter-rouge">speed</code>.
+The <code class="language-plaintext highlighter-rouge">out_time</code> is the current
+time point in the video that FFmpeg is encoding, <code class="language-plaintext highlighter-rouge">speed</code> is how fast relative to regular playback
 FFmpeg is encoding the video. For example, 1x means FFmpeg is encoding the video just
 as fast as it would be played back, meaning a 1 hour video will take 1 hour to encode.
 A speed of 2x means the 1 hour video would take 30 minutes to encode, and 0.5x means
 it would take 2 hours.</p>
 
-<p>Once we know the current time point FFmpeg has reached (<code class="highlighter-rouge">out_time</code>)
+<p>Once we know the current time point FFmpeg has reached (<code class="language-plaintext highlighter-rouge">out_time</code>)
 and total length of the video we can compute the percentage of the video FFmpeg has
 finished so far to display a progress bar:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.0</span> <span class="o">*</span> <span class="n">out_time</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">/</span> <span class="n">video_duration</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.0</span> <span class="o">*</span> <span class="n">out_time</span><span class="p">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">/</span> <span class="n">video_duration</span><span class="p">.</span><span class="n">total_seconds</span><span class="p">()</span></code></pre></figure>
 
 <p>Since we also know how fast FFmpeg is encoding the video relative to regular playback
 speed, we can estimate how much longer it will take until the encoding is finished:</p>

@@ -95,7 +95,7 @@
 <div class="row justify-content-md-center">
 	<div class="col-md-10">
 		
-<p>In this short postscript we’ll learn how to make use of <a href="https://wiki.libsdl.org/SDL_GetBasePath"><code class="highlighter-rouge">SDL_GetBasePath</code></a> to
+<p>In this short postscript we’ll learn how to make use of <a href="https://wiki.libsdl.org/SDL_GetBasePath"><code class="language-plaintext highlighter-rouge">SDL_GetBasePath</code></a> to
 properly resolve the path to our resource directory where we’ll be storing all the assets needed for each lesson.
 This approach lets us avoid issues with relative paths since it doesn’t depend on where the program working
 directory is set when it’s run. This functionality was introduced in SDL 2.0.1 so if you haven’t updated to the latest SDL
@@ -104,7 +104,7 @@ be sure to grab that before getting started.</p>
 <!--more-->
 
 <h2 id="lesson-directory-structure">Lesson Directory Structure</h2>
-<p><code class="highlighter-rouge">SDL_GetBasePath</code> will return the path to the directory where the application executable is, so to properly find the resource
+<p><code class="language-plaintext highlighter-rouge">SDL_GetBasePath</code> will return the path to the directory where the application executable is, so to properly find the resource
 directory we’ll have to know how to change this path to get the resource directory path. For the lessons I’ll be using
 the directory structure below, if you’re using a different directory structure you’ll likely need to make some
 modifications to how the resource path is set.</p>
@@ -122,9 +122,9 @@ modifications to how the resource path is set.</p>
         Headers shared between lessons</code></pre></figure>
 
 <h2 id="getting-the-resource-path">Getting the Resource Path</h2>
-<p>We’ll now write a convenient utility header containing the <code class="highlighter-rouge">getResourcePath</code> function which will be used to resolve
+<p>We’ll now write a convenient utility header containing the <code class="language-plaintext highlighter-rouge">getResourcePath</code> function which will be used to resolve
 the resource path based on the folder structure above. The function will also take a subdirectory name to be
-appended to the path so we can then get the Lesson1 resource directory with <code class="highlighter-rouge">getResourcePath("Lesson1")</code>. The code
+appended to the path so we can then get the Lesson1 resource directory with <code class="language-plaintext highlighter-rouge">getResourcePath("Lesson1")</code>. The code
 below is placed into the shared include directory and named res_path.h in my code. The comments throughout the code
 provide more detail on what’s going on so be sure to read through them.</p>
 
@@ -147,27 +147,20 @@ provide more detail on what’s going on so be sure to read through them.</p>
  * Paths returned will be Lessons/res/subDir
  */</span>
 <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="nf">getResourcePath</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">subDir</span> <span class="o">=</span> <span class="s">""</span><span class="p">){</span>
-	<span class="c1">//We need to choose the path separator properly based on which
-</span>
-	<span class="c1">//platform we're running on, since Windows uses a different
-</span>
-	<span class="c1">//separator than most systems
-</span>
+	<span class="c1">//We need to choose the path separator properly based on which</span>
+	<span class="c1">//platform we're running on, since Windows uses a different</span>
+	<span class="c1">//separator than most systems</span>
 <span class="cp">#ifdef _WIN32
 </span>	<span class="k">const</span> <span class="kt">char</span> <span class="n">PATH_SEP</span> <span class="o">=</span> <span class="sc">'\\'</span><span class="p">;</span>
 <span class="cp">#else
 </span>	<span class="k">const</span> <span class="kt">char</span> <span class="n">PATH_SEP</span> <span class="o">=</span> <span class="sc">'/'</span><span class="p">;</span>
 <span class="cp">#endif
-</span>	<span class="c1">//This will hold the base resource path: Lessons/res/
-</span>
-	<span class="c1">//We give it static lifetime so that we'll only need to call
-</span>
-	<span class="c1">//SDL_GetBasePath once to get the executable path
-</span>
+</span>	<span class="c1">//This will hold the base resource path: Lessons/res/</span>
+	<span class="c1">//We give it static lifetime so that we'll only need to call</span>
+	<span class="c1">//SDL_GetBasePath once to get the executable path</span>
 	<span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">baseRes</span><span class="p">;</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">baseRes</span><span class="p">.</span><span class="n">empty</span><span class="p">()){</span>
-		<span class="c1">//SDL_GetBasePath will return NULL if something went wrong in retrieving the path
-</span>
+		<span class="c1">//SDL_GetBasePath will return NULL if something went wrong in retrieving the path</span>
 		<span class="kt">char</span> <span class="o">*</span><span class="n">basePath</span> <span class="o">=</span> <span class="n">SDL_GetBasePath</span><span class="p">();</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">basePath</span><span class="p">){</span>
 			<span class="n">baseRes</span> <span class="o">=</span> <span class="n">basePath</span><span class="p">;</span>
@@ -177,15 +170,12 @@ provide more detail on what’s going on so be sure to read through them.</p>
 			<span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"Error getting resource path: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 			<span class="k">return</span> <span class="s">""</span><span class="p">;</span>
 		<span class="p">}</span>
-		<span class="c1">//We replace the last bin/ with res/ to get the the resource path
-</span>
+		<span class="c1">//We replace the last bin/ with res/ to get the the resource path</span>
 		<span class="kt">size_t</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">baseRes</span><span class="p">.</span><span class="n">rfind</span><span class="p">(</span><span class="s">"bin"</span><span class="p">);</span>
 		<span class="n">baseRes</span> <span class="o">=</span> <span class="n">baseRes</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span> <span class="o">+</span> <span class="s">"res"</span> <span class="o">+</span> <span class="n">PATH_SEP</span><span class="p">;</span>
 	<span class="p">}</span>
-	<span class="c1">//If we want a specific subdirectory path in the resource directory
-</span>
-	<span class="c1">//append it to the base path. This would be something like Lessons/res/Lesson0
-</span>
+	<span class="c1">//If we want a specific subdirectory path in the resource directory</span>
+	<span class="c1">//append it to the base path. This would be something like Lessons/res/Lesson0</span>
 	<span class="k">return</span> <span class="n">subDir</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">?</span> <span class="n">baseRes</span> <span class="o">:</span> <span class="n">baseRes</span> <span class="o">+</span> <span class="n">subDir</span> <span class="o">+</span> <span class="n">PATH_SEP</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -196,13 +186,13 @@ provide more detail on what’s going on so be sure to read through them.</p>
 <h2 id="using-the-resource-path-lookup">Using the Resource Path Lookup</h2>
 <p>With our new utility function we can easily construct the resource path for our programs and no longer need to rely
 on relative paths and the various hassles that come with them. To get access to this new header in our shared include
-directory we’ll need to add the directory <code class="highlighter-rouge">include</code> to our include path.</p>
+directory we’ll need to add the directory <code class="language-plaintext highlighter-rouge">include</code> to our include path.</p>
 
 <ul>
-  <li><strong>CMake</strong>: In your top level CMakeLists file add <code class="highlighter-rouge">include_directories(include)</code>.</li>
+  <li><strong>CMake</strong>: In your top level CMakeLists file add <code class="language-plaintext highlighter-rouge">include_directories(include)</code>.</li>
   <li><strong>Visual Studio</strong>: Add the include directory through your project preferences, similar to how you set the SDL2
 include directories.</li>
-  <li><strong>GCC and Clang</strong>: Use the <code class="highlighter-rouge">-I</code> flag to add the directory to your include path, eg. <code class="highlighter-rouge">-Iinclude</code>.</li>
+  <li><strong>GCC and Clang</strong>: Use the <code class="language-plaintext highlighter-rouge">-I</code> flag to add the directory to your include path, eg. <code class="language-plaintext highlighter-rouge">-Iinclude</code>.</li>
 </ul>
 
 <p>We’ll now write a simple program that will print out the resource directory path to make sure everything is working correctly.</p>
@@ -224,9 +214,9 @@ include directories.</li>
 <span class="p">}</span></code></pre></figure>
 
 <h2 id="end-of-postscript">End of Postscript</h2>
-<p>You’ll want to double check that the path output by the test program is correct as we’ll be using <code class="highlighter-rouge">getResourcePath</code> extensively
+<p>You’ll want to double check that the path output by the test program is correct as we’ll be using <code class="language-plaintext highlighter-rouge">getResourcePath</code> extensively
 throughout the lessons to reliably find the various images and other assets we need for our programs. A related function
-provided by SDL is <a href="https://wiki.libsdl.org/SDL_GetPrefPath"><code class="highlighter-rouge">SDL_GetPrefPath</code></a> which returns the path where your application
+provided by SDL is <a href="https://wiki.libsdl.org/SDL_GetPrefPath"><code class="language-plaintext highlighter-rouge">SDL_GetPrefPath</code></a> which returns the path where your application
 can write personal files (save games, etc.).</p>
 
 <p>I’ll see you again soon in <a href="/sdl2%20tutorials/2013/08/17/lesson-1-hello-world">Lesson 1: Hello World!</a></p>
