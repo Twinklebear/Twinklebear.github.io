@@ -38,7 +38,8 @@ const center = vec3.set(vec3.create(), 0.5, 0.5, 0.5);
 const up = vec3.set(vec3.create(), 0.0, 1.0, 0.0);
 
 var volumes = {
-	"Fuel": "7d87jcsh0qodk78/fuel_64x64x64_uint8.raw",
+    "Fuel": "https://lab.wushernet.com/data/fuel_64x64x64_uint8.raw",
+	//"Fuel": "7d87jcsh0qodk78/fuel_64x64x64_uint8.raw",
 	"Neghip": "zgocya7h33nltu9/neghip_64x64x64_uint8.raw",
 	"Hydrogen Atom": "jwbav8s3wmmxd5x/hydrogen_atom_128x128x128_uint8.raw",
 	"Boston Teapot": "w4y88hlf2nbduiv/boston_teapot_256x256x178_uint8.raw",
@@ -62,7 +63,14 @@ var loadVolume = function(file, onload) {
 	var m = file.match(fileRegex);
 	var volDims = [parseInt(m[2]), parseInt(m[3]), parseInt(m[4])];
 	
-	var url = "https://www.dl.dropboxusercontent.com/s/" + file + "?dl=1";
+	var url = "";
+    console.log(file);
+    if (file.includes("lab.wushernet") != -1) {
+        url = file;
+    } else {
+        url = "https://www.dl.dropboxusercontent.com/s/" + file + "?dl=1";
+    }
+
 	var req = new XMLHttpRequest();
 	var loadingProgressText = document.getElementById("loadingText");
 	var loadingProgressBar = document.getElementById("loadingProgressBar");
