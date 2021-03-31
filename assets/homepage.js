@@ -1,4 +1,4 @@
-window.onload = function() {
+$(document).ready(function() {
     var name = "will";
     var host = window.location.hostname;
     if (host.startsWith("www.")) {
@@ -7,5 +7,8 @@ window.onload = function() {
     var mail = name + "@" + host;
     document.getElementById("envelope").setAttribute("href", "mailto:" + mail);
     document.getElementById("envelope-text").innerHTML = mail;
-}
+
+	var clip = new ClipboardJS(".bib");
+    $('[data-toggle="popover"]').popover()
+});
 
