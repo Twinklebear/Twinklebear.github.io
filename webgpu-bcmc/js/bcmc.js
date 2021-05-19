@@ -23,8 +23,7 @@
     var volumeDims = getVolumeDimensions(dataset.name);
     var zfpDataName = dataset.name + ".zfp";
     var volumeURL = null;
-        console.log(`host = ${window.location.hostname}`);
-    if (window.location.hostname == "willusher.io") {
+    if (window.location.hostname == "www.willusher.io") {
         volumeURL = "https://lab.wushernet.com/data/bcmc/" + zfpDataName;
     } else {
         volumeURL = "/models/" + zfpDataName;
