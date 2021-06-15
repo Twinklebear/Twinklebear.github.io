@@ -1,13 +1,21 @@
 (async () => {
+    if (!navigator.gpu) {
+        document.getElementById("webgpu-canvas").setAttribute("style", "display:none;");
+        document.getElementById("no-webgpu").setAttribute("style", "display:block;");
+        return;
+    }
+
     var adapter = await navigator.gpu.requestAdapter();
 
     // TODO: Waiting on Chrome Canary to support passing these limits through
+    /*
     var gpuDeviceDesc = {
         nonGuaranteedLimits: {
             maxStorageBuffersPerShaderStage: 8,
         },
     };
-    var device = await adapter.requestDevice(gpuDeviceDesc);
+    */
+    var device = await adapter.requestDevice();
 
     var canvas = document.getElementById("webgpu-canvas");
     var context = canvas.getContext("gpupresent");
@@ -29,12 +37,18 @@
         volumeURL = "/models/" + zfpDataName;
     }
     var compressedData =
-        await fetch(volumeURL).then((res) => res.arrayBuffer().then(function(arr) {
-            return new Uint8Array(arr);
-        }));
-
-    if (compressedData == null) {
-        alert(`Failed to load compressed data`);
+        await fetch(volumeURL).then((res) => {
+            if (res.ok) {
+                return res.arrayBuffer().then(function(arr) {
+                    return new Uint8Array(arr);
+                })
+            } else {
+                alert(`Failed to load compressed data`);
+                return null;
+            }
+        });
+    console.log(compressedData);
+    if (compressedData === null) {
         return;
     }
 
