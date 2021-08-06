@@ -259,16 +259,13 @@ a feature Metal shares with OptiX, which uses CUDA for the device side code.</p>
 <p>This simplicity also has some drawbacks. For example, while in DirectX, Vulkan, and OptiX
 you have control over where the acceleration structure memory is allocated,
 Metal makes this allocation for you. As a result, you cannot allocate the acceleration
-structures on a <code class="highlighter-rouge">MTLHeap</code>, and so to make sure they’re available for your rendering
-pipeline, you must individually mark them as used in a loop instead of a single <code class="highlighter-rouge">useHeap</code> call.</p>
+structures on a <code class="language-plaintext highlighter-rouge">MTLHeap</code>, and so to make sure they’re available for your rendering
+pipeline, you must individually mark them as used in a loop instead of a single <code class="language-plaintext highlighter-rouge">useHeap</code> call.</p>
 
-<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="c1">// Use our top level acceleration structure
-</span>
+<figure class="highlight"><pre><code class="language-objc" data-lang="objc"><span class="c1">// Use our top level acceleration structure</span>
 <span class="p">[</span><span class="n">command_encoder</span> <span class="nf">setAccelerationStructure</span><span class="p">:</span><span class="n">bvh</span><span class="o">-&gt;</span><span class="n">bvh</span> <span class="nf">atBufferIndex</span><span class="p">:</span><span class="mi">1</span><span class="p">];</span>
-<span class="c1">// Also mark all mesh acceleration structures used, as they're indirectly
-</span>
-<span class="c1">// referenced by the top level one
-</span>
+<span class="c1">// Also mark all mesh acceleration structures used, as they're indirectly</span>
+<span class="c1">// referenced by the top level one</span>
 <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">mesh</span> <span class="o">:</span> <span class="n">bvh</span><span class="o">-&gt;</span><span class="n">meshes</span><span class="p">)</span> <span class="p">{</span>
     <span class="p">[</span><span class="n">command_encoder</span> <span class="nf">useResource</span><span class="p">:</span><span class="n">mesh</span><span class="o">-&gt;</span><span class="n">bvh</span> <span class="nf">usage</span><span class="p">:</span><span class="n">MTLResourceUsageRead</span><span class="p">];</span>
 <span class="p">}</span></code></pre></figure>
@@ -276,7 +273,7 @@ pipeline, you must individually mark them as used in a loop instead of a single 
 <p>This can add some overhead if you have a lot of bottom level BVHs, as can be the
 case in scenes with many instances.
 It’d be nice to be able to allocate the acceleration structures on a heap, and replace this loop
-with a single <code class="highlighter-rouge">[command_encoder useHeap:data_heap-&gt;heap];</code></p>
+with a single <code class="language-plaintext highlighter-rouge">[command_encoder useHeap:data_heap-&gt;heap];</code></p>
 
 <p>The API is also simplified significantly by not including ray tracing pipelines and
 only requiring a Shader Binding Table-esque

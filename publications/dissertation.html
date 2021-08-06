@@ -1,0 +1,151 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Adaptive Multiresolution Techniques for I/O, Data Layout, and Visualization of Massive Simulations</title>
+	
+    <meta name="author" content="Will Usher">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+	<link href="/assets/molokai.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content mb-4">
+		
+
+
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
+		<h1 class="display-4">Adaptive Multiresolution Techniques for I/O, Data Layout, and Visualization of Massive Simulations</h1>
+        <h4>Will Usher</h4>
+		<h5>In <i>PhD Dissertation, University of Utah</i>, 2021</h5>
+        
+		
+		<figure>
+			<img class="img-fluid" src="/assets/img/dissertation_contributions_in_pipeline.svg"/>
+			<figcaption class="text-left mt-2">
+				<b>Fig. 1: </b><i>An illustration of how this dissertation's contributions fit together in the broader scope of the end-to-end simulation visualization pipeline. The contributions discussed work together to support massive data sets across the simulation visualization pipeline.</i>
+			</figcaption>
+		</figure>
+		
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
+		<p>The continuing growth in computational power available on high-performance computing systems has allowed for increasingly higher fidelity simulations. As these simulations grow in scale, the amount of data produced grows correspondingly, challenging existing strategies for I/O and visualization. Moreover, although prior work has sought to achieve high bandwidth I/O at scale or post hoc visualization of massive data sets, treating these two sides of the simulation visualization pipeline independently introduces a bottleneck between them, where data must be converted from the simulation output layout to the layout used for visualization. <br/> The aim of this dissertation is to address key challenges across the simulation visualization pipeline to provide efficient end-to-end support for massive data sets. First, this dissertation proposes an I/O approach for particle data that rebalances the I/O workload on nonuniform distributions by constructing a spatial data structure, improving I/O performance and portability. To eliminate data layout bottlenecks between I/O and visualization, this dissertation proposes a layout for particle data that balances rendering and attribute-query access patterns through a spatial $k$-d tree and fixed size bitmap indices. The layout is constructed quickly when writing the data and requires little additional memory to store. This dissertation proposes a number of approaches to enable visualization of massive data sets at different scales. An asynchronous tile-based processing pipeline is proposed for distributed full-resolution rendering that overlaps compositing and rendering tasks to improve performance. Next, a virtual reality tool for neuron tracing in large connectomics data is proposed. The VR tool employs an intuitive painting metaphor and a real-time page-based data processing system to visualize large data without discomfort. To visualize massive data in compute and memory constrained environments, a GPU parallel isosurface extraction algorithm is proposed for block-compressed data sets. The algorithm is built on a GPU-driven memory management and caching strategy that allows working with compressed data sets entirely on the GPU. Finally, a simulation-oblivious approach to data transfer for loosely coupled in situ visualization is proposed that minimizes the impact of the visualization by offloading data restructuring from the simulation.</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="https://sci.utah.edu/~will/papers/will-usher-dissertation.pdf"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			
+			
+		</dl>
+	</div>
+	
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>@thesis{usher_dissertation_2021,<br />
+ title = {{Adaptive} {Multiresolution} {Techniques} for {I}/{O}, {Data} {Layout}, and {Visualization} of {Massive} {Simulations}},<br />
+ type = {phdthesis},<br />
+ author = {Usher, Will},<br />
+ school = {University of Utah},<br />
+ year = {2021}<br />
+}</code>
+	</div>
+</div>
+
+
+	</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+
+</body>
+</html>
+
+
+

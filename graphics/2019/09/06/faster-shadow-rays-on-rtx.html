@@ -126,8 +126,8 @@ which lets us skip creating an occlusion hit group entirely.</p>
 
 <h3 id="occlusion-group-with-any-hit-ogah">Occlusion Group with Any Hit (OGAH)</h3>
 <p>A standard approach is to use an occlusion hit group with an any hit shader, which just accepts the hit and terminates
-the ray when it’s called. In DXR our any hit shader would just call <code class="highlighter-rouge">AcceptHitAndEndSearch</code>, in OptiX <code class="highlighter-rouge">optixTerminateRay</code> and in
-Vulkan <code class="highlighter-rouge">terminateRayNV</code>. We can then call trace with any hit shaders forced to be run,
+the ray when it’s called. In DXR our any hit shader would just call <code class="language-plaintext highlighter-rouge">AcceptHitAndEndSearch</code>, in OptiX <code class="language-plaintext highlighter-rouge">optixTerminateRay</code> and in
+Vulkan <code class="language-plaintext highlighter-rouge">terminateRayNV</code>. We can then call trace with any hit shaders forced to be run,
 even for geometry created with the opaque flag, by setting the force non-opaque flag (enforce any hit in OptiX).
 As a result, the first hit the
 RTX hardware encounters to test with the any hit shader will be reported as the final hit to accept
@@ -166,26 +166,21 @@ and just use the primary ray group for the hit group, since we know it will neve
     <span class="kt">int</span> <span class="n">hit</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="c1">// Trace the shadow ray, assuming it is occluded
-</span>
+<span class="c1">// Trace the shadow ray, assuming it is occluded</span>
 <span class="n">occlusion_hit</span><span class="p">.</span><span class="n">hit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="n">TraceRay</span><span class="p">(</span><span class="n">scene</span><span class="p">,</span>
     <span class="n">RAY_FLAG_FORCE_OPAQUE</span>
     <span class="o">|</span> <span class="n">RAY_FLAG_ACCEPT_FIRST_HIT_AND_END_SEARCH</span>
     <span class="o">|</span> <span class="n">RAY_FLAG_SKIP_CLOSEST_HIT_SHADER</span><span class="p">,</span>
     <span class="mh">0xff</span><span class="p">,</span>
-    <span class="n">PRIMARY_RAY_TYPE</span><span class="p">,</span> <span class="c1">// Note: HG never called
-</span>
-    <span class="mi">1</span><span class="p">,</span>                <span class="c1">// No HG's so we set HG stride = 1
-</span>
+    <span class="n">PRIMARY_RAY_TYPE</span><span class="p">,</span> <span class="c1">// Note: HG never called</span>
+    <span class="mi">1</span><span class="p">,</span>                <span class="c1">// No HG's so we set HG stride = 1</span>
     <span class="n">OCCLUSION_RAY_TYPE</span><span class="p">,</span>
     <span class="n">shadow_ray</span><span class="p">,</span>
     <span class="n">shadow_hit</span><span class="p">);</span>
 
-<span class="c1">// The shadow ray miss shader marks the ray as not occluded if
-</span>
-<span class="c1">// no hit was encountered
-</span>
+<span class="c1">// The shadow ray miss shader marks the ray as not occluded if</span>
+<span class="c1">// no hit was encountered</span>
 <span class="p">[</span><span class="n">shader</span><span class="p">(</span><span class="s">"miss"</span><span class="p">)]</span>
 <span class="kt">void</span> <span class="nf">ShadowMiss</span><span class="p">(</span><span class="n">inout</span> <span class="n">OcclusionHitInfo</span> <span class="n">occlusion</span> <span class="o">:</span> <span class="n">SV_RayPayload</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">occlusion</span><span class="p">.</span><span class="n">hit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -258,7 +253,7 @@ In this case I think it is still possible to skip making an occlusion hit group
 and re-use the primary hit group (which would also implement an any hit shader to test against
 the cut-out texture), and pass the accept first hit and skip closest hit ray flags. This will
 result in the first valid hit returned by the any hit shader (which doesn’t necessarily need to call
-<code class="highlighter-rouge">AcceptHitAndEndSearch</code> or terminate ray) to be taken as the final hit and the closest hit shader
+<code class="language-plaintext highlighter-rouge">AcceptHitAndEndSearch</code> or terminate ray) to be taken as the final hit and the closest hit shader
 to be skipped. When I add support for alpha cut-out textures I’ll test this idea out to see how well it works.
 This would be the same as <strong>OGAH</strong> where we additionally specify the skip closest hit flag.</p>
 
