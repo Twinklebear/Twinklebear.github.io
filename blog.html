@@ -93,6 +93,66 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2021/08/30/0-to-gltf-bind-groups"><h3>From 0 to glTF with WebGPU: Bind Groups - Updated</h3></a>
+        <p>August 30, 2021</p>
+		
+<p>This tutorial is an updated version of my previous one and updates the
+code listing to match the finalizing WebGPU APIs. If you’ve read
+the previous version of this tutorial you can skim through the code
+listings to get up to date.</p>
+
+<p>In this second post of the series we’ll learn about Bind Groups,
+which let us pass buffers and textures to our shaders.
+When writing a renderer, we typically have inputs which do not make sense as vertex
+attributes (e.g., transform matrices, material parameters), or simply cannot be passed
+as vertex attributes (e.g., textures). Such parameters are instead
+passed as uniforms in GLSL terms, or root parameters in HLSL terms.
+The application then associates the desired buffers and textures with the
+parameters in the shader. In WebGPU, the association of data to parameters is made using Bind Groups.
+In this post, we’ll use Bind Groups to pass a uniform buffer containing a view
+transform to our vertex shader, allowing us to add camera controls to our triangle
+from the previous post.
+If you haven’t read the <a href="/graphics/2021/08/29/0-to-gltf-triangle">updated first post in this series</a>
+I recommend reading that first, as we’ll continue directly off the code written there.</p>
+
+
+
+		<a href="/graphics/2021/08/30/0-to-gltf-bind-groups">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
+		<a href="/graphics/2021/08/29/0-to-gltf-triangle"><h3>From 0 to glTF with WebGPU: The First Triangle - Updated</h3></a>
+        <p>August 29, 2021</p>
+		
+<p>This tutorial is an updated version of my previous one and updates the
+code listing to match the finalizing WebGPU APIs. If you’ve read
+the previous version of this tutorial you can skim through the code
+listings to get up to date.</p>
+
+<p>WebGPU is a modern graphics API for the web, in development by the
+major browser vendors. When compared to WebGL, WebGPU provides more direct
+control over the GPU to allow applications to leverage the hardware
+more efficiently, similar to Vulkan and DirectX 12.
+WebGPU also exposes additional GPU capabilities not available in WebGL, such as compute
+shaders and storage buffers, enabling powerful GPU compute applications
+to run on the web. As with the switch from OpenGL to Vulkan, WebGPU
+exposes more complexity to the user than WebGL, though the API strikes
+a good balance between complexity and usability, and overall is quite nice to work with.
+In this series, we’ll learn the key aspects of WebGPU from the ground up,
+with the goal of going from zero to a basic glTF model renderer.
+This post marks our initial step on this journey, where we’ll setup
+a WebGPU context and get a triangle on the screen.</p>
+
+
+
+		<a href="/graphics/2021/08/29/0-to-gltf-triangle">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/graphics/2020/12/20/rt-dive-m1"><h3>A Dive into Ray Tracing Performance on the Apple M1</h3></a>
         <p>December 20, 2020</p>
 		
@@ -189,56 +249,6 @@ with technical issues, without whom the event would not have been possible.</p>
 
 
 		<a href="/general/2020/11/13/vis2020-streaming-infrastructure">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/graphics/2020/06/20/0-to-gltf-bind-groups"><h3>From 0 to glTF with WebGPU: Bind Groups</h3></a>
-        <p>June 20, 2020</p>
-		
-<p>In this second post of the series we’ll learn about Bind Groups,
-which let us pass buffers and textures to our shaders.
-When writing a renderer, we typically have inputs which do not make sense as vertex
-attributes (e.g., transform matrices, material parameters), or simply cannot be passed
-as vertex attributes (e.g., textures). Such parameters are instead
-passed as uniforms in GLSL terms, or root parameters in HLSL terms.
-The application then associates the desired buffers and textures with the
-parameters in the shader. In WebGPU, the association of data to parameters is made using Bind Groups.
-In this post, we’ll use Bind Groups to pass a uniform buffer containing a view
-transform to our vertex shader, allowing us to add camera controls to our triangle
-from the previous post.
-If you haven’t read the <a href="/graphics/2020/06/15/0-to-gltf-triangle">first post in this series</a>
-I recommend reading that first, as we’ll continue directly off the code written there.</p>
-
-
-
-		<a href="/graphics/2020/06/20/0-to-gltf-bind-groups">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/graphics/2020/06/15/0-to-gltf-triangle"><h3>From 0 to glTF with WebGPU: The First Triangle</h3></a>
-        <p>June 15, 2020</p>
-		
-<p>WebGPU is a modern graphics API for the web, in development by the
-major browser vendors. When compared to WebGL, WebGPU provides more direct
-control over the GPU to allow applications to leverage the hardware
-more efficiently, similar to Vulkan and DirectX 12.
-WebGPU also exposes additional GPU capabilities not available in WebGL, such as compute
-shaders and storage buffers, enabling powerful GPU compute applications
-to run on the web. As with the switch from OpenGL to Vulkan, WebGPU
-exposes more complexity to the user than WebGL, though the API strikes
-a good balance between complexity and usability, and overall is quite nice to work with.
-In this series, we’ll learn the key aspects of WebGPU from the ground up,
-with the goal of going from zero to a basic glTF model renderer.
-This post marks our initial step on this journey, where we’ll setup
-a WebGPU context and get a triangle on the screen.</p>
-
-
-
-		<a href="/graphics/2020/06/15/0-to-gltf-triangle">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
 		</div>
 	</div>
