@@ -112,18 +112,9 @@
         targets: [{format: swapChainFormat}]
     };
 
-    // Create a buffer to store the view parameters
-    var viewParamsBuffer = device.createBuffer(
-        {size: 16 * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST});
-
     // Create bind group layout
     var bindGroupLayout = device.createBindGroupLayout({
         entries: [{binding: 0, visibility: GPUShaderStage.VERTEX, buffer: {type: "uniform"}}]
-    });
-
-    var viewParamBG = device.createBindGroup({
-        layout: bindGroupLayout,
-        entries: [{binding: 0, resource: {buffer: viewParamsBuffer}}]
     });
 
     // Create render pipeline
@@ -146,6 +137,15 @@
             stencilStoreOp: "store"
         }
     };
+
+    // Create a buffer to store the view parameters
+    var viewParamsBuffer = device.createBuffer(
+        {size: 16 * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST});
+
+    var viewParamBG = device.createBindGroup({
+        layout: bindGroupLayout,
+        entries: [{binding: 0, resource: {buffer: viewParamsBuffer}}]
+    });
 
     var camera =
         new ArcballCamera([0, 0, 3], [0, 0, 0], [0, 1, 0], 0.5, [canvas.width, canvas.height]);
