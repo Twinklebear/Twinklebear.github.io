@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Sun, 19 Sep 2021 08:32:24 -0700</lastBuildDate>
-		<pubDate>Sun, 19 Sep 2021 08:32:24 -0700</pubDate>
+		<lastBuildDate>Tue, 21 Sep 2021 11:50:24 -0700</lastBuildDate>
+		<pubDate>Tue, 21 Sep 2021 11:50:24 -0700</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -255,7 +255,7 @@ and executing trace calls on the scene to see which hit groups and miss shaders 
 Finally, we’ll look at how this model can be brought back to the CPU using Embree,
 to potentially build a unified low-level API for ray tracing.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Updated 5/1/2020:&lt;/strong&gt; Added discussion on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;KHR_ray_tracing&lt;/code&gt; for Vulkan.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Updated 5/1/2020:&lt;/strong&gt; Added discussion on &lt;code class=&quot;highlighter-rouge&quot;&gt;KHR_ray_tracing&lt;/code&gt; for Vulkan.&lt;/p&gt;
 
 
 				&lt;a href=&quot;https://www.willusher.io//graphics/2019/11/20/the-sbt-three-ways&quot;&gt;Continue Reading&lt;/a&gt;
@@ -353,7 +353,7 @@ described in this post &lt;a href=&quot;https://www.willusher.io/webgl-volume-ra
 &lt;p&gt;When writing a paper in LaTeX, it’s common to leave
 notes and comments in the text, either to yourself
 or your co-authors. I used to write these
-as just different colored text using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\textcolor{...}&lt;/code&gt;,
+as just different colored text using &lt;code class=&quot;highlighter-rouge&quot;&gt;\textcolor{...}&lt;/code&gt;,
 with each author assigned a color, or all with the same color.
 However, with more authors
 it can get hard to keep picking legible font colors.
@@ -499,11 +499,11 @@ sphere and save the image.&lt;/p&gt;
 			<description>
 &lt;p&gt;In this quick postscript we’ll look into a simple way to clean up our various SDL resources with variadic templates
 and template specialization. This will let us clean up all our resources with a single simple call:
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cleanup(texA, texB, renderer, window)&lt;/code&gt; instead of calling all the corresponding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SDL_Destroy/Free*&lt;/code&gt; functions,
+&lt;code class=&quot;highlighter-rouge&quot;&gt;cleanup(texA, texB, renderer, window)&lt;/code&gt; instead of calling all the corresponding &lt;code class=&quot;highlighter-rouge&quot;&gt;SDL_Destroy/Free*&lt;/code&gt; functions,
 saving ourselves a lot of typing.&lt;/p&gt;
 
-&lt;p&gt;We’ll do this by creating a variadic function &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cleanup&lt;/code&gt; that will take the list of SDL resources to be free’d and then
-define specializations of it for each resource we’ll be passing, eg. for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SDL_Window&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SDL_Renderer&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SDL_Texture&lt;/code&gt;
+&lt;p&gt;We’ll do this by creating a variadic function &lt;code class=&quot;highlighter-rouge&quot;&gt;cleanup&lt;/code&gt; that will take the list of SDL resources to be free’d and then
+define specializations of it for each resource we’ll be passing, eg. for &lt;code class=&quot;highlighter-rouge&quot;&gt;SDL_Window&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;SDL_Renderer&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;SDL_Texture&lt;/code&gt;
 and so on.&lt;/p&gt;
 
 
@@ -517,7 +517,7 @@ and so on.&lt;/p&gt;
 		<item>
 			<title>Postscript 0: Properly Finding Resource Paths</title>
 			<description>
-&lt;p&gt;In this short postscript we’ll learn how to make use of &lt;a href=&quot;https://wiki.libsdl.org/SDL_GetBasePath&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SDL_GetBasePath&lt;/code&gt;&lt;/a&gt; to
+&lt;p&gt;In this short postscript we’ll learn how to make use of &lt;a href=&quot;https://wiki.libsdl.org/SDL_GetBasePath&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SDL_GetBasePath&lt;/code&gt;&lt;/a&gt; to
 properly resolve the path to our resource directory where we’ll be storing all the assets needed for each lesson.
 This approach lets us avoid issues with relative paths since it doesn’t depend on where the program working
 directory is set when it’s run. This functionality was introduced in SDL 2.0.1 so if you haven’t updated to the latest SDL
@@ -585,8 +585,8 @@ each time but rather just which subsection of the texture.&lt;/p&gt;
 			<description>
 &lt;p&gt;In this lesson we’ll learn the basics of reading user input with SDL, in this simple example we’ll interpret any input
 as the user wanting to quit our application.
-To read events SDL provides the &lt;a href=&quot;http://wiki.libsdl.org/SDL_Event&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SDL_Event&lt;/code&gt;&lt;/a&gt; union
-and functions to get events from the queue such as &lt;a href=&quot;http://wiki.libsdl.org/SDL_PollEvent&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SDL_PollEvent&lt;/code&gt;&lt;/a&gt;.
+To read events SDL provides the &lt;a href=&quot;http://wiki.libsdl.org/SDL_Event&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SDL_Event&lt;/code&gt;&lt;/a&gt; union
+and functions to get events from the queue such as &lt;a href=&quot;http://wiki.libsdl.org/SDL_PollEvent&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SDL_PollEvent&lt;/code&gt;&lt;/a&gt;.
 The code for this lesson is built off of the lesson 3 code, if you need that code to start from grab it on &lt;a href=&quot;https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/Lesson3&quot;&gt;Github&lt;/a&gt; and let’s get started!&lt;/p&gt;
 
 
@@ -617,7 +617,7 @@ and &lt;a href=&quot;http://www.libsdl.org/projects/SDL_mixer/&quot;&gt;SDL_mixe
 		</item>
 		
 		<item>
-			<title>Lesson 2: Don&apos;t Put Everything in Main</title>
+			<title>Lesson 2: Don't Put Everything in Main</title>
 			<description>
 &lt;p&gt;In this lesson we’ll begin organizing our texture loading and rendering code from the previous lesson by 
 moving them out of main and placing them into some useful functions. We’ll also write a simple generic
@@ -680,10 +680,10 @@ them from the &lt;a href=&quot;http://www.libsdl.org/download-2.0.php&quot;&gt;S
 			<description>
 &lt;p&gt;To build the projects with mingw we’ll be using a lightweight makefile that will set the
 include and library paths along with linking our dependencies for us. The makefile assumes
-that you’ve placed the SDL mingw development libraries under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C:/SDL2-2.0.0-mingw/&lt;/code&gt; and that
+that you’ve placed the SDL mingw development libraries under &lt;code class=&quot;highlighter-rouge&quot;&gt;C:/SDL2-2.0.0-mingw/&lt;/code&gt; and that
 you’re using the 32bit version of mingw and the 32bit libraries. You should change this to 
 match your compiler (32/64bit) and the location of your SDL folder. To use makefiles with mingw call
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mingw32-make.exe&lt;/code&gt; in the folder containing the makefile.&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;mingw32-make.exe&lt;/code&gt; in the folder containing the makefile.&lt;/p&gt;
 
 &lt;p&gt;If you’re unfamiliar with Makefiles a basic introduction can be found &lt;a href=&quot;http://mrbook.org/blog/tutorials/make/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
@@ -716,12 +716,12 @@ downloads page and now have it available as a framework.&lt;/p&gt;
 			<title>Lesson 0: Linux Command Line</title>
 			<description>
 &lt;p&gt;To build the projects on Linux we’ll be using a simple makefile that will setup the include and library
-dependencies for us. The makefile assumes that your SDL libraries are installed under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/local/lib&lt;/code&gt;
-and the headers are under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/local/include&lt;/code&gt;. These are the install locations if you built the
+dependencies for us. The makefile assumes that your SDL libraries are installed under &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/lib&lt;/code&gt;
+and the headers are under &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/include&lt;/code&gt;. These are the install locations if you built the
 project through cmake, some more detail on building from source can be found &lt;a href=&quot;http://twinklebear.github.io/sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line/#comment-1053605032&quot;&gt;here&lt;/a&gt;. 
 If you’ve installed it through your package manager or placed the libraries 
 and headers elsewhere you may need to change these paths to match your installation. You can also check the output
-of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--cflags&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--libs&lt;/code&gt; switches to locate your install, assuming you haven’t moved it.&lt;/p&gt;
+of &lt;code class=&quot;highlighter-rouge&quot;&gt;sdl2-config&lt;/code&gt; with the &lt;code class=&quot;highlighter-rouge&quot;&gt;--cflags&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;--libs&lt;/code&gt; switches to locate your install, assuming you haven’t moved it.&lt;/p&gt;
 
 &lt;p&gt;If you’re unfamiliar with Makefiles a basic introduction can be found &lt;a href=&quot;http://mrbook.org/blog/tutorials/make/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
@@ -741,7 +741,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;/assets/img/dissertation_contributions_in_pipeline.svg&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;An illustration of how this dissertation&apos;s contributions fit together in the broader scope of the end-to-end simulation visualization pipeline. The contributions discussed work together to support massive data sets across the simulation visualization pipeline.&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;An illustration of how this dissertation's contributions fit together in the broader scope of the end-to-end simulation visualization pipeline. The contributions discussed work together to support massive data sets across the simulation visualization pipeline.&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
@@ -779,7 +779,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;https://i.imgur.com/XmBXWgu.png&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Interactive visualization of an isosurface of a ~1TB dataset entirely in the web browser. The full data is a float64 10240×7680×1536 grid computed by a DNS simulation. The isosurface is interactively computed and visualized entirely in the browser using our GPU isosurface computation algorithm for block-compressed data, after applying advanced precision and resolution trade-offs. The surface consists of 137.5M triangles and is computed in 526ms on an RTX 2070 using WebGPU in Chrome and rendered at 30FPS at 1280×720. The original surface, shown in the right split image, consists of 4.3B triangles and was computed with VTK&apos;s Flying Edges filter on a quad-socket Xeon server in 78s using 1.3TB of memory.&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Interactive visualization of an isosurface of a ~1TB dataset entirely in the web browser. The full data is a float64 10240×7680×1536 grid computed by a DNS simulation. The isosurface is interactively computed and visualized entirely in the browser using our GPU isosurface computation algorithm for block-compressed data, after applying advanced precision and resolution trade-offs. The surface consists of 137.5M triangles and is computed in 526ms on an RTX 2070 using WebGPU in Chrome and rendered at 30FPS at 1280×720. The original surface, shown in the right split image, consists of 4.3B triangles and was computed with VTK's Flying Edges filter on a quad-socket Xeon server in 78s using 1.3TB of memory.&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
@@ -802,7 +802,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
-				Researchers in the field of connectomics are working to reconstruct a map of neural connections in the brain in order to understand at a fundamental level how the brain processes information. Constructing this wiring diagram is done by tracing neurons through high-resolution image stacks acquired with fluorescence microscopy imaging techniques. While a large number of automatic tracing algorithms have been proposed, these frequently rely on local features in the data and fail on noisy data or ambiguous cases, requiring time-consuming manual correction. As a result, manual and semi-automatic tracing methods remain the state-of-the-art for creating accurate neuron reconstructions. We propose a new semi-automatic method that uses topological features to guide users in tracing neurons and integrate this method within a virtual reality (VR) framework previously used for manual tracing. Our approach augments both visualization and interaction with topological elements, allowing rapid understanding and tracing of complex morphologies. In our pilot study, neuroscientists demonstrated a strong preference for using our tool over prior approaches, reported less fatigue during tracing, and commended the ability to better understand possible paths and alternatives. Quantitative evaluation of the traces reveals that users&apos; tracing speed increased, while retaining similar accuracy compared to a fully manual approach.
+				Researchers in the field of connectomics are working to reconstruct a map of neural connections in the brain in order to understand at a fundamental level how the brain processes information. Constructing this wiring diagram is done by tracing neurons through high-resolution image stacks acquired with fluorescence microscopy imaging techniques. While a large number of automatic tracing algorithms have been proposed, these frequently rely on local features in the data and fail on noisy data or ambiguous cases, requiring time-consuming manual correction. As a result, manual and semi-automatic tracing methods remain the state-of-the-art for creating accurate neuron reconstructions. We propose a new semi-automatic method that uses topological features to guide users in tracing neurons and integrate this method within a virtual reality (VR) framework previously used for manual tracing. Our approach augments both visualization and interaction with topological elements, allowing rapid understanding and tracing of complex morphologies. In our pilot study, neuroscientists demonstrated a strong preference for using our tool over prior approaches, reported less fatigue during tracing, and commended the ability to better understand possible paths and alternatives. Quantitative evaluation of the traces reveals that users' tracing speed increased, while retaining similar accuracy compared to a fully manual approach.
 				&lt;a href=&quot;https://www.willusher.io//publications/mscvrnt&quot;&gt;Continue Reading&lt;/a&gt;
 			</description>
 			<link>https://www.willusher.io/publications/mscvrnt</link>
@@ -874,11 +874,11 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;https://i.imgur.com/e4HJywq.jpg&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Left: The Disney Moana Island rendered remotely with OSPRay&apos;s path tracer at full detail using 128 Skylake Xeon (SKX) nodes on Stampede2 and streamed to the 132Mpixel POWERwall display wall, averages 0.2-1.2 FPS. Right: The Boeing 777 model, consisting of 349M triangles, rendered remotely with OSPRay&apos;s scivis renderer using 64 Intel Xeon Phi Knight’s Landing nodes on Stampede2 and streamed to the POWERwall, averages 6-7 FPS&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Left: The Disney Moana Island rendered remotely with OSPRay's path tracer at full detail using 128 Skylake Xeon (SKX) nodes on Stampede2 and streamed to the 132Mpixel POWERwall display wall, averages 0.2-1.2 FPS. Right: The Boeing 777 model, consisting of 349M triangles, rendered remotely with OSPRay's scivis renderer using 64 Intel Xeon Phi Knight’s Landing nodes on Stampede2 and streamed to the POWERwall, averages 6-7 FPS&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
-				We present dw2, a flexible and easy-to-use software infrastructure for interactive rendering of large tiled display walls. Our library represents the tiled display wall as a single virtual screen through a display &apos;service&apos;, which renderers connect to and send image tiles to be displayed, either from an on-site or remote cluster. The display service can be easily configured to support a range of typical network and display hardware configurations; the client library provides a straightforward interface for easy integration into existing renderers. We evaluate the performance of our display wall service in different configurations using a CPU and GPU ray tracer, in both on-site and remote rendering scenarios using multiple display walls.
+				We present dw2, a flexible and easy-to-use software infrastructure for interactive rendering of large tiled display walls. Our library represents the tiled display wall as a single virtual screen through a display 'service', which renderers connect to and send image tiles to be displayed, either from an on-site or remote cluster. The display service can be easily configured to support a range of typical network and display hardware configurations; the client library provides a straightforward interface for easy integration into existing renderers. We evaluate the performance of our display wall service in different configurations using a CPU and GPU ray tracer, in both on-site and remote rendering scenarios using multiple display walls.
 				&lt;a href=&quot;https://www.willusher.io//publications/ospdisplaywall&quot;&gt;Continue Reading&lt;/a&gt;
 			</description>
 			<link>https://www.willusher.io/publications/ospdisplaywall</link>
@@ -890,7 +890,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			<title>A Terminology for In Situ Visualization and Analysis Systems</title>
 			<description>
 				
-				The term &apos;in situ processing&apos; has evolved over the last decade to mean both a specific strategy for visualizing and analyzing data and an umbrella term for a processing paradigm. The resulting confusion makes it difficult for visualization and analysis scientists to communicate with each other and with their stakeholders. To address this problem, a group of over 50 experts convened with the goal of standardizing terminology. This paper summarizes their findings and proposes a new terminology for describing in situ systems. An important finding from this group was that in situ systems are best described via multiple, distinct axes: integration type, proximity, access, division of execution, operation controls, and output type. This paper discusses these axes, evaluates existing systems within the axes, and explores how currently used terms relate to the axes.
+				The term 'in situ processing' has evolved over the last decade to mean both a specific strategy for visualizing and analyzing data and an umbrella term for a processing paradigm. The resulting confusion makes it difficult for visualization and analysis scientists to communicate with each other and with their stakeholders. To address this problem, a group of over 50 experts convened with the goal of standardizing terminology. This paper summarizes their findings and proposes a new terminology for describing in situ systems. An important finding from this group was that in situ systems are best described via multiple, distinct axes: integration type, proximity, access, division of execution, operation controls, and output type. This paper discusses these axes, evaluates existing systems within the axes, and explores how currently used terms relate to the axes.
 				&lt;a href=&quot;https://www.willusher.io//publications/istp&quot;&gt;Continue Reading&lt;/a&gt;
 			</description>
 			<link>https://www.willusher.io/publications/istp</link>
@@ -905,11 +905,11 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;https://i.imgur.com/trtSPND.jpg&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Three of the models we used for evaluating our method: Left) SciVis2011 contest data set (334.96K rounded cylinders via Quilez-style &apos;capsules&apos;, plus 315.88K triangles). Middle,Right) hair/fur on the Blender Foundation franck and autumn models (2.4M and 3.4M &apos;phantom&apos; curve segments, plus 249.62K and 904.40K triangles, respectively). For these three models, our method leverages hardware ray transforms to realize a hardware-accelerated OBB culling test, achieving speedup of 1.3×, 2.0×, and 2.1×, respectively, over a traditional (but also hardware-accelerated) AABB-based BVH (both methods use exactly the same primitive intersection codes). Bottom: heat map of number of intersection program evaluations for the two methods, respectively.&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Three of the models we used for evaluating our method: Left) SciVis2011 contest data set (334.96K rounded cylinders via Quilez-style 'capsules', plus 315.88K triangles). Middle,Right) hair/fur on the Blender Foundation franck and autumn models (2.4M and 3.4M 'phantom' curve segments, plus 249.62K and 904.40K triangles, respectively). For these three models, our method leverages hardware ray transforms to realize a hardware-accelerated OBB culling test, achieving speedup of 1.3×, 2.0×, and 2.1×, respectively, over a traditional (but also hardware-accelerated) AABB-based BVH (both methods use exactly the same primitive intersection codes). Bottom: heat map of number of intersection program evaluations for the two methods, respectively.&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
-				With the recent addition of hardware ray tracing capabilities, GPUs have become incredibly efficient at ray tracing both triangular geometry, and instances thereof. However, the bounding volume hierarchies that current ray tracing hardware relies on are known to struggle with long, thin primitives like cylinders and curves, because the axis-aligned bounding boxes that these hierarchies rely on cannot tightly bound such primitives. In this paper, we evaluate the use of RTX ray tracing capabilities to accelerate these primitives by tricking the GPU&apos;s instancing units into executing a hardware-accelerated oriented bounding box (OBB) rejection test before calling the user’s intersection program. We show that this can be done with minimal changes to the intersection programs and demonstrate speedups of up to 5.9× on a variety of data sets.
+				With the recent addition of hardware ray tracing capabilities, GPUs have become incredibly efficient at ray tracing both triangular geometry, and instances thereof. However, the bounding volume hierarchies that current ray tracing hardware relies on are known to struggle with long, thin primitives like cylinders and curves, because the axis-aligned bounding boxes that these hierarchies rely on cannot tightly bound such primitives. In this paper, we evaluate the use of RTX ray tracing capabilities to accelerate these primitives by tricking the GPU's instancing units into executing a hardware-accelerated oriented bounding box (OBB) rejection test before calling the user’s intersection program. We show that this can be done with minimal changes to the intersection programs and demonstrate speedups of up to 5.9× on a variety of data sets.
 				&lt;a href=&quot;https://www.willusher.io//publications/owltubes&quot;&gt;Continue Reading&lt;/a&gt;
 			</description>
 			<link>https://www.willusher.io/publications/owltubes</link>
@@ -962,7 +962,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;https://i.imgur.com/xDw1wI1.jpg&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Large-scale interactive visualization using the Distributed FrameBuffer. Top left: Image-parallel rendering of two transparent isosurfaces from the Richtmyer-Meshkov (516M triangles), 8FPS with a 2048&lt;sup&gt;2&lt;/sup&gt; framebuffer using 16 Stampede2 Intel Xeon Platinum 8160 SKX nodes. Top right: Data-parallel rendering of the Cosmic Web (29B transparent spheres), 2FPS at 2048&lt;sup&gt;2&lt;/sup&gt; using 128 Theta Intel Xeon Phi Knight&apos;s Landing (KNL) nodes. Bottom: Data-parallel rendering of the 951GB DNS volume combined with a transparent isosurface (4.35B triangles), 5FPS at 4096x1024 using 64 Stampede2 Intel Xeon Phi KNL nodes.&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Large-scale interactive visualization using the Distributed FrameBuffer. Top left: Image-parallel rendering of two transparent isosurfaces from the Richtmyer-Meshkov (516M triangles), 8FPS with a 2048&lt;sup&gt;2&lt;/sup&gt; framebuffer using 16 Stampede2 Intel Xeon Platinum 8160 SKX nodes. Top right: Data-parallel rendering of the Cosmic Web (29B transparent spheres), 2FPS at 2048&lt;sup&gt;2&lt;/sup&gt; using 128 Theta Intel Xeon Phi Knight's Landing (KNL) nodes. Bottom: Data-parallel rendering of the 951GB DNS volume combined with a transparent isosurface (4.35B triangles), 5FPS at 4096x1024 using 64 Stampede2 Intel Xeon Phi KNL nodes.&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
@@ -1019,11 +1019,11 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;https://i.imgur.com/clMvtsl.png&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;a-c) Illustrations of the tetrahedral mesh point location kernels evaluated in this paper. a) Our reference method builds a BVH over the tets and performs both BVH traversal and point-in-tet tests in software (black) using CUDA. b) &lt;font face=&apos;monospace&apos;&gt;rtx-bvh&lt;/font&gt; uses an RTX-accelerated BVH over tets and triggers hardware BVH traversal (green) by tracing infinitesimal rays at the sample points, while still performing point-tet tests in software (black). c) &lt;font face=&apos;monospace&apos;&gt;rtx-rep-faces&lt;/font&gt; and &lt;font face=&apos;monospace&apos;&gt;rtx-shrd-faces&lt;/font&gt; use both hardware BVH traversal and triangle intersection (green) by tracing rays against the tetrahedras&apos; faces. d) An image from the unstructured-data volume ray marcher used to evaluate our point location kernels, showing the 35.7M tet Agulhas Current data set rendered interactively on an NVIDIA TITAN RTX (34FPS at 1024&lt;sup&gt;2&lt;/sup&gt; pixels)&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;a-c) Illustrations of the tetrahedral mesh point location kernels evaluated in this paper. a) Our reference method builds a BVH over the tets and performs both BVH traversal and point-in-tet tests in software (black) using CUDA. b) &lt;font face='monospace'&gt;rtx-bvh&lt;/font&gt; uses an RTX-accelerated BVH over tets and triggers hardware BVH traversal (green) by tracing infinitesimal rays at the sample points, while still performing point-tet tests in software (black). c) &lt;font face='monospace'&gt;rtx-rep-faces&lt;/font&gt; and &lt;font face='monospace'&gt;rtx-shrd-faces&lt;/font&gt; use both hardware BVH traversal and triangle intersection (green) by tracing rays against the tetrahedras' faces. d) An image from the unstructured-data volume ray marcher used to evaluate our point location kernels, showing the 35.7M tet Agulhas Current data set rendered interactively on an NVIDIA TITAN RTX (34FPS at 1024&lt;sup&gt;2&lt;/sup&gt; pixels)&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
-				We explore a first proof-of-concept example of creatively using the Turing generation&apos;s hardware ray tracing cores to solve a problem other than classical ray tracing, specifically, point location in unstructured tetrahedral meshes. Starting with a CUDA reference method, we describe and evaluate three different approaches to reformulate this problem in a manner that allows it to be mapped to these new hardware units. Each variant replaces the simpler problem of point queries with the more complex one of ray queries; however, thanks to hardware acceleration, these approaches are actually faster than the reference method.
+				We explore a first proof-of-concept example of creatively using the Turing generation's hardware ray tracing cores to solve a problem other than classical ray tracing, specifically, point location in unstructured tetrahedral meshes. Starting with a CUDA reference method, we describe and evaluate three different approaches to reformulate this problem in a manner that allows it to be mapped to these new hardware units. Each variant replaces the simpler problem of point queries with the more complex one of ray queries; however, thanks to hardware acceleration, these approaches are actually faster than the reference method.
 				&lt;a href=&quot;https://www.willusher.io//publications/rtx-points&quot;&gt;Continue Reading&lt;/a&gt;
 			</description>
 			<link>https://www.willusher.io/publications/rtx-points</link>
@@ -1057,7 +1057,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;https://i.imgur.com/PqmRTuz.jpg&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;High-fidelity isosurface visualizations of gigascale block-structured adaptive mesh refinement (BS-AMR) data using our method. Left: a 28GB GR-Chombo simulation of gravitational waves resulting from the collision of two black holes. Middle and Right: a 57GB AMR dataset computed with LAVA at NASA, simulating multiple fields over the landing gear of an aircraft. Middle: isosurface representation of the vorticity, rendered with path tracing. Right: a combined visualization of volume rending and an isosurface of the pressure over the landing gear, rendered with OSPRay&apos;s SciVis renderer.  Using our approach for ray tracing such AMR data, we can interactively render crack-free implicit isosurfaces in combination with direct volume rendering and advanced shading effects like transparency, ambient occlusion and path tracing.&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;High-fidelity isosurface visualizations of gigascale block-structured adaptive mesh refinement (BS-AMR) data using our method. Left: a 28GB GR-Chombo simulation of gravitational waves resulting from the collision of two black holes. Middle and Right: a 57GB AMR dataset computed with LAVA at NASA, simulating multiple fields over the landing gear of an aircraft. Middle: isosurface representation of the vorticity, rendered with path tracing. Right: a combined visualization of volume rending and an isosurface of the pressure over the landing gear, rendered with OSPRay's SciVis renderer.  Using our approach for ray tracing such AMR data, we can interactively render crack-free implicit isosurfaces in combination with direct volume rendering and advanced shading effects like transparency, ambient occlusion and path tracing.&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
@@ -1095,7 +1095,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;https://i.imgur.com/UYlTqhT.png&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Interactive in situ visualization of a 172k atom simulation of silicene formation with 128 LAMMPS ranks sending to 16 OSPRay renderer ranks, all executed on Theta in the mpi-multi configuration. When taking four ambient occlusion samples per-pixel, our viewer averages 7FPS at 1024x1024. Simulation dataset is courtesy of &lt;a href=&apos;https://pubs.rsc.org/en/content/articlelanding/2017/nr/c7nr03153j#!divAbstract&apos;&gt;Cherukara et al.&lt;/a&gt;&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;Interactive in situ visualization of a 172k atom simulation of silicene formation with 128 LAMMPS ranks sending to 16 OSPRay renderer ranks, all executed on Theta in the mpi-multi configuration. When taking four ambient occlusion samples per-pixel, our viewer averages 7FPS at 1024x1024. Simulation dataset is courtesy of &lt;a href='https://pubs.rsc.org/en/content/articlelanding/2017/nr/c7nr03153j#!divAbstract'&gt;Cherukara et al.&lt;/a&gt;&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				
@@ -1114,7 +1114,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 				&lt;figure&gt;
 					&lt;img src=&quot;https://i.imgur.com/JgAOmst.png&quot;/&gt;
 					&lt;figcaption&gt;
-					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;High-quality interactive volume visualization using VisIt-OSPRay: &lt;b&gt;a)&lt;/b&gt; volume rendering of O&lt;sub&gt;2&lt;/sub&gt; concentration inside a combustion chamber, data courtesy of the &lt;a href=&quot;http://ccmsc.sci.utah.edu/&quot;&gt;University of Utah CCMSC&lt;/a&gt;; &lt;b&gt;b)&lt;/b&gt; volume rendering of the Richtmyer-Meshkov Instability; &lt;b&gt;c)&lt;/b&gt; visualization of a supernova simulation; &lt;b&gt;d)&lt;/b&gt; visualization of the aneurysm dataset using volume rendering and streamlines; &lt;b&gt;e)&lt;/b&gt; scalable volume rendering of the 966GB DNS data on 64 Stampede2 Intel Xeon Phi Knight&apos;s Landing nodes.&lt;/i&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;High-quality interactive volume visualization using VisIt-OSPRay: &lt;b&gt;a)&lt;/b&gt; volume rendering of O&lt;sub&gt;2&lt;/sub&gt; concentration inside a combustion chamber, data courtesy of the &lt;a href=&quot;http://ccmsc.sci.utah.edu/&quot;&gt;University of Utah CCMSC&lt;/a&gt;; &lt;b&gt;b)&lt;/b&gt; volume rendering of the Richtmyer-Meshkov Instability; &lt;b&gt;c)&lt;/b&gt; visualization of a supernova simulation; &lt;b&gt;d)&lt;/b&gt; visualization of the aneurysm dataset using volume rendering and streamlines; &lt;b&gt;e)&lt;/b&gt; scalable volume rendering of the 966GB DNS data on 64 Stampede2 Intel Xeon Phi Knight's Landing nodes.&lt;/i&gt;
 					&lt;/figcaption&gt;
 				&lt;/figure&gt;
 				

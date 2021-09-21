@@ -155,7 +155,7 @@ will not work in Safari for now, but can be made to work with some smaller tweak
 
 <p>The initial setup of our WebGPU rendering context is similar to WebGL.
 Our webpage will have a canvas to display our rendered image,
-and load our rendering code from <code class="language-plaintext highlighter-rouge">render.js</code>.</p>
+and load our rendering code from <code class="highlighter-rouge">render.js</code>.</p>
 
 <figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html&gt;</span>
@@ -169,20 +169,20 @@ and load our rendering code from <code class="language-plaintext highlighter-rou
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span></code></pre></figure>
 
-<p>A number of the APIs used to interact with the GPU are <code class="language-plaintext highlighter-rouge">async</code>, thus
-we’ll place our rendering code inside an <code class="language-plaintext highlighter-rouge">async</code>
+<p>A number of the APIs used to interact with the GPU are <code class="highlighter-rouge">async</code>, thus
+we’ll place our rendering code inside an <code class="highlighter-rouge">async</code>
 function which is executed when the script is loaded.
-Our first step is to get a <a href="https://gpuweb.github.io/gpuweb/#adapter"><code class="language-plaintext highlighter-rouge">GPUAdapter</code></a>
+Our first step is to get a <a href="https://gpuweb.github.io/gpuweb/#adapter"><code class="highlighter-rouge">GPUAdapter</code></a>
 from the WebGPU API. Each adapter represents a GPU on the machine
 and the browser’s implementation of WebGPU on top of that GPU.
-We can then request a <a href="https://gpuweb.github.io/gpuweb/#devices"><code class="language-plaintext highlighter-rouge">GPUDevice</code></a>
+We can then request a <a href="https://gpuweb.github.io/gpuweb/#devices"><code class="highlighter-rouge">GPUDevice</code></a>
 from the adapter, which gives us a context to work with the hardware.
-The <code class="language-plaintext highlighter-rouge">GPUDevice</code> provides APIs to create GPU objects such as buffers and textures, and
-execute commands on the device. The distinction between the <code class="language-plaintext highlighter-rouge">GPUAdapter</code>
-and <code class="language-plaintext highlighter-rouge">GPUDevice</code> is similar to that of <code class="language-plaintext highlighter-rouge">VkPhysicalDevice</code> and <code class="language-plaintext highlighter-rouge">VkDevice</code> in Vulkan.
+The <code class="highlighter-rouge">GPUDevice</code> provides APIs to create GPU objects such as buffers and textures, and
+execute commands on the device. The distinction between the <code class="highlighter-rouge">GPUAdapter</code>
+and <code class="highlighter-rouge">GPUDevice</code> is similar to that of <code class="highlighter-rouge">VkPhysicalDevice</code> and <code class="highlighter-rouge">VkDevice</code> in Vulkan.
 As with WebGL, we need a context for the canvas which will
 be used to display our rendered image. To use WebGPU with the
-canvas, we request a <code class="language-plaintext highlighter-rouge">webgpu</code> context (Safari calls it a <code class="language-plaintext highlighter-rouge">gpu</code> context).
+canvas, we request a <code class="highlighter-rouge">webgpu</code> context (Safari calls it a <code class="highlighter-rouge">gpu</code> context).
 After this setup, we can load our shaders and vertex
 data, configure our render targets, and build our render pipeline, to draw
 our triangle!</p>
@@ -193,28 +193,40 @@ our triangle!</p>
         <span class="k">return</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="c1">// Get a GPU device to render with</span>
+    <span class="c1">// Get a GPU device to render with
+</span>
     <span class="kd">var</span> <span class="nx">adapter</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">.</span><span class="nx">requestAdapter</span><span class="p">();</span>
     <span class="kd">var</span> <span class="nx">device</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">adapter</span><span class="p">.</span><span class="nx">requestDevice</span><span class="p">();</span>
 
-    <span class="c1">// Get a context to display our rendered image on the canvas</span>
+    <span class="c1">// Get a context to display our rendered image on the canvas
+</span>
     <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">webgpu-canvas</span><span class="dl">"</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">"</span><span class="s2">webgpu</span><span class="dl">"</span><span class="p">);</span>
 
-    <span class="c1">// Setup shader modules</span>
-    <span class="c1">// ....</span>
+    <span class="c1">// Setup shader modules
+</span>
+    <span class="c1">// ....
+</span>
 
-    <span class="c1">// Upload vertex data</span>
-    <span class="c1">// ....</span>
+    <span class="c1">// Upload vertex data
+</span>
+    <span class="c1">// ....
+</span>
 
-    <span class="c1">// Setup render outputs</span>
-    <span class="c1">// ....</span>
+    <span class="c1">// Setup render outputs
+</span>
+    <span class="c1">// ....
+</span>
 
-    <span class="c1">// Create render pipeline</span>
-    <span class="c1">// ....</span>
+    <span class="c1">// Create render pipeline
+</span>
+    <span class="c1">// ....
+</span>
 
-    <span class="c1">// Render!</span>
-    <span class="c1">// ....</span>
+    <span class="c1">// Render!
+</span>
+    <span class="c1">// ....
+</span>
 <span class="p">})();</span></code></pre></figure>
 
 <h1 id="the-webgpu-rendering-pipeline">The WebGPU Rendering Pipeline</h1>
@@ -238,7 +250,7 @@ the rendering pipeline.</p>
 <p>To render our triangle, we’ll need to configure such a pipeline,
 specifying our shaders, vertex attribute configuration, etc.
 In WebGPU, this pipeline takes the form of a concrete object, the
-<a href="https://gpuweb.github.io/gpuweb/#gpurenderpipeline"><code class="language-plaintext highlighter-rouge">GPURenderPipeline</code></a>,
+<a href="https://gpuweb.github.io/gpuweb/#gpurenderpipeline"><code class="highlighter-rouge">GPURenderPipeline</code></a>,
 which specifies the different pieces of the pipeline.
 The configuration of the components of this pipeline (e.g., the shaders,
 vertex state, render output state, etc.) are fixed, allowing the GPU
@@ -260,7 +272,8 @@ WebGPU takes shaders in the form of SPV (compiled from GLSL) or
 As WGSL is the main language for future WebGPU applications, we’ll take
 this route in the updated tutorial.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="c1">// This type definition is just to make typing a bit easier</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="c1">// This type definition is just to make typing a bit easier
+</span>
 <span class="n">type</span> <span class="n">float4</span> <span class="o">=</span> <span class="kt">vec4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="k">struct</span> <span class="n">VertexInput</span> <span class="p">{</span>
@@ -269,7 +282,8 @@ this route in the updated tutorial.</p>
 <span class="p">};</span>
 
 <span class="k">struct</span> <span class="n">VertexOutput</span> <span class="p">{</span>
-    <span class="c1">// This is the equivalent of gl_Position in GLSL</span>
+    <span class="c1">// This is the equivalent of gl_Position in GLSL
+</span>
     <span class="p">[[</span><span class="n">builtin</span><span class="p">(</span><span class="n">position</span><span class="p">)]]</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
     <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
 <span class="p">};</span>
@@ -287,14 +301,16 @@ this route in the updated tutorial.</p>
     <span class="k">return</span> <span class="n">float4</span><span class="p">(</span><span class="k">in</span><span class="p">.</span><span class="n">color</span><span class="p">);</span>
 <span class="err">}</span></code></pre></figure>
 
-<p>We can pass a string containing our WGSL code to the <code class="language-plaintext highlighter-rouge">createShaderModule</code>
+<p>We can pass a string containing our WGSL code to the <code class="highlighter-rouge">createShaderModule</code>
 method to compile them. We can check the compilation info of the resulting
 shader module to see if any error occured that caused the shader to fail to
 compile.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Setup shader modules</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Setup shader modules
+</span>
 <span class="kd">var</span> <span class="nx">shaderModule</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createShaderModule</span><span class="p">({</span><span class="na">code</span><span class="p">:</span> <span class="nx">shaderCode</span><span class="p">});</span>
-<span class="c1">// This API is only available in Chrome right now</span>
+<span class="c1">// This API is only available in Chrome right now
+</span>
 <span class="k">if</span> <span class="p">(</span><span class="nx">shaderModule</span><span class="p">.</span><span class="nx">compilationInfo</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">compilationInfo</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">shaderModule</span><span class="p">.</span><span class="nx">compilationInfo</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">compilationInfo</span><span class="p">.</span><span class="nx">messages</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
@@ -317,63 +333,72 @@ compile.</p>
 <p>Next, we’ll specify the vertex data for our triangle.
 We’ll specify both the vertex positions and colors in a single
 buffer, with the positions and colors interleaved with each other.
-Each position and color will be stored as a <code class="language-plaintext highlighter-rouge">float4</code>.
+Each position and color will be stored as a <code class="highlighter-rouge">float4</code>.
 First, we allocate and map a buffer on the device with enough
-room to store the vertex data, using <code class="language-plaintext highlighter-rouge">createBuffer</code>.
+room to store the vertex data, using <code class="highlighter-rouge">createBuffer</code>.
 This method takes the size (in bytes) of the buffer we want
 to create and a set of flags or’d together specifying the
 desired <a href="https://gpuweb.github.io/gpuweb/#buffer-usage">usage modes</a> of the buffer.
-We specify the buffer should be mapped when it’s created by setting the <code class="language-plaintext highlighter-rouge">mappedAtCreation</code> parameter.</p>
+We specify the buffer should be mapped when it’s created by setting the <code class="highlighter-rouge">mappedAtCreation</code> parameter.</p>
 
-<p><code class="language-plaintext highlighter-rouge">createBuffer</code> returns the <code class="language-plaintext highlighter-rouge">GPUBuffer</code> and an <code class="language-plaintext highlighter-rouge">ArrayBuffer</code> which
+<p><code class="highlighter-rouge">createBuffer</code> returns the <code class="highlighter-rouge">GPUBuffer</code> and an <code class="highlighter-rouge">ArrayBuffer</code> which
 we can use to upload data into the buffer.
-To write our vertex data we create a <code class="language-plaintext highlighter-rouge">Float32Array</code> view of the array buffer
+To write our vertex data we create a <code class="highlighter-rouge">Float32Array</code> view of the array buffer
 and set the data through this view.
 Finally, we have to unmap the buffer before using it later in rendering.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Specify vertex data</span>
-<span class="c1">// Allocate room for the vertex data: 3 vertices, each with 2 float4's</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Specify vertex data
+</span>
+<span class="c1">// Allocate room for the vertex data: 3 vertices, each with 2 float4's
+</span>
 <span class="kd">var</span> <span class="nx">dataBuf</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
     <span class="na">size</span><span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
     <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">,</span>
     <span class="na">mappedAtCreation</span><span class="p">:</span> <span class="kc">true</span>
 <span class="p">});</span>
 
-<span class="c1">// Interleaved positions and colors</span>
+<span class="c1">// Interleaved positions and colors
+</span>
 <span class="k">new</span> <span class="nb">Float32Array</span><span class="p">(</span><span class="nx">dataBuf</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="kd">set</span><span class="p">([</span>
-    <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1">// position</span>
-    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
-    <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// position</span>
-    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
-    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// position</span>
-    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1">// position
+</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color
+</span>
+    <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// position
+</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color
+</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// position
+</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color
+</span>
 <span class="p">]);</span>
 <span class="nx">dataBuf</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span></code></pre></figure>
 
 <p>To tell the GPU how to pass the vertex data to our shader, we’ll
-specify a <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuvertexstate"><code class="language-plaintext highlighter-rouge">GPUVertexState</code></a>
+specify a <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuvertexstate"><code class="highlighter-rouge">GPUVertexState</code></a>
 as part of the rendering pipeline when we create it. 
 This object specifies both the shader we want to run and how the attribute
 inputs to this shader should be filled with data from our vertex buffers.
 We specify how the vertex buffers should be interpreted by passing
-an array of <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuvertexbufferlayout"><code class="language-plaintext highlighter-rouge">GPUVertexBufferLayout</code></a>
+an array of <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuvertexbufferlayout"><code class="highlighter-rouge">GPUVertexBufferLayout</code></a>
 objects. Each entry describes the vertex attributes to be read from
 the vertex buffer bound to the corresponding slot at render time.</p>
 
 <p>In this example, we have a single buffer containing the interleaved
-attributes of each vertex. Thus, the stride between elements is 32 bytes (2 <code class="language-plaintext highlighter-rouge">float4</code>),
-and the buffer specifies two <code class="language-plaintext highlighter-rouge">float4</code> attributes.
+attributes of each vertex. Thus, the stride between elements is 32 bytes (2 <code class="highlighter-rouge">float4</code>),
+and the buffer specifies two <code class="highlighter-rouge">float4</code> attributes.
 The first attribute is the position, and is sent to shader input location 0.
 The second is the color, and is sent to shader input location 1.</p>
 
 <p>WebGPU’s model for specifying vertex buffers and attributes follows that of D3D12 and Vulkan,
 where vertex buffers are bound to input slots and provide some set of vertex attributes,
 illustrated below.
-From a D3D12 view, the <code class="language-plaintext highlighter-rouge">vertexBuffers</code> member maps to the array of <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_input_element_desc"><code class="language-plaintext highlighter-rouge">D3D12_INPUT_ELEMENT_DESC</code></a>
-structures passed through the <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_input_layout_desc"><code class="language-plaintext highlighter-rouge">D3D12_INPUT_LAYOUT_DESC</code></a>
+From a D3D12 view, the <code class="highlighter-rouge">vertexBuffers</code> member maps to the array of <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_input_element_desc"><code class="highlighter-rouge">D3D12_INPUT_ELEMENT_DESC</code></a>
+structures passed through the <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d12/ns-d3d12-d3d12_input_layout_desc"><code class="highlighter-rouge">D3D12_INPUT_LAYOUT_DESC</code></a>
 when creating a graphics pipeline.
-From a Vulkan view, the <code class="language-plaintext highlighter-rouge">vertexBuffers</code> member maps directly to the
-<a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineVertexInputStateCreateInfo.html"><code class="language-plaintext highlighter-rouge">VkPipelineVertexInputStateCreateInfo</code></a>
+From a Vulkan view, the <code class="highlighter-rouge">vertexBuffers</code> member maps directly to the
+<a href="https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkPipelineVertexInputStateCreateInfo.html"><code class="highlighter-rouge">VkPipelineVertexInputStateCreateInfo</code></a>
 structure passed when creating a graphics pipeline.</p>
 
 <figure>
@@ -387,12 +412,15 @@ structure passed when creating a graphics pipeline.</p>
 	</i></figcaption>
 </figure>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Vertex attribute state and shader stage</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Vertex attribute state and shader stage
+</span>
 <span class="kd">var</span> <span class="nx">vertexState</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">// Shader stage info</span>
+    <span class="c1">// Shader stage info
+</span>
     <span class="na">module</span><span class="p">:</span> <span class="nx">shaderModule</span><span class="p">,</span>
     <span class="na">entryPoint</span><span class="p">:</span> <span class="dl">"</span><span class="s2">vertex_main</span><span class="dl">"</span><span class="p">,</span>
-    <span class="c1">// Vertex buffer info</span>
+    <span class="c1">// Vertex buffer info
+</span>
     <span class="na">buffers</span><span class="p">:</span> <span class="p">[{</span>
         <span class="na">arrayStride</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
         <span class="na">attributes</span><span class="p">:</span> <span class="p">[</span>
@@ -415,10 +443,11 @@ they’ll be displayed on.
 Since we’ll be rendering directly to the swap chain textures, we specify that
 they’ll be used as output attachments.
 The swap chain is no longer an explicit object in WebGPU, but is managed internally
-by the context. To set up the swap chain we call <code class="language-plaintext highlighter-rouge">configure</code>, and pass
+by the context. To set up the swap chain we call <code class="highlighter-rouge">configure</code>, and pass
 the swap chain parameters.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Setup render outputs</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Setup render outputs
+</span>
 <span class="kd">var</span> <span class="nx">swapChainFormat</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">bgra8unorm</span><span class="dl">"</span><span class="p">;</span>
 <span class="nx">context</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span>
     <span class="na">device</span><span class="p">:</span> <span class="nx">device</span><span class="p">,</span>
@@ -445,7 +474,7 @@ an output attachment.</p>
 <span class="p">});</span></code></pre></figure>
 
 <p>The analog to our GPUVertexState for the fragment shader stage is
-the <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpufragmentstate"><code class="language-plaintext highlighter-rouge">GPUFragmentState</code></a>.
+the <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpufragmentstate"><code class="highlighter-rouge">GPUFragmentState</code></a>.
 This object specifies the fragment shader to be run and what format the
 textures it will write its outputs to will be in. The render targets are
 specified in order to match the output locations in the shader,
@@ -454,10 +483,12 @@ We’ll be rendering directly to the swap chain, so we have just one render
 target whose format is the swap chain format.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">fragmentState</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">// Shader info</span>
+    <span class="c1">// Shader info
+</span>
     <span class="na">module</span><span class="p">:</span> <span class="nx">shaderModule</span><span class="p">,</span>
     <span class="na">entryPoint</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fragment_main</span><span class="dl">"</span><span class="p">,</span>
-    <span class="c1">// Output render target info</span>
+    <span class="c1">// Output render target info
+</span>
     <span class="na">targets</span><span class="p">:</span> <span class="p">[{</span><span class="na">format</span><span class="p">:</span> <span class="nx">swapChainFormat</span><span class="p">}]</span>
 <span class="p">};</span></code></pre></figure>
 
@@ -466,15 +497,16 @@ target whose format is the swap chain format.</p>
 <p>Finally, we can create the rendering pipeline that combines our
 shaders, vertex attributes, and output configuration, which we can
 use to render our triangle. The rendering pipeline description is
-passed through a <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpipelinedescriptor"><code class="language-plaintext highlighter-rouge">GPURenderPipelineDescriptor</code></a>
-object, passed to <code class="language-plaintext highlighter-rouge">createRenderPipeline</code>.
+passed through a <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpipelinedescriptor"><code class="highlighter-rouge">GPURenderPipelineDescriptor</code></a>
+object, passed to <code class="highlighter-rouge">createRenderPipeline</code>.
 The final pieces we need for our rendering pipeline are
 the pipeline layout, which specifies the bind group layouts used by the pipeline;
 and the depth/stencil state.
 The primitive topology is also be specified in this structure; however, the default
-is <code class="language-plaintext highlighter-rouge">triangle-list</code>, which is already what we need.</p>
+is <code class="highlighter-rouge">triangle-list</code>, which is already what we need.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create render pipeline</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create render pipeline
+</span>
 <span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span><span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[]});</span>
 
 <span class="kd">var</span> <span class="nx">renderPipeline</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createRenderPipeline</span><span class="p">({</span>
@@ -487,7 +519,7 @@ is <code class="language-plaintext highlighter-rouge">triangle-list</code>, whic
 <h2 id="rendering">Rendering!</h2>
 
 <p>Rendering in WebGPU takes place during a Render Pass, which is
-described through a <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpassdescriptor"><code class="language-plaintext highlighter-rouge">GPURenderPassDescriptor</code></a>.
+described through a <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpassdescriptor"><code class="highlighter-rouge">GPURenderPassDescriptor</code></a>.
 The render pass descriptor specifies the images to bind to the targets
 that will be written to in the fragment shader, and optionally a depth buffer
 and the occlusion query set. The color and depth attachments specified must
@@ -507,9 +539,9 @@ to the current swap chain image, we don’t set it just yet.</p>
     <span class="p">}</span>
 <span class="p">};</span></code></pre></figure>
 
-<p>All that’s left to do is write our rendering loop, and pass it to <code class="language-plaintext highlighter-rouge">requestAnimationFrame</code>
+<p>All that’s left to do is write our rendering loop, and pass it to <code class="highlighter-rouge">requestAnimationFrame</code>
 to call it each frame to update the image.
-To record and submit GPU commands, we use a <a href="https://gpuweb.github.io/gpuweb/#command-encoder"><code class="language-plaintext highlighter-rouge">GPUCommandEncoder</code></a>.
+To record and submit GPU commands, we use a <a href="https://gpuweb.github.io/gpuweb/#command-encoder"><code class="highlighter-rouge">GPUCommandEncoder</code></a>.
 The command encoder can be used to prerecord and command buffers that can
 be submitted multiple times to the GPU, or rerecord and submit each frame.
 As we’ll be changing the render pass color attachment each frame, we’ll be
@@ -518,18 +550,19 @@ rerecording and submitting the command buffer each frame.</p>
 <p>For each frame, we get the latest swap chain image which we should write rendering outputs
 to and set this as our output color attachment image.
 We then create a command encoder to record our rendering commands.
-We begin the render pass by calling <code class="language-plaintext highlighter-rouge">beginRenderPass</code> and passing our render pass descriptor
-to get back a <a href="https://gpuweb.github.io/gpuweb/#gpurenderpassencoder"><code class="language-plaintext highlighter-rouge">GPURenderPassEncoder</code></a>,
+We begin the render pass by calling <code class="highlighter-rouge">beginRenderPass</code> and passing our render pass descriptor
+to get back a <a href="https://gpuweb.github.io/gpuweb/#gpurenderpassencoder"><code class="highlighter-rouge">GPURenderPassEncoder</code></a>,
 that will allow us to record rendering commands.
 We can then set the render pipeline to use, bind our vertex buffers to the
 corresponding input slots, draw the triangle, and end the render pass.
 To get a command buffer which can be submitted to the GPU for execution
-we call <code class="language-plaintext highlighter-rouge">finish</code> on the command encoder. The returned command buffer
+we call <code class="highlighter-rouge">finish</code> on the command encoder. The returned command buffer
 is then passed to the device for execution. After the command buffer is run
 our triangle will be written to the swap chain image and displayed on the
 canvas as shown below!</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Render!</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Render!
+</span>
 <span class="kd">var</span> <span class="nx">frame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">renderPassDesc</span><span class="p">.</span><span class="nx">colorAttachments</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">view</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">getCurrentTexture</span><span class="p">().</span><span class="nx">createView</span><span class="p">();</span>
 
