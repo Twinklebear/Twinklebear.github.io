@@ -16,13 +16,6 @@
             <div class="col-12 text-center">
                 <h4>WebGPU Block Compressed Marching Cubes</h4>
                 <canvas id="webgpu-canvas" class="img-fluid" width="1280" height="720"></canvas>
-                <div class="col-12 alert alert-danger" id="no-webgpu" style="display:none;">
-                    <h4>Error: Your browser does not support WebGPU.</h4>
-                    <p>I recommend using Chrome Canary for WebGPU support at the moment.
-                    Information on how to enable WebGPU in Chrome Canary is
-                    available <a href="https://github.com/gpuweb/gpuweb/wiki/Implementation-Status">here.</a>
-                    </p>
-                </div>
             </div>
             <div class="col-12 col-lg-8 mx-auto row">
                 <div class="form-group col-8">
@@ -66,6 +59,7 @@
                         <p id="cacheMemDisplay"></p>
                     </div>
                 </div>
+                <!--
                 <div class="col-12 text-left">
                     <p id="camDisplay"></p>
                 </div>
@@ -76,12 +70,14 @@
                     type="button" class="btn btn-primary mr-1">Sweep Up Benchmark</button>
                 <button href="javascript:void(0);" id="runSweepDown" onclick="runBenchmark('sweepDown');"
                     type="button" class="btn btn-primary">Sweep Down Benchmark</button>
+                -->
             </div>
         </div>
     </div>
     <script src="shaders/embedded_shaders.js"></script>
     <script src="js/gl-matrix-min.js"></script>
     <script src="js/webgl-util.js"></script>
+    <script src="js/util.js"></script>
     <script src="js/exclusive_scan.js"></script>
     <script src="js/volumes.js"></script>
     <script src="js/tri_table.js"></script>
