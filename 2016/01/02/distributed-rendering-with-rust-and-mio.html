@@ -362,19 +362,19 @@ specifying the worker nodes to contact. To identify the connection that an event
 mio allows you to specify a <a href="http://rustdoc.s3-website-us-east-1.amazonaws.com/mio/master/mio/struct.Token.html">Token</a>
 with a <code class="language-plaintext highlighter-rouge">usize</code>, we’ll just use the worker’s index in the list of workers.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// Loop through the list of workers and connect to them.</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span> <span class="n">in</span> <span class="n">workers</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.enumerate</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c">// to_socket_addrs returns a Result&lt;Iterator&gt; of SocketAddrs, if we fail parsing</span>
-    <span class="c">// we should just abort so we use unwrap here.</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c1">// Loop through the list of workers and connect to them.</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span> <span class="k">in</span> <span class="n">workers</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.enumerate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// to_socket_addrs returns a Result&lt;Iterator&gt; of SocketAddrs, if we fail parsing</span>
+    <span class="c1">// we should just abort so we use unwrap here.</span>
     <span class="k">let</span> <span class="n">addr</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">host</span><span class="p">[</span><span class="o">..</span><span class="p">],</span> <span class="nn">worker</span><span class="p">::</span><span class="n">PORT</span><span class="p">)</span><span class="nf">.to_socket_addrs</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">()</span><span class="nf">.next</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
-    <span class="c">// Use mio's TcpStream to connect to the worker, if we succeed in starting the</span>
-    <span class="c">// connection add this stream to the event loop</span>
+    <span class="c1">// Use mio's TcpStream to connect to the worker, if we succeed in starting the</span>
+    <span class="c1">// connection add this stream to the event loop</span>
     <span class="k">match</span> <span class="nn">TcpStream</span><span class="p">::</span><span class="nf">connect</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">)</span> <span class="p">{</span>
         <span class="nf">Ok</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
-            <span class="c">// Each worker is identified in the event loop by their index in the workers Vec</span>
+            <span class="c1">// Each worker is identified in the event loop by their index in the workers Vec</span>
             <span class="k">match</span> <span class="n">event_loop</span><span class="nf">.register</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stream</span><span class="p">,</span> <span class="nf">Token</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nn">EventSet</span><span class="p">::</span><span class="nf">all</span><span class="p">(),</span> <span class="nn">PollOpt</span><span class="p">::</span><span class="nf">level</span><span class="p">()){</span>
                 <span class="nf">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">panic!</span><span class="p">(</span><span class="s">"Error registering stream from {}: {}"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">e</span><span class="p">),</span>
-                <span class="nf">Ok</span><span class="p">(</span><span class="mi">_</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{},</span>
+                <span class="nf">Ok</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{},</span>
             <span class="p">}</span>
             <span class="n">connections</span><span class="nf">.push</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
         <span class="p">},</span>
@@ -395,10 +395,10 @@ the master.</p>
     <span class="k">fn</span> <span class="nf">ready</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">event_loop</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">EventLoop</span><span class="o">&lt;</span><span class="n">Master</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">Token</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">EventSet</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="n">token</span><span class="nf">.as_usize</span><span class="p">();</span>
         <span class="k">if</span> <span class="n">event</span><span class="nf">.is_writable</span><span class="p">()</span> <span class="p">{</span>
-            <span class="c">// Send the worker their instructions and stop listening for writable events</span>
+            <span class="c1">// Send the worker their instructions and stop listening for writable events</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="n">event</span><span class="nf">.is_readable</span><span class="p">()</span> <span class="p">{</span>
-            <span class="c">// Read frame data sent by the worker</span>
+            <span class="c1">// Read frame data sent by the worker</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
@@ -440,8 +440,8 @@ gotten so far so we know where to continue writing to the buffer and when we’v
 <span class="p">}</span>
 <span class="k">impl</span> <span class="n">WorkerBuffer</span> <span class="p">{</span>
     <span class="k">pub</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">WorkerBuffer</span> <span class="p">{</span>
-        <span class="c">// We start with an expected size of 8 since we expect a 64 bit uint header</span>
-        <span class="c">// telling us how many bytes are being sent</span>
+        <span class="c1">// We start with an expected size of 8 since we expect a 64 bit uint header</span>
+        <span class="c1">// telling us how many bytes are being sent</span>
         <span class="n">WorkerBuffer</span> <span class="p">{</span> <span class="n">buf</span><span class="p">:</span> <span class="nn">Vec</span><span class="p">::</span><span class="nf">new</span><span class="p">(),</span> <span class="n">expected_size</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="n">currently_read</span><span class="p">:</span> <span class="mi">0</span> <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
@@ -451,13 +451,13 @@ begins with an 8 byte header specifying how many bytes it is when encoded with b
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">Frame</span> <span class="p">{</span>
     <span class="k">pub</span> <span class="n">encoded_size</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span>
-    <span class="c">// Which frame the worker is sending its results for</span>
+    <span class="c1">// Which frame the worker is sending its results for</span>
     <span class="k">pub</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
-    <span class="c">// Block size of the blocks being sent</span>
+    <span class="c1">// Block size of the blocks being sent</span>
     <span class="k">pub</span> <span class="n">block_size</span><span class="p">:</span> <span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="nb">usize</span><span class="p">),</span>
-    <span class="c">// Starting locations of each block</span>
+    <span class="c1">// Starting locations of each block</span>
     <span class="k">pub</span> <span class="n">blocks</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="nb">usize</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="c">// Sample data for each block, RGBW</span>
+    <span class="c1">// Sample data for each block, RGBW</span>
     <span class="k">pub</span> <span class="n">pixels</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">f32</span><span class="o">&gt;</span><span class="p">,</span>
 <span class="p">}</span></code></pre></figure>
 
@@ -470,32 +470,32 @@ explained inline with comments, so please see the snippet for details on how thi
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">read_worker_buffer</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="nb">usize</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">bool</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">buf</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="py">.worker_buffers</span><span class="p">[</span><span class="n">worker</span><span class="p">];</span>
-    <span class="c">// If we haven't read the size of data being sent, read that now</span>
+    <span class="c1">// If we haven't read the size of data being sent, read that now</span>
     <span class="k">if</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">&lt;</span> <span class="mi">8</span> <span class="p">{</span>
-        <span class="c">// First 8 bytes are a u64 specifying the number of bytes being sent,</span>
-        <span class="c">// make sure we have room to store 8 bytes</span>
+        <span class="c1">// First 8 bytes are a u64 specifying the number of bytes being sent,</span>
+        <span class="c1">// make sure we have room to store 8 bytes</span>
         <span class="n">buf</span><span class="py">.buf</span><span class="nf">.extend</span><span class="p">(</span><span class="nn">iter</span><span class="p">::</span><span class="nf">repeat</span><span class="p">(</span><span class="mi">0u8</span><span class="p">)</span><span class="nf">.take</span><span class="p">(</span><span class="mi">8</span><span class="p">));</span>
         <span class="k">match</span> <span class="k">self</span><span class="py">.connections</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="nf">.read</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="n">buf</span><span class="py">.currently_read</span><span class="o">..</span><span class="p">])</span> <span class="p">{</span>
             <span class="nf">Ok</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">+=</span> <span class="n">n</span><span class="p">,</span>
             <span class="nf">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"Error reading results from worker {}: {}"</span><span class="p">,</span> <span class="k">self</span><span class="py">.workers</span><span class="p">[</span><span class="n">worker</span><span class="p">],</span> <span class="n">e</span><span class="p">),</span>
         <span class="p">}</span>
-        <span class="c">// Recall that our initial expected size is 8, for the size header.</span>
-        <span class="c">// Once we've read this we can decode the header and get the real size of the data.</span>
+        <span class="c1">// Recall that our initial expected size is 8, for the size header.</span>
+        <span class="c1">// Once we've read this we can decode the header and get the real size of the data.</span>
         <span class="k">if</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">==</span> <span class="n">buf</span><span class="py">.expected_size</span> <span class="p">{</span>
             <span class="n">buf</span><span class="py">.expected_size</span> <span class="o">=</span> <span class="nf">decode</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="o">..</span><span class="p">])</span><span class="nf">.unwrap</span><span class="p">();</span>
-            <span class="c">// Extend the Vec so we've got room for the remaning bytes, minus 8 for the</span>
-            <span class="c">// size header we just read</span>
+            <span class="c1">// Extend the Vec so we've got room for the remaning bytes, minus 8 for the</span>
+            <span class="c1">// size header we just read</span>
             <span class="n">buf</span><span class="py">.buf</span><span class="nf">.extend</span><span class="p">(</span><span class="nn">iter</span><span class="p">::</span><span class="nf">repeat</span><span class="p">(</span><span class="mi">0u8</span><span class="p">)</span><span class="nf">.take</span><span class="p">(</span><span class="n">buf</span><span class="py">.expected_size</span> <span class="o">-</span> <span class="mi">8</span><span class="p">));</span>
         <span class="p">}</span>
     <span class="p">}</span>
-    <span class="c">// If we've finished reading the size header we can now start reading the frame data</span>
+    <span class="c1">// If we've finished reading the size header we can now start reading the frame data</span>
     <span class="k">if</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">&gt;=</span> <span class="mi">8</span> <span class="p">{</span>
         <span class="k">match</span> <span class="k">self</span><span class="py">.connections</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="nf">.read</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">buf</span><span class="py">.buf</span><span class="p">[</span><span class="n">buf</span><span class="py">.currently_read</span><span class="o">..</span><span class="p">])</span> <span class="p">{</span>
             <span class="nf">Ok</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">+=</span> <span class="n">n</span><span class="p">,</span>
             <span class="nf">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"Error reading results from worker {}: {}"</span><span class="p">,</span> <span class="k">self</span><span class="py">.workers</span><span class="p">[</span><span class="n">worker</span><span class="p">],</span> <span class="n">e</span><span class="p">),</span>
         <span class="p">}</span>
     <span class="p">}</span>
-    <span class="c">// Return true if we've read all the data we're expecting</span>
+    <span class="c1">// Return true if we've read all the data we're expecting</span>
     <span class="n">buf</span><span class="py">.currently_read</span> <span class="o">==</span> <span class="n">buf</span><span class="py">.expected_size</span>
 <span class="p">}</span></code></pre></figure>
 
@@ -505,12 +505,12 @@ If we’ve read the all the data being sent by the worker we decode the frame
 with bincode, accumulate its data into the combined frame and clean up to start
 reading the next frame.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// Read results from the worker, if we've accumulated all the data being sent</span>
-<span class="c">// decode and accumulate the frame</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c1">// Read results from the worker, if we've accumulated all the data being sent</span>
+<span class="c1">// decode and accumulate the frame</span>
 <span class="k">if</span> <span class="k">self</span><span class="nf">.read_worker_buffer</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">frame</span> <span class="o">=</span> <span class="nf">decode</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="py">.worker_buffers</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="py">.buf</span><span class="p">[</span><span class="o">..</span><span class="p">])</span><span class="nf">.unwrap</span><span class="p">();</span>
     <span class="k">self</span><span class="nf">.save_results</span><span class="p">(</span><span class="n">frame</span><span class="p">);</span>
-    <span class="c">// Clear the worker buffer for the next frame</span>
+    <span class="c1">// Clear the worker buffer for the next frame</span>
     <span class="k">self</span><span class="py">.worker_buffers</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="py">.buf</span><span class="nf">.clear</span><span class="p">();</span>
     <span class="k">self</span><span class="py">.worker_buffers</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="py">.expected_size</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
     <span class="k">self</span><span class="py">.worker_buffers</span><span class="p">[</span><span class="n">worker</span><span class="p">]</span><span class="py">.currently_read</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -530,16 +530,16 @@ or it’s completed and has been saved out.</p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">enum</span> <span class="n">DistributedFrame</span> <span class="p">{</span>
     <span class="n">InProgress</span> <span class="p">{</span>
-        <span class="c">// The number of workers who have reported results for this frame so far</span>
+        <span class="c1">// The number of workers who have reported results for this frame so far</span>
         <span class="n">num_reporting</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
-        <span class="c">// Where we're combining worker's results to form the final image</span>
+        <span class="c1">// Where we're combining worker's results to form the final image</span>
         <span class="n">render</span><span class="p">:</span> <span class="n">Image</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="n">Completed</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="k">impl</span> <span class="n">DistributedFrame</span> <span class="p">{</span>
-    <span class="c">// Start accumulating results for a frame, we begin with no workers reporting</span>
+    <span class="c1">// Start accumulating results for a frame, we begin with no workers reporting</span>
     <span class="k">pub</span> <span class="k">fn</span> <span class="nf">start</span><span class="p">(</span><span class="n">img_dim</span><span class="p">:</span> <span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="nb">usize</span><span class="p">))</span> <span class="k">-&gt;</span> <span class="n">DistributedFrame</span> <span class="p">{</span>
         <span class="nn">DistributedFrame</span><span class="p">::</span><span class="n">InProgress</span> <span class="p">{</span> <span class="n">num_reporting</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">render</span><span class="p">:</span> <span class="nn">Image</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">img_dim</span><span class="p">)</span> <span class="p">}</span>
     <span class="p">}</span>
@@ -569,18 +569,18 @@ who’ve reported results for it is equal to the total number of workers.</p>
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">let</span> <span class="k">mut</span> <span class="n">finished</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
 <span class="k">match</span> <span class="n">df</span> <span class="p">{</span>
     <span class="o">&amp;</span><span class="k">mut</span> <span class="nn">DistributedFrame</span><span class="p">::</span><span class="n">InProgress</span> <span class="p">{</span> <span class="k">ref</span> <span class="k">mut</span> <span class="n">num_reporting</span><span class="p">,</span> <span class="k">ref</span> <span class="k">mut</span> <span class="n">render</span> <span class="p">}</span> <span class="k">=&gt;</span> <span class="p">{</span>
-        <span class="c">// Collect results from the worker and see if we've finished the</span>
-        <span class="c">// frame and can save it</span>
+        <span class="c1">// Collect results from the worker and see if we've finished the</span>
+        <span class="c1">// frame and can save it</span>
         <span class="n">render</span><span class="nf">.add_blocks</span><span class="p">(</span><span class="n">frame</span><span class="py">.block_size</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">frame</span><span class="py">.blocks</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">frame</span><span class="py">.pixels</span><span class="p">);</span>
         <span class="o">*</span><span class="n">num_reporting</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
         <span class="k">if</span> <span class="o">*</span><span class="n">num_reporting</span> <span class="o">==</span> <span class="k">self</span><span class="py">.workers</span><span class="nf">.len</span><span class="p">()</span> <span class="p">{</span>
-            <span class="c">// This frame is done, save it out to a PNG</span>
+            <span class="c1">// This frame is done, save it out to a PNG</span>
             <span class="n">finished</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="o">&amp;</span><span class="k">mut</span> <span class="nn">DistributedFrame</span><span class="p">::</span><span class="n">Completed</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"Worker reporting on completed frame {}?"</span><span class="p">,</span> <span class="n">frame_num</span><span class="p">),</span>
 <span class="p">}</span>
-<span class="c">// This is a bit awkward, since we borrow df in the match we can't mark it completed in there</span>
+<span class="c1">// This is a bit awkward, since we borrow df in the match we can't mark it completed in there</span>
 <span class="k">if</span> <span class="n">finished</span> <span class="p">{</span>
     <span class="o">*</span><span class="n">df</span> <span class="o">=</span> <span class="nn">DistributedFrame</span><span class="p">::</span><span class="n">Completed</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>

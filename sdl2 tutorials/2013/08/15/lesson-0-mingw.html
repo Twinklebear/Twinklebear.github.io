@@ -146,8 +146,8 @@ in the makefile to match your source file. Before we can run this program we’l
 binary into our executable’s directory. SDL2.dll can be found in the bin directory in the mingw folders,
 you should use the one for the architecture you compiled for (32/64bit).</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;
-#include &lt;SDL2/SDL.h&gt;
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;SDL2/SDL.h&gt;</span><span class="cp">
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>

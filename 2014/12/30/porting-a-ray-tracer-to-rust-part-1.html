@@ -172,19 +172,19 @@ which may be getting fixed in <a href="https://github.com/rust-lang/rust/pull/19
 for writing overloaded operators has changed significantly with the addition of associated types. The
 current implementation of right and left multiply for <code class="language-plaintext highlighter-rouge">Vector</code> are now:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// Multiply a vector by a f32 on the right, eg. `vec * 2.0`</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c1">// Multiply a vector by a f32 on the right, eg. `vec * 2.0`</span>
 <span class="k">impl</span> <span class="nb">Mul</span><span class="o">&lt;</span><span class="nb">f32</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">Vector</span> <span class="p">{</span>
     <span class="k">type</span> <span class="n">Output</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">;</span>
-    <span class="c">/// Scale the vector by some value</span>
+    <span class="cd">/// Scale the vector by some value</span>
     <span class="k">fn</span> <span class="nf">mul</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Vector</span> <span class="p">{</span>
         <span class="n">Vector</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="k">self</span><span class="py">.x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="k">self</span><span class="py">.y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="k">self</span><span class="py">.z</span> <span class="o">*</span> <span class="n">rhs</span> <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="c">// Multiply a f32 by a vector on the right, eg. `2.0 * vec`</span>
+<span class="c1">// Multiply a f32 by a vector on the right, eg. `2.0 * vec`</span>
 <span class="k">impl</span> <span class="nb">Mul</span><span class="o">&lt;</span><span class="n">Vector</span><span class="o">&gt;</span> <span class="k">for</span> <span class="nb">f32</span> <span class="p">{</span>
     <span class="k">type</span> <span class="n">Output</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">;</span>
-    <span class="c">/// Scale the vector by some value</span>
+    <span class="cd">/// Scale the vector by some value</span>
     <span class="k">fn</span> <span class="nf">mul</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Vector</span> <span class="p">{</span>
         <span class="n">Vector</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="k">self</span> <span class="o">*</span> <span class="n">rhs</span><span class="py">.x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="k">self</span> <span class="o">*</span> <span class="n">rhs</span><span class="py">.y</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="k">self</span> <span class="o">*</span> <span class="n">rhs</span><span class="py">.z</span> <span class="p">}</span>
     <span class="p">}</span>
@@ -283,7 +283,7 @@ have a very simple <code class="language-plaintext highlighter-rouge">lib.rs</co
 <p>In <code class="language-plaintext highlighter-rouge">main.rs</code> I can then tell Rust I need to build and link against the default library crate for
 the executable, <code class="language-plaintext highlighter-rouge">tray_rust</code> which is defined by <code class="language-plaintext highlighter-rouge">lib.rs</code>, and use the modules:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">tray_rust</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">crate</span> <span class="n">tray_rust</span><span class="p">;</span>
 
 <span class="k">use</span> <span class="nn">tray_rust</span><span class="p">::</span><span class="n">linalg</span><span class="p">;</span>
 
@@ -359,7 +359,7 @@ referenced by the differential geometry will not be outlived by the differential
 would result in dangling references. To specify this separate lifetime on a struct we’d write:</p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">DifferentialGeometry</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="c">// This isn't quite correct yet!</span>
+    <span class="c1">// This isn't quite correct yet!</span>
     <span class="k">pub</span> <span class="n">geom</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="n">Geometry</span><span class="p">,</span>
 <span class="p">}</span></code></pre></figure>
 
@@ -474,7 +474,7 @@ we need to render a sphere! In <code class="language-plaintext highlighter-rouge
 target, camera and sphere then attach the sphere to an instance and loop over the pixels in the image,
 firing rays through each and checking for intersections:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">tray_rust</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">crate</span> <span class="n">tray_rust</span><span class="p">;</span>
 
 <span class="k">use</span> <span class="nn">tray_rust</span><span class="p">::</span><span class="n">linalg</span><span class="p">;</span>
 <span class="k">use</span> <span class="nn">tray_rust</span><span class="p">::</span><span class="n">film</span><span class="p">;</span>
@@ -491,12 +491,12 @@ firing rays through each and checking for intersections:</p>
     <span class="k">let</span> <span class="n">sphere</span> <span class="o">=</span> <span class="nn">geometry</span><span class="p">::</span><span class="nn">Sphere</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mf">1.5</span><span class="p">);</span>
     <span class="k">let</span> <span class="n">instance</span> <span class="o">=</span> <span class="nn">geometry</span><span class="p">::</span><span class="nn">Instance</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sphere</span><span class="p">,</span>
         <span class="nn">linalg</span><span class="p">::</span><span class="nn">Transform</span><span class="p">::</span><span class="nf">translate</span><span class="p">(</span><span class="o">&amp;</span><span class="nn">linalg</span><span class="p">::</span><span class="nn">Vector</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)));</span>
-    <span class="k">for</span> <span class="n">y</span> <span class="n">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="n">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="k">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="k">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">let</span> <span class="n">px</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="k">as</span> <span class="nb">f32</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="k">as</span> <span class="nb">f32</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">);</span>
             <span class="k">let</span> <span class="k">mut</span> <span class="n">ray</span> <span class="o">=</span> <span class="n">camera</span><span class="nf">.generate_ray</span><span class="p">(</span><span class="n">px</span><span class="p">);</span>
             <span class="k">match</span> <span class="n">instance</span><span class="nf">.intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">ray</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nf">Some</span><span class="p">(</span><span class="mi">_</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="n">rt</span><span class="nf">.write</span><span class="p">(</span><span class="n">px</span><span class="na">.0</span><span class="p">,</span> <span class="n">px</span><span class="na">.1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nn">film</span><span class="p">::</span><span class="nn">Colorf</span><span class="p">::</span><span class="nf">broadcast</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)),</span>
+                <span class="nf">Some</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="n">rt</span><span class="nf">.write</span><span class="p">(</span><span class="n">px</span><span class="na">.0</span><span class="p">,</span> <span class="n">px</span><span class="na">.1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nn">film</span><span class="p">::</span><span class="nn">Colorf</span><span class="p">::</span><span class="nf">broadcast</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)),</span>
                 <span class="nb">None</span> <span class="k">=&gt;</span> <span class="p">{},</span>
             <span class="p">}</span>
         <span class="p">}</span>

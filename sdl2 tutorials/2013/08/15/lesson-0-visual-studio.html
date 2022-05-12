@@ -180,8 +180,8 @@ Before we can run this program we’ll need to copy the
 SDL binary into our executable’s directory. <code class="language-plaintext highlighter-rouge">SDL2.dll</code> can be found in the lib directory
 of your SDL folder under lib/(x86/x64), use the one for the architecture you linked against.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;
-#include &lt;SDL.h&gt;
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;SDL.h&gt;</span><span class="cp">
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>

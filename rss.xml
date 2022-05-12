@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Thu, 07 Apr 2022 20:33:22 -0700</lastBuildDate>
-		<pubDate>Thu, 07 Apr 2022 20:33:22 -0700</pubDate>
+		<lastBuildDate>Wed, 11 May 2022 17:22:46 -0700</lastBuildDate>
+		<pubDate>Wed, 11 May 2022 17:22:46 -0700</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -733,6 +733,37 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			<pubDate>Thu, 15 Aug 2013 00:00:00 -0700</pubDate>
 		</item>
 		
+		
+		<item>
+			<title>GraphWaGu: GPU Powered Large Scale Graph Layout Computation and Rendering for the Web</title>
+			<description>
+				
+				Large scale graphs are used to encode data from a variety of application domains such as social networks, the web, biological networks, road maps, and finance. Computing enriching layouts and interactive rendering play an important role in many of these applications. However, producing an efficient and interactive visualization of large graphs remains a major challenge, particularly in the web-browser. Existing state of the art web-based visualization systems such as D3.js, Stardust, and NetV.js struggle to achieve interactive layout and visualization for large scale graphs. In this work, we leverage the latest WebGPU technology to develop GraphWaGu, the first WebGPU-based graph visualization system. WebGPU is a new graphics API that brings the full capabilities of modern GPUs to the web browser. Leveraging the computational capabilities of the GPU using this technology enables GraphWaGu to scale to larger graphs than existing technologies. GraphWaGu embodies both fast parallel rendering and layout creation using modified Frutcherman-Reingold and Barnes-Hut algorithms implemented in WebGPU compute shaders. Experimental results demonstrate that our solution achieves the best performance, scalability, and layout quality when compared to current state of the art web-based graph visualization libraries. All of our source code for the project is available at https://github.com/harp-lab/GraphWaGu .
+				&lt;a href=&quot;https://www.willusher.io//publications/graphwagu&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io/publications/graphwagu</link>
+			<guid>https://www.willusher.io/publications/graphwagu</guid>
+			<pubDate>Sun, 08 May 2022 23:00:00 -0700</pubDate>
+		</item>
+		
+		<item>
+			<title>Design and Evaluation of a GPU Streaming Framework for Visualizing Time-Varying AMR Data</title>
+			<description>
+				
+				&lt;figure&gt;
+					&lt;img src=&quot;/assets/img/exajet-animated-teaser.png&quot;/&gt;
+					&lt;figcaption&gt;
+					&lt;b&gt;Fig 1:&lt;/b&gt;&lt;i&gt;The NASA Exajet serves as the motivating use case for our study. The large computational fluid dynamics data set was computed using an adaptive mesh refinement (AMR) code and consists of 656 million cells and 423 time steps. Each time step stores 2.5 GB of data per scalar field. At four scalar fields for density and X/Y/Z velocity components, the full time series occupies over 4 TB. Data sets such as these pose significant challenges for interactive visualization on current GPU workstations. We present and evaluate a prototypical framework targeting GPU workstations that asynchronously streams and renders such data sets at interactive rates and with high quality.&lt;/i&gt;
+					&lt;/figcaption&gt;
+				&lt;/figure&gt;
+				
+				We describe a systematic approach for rendering time-varying simulation data produced by exa-scale simulations, using GPU workstations. The data sets we focus on use adaptive mesh refinement (AMR) to overcome memory bandwidth limitations by representing interesting regions in space with high detail. Particularly, our focus is on data sets where the AMR hierarchy is fixed and does not change over time. Our study is motivated by the NASA Exajet, a large computational fluid dynamics simulation of a civilian cargo aircraft that consists of 423 simulation time steps, each storing 2.5 GB of data per scalar field, amounting to a total of 4 TB. We present strategies for rendering this time series data set with smooth animation and at interactive rates using current generation GPUs. We start with an unoptimized baseline and step by step extend that to support fast streaming updates. Our approach demonstrates how to push current visualization workstations and modern visualization APIs to their limits to achieve interactive visualization of exa-scale time series data sets.
+				&lt;a href=&quot;https://www.willusher.io//publications/exajet-animated&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io/publications/exajet-animated</link>
+			<guid>https://www.willusher.io/publications/exajet-animated</guid>
+			<pubDate>Sun, 08 May 2022 23:00:00 -0700</pubDate>
+		</item>
 		
 		<item>
 			<title>Adaptive Multiresolution Techniques for I/O, Data Layout, and Visualization of Massive Simulations</title>

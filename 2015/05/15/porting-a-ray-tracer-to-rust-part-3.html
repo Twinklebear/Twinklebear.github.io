@@ -230,9 +230,9 @@ called a lot in our rendering loop. Using Rust’s traits we can meet all these 
 
 <p>We’ll start by putting together a <code class="language-plaintext highlighter-rouge">Boundable</code> trait for types that can report their bounds in space:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// Trait implemented by scene objects that can report an AABB describing their bounds</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c1">// Trait implemented by scene objects that can report an AABB describing their bounds</span>
 <span class="k">pub</span> <span class="k">trait</span> <span class="n">Boundable</span> <span class="p">{</span>
-    <span class="c">// Get an AABB reporting the object's bounds in space</span>
+    <span class="c1">// Get an AABB reporting the object's bounds in space</span>
     <span class="k">fn</span> <span class="nf">bounds</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">BBox</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 

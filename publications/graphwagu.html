@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="origin-trial" content="AoMftca5+Dstn4K7mCd1AKVcenGb0/EBkqJgonux6w6fVXhyJ2iHs9LuZKA36+gcaypMdBLAaIpkES6VMXoJtg8AAABQeyJvcmlnaW4iOiJodHRwczovL3d3dy53aWxsdXNoZXIuaW86NDQzIiwiZmVhdHVyZSI6IldlYkdQVSIsImV4cGlyeSI6MTY0MzE1NTE5OX0=">
+
+	<title>GraphWaGu: GPU Powered Large Scale Graph Layout Computation and Rendering for the Web</title>
+	
+    <meta name="author" content="Will Usher">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+	<link href="/assets/molokai.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content mb-4">
+		
+
+
+<div class="row col-12 mt-4">
+	<div class="col-12 text-center">
+		<h1 class="display-4">GraphWaGu: GPU Powered Large Scale Graph Layout Computation and Rendering for the Web</h1>
+        <h4>Landon Dyken, Pravin Poudel, Will Usher, Steve Petruzza, Jake Y. Chen, Sidharth Kumar</h4>
+		<h5>In <i>Eurographics Symposium on Parallel Graphics and Visualization (To Appear)</i>, 2022</h5>
+        
+		
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Abstract</h2>
+		<p>Large scale graphs are used to encode data from a variety of application domains such as social networks, the web, biological networks, road maps, and finance. Computing enriching layouts and interactive rendering play an important role in many of these applications. However, producing an efficient and interactive visualization of large graphs remains a major challenge, particularly in the web-browser. Existing state of the art web-based visualization systems such as D3.js, Stardust, and NetV.js struggle to achieve interactive layout and visualization for large scale graphs. In this work, we leverage the latest WebGPU technology to develop GraphWaGu, the first WebGPU-based graph visualization system. WebGPU is a new graphics API that brings the full capabilities of modern GPUs to the web browser. Leveraging the computational capabilities of the GPU using this technology enables GraphWaGu to scale to larger graphs than existing technologies. GraphWaGu embodies both fast parallel rendering and layout creation using modified Frutcherman-Reingold and Barnes-Hut algorithms implemented in WebGPU compute shaders. Experimental results demonstrate that our solution achieves the best performance, scalability, and layout quality when compared to current state of the art web-based graph visualization libraries. All of our source code for the project is available at https://github.com/harp-lab/GraphWaGu .</p>
+	</div>
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">Downloads</h2>
+		<!--This would be a link to my version and the official version of the paper,
+		along with code and supplmental materials. The JSON would then become basically
+		a translation of this list, with an object per entry (besides publication, which
+		is assumed). All the supplemental stuff would be different objs, with a corresponding
+		list of entries. One main supplemental video could be included though in the main page.-->
+		<dl>
+			<dt>Publication</dt>
+			<dd><a href="https://drive.google.com/file/d/16PWup93vFLCWqQexop2IfRyMeQGniLqa/view?usp=sharing"><i class="far fa-file-pdf"></i> Paper (PDF)</a><dd>
+			
+			
+			<dt>Code</dt>
+				
+				<dd><a href="https://github.com/harp-lab/GraphWaGu">
+					
+					<i class="fab fa-github"></i>
+					
+					 GraphWaGu</a></dd>
+				
+				<dd><a href="https://harp-lab.github.io/GraphWaGu/">
+					
+					<i class="fas fa-flask"></i>
+					
+					 Live demo!</a></dd>
+				
+			</dt>
+			
+		</dl>
+	</div>
+	
+	
+	<div class="col-12 mt-2">
+		<h2 class="border-bottom border-secondary">BibTeX</h2>
+		<code>@inproceedings{dyken_graphwagu_2022,<br />
+ booktitle = {Eurographics Symposium on Parallel Graphics and Visualization},<br />
+ editor = {Bujack, R. and Tierny, J. and Sadlo, F.},<br />
+ title = {{GraphWaGu:} {GPU} {Powered} {Large} {Scale} {Graph} {Layout} {Computation} and {Rendering} for the {Web}},<br />
+ author = {Dyken, Landon and Poudel, Pravin and Usher, Will and Petruzza, Steve and Chen, Jake Y. and Kumar, Sidharth},<br />
+ year = {2022},<br />
+ }</code>
+	</div>
+</div>
+
+
+	</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+
+</body>
+</html>
+
+
+
