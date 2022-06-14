@@ -586,7 +586,7 @@ var<private> gl_GlobalInvocationID : vec3<u32>;
 
 @group(1) @binding(0) var<uniform> x_863 : BlockIDOffset;
 
-@group(0) @binding(2) var<storage, read_write> x_1063 : BlockRanges;
+@group(0) @binding(2) var<storage, read_write> x_1064 : BlockRanges;
 
 fn shift_right_struct_EmulateUint64_u1_u11_u1_(a_3 : EmulateUint64, n_1 : ptr<function, u32>) -> EmulateUint64 {
   var carry_1 : u32;
@@ -1282,145 +1282,145 @@ fn main_1() {
   var block_range : vec2<f32>;
   var partial : vec3<bool>;
   var partial_size : vec3<u32>;
-  var x_963 : u32;
-  var x_975 : u32;
-  var x_987 : u32;
+  var x_964 : u32;
+  var x_976 : u32;
+  var x_988 : u32;
   var z_2 : u32;
   var y_2 : u32;
   var x_4 : u32;
   let x_860 : u32 = gl_GlobalInvocationID.x;
   let x_865 : u32 = x_863.block_id_offset;
-  block_index_1 = (x_860 + x_865);
-  let x_869 : u32 = x_242.padded_dims.x;
-  let x_871 : u32 = x_242.padded_dims.y;
-  let x_874 : u32 = x_242.padded_dims.z;
-  total_blocks = (((x_869 * x_871) * x_874) / 64u);
-  let x_877 : u32 = block_index_1;
-  let x_878 : u32 = total_blocks;
-  if ((x_877 >= x_878)) {
+  block_index_1 = (x_860 + (x_865 * 32u));
+  let x_870 : u32 = x_242.padded_dims.x;
+  let x_872 : u32 = x_242.padded_dims.y;
+  let x_875 : u32 = x_242.padded_dims.z;
+  total_blocks = (((x_870 * x_872) * x_875) / 64u);
+  let x_878 : u32 = block_index_1;
+  let x_879 : u32 = total_blocks;
+  if ((x_878 >= x_879)) {
     return;
   }
-  let x_885 : u32 = block_index_1;
-  param_29 = x_885;
-  let x_886 : BlockReader = create_block_reader_u1_(&(param_29));
-  reader_6 = x_886;
-  let x_889 : BlockReader = reader_6;
-  param_30 = x_889;
-  let x_891 : array<f32, 64u> = decompressed_block_1;
-  param_31 = x_891;
+  let x_886 : u32 = block_index_1;
+  param_29 = x_886;
+  let x_887 : BlockReader = create_block_reader_u1_(&(param_29));
+  reader_6 = x_887;
+  let x_890 : BlockReader = reader_6;
+  param_30 = x_890;
+  let x_892 : array<f32, 64u> = decompressed_block_1;
+  param_31 = x_892;
   decompress_block_struct_BlockReader_u1_u1_struct_EmulateUint64_u1_u111_f1_64__(&(param_30), &(param_31));
-  let x_893 : array<f32, 64u> = param_31;
-  decompressed_block_1 = x_893;
-  let x_897 : u32 = x_242.volume_dims.x;
-  let x_899 : u32 = x_242.volume_dims.x;
-  let x_901 : u32 = x_242.volume_dims.y;
-  stride = vec3<u32>(1u, x_897, (x_899 * x_901));
-  let x_906 : u32 = x_242.padded_dims.x;
-  nblocks.x = (x_906 >> bitcast<u32>(2));
-  let x_910 : u32 = x_242.padded_dims.y;
-  nblocks.y = (x_910 >> bitcast<u32>(2));
-  let x_914 : u32 = x_242.padded_dims.z;
-  nblocks.z = (x_914 >> bitcast<u32>(2));
-  let x_918 : u32 = block_index_1;
-  let x_920 : u32 = nblocks.x;
-  block_4.x = ((x_918 % x_920) * 4u);
-  let x_924 : u32 = block_index_1;
-  let x_926 : u32 = nblocks.x;
-  let x_929 : u32 = nblocks.y;
-  block_4.y = (((x_924 / x_926) % x_929) * 4u);
-  let x_933 : u32 = block_index_1;
-  let x_935 : u32 = nblocks.x;
-  let x_937 : u32 = nblocks.y;
-  block_4.z = ((x_933 / (x_935 * x_937)) * 4u);
+  let x_894 : array<f32, 64u> = param_31;
+  decompressed_block_1 = x_894;
+  let x_898 : u32 = x_242.volume_dims.x;
+  let x_900 : u32 = x_242.volume_dims.x;
+  let x_902 : u32 = x_242.volume_dims.y;
+  stride = vec3<u32>(1u, x_898, (x_900 * x_902));
+  let x_907 : u32 = x_242.padded_dims.x;
+  nblocks.x = (x_907 >> bitcast<u32>(2));
+  let x_911 : u32 = x_242.padded_dims.y;
+  nblocks.y = (x_911 >> bitcast<u32>(2));
+  let x_915 : u32 = x_242.padded_dims.z;
+  nblocks.z = (x_915 >> bitcast<u32>(2));
+  let x_919 : u32 = block_index_1;
+  let x_921 : u32 = nblocks.x;
+  block_4.x = ((x_919 % x_921) * 4u);
+  let x_925 : u32 = block_index_1;
+  let x_927 : u32 = nblocks.x;
+  let x_930 : u32 = nblocks.y;
+  block_4.y = (((x_925 / x_927) % x_930) * 4u);
+  let x_934 : u32 = block_index_1;
+  let x_936 : u32 = nblocks.x;
+  let x_938 : u32 = nblocks.y;
+  block_4.z = ((x_934 / (x_936 * x_938)) * 4u);
   block_range = vec2<f32>(100000002004087734272.0, -100000002004087734272.0);
-  let x_951 : vec3<u32> = block_4;
-  let x_956 : vec4<u32> = x_242.volume_dims;
-  partial = ((x_951 + vec3<u32>(4u, 4u, 4u)) > vec3<u32>(x_956.x, x_956.y, x_956.z));
-  let x_962 : bool = partial.x;
-  if (x_962) {
-    let x_967 : u32 = x_242.volume_dims.x;
-    let x_969 : u32 = block_4.x;
-    x_963 = (x_967 - x_969);
+  let x_952 : vec3<u32> = block_4;
+  let x_957 : vec4<u32> = x_242.volume_dims;
+  partial = ((x_952 + vec3<u32>(4u, 4u, 4u)) > vec3<u32>(x_957.x, x_957.y, x_957.z));
+  let x_963 : bool = partial.x;
+  if (x_963) {
+    let x_968 : u32 = x_242.volume_dims.x;
+    let x_970 : u32 = block_4.x;
+    x_964 = (x_968 - x_970);
   } else {
-    x_963 = 4u;
+    x_964 = 4u;
   }
-  let x_972 : u32 = x_963;
-  let x_974 : bool = partial.y;
-  if (x_974) {
-    let x_979 : u32 = x_242.volume_dims.y;
-    let x_981 : u32 = block_4.y;
-    x_975 = (x_979 - x_981);
+  let x_973 : u32 = x_964;
+  let x_975 : bool = partial.y;
+  if (x_975) {
+    let x_980 : u32 = x_242.volume_dims.y;
+    let x_982 : u32 = block_4.y;
+    x_976 = (x_980 - x_982);
   } else {
-    x_975 = 4u;
+    x_976 = 4u;
   }
-  let x_984 : u32 = x_975;
-  let x_986 : bool = partial.z;
-  if (x_986) {
-    let x_991 : u32 = x_242.volume_dims.z;
-    let x_993 : u32 = block_4.z;
-    x_987 = (x_991 - x_993);
+  let x_985 : u32 = x_976;
+  let x_987 : bool = partial.z;
+  if (x_987) {
+    let x_992 : u32 = x_242.volume_dims.z;
+    let x_994 : u32 = block_4.z;
+    x_988 = (x_992 - x_994);
   } else {
-    x_987 = 4u;
+    x_988 = 4u;
   }
-  let x_996 : u32 = x_987;
-  partial_size = vec3<u32>(x_972, x_984, x_996);
+  let x_997 : u32 = x_988;
+  partial_size = vec3<u32>(x_973, x_985, x_997);
   z_2 = 0u;
   loop {
-    let x_1004 : u32 = z_2;
-    let x_1006 : u32 = partial_size.z;
-    if ((x_1004 < x_1006)) {
+    let x_1005 : u32 = z_2;
+    let x_1007 : u32 = partial_size.z;
+    if ((x_1005 < x_1007)) {
     } else {
       break;
     }
     y_2 = 0u;
     loop {
-      let x_1014 : u32 = y_2;
-      let x_1016 : u32 = partial_size.y;
-      if ((x_1014 < x_1016)) {
+      let x_1015 : u32 = y_2;
+      let x_1017 : u32 = partial_size.y;
+      if ((x_1015 < x_1017)) {
       } else {
         break;
       }
       x_4 = 0u;
       loop {
-        let x_1024 : u32 = x_4;
-        let x_1026 : u32 = partial_size.x;
-        if ((x_1024 < x_1026)) {
+        let x_1025 : u32 = x_4;
+        let x_1027 : u32 = partial_size.x;
+        if ((x_1025 < x_1027)) {
         } else {
           break;
         }
-        let x_1029 : f32 = block_range.x;
-        let x_1030 : u32 = z_2;
-        let x_1032 : u32 = y_2;
-        let x_1035 : u32 = x_4;
-        let x_1038 : f32 = decompressed_block_1[(((16u * x_1030) + (4u * x_1032)) + x_1035)];
-        block_range.x = min(x_1029, x_1038);
-        let x_1042 : f32 = block_range.y;
-        let x_1043 : u32 = z_2;
-        let x_1045 : u32 = y_2;
-        let x_1048 : u32 = x_4;
-        let x_1051 : f32 = decompressed_block_1[(((16u * x_1043) + (4u * x_1045)) + x_1048)];
-        block_range.y = max(x_1042, x_1051);
+        let x_1030 : f32 = block_range.x;
+        let x_1031 : u32 = z_2;
+        let x_1033 : u32 = y_2;
+        let x_1036 : u32 = x_4;
+        let x_1039 : f32 = decompressed_block_1[(((16u * x_1031) + (4u * x_1033)) + x_1036)];
+        block_range.x = min(x_1030, x_1039);
+        let x_1043 : f32 = block_range.y;
+        let x_1044 : u32 = z_2;
+        let x_1046 : u32 = y_2;
+        let x_1049 : u32 = x_4;
+        let x_1052 : f32 = decompressed_block_1[(((16u * x_1044) + (4u * x_1046)) + x_1049)];
+        block_range.y = max(x_1043, x_1052);
 
         continuing {
-          let x_1054 : u32 = x_4;
-          x_4 = (x_1054 + bitcast<u32>(1));
+          let x_1055 : u32 = x_4;
+          x_4 = (x_1055 + bitcast<u32>(1));
         }
       }
 
       continuing {
-        let x_1056 : u32 = y_2;
-        y_2 = (x_1056 + bitcast<u32>(1));
+        let x_1057 : u32 = y_2;
+        y_2 = (x_1057 + bitcast<u32>(1));
       }
     }
 
     continuing {
-      let x_1058 : u32 = z_2;
-      z_2 = (x_1058 + bitcast<u32>(1));
+      let x_1059 : u32 = z_2;
+      z_2 = (x_1059 + bitcast<u32>(1));
     }
   }
-  let x_1064 : u32 = block_index_1;
-  let x_1065 : vec2<f32> = block_range;
-  x_1063.block_ranges[x_1064] = x_1065;
+  let x_1065 : u32 = block_index_1;
+  let x_1066 : vec2<f32> = block_range;
+  x_1064.block_ranges[x_1065] = x_1066;
   return;
 }
 
@@ -4731,7 +4731,12 @@ fn main(@builtin(global_invocation_id) gl_GlobalInvocationID_param : vec3<u32>) 
 }
 `;
 
-const lru_cache_mark_new_items_comp_spv = `type RTArr = array<i32>;
+const lru_cache_mark_new_items_comp_spv = `struct PushConstants {
+  global_idx_offset : u32,
+  num_work_items : u32,
+}
+
+type RTArr = array<i32>;
 
 struct CachedItemSlots {
   cached_item_slot : RTArr,
@@ -4767,53 +4772,49 @@ struct SlotAvailableIDs {
   slot_available_id : RTArr_2,
 }
 
-struct PushConstants {
-  global_idx_offset : u32,
-  num_work_items : u32,
-}
-
 var<private> gl_GlobalInvocationID : vec3<u32>;
 
-@group(0) @binding(0) var<storage, read_write> x_22 : CachedItemSlots;
+@group(2) @binding(0) var<uniform> x_18 : PushConstants;
 
-@group(1) @binding(1) var<storage, read_write> x_36 : ItemNeedsCaching;
+@group(0) @binding(0) var<storage, read_write> x_32 : CachedItemSlots;
 
-@group(1) @binding(0) var<storage, read> x_43 : ItemNeeded;
+@group(1) @binding(1) var<storage, read_write> x_45 : ItemNeedsCaching;
 
-@group(0) @binding(2) var<storage, read_write> x_55 : SlotData;
+@group(1) @binding(0) var<storage, read> x_51 : ItemNeeded;
 
-@group(0) @binding(1) var<storage, read_write> x_73 : SlotAvailableIDs;
+@group(0) @binding(2) var<storage, read_write> x_63 : SlotData;
 
-@group(2) @binding(0) var<uniform> x_78 : PushConstants;
+@group(0) @binding(1) var<storage, read_write> x_81 : SlotAvailableIDs;
 
 fn main_1() {
   var idx : u32;
   var slot : i32;
   let x_15 : u32 = gl_GlobalInvocationID.x;
-  idx = x_15;
-  let x_24 : u32 = idx;
-  let x_27 : i32 = x_22.cached_item_slot[x_24];
-  slot = x_27;
-  let x_28 : i32 = slot;
-  if ((x_28 >= 0)) {
-    let x_37 : u32 = idx;
-    x_36.item_needs_caching[x_37] = 0u;
-    let x_44 : u32 = idx;
-    let x_46 : u32 = x_43.item_needed[x_44];
-    if ((x_46 == 1u)) {
-      let x_56 : i32 = slot;
-      x_55.slot_data[x_56].age = 0u;
-      let x_58 : i32 = slot;
-      x_55.slot_data[x_58].available = 0u;
+  let x_23 : u32 = x_18.global_idx_offset;
+  idx = (x_15 + (x_23 * 32u));
+  let x_33 : u32 = idx;
+  let x_36 : i32 = x_32.cached_item_slot[x_33];
+  slot = x_36;
+  let x_37 : i32 = slot;
+  if ((x_37 >= 0)) {
+    let x_46 : u32 = idx;
+    x_45.item_needs_caching[x_46] = 0u;
+    let x_52 : u32 = idx;
+    let x_54 : u32 = x_51.item_needed[x_52];
+    if ((x_54 == 1u)) {
+      let x_64 : i32 = slot;
+      x_63.slot_data[x_64].age = 0u;
+      let x_66 : i32 = slot;
+      x_63.slot_data[x_66].available = 0u;
     } else {
-      let x_62 : i32 = slot;
-      x_55.slot_data[x_62].available = 1u;
+      let x_70 : i32 = slot;
+      x_63.slot_data[x_70].available = 1u;
     }
   } else {
-    let x_65 : u32 = idx;
-    let x_66 : u32 = idx;
-    let x_68 : u32 = x_43.item_needed[x_66];
-    x_36.item_needs_caching[x_65] = x_68;
+    let x_73 : u32 = idx;
+    let x_74 : u32 = idx;
+    let x_76 : u32 = x_51.item_needed[x_74];
+    x_45.item_needs_caching[x_73] = x_76;
   }
   return;
 }
