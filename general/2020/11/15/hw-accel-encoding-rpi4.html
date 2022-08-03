@@ -135,9 +135,10 @@ the <code class="language-plaintext highlighter-rouge">h264_v4l2m2m</code> encod
     </p>
 </div>
 
-<p>The version of FFmpeg distributed in apt (4.2.4) is missing some commits that
-fix this issue, which didn’t make it in til release 4.3. So we’ll have to build from
-source. First, we can grab the source for 4.3 from Github:</p>
+<p>The version of FFmpeg distributed in apt (4.2.4 at the time of writing) is missing some commits that
+fix this issue, which didn’t make it in until release 4.3. So we’ll have to build from
+source. First, we can grab the source for 4.3 from Github. Note: later releases are also fine,
+4.3 was the latest at the time of writing.</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">git clone <span class="nt">--depth</span> 1 <span class="nt">--branch</span> release/4.3 git@github.com:FFmpeg/FFmpeg.git</code></pre></figure>
 
