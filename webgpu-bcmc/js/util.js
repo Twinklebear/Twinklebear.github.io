@@ -4,7 +4,7 @@
 //      u32: global work group id offset
 //      u32: totalWorkGroups
 //      ...: up to 248 bytes additional data (if any) from the pushConstants parameter,
-//           passed as an ArrayBuffer
+//           passed as an ArrayBuffer or TypedArray
 // }
 // ID offset (u32),
 function buildPushConstantsBuffer(device, totalWorkGroups, pushConstants)
@@ -22,8 +22,14 @@ function buildPushConstantsBuffer(device, totalWorkGroups, pushConstants)
     {
         var pushConstantsView = null;
         if (pushConstants) {
-            pushConstantsView = new Uint8Array(pushConstants);
-            console.log(`got push constants of size ${pushConstantsView.length}`);
+            var pc = pushConstants;
+            if (pushConstants.buffer) {
+                pc = pushConstants.buffer;
+            }
+            if (pc.byteLength > 248) {
+                console.log(`Error: push constants can be at most 248 bytes`);
+            }
+            pushConstantsView = new Uint8Array(pc);
         }
         var mapping = idOffsetsBuffer.getMappedRange();
         for (var i = 0; i < numDynamicOffsets; ++i) {

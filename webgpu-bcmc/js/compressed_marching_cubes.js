@@ -570,7 +570,7 @@ CompressedMarchingCubes.prototype.computeBlockRanges = async function() {
     pass.setBindGroup(0, bindGroup);
     for (var i = 0; i < pushConstants.nOffsets; ++i) {
         pass.setBindGroup(1, blockIDOffsetBG, pushConstants.dynamicOffsets, i, 1);
-        pass.dispatch(pushConstants.dispatchSizes[i], 1, 1);
+        pass.dispatchWorkgroups(pushConstants.dispatchSizes[i], 1, 1);
     }
 
     pass.end();
@@ -578,11 +578,11 @@ CompressedMarchingCubes.prototype.computeBlockRanges = async function() {
 };
 
 CompressedMarchingCubes.prototype.computeSurface = async function(isovalue, perfTracker) {
-    console.log(`=====\nIsovalue = ${isovalue}`);
-    // TODO: Conditionally free if memory use of VBO is very high to make
-    // sure we don't OOM with some of our temp allocations?
-    // This isn't quite enough to get miranda running on the 4GB VRAM surface
-    // Adds about 100ms cost on RTX2070 on miranda
+    // console.log(`=====\nIsovalue = ${isovalue}`);
+    //  TODO: Conditionally free if memory use of VBO is very high to make
+    //  sure we don't OOM with some of our temp allocations?
+    //  This isn't quite enough to get miranda running on the 4GB VRAM surface
+    //  Adds about 100ms cost on RTX2070 on miranda
     /*
       if (this.vertexBuffer) {
           this.vertexBuffer.destroy();
@@ -812,7 +812,8 @@ CompressedMarchingCubes.prototype.computeActiveBlocks = async function() {
     var pass = commandEncoder.beginComputePass();
     pass.setPipeline(this.computeActiveBlocksPipeline);
     pass.setBindGroup(0, this.computeActiveBlocksBG);
-    pass.dispatch(this.paddedDims[0] / 4, this.paddedDims[1] / 4, this.paddedDims[2] / 4);
+    pass.dispatchWorkgroups(
+        this.paddedDims[0] / 4, this.paddedDims[1] / 4, this.paddedDims[2] / 4);
     pass.end();
     commandEncoder.copyBufferToBuffer(
         this.blockActiveBuffer, 0, this.activeBlockOffsets, 0, this.totalBlocks * 4);
@@ -902,7 +903,7 @@ CompressedMarchingCubes.prototype.decompressBlocks =
             ],
         });
         pass.setBindGroup(1, decompressBlocksStartOffsetBG);
-        pass.dispatch(numWorkGroups, 1, 1);
+        pass.dispatchWorkgroups(numWorkGroups, 1, 1);
         pass.end();
         this.device.queue.submit([commandEncoder.finish()]);
     }
@@ -980,7 +981,7 @@ CompressedMarchingCubes.prototype.computeBlockHasVertices = async function() {
     pass.setBindGroup(0, this.computeBlockVertexInfoBG);
     for (var i = 0; i < pushConstants.nOffsets; ++i) {
         pass.setBindGroup(1, blockHasVerticesBG, pushConstants.dynamicOffsets, i, 1);
-        pass.dispatch(pushConstants.dispatchSizes[i], 1, 1);
+        pass.dispatchWorkgroups(pushConstants.dispatchSizes[i], 1, 1);
     }
     pass.end();
     this.device.queue.submit([commandEncoder.finish()]);
@@ -1030,7 +1031,7 @@ CompressedMarchingCubes.prototype.computeBlockVertexCounts = async function() {
     // Run chunks
     for (var i = 0; i < pushConstants.nOffsets; ++i) {
         pass.setBindGroup(2, blockOffsetsBG, pushConstants.dynamicOffsets, i, 1);
-        pass.dispatch(pushConstants.dispatchSizes[i], 1, 1);
+        pass.dispatchWorkgroups(pushConstants.dispatchSizes[i], 1, 1);
     }
     pass.end();
     this.device.queue.submit([commandEncoder.finish()]);
@@ -1102,14 +1103,14 @@ CompressedMarchingCubes.prototype.computeVertices = async function() {
         pass.setBindGroup(0, blockInformationBG);
         pass.setBindGroup(1, this.blockVertexOffsetsBG);
         pass.setBindGroup(2, offsetBG);
-        pass.dispatch(numWorkGroups, 1, 1);
+        pass.dispatchWorkgroups(numWorkGroups, 1, 1);
 
         // Now extract the vertices for the blocks
         pass.setPipeline(this.computeBlockVerticesPipeline);
         pass.setBindGroup(0, this.computeBlockVertexInfoBG);
         pass.setBindGroup(1, blockInformationBG);
         pass.setBindGroup(2, vertexBufferBG);
-        pass.dispatch(numWorkGroups, 1, 1);
+        pass.dispatchWorkgroups(numWorkGroups, 1, 1);
 
         pass.end();
         this.device.queue.submit([commandEncoder.finish()]);
