@@ -101,7 +101,7 @@
 <p>When writing a paper in LaTeX, it’s common to leave
 notes and comments in the text, either to yourself
 or your co-authors. I used to write these
-as just different colored text using <code class="language-plaintext highlighter-rouge">\textcolor{...}</code>,
+as just different colored text using <code class="highlighter-rouge">\textcolor{...}</code>,
 with each author assigned a color, or all with the same color.
 However, with more authors
 it can get hard to keep picking legible font colors.
@@ -120,7 +120,7 @@ the text. This is easy to do with the
 the xcolor package provides some convenient color names
 (I use it with the dvipsnames option). With these packages
 you can then create commands for each author to write
-their comments as <code class="language-plaintext highlighter-rouge">\authorname{comment}</code>, as shown below.
+their comments as <code class="highlighter-rouge">\authorname{comment}</code>, as shown below.
 This sample is also available on
 <a href="https://www.overleaf.com/read/nsxknypvpfhh">Overleaf</a>, so
 you see it in action.</p>
@@ -131,17 +131,22 @@ you see it in action.</p>
 <span class="k">\usepackage</span><span class="p">{</span>soul<span class="p">}</span>
 <span class="k">\usepackage</span><span class="na">[dvipsnames]</span><span class="p">{</span>xcolor<span class="p">}</span>
 
-<span class="c">% We also use DeclareRobustCommand instead of</span>
-<span class="c">% NewCommand so that the command will work in captions</span>
-<span class="c">% and other contexts as well.</span>
+<span class="c">% We also use DeclareRobustCommand instead of
+</span>
+<span class="c">% NewCommand so that the command will work in captions
+</span>
+<span class="c">% and other contexts as well.
+</span>
 <span class="k">\DeclareRobustCommand</span><span class="p">{</span><span class="k">\will</span><span class="p">}</span>[1]<span class="p">{</span> <span class="p">{</span><span class="k">\begingroup\sethlcolor</span><span class="p">{</span>BurntOrange<span class="p">}</span><span class="k">\hl</span><span class="p">{</span>(will:) #1<span class="p">}</span><span class="k">\endgroup</span><span class="p">}</span> <span class="p">}</span>
 
 <span class="nt">\begin{document}</span>
-<span class="c">% The highlight comment command can then be used in the text</span>
+<span class="c">% The highlight comment command can then be used in the text
+</span>
 <span class="k">\will</span><span class="p">{</span>This is an example comment!<span class="p">}</span>
 
 <span class="nt">\begin{figure}</span>
-<span class="c">% Or in captions, etc.</span>
+<span class="c">% Or in captions, etc.
+</span>
 <span class="k">\caption</span><span class="p">{</span><span class="k">\will</span><span class="p">{</span>By making it robust, we can also use it in captions.<span class="p">}}</span>
 <span class="nt">\end{figure}</span>
 
