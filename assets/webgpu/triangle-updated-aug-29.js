@@ -22,16 +22,16 @@
         `
     type float4 = vec4<f32>;
     struct VertexInput {
-        @location(0) position: float4,
-        @location(1) color: float4,
+        [[location(0)]] position: float4;
+        [[location(1)]] color: float4;
     };
 
     struct VertexOutput {
-        @builtin(position) position: float4,
-        @location(0) color: float4,
+        [[builtin(position)]] position: float4;
+        [[location(0)]] color: float4;
     };
 
-    @vertex
+    [[stage(vertex)]]
     fn vertex_main(vert: VertexInput) -> VertexOutput {
         var out: VertexOutput;
         out.color = vert.color;
@@ -39,8 +39,8 @@
         return out;
     };
 
-    @fragment
-    fn fragment_main(in: VertexOutput) -> @location(0) float4 {
+    [[stage(fragment)]]
+    fn fragment_main(in: VertexOutput) -> [[location(0)]] float4 {
         return float4(in.color);
     }
     `;
@@ -120,19 +120,12 @@
     });
 
     var renderPassDesc = {
-        colorAttachments: [{
-            view: undefined,
-            loadOp: "clear",
-            clearValue: [0.3, 0.3, 0.3, 1],
-            storeOp: "store"
-        }],
+        colorAttachments: [{view: undefined, loadValue: [0.3, 0.3, 0.3, 1]}],
         depthStencilAttachment: {
             view: depthTexture.createView(),
-            depthLoadOp: "clear",
-            depthClearValue: 1.0,
+            depthLoadValue: 1.0,
             depthStoreOp: "store",
-            stencilLoadOp: "clear",
-            stencilClearValue: 0,
+            stencilLoadValue: 0,
             stencilStoreOp: "store"
         }
     };
@@ -161,7 +154,7 @@
             renderPass.setVertexBuffer(0, dataBuf);
             renderPass.draw(3, 1, 0, 0);
 
-            renderPass.end();
+            renderPass.endPass();
             device.queue.submit([commandEncoder.finish()]);
         }
         requestAnimationFrame(frame);

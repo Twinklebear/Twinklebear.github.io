@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="origin-trial" content="AoMftca5+Dstn4K7mCd1AKVcenGb0/EBkqJgonux6w6fVXhyJ2iHs9LuZKA36+gcaypMdBLAaIpkES6VMXoJtg8AAABQeyJvcmlnaW4iOiJodHRwczovL3d3dy53aWxsdXNoZXIuaW86NDQzIiwiZmVhdHVyZSI6IldlYkdQVSIsImV4cGlyeSI6MTY0MzE1NTE5OX0=">
 
-	<title>From 0 to glTF with WebGPU: Bind Groups - Updated 11/24/2022</title>
+	<title>From 0 to glTF with WebGPU: Bind Groups - Updated</title>
 	
 		<meta name="description" content="">
 	
@@ -92,7 +92,7 @@
 	<div class="container content mb-4">
 		
 
-<h1 class="display-4">From 0 to glTF with WebGPU: Bind Groups - Updated 11/24/2022</h1>
+<h1 class="display-4">From 0 to glTF with WebGPU: Bind Groups - Updated</h1>
 
 <div class="row justify-content-center">
 	<div class="col-9">
@@ -167,7 +167,7 @@ This is analogous to sets and bindings in Vulkan, where sets are referred to
 as groups in WGSL.</p>
 
 <p>To specify a uniform buffer in WGSL we first define a struct with the
-<code class="highlighter-rouge">[[block]]</code> qualifier, indicating that this struct will be used as
+<code class="language-plaintext highlighter-rouge">[[block]]</code> qualifier, indicating that this struct will be used as
 the type of a buffer input. We then define a uniform variable to create
 a uniform buffer of this type, and specify that it will be passed through
 bind group 0 at binding 0.</p>
@@ -177,27 +177,26 @@ buffer to our vertices is shown below.</p>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="n">type</span> <span class="n">float4</span> <span class="o">=</span> <span class="kt">vec4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="k">struct</span> <span class="n">VertexInput</span> <span class="p">{</span>
-    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
-    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
+    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
+    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">1</span><span class="p">)]]</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="k">struct</span> <span class="n">VertexOutput</span> <span class="p">{</span>
-    <span class="err">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
-    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
+    <span class="p">[[</span><span class="n">builtin</span><span class="p">(</span><span class="n">position</span><span class="p">)]]</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
+    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="c1">// New: define a structure that will contain our parameters
-</span>
+<span class="c1">// New: define a structure with the block qualifier</span>
+<span class="p">[[</span><span class="n">block</span><span class="p">]]</span>
 <span class="k">struct</span> <span class="n">ViewParams</span> <span class="p">{</span>
-    <span class="nl">view_proj:</span> <span class="kt">mat4x4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nl">view_proj:</span> <span class="kt">mat4x4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="c1">// New: define a uniform variable using that structure
-</span>
-<span class="err">@</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="err">@</span><span class="n">binding</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1">// And a uniform variable using that structure</span>
+<span class="p">[[</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">binding</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span>
 <span class="n">var</span><span class="o">&lt;</span><span class="k">uniform</span><span class="o">&gt;</span> <span class="n">view_params</span><span class="o">:</span> <span class="n">ViewParams</span><span class="p">;</span>
 
-<span class="err">@</span><span class="n">vertex</span>
+<span class="p">[[</span><span class="n">stage</span><span class="p">(</span><span class="n">vertex</span><span class="p">)]]</span>
 <span class="n">fn</span> <span class="n">vertex_main</span><span class="p">(</span><span class="n">vert</span><span class="o">:</span> <span class="n">VertexInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VertexOutput</span> <span class="p">{</span>
     <span class="n">var</span> <span class="k">out</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">;</span>
     <span class="k">out</span><span class="p">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">vert</span><span class="p">.</span><span class="n">color</span><span class="p">;</span>
@@ -205,8 +204,8 @@ buffer to our vertices is shown below.</p>
     <span class="k">return</span> <span class="k">out</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="err">@</span><span class="n">fragment</span>
-<span class="n">fn</span> <span class="nf">fragment_main</span><span class="p">(</span><span class="k">in</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">float4</span> <span class="p">{</span>
+<span class="p">[[</span><span class="n">stage</span><span class="p">(</span><span class="n">fragment</span><span class="p">)]]</span>
+<span class="n">fn</span> <span class="nf">fragment_main</span><span class="p">(</span><span class="k">in</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">float4</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">float4</span><span class="p">(</span><span class="k">in</span><span class="p">.</span><span class="n">color</span><span class="p">);</span>
 <span class="err">}</span></code></pre></figure>
 
@@ -217,10 +216,10 @@ As discussed last time, by fixing the
 configuration of inputs to the pipeline, the GPU can better optimize execution of
 the pipeline.
 The layouts of the bind groups which will be used in the pipeline
-are specified through an array of <a href="https://gpuweb.github.io/gpuweb/#bind-group-layout"><code class="highlighter-rouge">GPUBindGroupLayout</code></a>
-objects which are passed to <a href="https://gpuweb.github.io/gpuweb/#dom-gpudevice-createpipelinelayout"><code class="highlighter-rouge">createPipelineLayout</code></a>
-through the <code class="highlighter-rouge">bindGroupLayouts</code> member.
-The index of a bind group layout in the pipeline layout’s <code class="highlighter-rouge">bindGroupLayouts</code> array
+are specified through an array of <a href="https://gpuweb.github.io/gpuweb/#bind-group-layout"><code class="language-plaintext highlighter-rouge">GPUBindGroupLayout</code></a>
+objects which are passed to <a href="https://gpuweb.github.io/gpuweb/#dom-gpudevice-createpipelinelayout"><code class="language-plaintext highlighter-rouge">createPipelineLayout</code></a>
+through the <code class="language-plaintext highlighter-rouge">bindGroupLayouts</code> member.
+The index of a bind group layout in the pipeline layout’s <code class="language-plaintext highlighter-rouge">bindGroupLayouts</code> array
 is its set number in GLSL. The actual data associated with the binding points
 of each layout is specified separately, allowing re-use of the pipeline and
 layout with different inputs.
@@ -236,7 +235,7 @@ The bind group and pipeline layout which we’ll use in this post is illustrated
 	</i></figcaption>
 </figure>
 
-<p>The bind group layout is created through <a href="https://gpuweb.github.io/gpuweb/#dom-gpudevice-createbindgrouplayout"><code class="highlighter-rouge">createBindGroupLayout</code></a>,
+<p>The bind group layout is created through <a href="https://gpuweb.github.io/gpuweb/#dom-gpudevice-createbindgrouplayout"><code class="language-plaintext highlighter-rouge">createBindGroupLayout</code></a>,
 which takes a list of entries that the corresponding bind group used during rendering must contain.
 Each <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpubindgrouplayoutentry">entry</a> specifies the type
 of the parameter, which shader stages will be able to
@@ -245,14 +244,12 @@ After creating the bind group layout we use it to create our pipeline layout,
 specifying that pipelines created using the layout (i.e., our rendering pipeline)
 will use bind groups matching the bind group layouts specified.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create bind group layout
-</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create bind group layout</span>
 <span class="kd">var</span> <span class="nx">bindGroupLayout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBindGroupLayout</span><span class="p">({</span>
     <span class="na">entries</span><span class="p">:</span> <span class="p">[{</span><span class="na">binding</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="na">visibility</span><span class="p">:</span> <span class="nx">GPUShaderStage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">,</span> <span class="na">buffer</span><span class="p">:</span> <span class="p">{</span><span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uniform</span><span class="dl">"</span><span class="p">}}]</span>
 <span class="p">});</span>
 
-<span class="c1">// Create render pipeline
-</span>
+<span class="c1">// Create render pipeline</span>
 <span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span><span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[</span><span class="nx">bindGroupLayout</span><span class="p">]});</span></code></pre></figure>
 
 <h2 id="creating-a-uniform-buffer-and-bind-group">Creating a Uniform Buffer and Bind Group</h2>
@@ -262,25 +259,23 @@ as a uniform buffer (in our bind group), and a copy destination buffer.
 The latter usage will allow us to update the buffer’s data each frame
 by copying in a new view transform.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create a buffer to store the view parameters
-</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create a buffer to store the view parameters</span>
 <span class="kd">var</span> <span class="nx">viewParamsBuffer</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
     <span class="na">size</span><span class="p">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
     <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">UNIFORM</span> <span class="o">|</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_DST</span>
 <span class="p">});</span></code></pre></figure>
 
-<p>The <a href="https://gpuweb.github.io/gpuweb/#gpu-bind-group"><code class="highlighter-rouge">GPUBindGroup</code></a> specifies the
+<p>The <a href="https://gpuweb.github.io/gpuweb/#gpu-bind-group"><code class="language-plaintext highlighter-rouge">GPUBindGroup</code></a> specifies the
 actual buffers or textures which will be passed to the shaders. During
 rendering, each bind group is bound to the index of its corresponding layout in
-the pipeline’s <code class="highlighter-rouge">bindGroupLayouts</code> array.
+the pipeline’s <code class="language-plaintext highlighter-rouge">bindGroupLayouts</code> array.
 The bind group using our bind group layout passes our view parameter buffer at binding 0, matching the layout.
 For bind groups with multiple entries, the order of the entries specified in the
 layout and bind group do not
 need to match; however, for each binding index specified in the layout,
 a matching binding must be specified in the bind group.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create a bind group which places our view params buffer at binding 0
-</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create a bind group which places our view params buffer at binding 0</span>
 <span class="kd">var</span> <span class="nx">viewParamBG</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBindGroup</span><span class="p">({</span>
     <span class="na">layout</span><span class="p">:</span> <span class="nx">bindGroupLayout</span><span class="p">,</span>
     <span class="na">entries</span><span class="p">:</span> <span class="p">[{</span><span class="na">binding</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="na">resource</span><span class="p">:</span> <span class="p">{</span><span class="na">buffer</span><span class="p">:</span> <span class="nx">viewParamsBuffer</span><span class="p">}}]</span>
@@ -300,22 +295,18 @@ If you have your own preferred camera and controller code, you can also use that
 all we’ll need in the end is to update the view transform based on
 the user’s inputs.</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create an Arcball camera and view projection matrix
-</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create an Arcball camera and view projection matrix</span>
 <span class="kd">var</span> <span class="nx">camera</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ArcballCamera</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
     <span class="mf">0.5</span><span class="p">,</span> <span class="p">[</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">]);</span>
 
-<span class="c1">// Create a perspective projection matrix
-</span>
+<span class="c1">// Create a perspective projection matrix</span>
 <span class="kd">var</span> <span class="nx">projection</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">perspective</span><span class="p">(</span><span class="nx">mat4</span><span class="p">.</span><span class="nx">create</span><span class="p">(),</span> <span class="mi">50</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">,</span>
     <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
 
-<span class="c1">// Matrix which will store the computed projection * view matrix
-</span>
+<span class="c1">// Matrix which will store the computed projection * view matrix</span>
 <span class="kd">var</span> <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
 
-<span class="c1">// Controller utility for interacting with the canvas and driving the Arcball camera
-</span>
+<span class="c1">// Controller utility for interacting with the canvas and driving the Arcball camera</span>
 <span class="kd">var</span> <span class="nx">controller</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Controller</span><span class="p">();</span>
 <span class="nx">controller</span><span class="p">.</span><span class="nx">mousemove</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prev</span><span class="p">,</span> <span class="nx">cur</span><span class="p">,</span> <span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">buttons</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
@@ -333,27 +324,26 @@ the user’s inputs.</p>
 <p>With everything set up, all that’s left to do each frame is upload
 the new view transform, set our bind group, and render!
 After computing the combined projection and view matrix using
-the updated view transform (stored in <code class="highlighter-rouge">camera.camera</code>), we create a
+the updated view transform (stored in <code class="language-plaintext highlighter-rouge">camera.camera</code>), we create a
 mapped staging buffer to upload the transform to the GPU.
-In WebGPU, the <code class="highlighter-rouge">MAP_READ</code> and <code class="highlighter-rouge">MAP_WRITE</code> usage modes cannot be combined
-with any modes other than <code class="highlighter-rouge">COPY_DST</code> and <code class="highlighter-rouge">COPY_SRC</code>, respectively,
+In WebGPU, the <code class="language-plaintext highlighter-rouge">MAP_READ</code> and <code class="language-plaintext highlighter-rouge">MAP_WRITE</code> usage modes cannot be combined
+with any modes other than <code class="language-plaintext highlighter-rouge">COPY_DST</code> and <code class="language-plaintext highlighter-rouge">COPY_SRC</code>, respectively,
 and thus we cannot map back our view parameters buffer to write to it directly.
 For simplicity, each frame we’ll just create a new mapped buffer to
-upload our view transform. We set this buffer’s usage as <code class="highlighter-rouge">COPY_SRC</code>,
+upload our view transform. We set this buffer’s usage as <code class="language-plaintext highlighter-rouge">COPY_SRC</code>,
 meaning that we’ll use it to copy data from it into another buffer,
 i.e., into our uniform buffer.
 We then copy the uploaded view matrix into our uniform buffer
-by enqueuing a <a href="https://gpuweb.github.io/gpuweb/#dom-gpucommandencoder-copybuffertobuffer"><code class="highlighter-rouge">copyBufferToBuffer</code></a>
+by enqueuing a <a href="https://gpuweb.github.io/gpuweb/#dom-gpucommandencoder-copybuffertobuffer"><code class="language-plaintext highlighter-rouge">copyBufferToBuffer</code></a>
 command on the command encoder before beginning our rendering pass.
 In the rendering pass, we set the bind group to be used before rendering our triangle
-by calling <a href="https://gpuweb.github.io/gpuweb/#dom-gpuprogrammablepassencoder-setbindgroup"><code class="highlighter-rouge">setBindGroup</code></a>
+by calling <a href="https://gpuweb.github.io/gpuweb/#dom-gpuprogrammablepassencoder-setbindgroup"><code class="language-plaintext highlighter-rouge">setBindGroup</code></a>
 on the render pass, specifying the bind group set number to place our bind group at.
 After the command buffer is run we’ll have our triangle rendered with our
 view transform applied, as shown below!</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">frame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Update camera buffer
-</span>
+    <span class="c1">// Update camera buffer</span>
     <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">mul</span><span class="p">(</span><span class="nx">projView</span><span class="p">,</span> <span class="nx">proj</span><span class="p">,</span> <span class="nx">camera</span><span class="p">.</span><span class="nx">camera</span><span class="p">);</span>
 
     <span class="kd">var</span> <span class="nx">upload</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">(</span>
@@ -376,7 +366,7 @@ view transform applied, as shown below!</p>
     <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dataBuf</span><span class="p">);</span>
     <span class="nx">renderPass</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">endPass</span><span class="p">();</span>
     <span class="nx">device</span><span class="p">.</span><span class="nx">queue</span><span class="p">.</span><span class="nx">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">finish</span><span class="p">()]);</span>
     <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
 <span class="p">};</span>
@@ -419,7 +409,7 @@ or get in touch via <a href="https://twitter.com/_wusher">Twitter</a> or email.<
 		<div class="col-12 row">
 			
 			<div class="col-md-6 justify-content-left">
-				<a href="/graphics/2021/08/29/0-to-gltf-triangle" title="From 0 to glTF with WebGPU: The First Triangle - Updated 11/24/2022">
+				<a href="/graphics/2021/08/29/0-to-gltf-triangle" title="From 0 to glTF with WebGPU: The First Triangle - Updated">
 					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
 			</div>
 			
