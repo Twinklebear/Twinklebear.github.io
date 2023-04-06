@@ -7,6 +7,7 @@
         requiredLimits: {
             maxStorageBuffersPerShaderStage: adapter.limits.maxStorageBuffersPerShaderStage,
             maxStorageBufferBindingSize: adapter.limits.maxStorageBufferBindingSize,
+            maxBufferSize: adapter.limits.maxBufferSize
         },
     };
     var device = await adapter.requestDevice(gpuDeviceDesc);
@@ -32,7 +33,7 @@
         volumeURL = "/models/" + zfpDataName;
     }
     var compressedData =
-        await fetch(volumeURL).then((res) => res.arrayBuffer().then(function(arr) {
+        await fetch(volumeURL).then((res) => res.arrayBuffer().then(function (arr) {
             return new Uint8Array(arr);
         }));
 
@@ -73,33 +74,28 @@
     var totalVerts = await compressedMC.computeSurface(currentIsovalue, {});
     var end = performance.now();
 
-    var displayMCInfo = function() {
-        mcInfo.innerHTML = `Extracted surface with ${
-      totalVerts / 3
-    } triangles in ${(end - start).toFixed(2)}ms.
+    var displayMCInfo = function () {
+        mcInfo.innerHTML = `Extracted surface with ${totalVerts / 3
+            } triangles in ${(end - start).toFixed(2)}ms.
             Isovalue = ${currentIsovalue}`;
     };
-    var displayCacheInfo = function() {
+    var displayCacheInfo = function () {
         var percentActive = (compressedMC.numActiveBlocks / compressedMC.totalBlocks) * 100;
         var percentWithVerts =
             (compressedMC.numBlocksWithVertices / compressedMC.numActiveBlocks) * 100;
-        cacheInfo.innerHTML = `Cache Space: ${
-      compressedMC.lruCache.cacheSize
-    } blocks
+        cacheInfo.innerHTML = `Cache Space: ${compressedMC.lruCache.cacheSize
+            } blocks
             (${(
-              (compressedMC.lruCache.cacheSize / compressedMC.totalBlocks) *
-              100
+                (compressedMC.lruCache.cacheSize / compressedMC.totalBlocks) *
+                100
             ).toFixed(2)} %
             of ${compressedMC.totalBlocks} total blocks)<br/>
             # Newly Decompressed: ${compressedMC.newDecompressed}<br/>
-            # Active Blocks: ${
-              compressedMC.numActiveBlocks
+            # Active Blocks: ${compressedMC.numActiveBlocks
             } (${percentActive.toFixed(2)}%)<br/>
-            # Active with Vertices: ${
-              compressedMC.numBlocksWithVertices
+            # Active with Vertices: ${compressedMC.numBlocksWithVertices
             } (${percentWithVerts.toFixed(2)}%)<br/>
-            # Cache Slots Available ${
-              compressedMC.lruCache.displayNumSlotsAvailable
+            # Cache Slots Available ${compressedMC.lruCache.displayNumSlotsAvailable
             }`;
     };
     displayMCInfo();
@@ -133,7 +129,7 @@
     var cameraChanged = true;
 
     var controller = new Controller();
-    controller.mousemove = function(prev, cur, evt) {
+    controller.mousemove = function (prev, cur, evt) {
         if (evt.buttons == 1) {
             cameraChanged = true;
             camera.rotate(prev, cur);
@@ -146,14 +142,14 @@
             totalTimeMS = 0;
         }
     };
-    controller.wheel = function(amt) {
+    controller.wheel = function (amt) {
         cameraChanged = true;
         camera.zoom(amt * 0.05);
         numFrames = 0;
         totalTimeMS = 0;
     };
     controller.pinch = controller.wheel;
-    controller.twoFingerDrag = function(drag) {
+    controller.twoFingerDrag = function (drag) {
         cameraChanged = true;
         camera.pan(drag);
         numFrames = 0;
@@ -268,7 +264,7 @@
         },
     });
 
-    var animationFrame = function() {
+    var animationFrame = function () {
         var resolve = null;
         var promise = new Promise((r) => (resolve = r));
         window.requestAnimationFrame(resolve);
@@ -288,6 +284,7 @@
     var perfResults = {
         isovalue: [],
         totalTime: [],
+        memUse: []
     };
     var once = true;
     while (true) {
@@ -323,6 +320,7 @@
             perfResults = {
                 isovalue: [],
                 totalTime: [],
+                memUse: [],
             };
             await compressedMC.lruCache.reset();
             if (requestBenchmark == "random") {
@@ -340,6 +338,9 @@
 
         if (currentBenchmark) {
             if (!currentBenchmark.run()) {
+                var blob = new Blob([JSON.stringify(perfResults)], {type: "text/plain"});
+                saveAs(blob, `bcmc-explicit-${dataset.name}-${currentBenchmark.name}.json`);
+
                 currentBenchmark = null;
             }
         }
@@ -366,21 +367,11 @@
             mcMemDisplay.innerHTML = memUse[0];
             cacheMemDisplay.innerHTML = memUse[1];
             totalMemDisplay.innerHTML = `Total Memory: ${memUse[2]}`;
+            perfResults.memUse.push(memUse[3]);
 
             requestRecompute = false;
             numFrames = 0;
             totalTimeMS = 0;
-
-            /*
-            console.log(JSON.stringify(perfResults));
-            for (const prop in perfResults) {
-                var sum = perfResults[prop].reduce(function(acc, x) {
-                    return acc + x;
-                });
-                console.log(
-                    `${prop} average = ${(sum / perfResults[prop].length).toFixed(3)}`);
-            }
-            */
         }
 
         renderPassDesc.colorAttachments[0].view = context.getCurrentTexture().createView();

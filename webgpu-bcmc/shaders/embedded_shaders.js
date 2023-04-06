@@ -1,8 +1,8 @@
 const ScanBlockSize = 512;
 const SortChunkSize = 64;
-const prefix_sum_comp_spv = `type RTArr = array<u32>;
+const prefix_sum_comp_spv = `alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct Data {
   vals : RTArr_1,
@@ -138,7 +138,7 @@ fn main(@builtin(local_invocation_id) gl_LocalInvocationID_param : vec3<u32>, @b
 }
 `;
 
-const block_prefix_sum_comp_spv = `type RTArr = array<u32>;
+const block_prefix_sum_comp_spv = `alias RTArr = array<u32>;
 
 struct Data {
   vals : RTArr,
@@ -274,9 +274,9 @@ fn main(@builtin(local_invocation_id) gl_LocalInvocationID_param : vec3<u32>, @b
 }
 `;
 
-const add_block_sums_comp_spv = `type RTArr = array<u32>;
+const add_block_sums_comp_spv = `alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct BlockSums {
   block_sums : RTArr_1,
@@ -320,15 +320,15 @@ fn main(@builtin(workgroup_id) gl_WorkGroupID_param : vec3<u32>, @builtin(global
 }
 `;
 
-const stream_compact_comp_spv = `type RTArr = array<u32>;
+const stream_compact_comp_spv = `alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct Input {
   inputs : RTArr_1,
 }
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct Output {
   outputs : RTArr_1,
@@ -567,7 +567,7 @@ struct EmulateUint64_1 {
   hi : u32,
 }
 
-type RTArr = array<EmulateUint64_1>;
+alias RTArr = array<EmulateUint64_1>;
 
 struct Compressed {
   compressed : RTArr,
@@ -577,7 +577,7 @@ struct BlockIDOffset {
   block_id_offset : u32,
 }
 
-type RTArr_1 = array<vec2<f32>>;
+alias RTArr_1 = array<vec2<f32>>;
 
 struct BlockRanges {
   block_ranges : RTArr_1,
@@ -1457,15 +1457,15 @@ struct EmulateUint64_1 {
   hi : u32,
 }
 
-type RTArr = array<EmulateUint64_1>;
+alias RTArr = array<EmulateUint64_1>;
 
 struct Compressed {
   compressed : RTArr,
 }
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct BlockIDs {
   block_ids : RTArr_2,
@@ -1479,7 +1479,7 @@ struct CachedItemSlots {
   cached_item_slots : RTArr_2,
 }
 
-type RTArr_3 = array<f32>;
+alias RTArr_3 = array<f32>;
 
 struct Decompressed {
   decompressed : RTArr_3,
@@ -2239,13 +2239,13 @@ const compute_block_active_comp_spv = `struct VolumeParams {
   isovalue : f32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
 struct BlockActive {
   block_active : RTArr,
 }
 
-type RTArr_1 = array<vec2<f32>>;
+alias RTArr_1 = array<vec2<f32>>;
 
 struct BlockRanges {
   block_ranges : RTArr_1,
@@ -2418,21 +2418,21 @@ const compute_block_has_vertices_comp_spv = `struct VolumeParams {
   isovalue : f32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct BlockActive {
   block_active : RTArr_1,
 }
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct BlockLocations {
   block_locations : RTArr_1,
 }
 
-type RTArr_3 = array<f32>;
+alias RTArr_3 = array<f32>;
 
 struct Decompressed {
   decompressed : RTArr_3,
@@ -2442,13 +2442,13 @@ struct BlockIDOffset {
   block_id_offset : u32,
 }
 
-type RTArr_4 = array<u32>;
+alias RTArr_4 = array<u32>;
 
 struct BlockIDs {
   block_ids : RTArr_1,
 }
 
-type Arr = array<vec4<i32>, 1024u>;
+alias Arr = array<vec4<i32>, 1024u>;
 
 struct TriTable {
   tri_table : Arr,
@@ -3066,33 +3066,33 @@ const compute_block_voxel_num_verts_comp_spv = `struct VolumeParams {
   isovalue : f32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct BlockActive {
   block_active : RTArr_1,
 }
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct BlockLocations {
   block_locations : RTArr_1,
 }
 
-type RTArr_3 = array<f32>;
+alias RTArr_3 = array<f32>;
 
 struct Decompressed {
   decompressed : RTArr_3,
 }
 
-type RTArr_4 = array<u32>;
+alias RTArr_4 = array<u32>;
 
 struct BlockIDs {
   block_ids : RTArr_1,
 }
 
-type RTArr_5 = array<u32>;
+alias RTArr_5 = array<u32>;
 
 struct BlockWithVertsIndices {
   block_with_verts_indices : RTArr_1,
@@ -3102,7 +3102,7 @@ struct BlockIndexOffset {
   block_index_offset : u32,
 }
 
-type Arr = array<vec4<i32>, 1024u>;
+alias Arr = array<vec4<i32>, 1024u>;
 
 struct TriTable {
   tri_table : Arr,
@@ -3739,21 +3739,21 @@ const compute_block_vertices_comp_spv = `struct VolumeParams {
   isovalue : f32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct BlockActive {
   block_active : RTArr_1,
 }
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct BlockLocations {
   block_locations : RTArr_1,
 }
 
-type RTArr_3 = array<f32>;
+alias RTArr_3 = array<f32>;
 
 struct Decompressed {
   decompressed : RTArr_3,
@@ -3769,7 +3769,7 @@ struct BlockInfo_1 {
   offset : u32,
 }
 
-type RTArr_4 = array<BlockInfo_1>;
+alias RTArr_4 = array<BlockInfo_1>;
 
 struct BlockInformation {
   blocks_with_verts : RTArr_4,
@@ -3779,13 +3779,13 @@ struct BlockIDs {
   block_ids : RTArr_1,
 }
 
-type Arr = array<vec4<i32>, 1024u>;
+alias Arr = array<vec4<i32>, 1024u>;
 
 struct TriTable {
   tri_table : Arr,
 }
 
-type RTArr_5 = array<vec2<u32>>;
+alias RTArr_5 = array<vec2<u32>>;
 
 struct Vertices {
   verts : RTArr_5,
@@ -4598,9 +4598,9 @@ fn main(@builtin(local_invocation_id) gl_LocalInvocationID_param : vec3<u32>, @b
 }
 `;
 
-const build_block_info_comp_spv = `type RTArr = array<u32>;
+const build_block_info_comp_spv = `alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct BlockWithVertsIndices {
   block_with_verts_indices : RTArr_1,
@@ -4619,7 +4619,7 @@ struct BlockInfo {
   offset : u32,
 }
 
-type RTArr_2 = array<BlockInfo>;
+alias RTArr_2 = array<BlockInfo>;
 
 struct BlockInformation {
   blocks_with_verts : RTArr_2,
@@ -4678,19 +4678,19 @@ struct Slot {
   item_id : i32,
 }
 
-type RTArr = array<Slot>;
+alias RTArr = array<Slot>;
 
 struct SlotData {
   slot_data : RTArr,
 }
 
-type RTArr_1 = array<i32>;
+alias RTArr_1 = array<i32>;
 
 struct CachedItemSlots {
   cached_item_slot : RTArr_1,
 }
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct SlotAvailableIDs {
   slot_available_id : RTArr_2,
@@ -4740,21 +4740,21 @@ const lru_cache_mark_new_items_comp_spv = `struct PushConstants {
   num_work_items : u32,
 }
 
-type RTArr = array<i32>;
+alias RTArr = array<i32>;
 
 struct CachedItemSlots {
   cached_item_slot : RTArr,
 }
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct ItemNeedsCaching {
   item_needs_caching : RTArr_2,
 }
 
-type RTArr_3 = array<u32>;
+alias RTArr_3 = array<u32>;
 
 struct ItemNeeded {
   item_needed : RTArr_2,
@@ -4766,7 +4766,7 @@ struct Slot {
   item_id : i32,
 }
 
-type RTArr_4 = array<Slot>;
+alias RTArr_4 = array<Slot>;
 
 struct SlotData {
   slot_data : RTArr_4,
@@ -4836,9 +4836,9 @@ const lru_cache_update_comp_spv = `struct WorkItemOffset {
   num_new_items : u32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct NewItemIDs {
   new_items : RTArr_1,
@@ -4854,13 +4854,13 @@ struct Slot {
   item_id : i32,
 }
 
-type RTArr_2 = array<Slot>;
+alias RTArr_2 = array<Slot>;
 
 struct SlotData {
   slot_data : RTArr_2,
 }
 
-type RTArr_3 = array<i32>;
+alias RTArr_3 = array<i32>;
 
 struct CachedItemSlots {
   cached_item_slot : RTArr_3,
@@ -4931,9 +4931,9 @@ const lru_copy_available_slot_age_comp_spv = `struct WorkItemOffset {
   num_slots_available : u32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct AvailableSlotAges {
   available_slot_ages : RTArr_1,
@@ -4945,7 +4945,7 @@ struct Slot {
   item_id : i32,
 }
 
-type RTArr_2 = array<Slot>;
+alias RTArr_2 = array<Slot>;
 
 struct SlotData {
   slot_data : RTArr_2,
@@ -4955,7 +4955,7 @@ struct SlotAvailableIDs {
   slot_available_id : RTArr_1,
 }
 
-type RTArr_3 = array<i32>;
+alias RTArr_3 = array<i32>;
 
 struct CachedItemSlots {
   cached_item_slot : RTArr_3,
@@ -5010,19 +5010,19 @@ struct Slot {
   item_id : i32,
 }
 
-type RTArr = array<Slot>;
+alias RTArr = array<Slot>;
 
 struct SlotData {
   slot_data : RTArr,
 }
 
-type RTArr_1 = array<i32>;
+alias RTArr_1 = array<i32>;
 
 struct CachedItemSlots {
   cached_item_slot : RTArr_1,
 }
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct SlotAvailableIDs {
   slot_available_id : RTArr_2,
@@ -5067,9 +5067,9 @@ const lru_cache_extract_slot_available_comp_spv = `struct WorkItemOffset {
   cache_size : u32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct Output {
   out_buf : RTArr_1,
@@ -5081,13 +5081,13 @@ struct Slot {
   item_id : i32,
 }
 
-type RTArr_2 = array<Slot>;
+alias RTArr_2 = array<Slot>;
 
 struct SlotData {
   slot_data : RTArr_2,
 }
 
-type RTArr_3 = array<i32>;
+alias RTArr_3 = array<i32>;
 
 struct CachedItemSlots {
   cached_item_slot : RTArr_3,
@@ -5141,9 +5141,9 @@ struct BufferInfo {
   size : u32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct Keys {
   keys : RTArr_1,
@@ -5366,9 +5366,9 @@ fn main(@builtin(global_invocation_id) gl_GlobalInvocationID_param : vec3<u32>, 
 }
 `;
 
-const merge_sorted_chunks_comp_spv = `type RTArr = array<u32>;
+const merge_sorted_chunks_comp_spv = `alias RTArr = array<u32>;
 
-type RTArr_1 = array<u32>;
+alias RTArr_1 = array<u32>;
 
 struct InputKeys {
   input_keys : RTArr_1,
@@ -5386,13 +5386,13 @@ struct PushConstants {
   work_group_offset : u32,
 }
 
-type RTArr_2 = array<u32>;
+alias RTArr_2 = array<u32>;
 
 struct OutputKeys {
   output_keys : RTArr_1,
 }
 
-type RTArr_3 = array<u32>;
+alias RTArr_3 = array<u32>;
 
 struct OutputValues {
   output_values : RTArr_1,
@@ -5614,7 +5614,7 @@ struct PushConstants {
   work_group_offset : u32,
 }
 
-type RTArr = array<u32>;
+alias RTArr = array<u32>;
 
 struct Values {
   values : RTArr,
