@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="origin-trial" content="AoMftca5+Dstn4K7mCd1AKVcenGb0/EBkqJgonux6w6fVXhyJ2iHs9LuZKA36+gcaypMdBLAaIpkES6VMXoJtg8AAABQeyJvcmlnaW4iOiJodHRwczovL3d3dy53aWxsdXNoZXIuaW86NDQzIiwiZmVhdHVyZSI6IldlYkdQVSIsImV4cGlyeSI6MTY0MzE1NTE5OX0=">
 
-	<title>From 0 to glTF with WebGPU: Bind Groups - Updated</title>
+	<title>From 0 to glTF with WebGPU: Bind Groups - Updated for Chrome 113 Release</title>
 	
 		<meta name="description" content="">
 	
@@ -92,11 +92,11 @@
 	<div class="container content mb-4">
 		
 
-<h1 class="display-4">From 0 to glTF with WebGPU: Bind Groups - Updated</h1>
+<h1 class="display-4">From 0 to glTF with WebGPU: Bind Groups - Updated for Chrome 113 Release</h1>
 
 <div class="row justify-content-center">
 	<div class="col-9">
-        <p>August 30, 2021</p>
+        <p>April 11, 2023</p>
 		
 <p>This tutorial is an updated version of my previous one and updates the
 code listing to match the finalizing WebGPU APIs. If you’ve read
@@ -114,7 +114,7 @@ parameters in the shader. In WebGPU, the association of data to parameters is ma
 In this post, we’ll use Bind Groups to pass a uniform buffer containing a view
 transform to our vertex shader, allowing us to add camera controls to our triangle
 from the previous post.
-If you haven’t read the <a href="/graphics/2021/08/29/0-to-gltf-triangle">updated first post in this series</a>
+If you haven’t read the <a href="/graphics/2023/04/10/0-to-gltf-triangle">updated first post in this series</a>
 I recommend reading that first, as we’ll continue directly off the code written there.</p>
 
 <!--more-->
@@ -175,28 +175,29 @@ bind group 0 at binding 0.</p>
 <p>The updated vertex shader that applies the transform passed through the uniform
 buffer to our vertices is shown below.</p>
 
-<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="n">type</span> <span class="n">float4</span> <span class="o">=</span> <span class="kt">vec4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="n">alias</span> <span class="n">float4</span> <span class="o">=</span> <span class="kt">vec4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="k">struct</span> <span class="n">VertexInput</span> <span class="p">{</span>
-    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
-    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">1</span><span class="p">)]]</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
 <span class="p">};</span>
 
 <span class="k">struct</span> <span class="n">VertexOutput</span> <span class="p">{</span>
-    <span class="p">[[</span><span class="n">builtin</span><span class="p">(</span><span class="n">position</span><span class="p">)]]</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
-    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
+    <span class="err">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
 <span class="p">};</span>
 
-<span class="c1">// New: define a structure with the block qualifier</span>
-<span class="p">[[</span><span class="n">block</span><span class="p">]]</span>
+<span class="c1">// New: define a struct that contains the data we want to pass</span>
+<span class="c1">// through the uniform buffer</span>
 <span class="k">struct</span> <span class="n">ViewParams</span> <span class="p">{</span>
-    <span class="nl">view_proj:</span> <span class="kt">mat4x4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="nl">view_proj:</span> <span class="kt">mat4x4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">,</span>
 <span class="p">};</span>
 
-<span class="c1">// And a uniform variable using that structure</span>
-<span class="p">[[</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">binding</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span>
+<span class="c1">// New: create a uniform variable of our struct type</span>
+<span class="c1">// and assign it group and binding indices</span>
+<span class="err">@</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="err">@</span><span class="n">binding</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">var</span><span class="o">&lt;</span><span class="k">uniform</span><span class="o">&gt;</span> <span class="n">view_params</span><span class="o">:</span> <span class="n">ViewParams</span><span class="p">;</span>
 
-<span class="p">[[</span><span class="n">stage</span><span class="p">(</span><span class="n">vertex</span><span class="p">)]]</span>
+<span class="err">@</span><span class="n">vertex</span>
 <span class="n">fn</span> <span class="n">vertex_main</span><span class="p">(</span><span class="n">vert</span><span class="o">:</span> <span class="n">VertexInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VertexOutput</span> <span class="p">{</span>
     <span class="n">var</span> <span class="k">out</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">;</span>
     <span class="k">out</span><span class="p">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">vert</span><span class="p">.</span><span class="n">color</span><span class="p">;</span>
@@ -204,8 +205,8 @@ buffer to our vertices is shown below.</p>
     <span class="k">return</span> <span class="k">out</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="p">[[</span><span class="n">stage</span><span class="p">(</span><span class="n">fragment</span><span class="p">)]]</span>
-<span class="n">fn</span> <span class="nf">fragment_main</span><span class="p">(</span><span class="k">in</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">float4</span> <span class="p">{</span>
+<span class="err">@</span><span class="n">fragment</span>
+<span class="n">fn</span> <span class="nf">fragment_main</span><span class="p">(</span><span class="k">in</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">float4</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">float4</span><span class="p">(</span><span class="k">in</span><span class="p">.</span><span class="n">color</span><span class="p">);</span>
 <span class="err">}</span></code></pre></figure>
 
@@ -366,7 +367,7 @@ view transform applied, as shown below!</p>
     <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dataBuf</span><span class="p">);</span>
     <span class="nx">renderPass</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">endPass</span><span class="p">();</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
     <span class="nx">device</span><span class="p">.</span><span class="nx">queue</span><span class="p">.</span><span class="nx">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">finish</span><span class="p">()]);</span>
     <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
 <span class="p">};</span>
@@ -392,7 +393,7 @@ view transform applied, as shown below!</p>
 
 <script src="/assets/webgl-util.min.js"></script>
 
-<script src="/assets/webgpu/triangle-bind-groups-updated-aug-30.js"></script>
+<script src="/assets/webgpu/triangle-bind-groups-updated-apr-11.js"></script>
 
 <h2 id="wrapping-up">Wrapping Up</h2>
 
@@ -401,7 +402,7 @@ object transform matrices, material parameters, and textures, to our shaders. In
 next post, we’ll take a look at the glTF Binary format to load and render our
 first real triangle mesh.
 If you run into issues getting the example to work,
-<a href="/assets/webgpu/triangle-bind-groups-updated-aug-30.js">check out the code</a> for rendering the triangle in Figure 3,
+<a href="/assets/webgpu/triangle-bind-groups-updated-apr-11.js">check out the code</a> for rendering the triangle in Figure 3,
 or get in touch via <a href="https://twitter.com/_wusher">Twitter</a> or email.</p>
 
 
@@ -409,7 +410,7 @@ or get in touch via <a href="https://twitter.com/_wusher">Twitter</a> or email.<
 		<div class="col-12 row">
 			
 			<div class="col-md-6 justify-content-left">
-				<a href="/graphics/2021/08/29/0-to-gltf-triangle" title="From 0 to glTF with WebGPU: The First Triangle - Updated">
+				<a href="/graphics/2023/04/10/0-to-gltf-triangle" title="From 0 to glTF with WebGPU: The First Triangle - Updated for Chrome 113 Release">
 					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
 			</div>
 			

@@ -20,26 +20,25 @@
 
     var shaderCode =
         `
-    type float4 = vec4<f32>;
+    alias float4 = vec4<f32>;
     struct VertexInput {
-        [[location(0)]] position: float4;
-        [[location(1)]] color: float4;
+        @location(0) position: float4,
+        @location(1) color: float4,
     };
 
     struct VertexOutput {
-        [[builtin(position)]] position: float4;
-        [[location(0)]] color: float4;
+        @builtin(position) position: float4,
+        @location(0) color: float4,
     };
 
-    [[block]]
     struct ViewParams {
-        view_proj: mat4x4<f32>;
+        view_proj: mat4x4<f32>,
     };
 
-    [[group(0), binding(0)]]
+    @group(0) @binding(0)
     var<uniform> view_params: ViewParams;
 
-    [[stage(vertex)]]
+    @vertex
     fn vertex_main(vert: VertexInput) -> VertexOutput {
         var out: VertexOutput;
         out.color = vert.color;
@@ -47,29 +46,26 @@
         return out;
     };
 
-    [[stage(fragment)]]
-    fn fragment_main(in: VertexOutput) -> [[location(0)]] float4 {
+    @fragment
+    fn fragment_main(in: VertexOutput) -> @location(0) float4 {
         return float4(in.color);
     }
     `;
 
     // Setup shader modules
     var shaderModule = device.createShaderModule({code: shaderCode});
-    // This API is only available in Chrome right now
-    if (shaderModule.compilationInfo) {
-        var compilationInfo = await shaderModule.compilationInfo();
-        if (compilationInfo.messages.length > 0) {
-            var hadError = false;
-            console.log("Shader compilation log:");
-            for (var i = 0; i < compilationInfo.messages.length; ++i) {
-                var msg = compilationInfo.messages[i];
-                console.log(`${msg.lineNum}:${msg.linePos} - ${msg.message}`);
-                hadError = hadError || msg.type == "error";
-            }
-            if (hadError) {
-                console.log("Shader failed to compile");
-                return;
-            }
+    var compilationInfo = await shaderModule.getCompilationInfo();
+    if (compilationInfo.messages.length > 0) {
+        var hadError = false;
+        console.log("Shader compilation log:");
+        for (var i = 0; i < compilationInfo.messages.length; ++i) {
+            var msg = compilationInfo.messages[i];
+            console.log(`${msg.lineNum}:${msg.linePos} - ${msg.message}`);
+            hadError = hadError || msg.type == "error";
+        }
+        if (hadError) {
+            console.log("Shader failed to compile");
+            return;
         }
     }
 
@@ -133,12 +129,19 @@
     });
 
     var renderPassDesc = {
-        colorAttachments: [{view: undefined, loadValue: [0.3, 0.3, 0.3, 1]}],
+        colorAttachments: [{
+            view: undefined,
+            loadOp: "clear",
+            loadValue: [0.3, 0.3, 0.3, 1],
+            storeOp: "store"
+        }],
         depthStencilAttachment: {
             view: depthTexture.createView(),
-            depthLoadValue: 1.0,
+            depthLoadOp: "clear",
+            depthClearValue: 1.0,
             depthStoreOp: "store",
-            stencilLoadValue: 0,
+            stencilLoadOp: "clear",
+            stencilClearValue: 0,
             stencilStoreOp: "store"
         }
     };
@@ -214,7 +217,7 @@
             renderPass.setVertexBuffer(0, dataBuf);
             renderPass.draw(3, 1, 0, 0);
 
-            renderPass.endPass();
+            renderPass.end();
             device.queue.submit([commandEncoder.finish()]);
         }
         requestAnimationFrame(frame);

@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="origin-trial" content="AoMftca5+Dstn4K7mCd1AKVcenGb0/EBkqJgonux6w6fVXhyJ2iHs9LuZKA36+gcaypMdBLAaIpkES6VMXoJtg8AAABQeyJvcmlnaW4iOiJodHRwczovL3d3dy53aWxsdXNoZXIuaW86NDQzIiwiZmVhdHVyZSI6IldlYkdQVSIsImV4cGlyeSI6MTY0MzE1NTE5OX0=">
 
-	<title>From 0 to glTF with WebGPU: The First Triangle - Updated</title>
+	<title>From 0 to glTF with WebGPU: The First Triangle - Updated for Chrome 113 Release</title>
 	
 		<meta name="description" content="">
 	
@@ -92,11 +92,11 @@
 	<div class="container content mb-4">
 		
 
-<h1 class="display-4">From 0 to glTF with WebGPU: The First Triangle - Updated</h1>
+<h1 class="display-4">From 0 to glTF with WebGPU: The First Triangle - Updated for Chrome 113 Release</h1>
 
 <div class="row justify-content-center">
 	<div class="col-9">
-        <p>August 29, 2021</p>
+        <p>April 10, 2023</p>
 		
 <p>This tutorial is an updated version of my previous one and updates the
 code listing to match the finalizing WebGPU APIs. If you’ve read
@@ -254,26 +254,30 @@ between draw calls, making it challenging to optimize the pipeline.</p>
 <p>Our first step in creating the pipeline is to create the vertex and fragment
 <a href="https://gpuweb.github.io/gpuweb/#shader-modules">shader modules</a>,
 which will be executed in the pipeline.
-WebGPU takes shaders in the form of SPV (compiled from GLSL) or
-<a href="https://www.w3.org/TR/WGSL/">WGSL</a>, which is the WebGPU shading language.
-As WGSL is the main language for future WebGPU applications, we’ll take
-this route in the updated tutorial.</p>
+WebGPU shaders are written in <a href="https://www.w3.org/TR/WGSL/">WGSL</a>.
+Our shader for this application is relatively simple. We define a struct
+for our vertex data input and output format and pass through positions
+and colors from the input to the outputs.</p>
 
 <figure class="highlight"><pre><code class="language-glsl" data-lang="glsl"><span class="c1">// This type definition is just to make typing a bit easier</span>
-<span class="n">type</span> <span class="n">float4</span> <span class="o">=</span> <span class="kt">vec4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="n">alias</span> <span class="n">float4</span> <span class="o">=</span> <span class="kt">vec4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="k">struct</span> <span class="n">VertexInput</span> <span class="p">{</span>
-    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
-    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">1</span><span class="p">)]]</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
+    <span class="c1">// Input vertex data will in attribute 0 will map to this member</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
+    <span class="c1">// Input vertex data will in attribute 1 will map to this member</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
 <span class="p">};</span>
 
 <span class="k">struct</span> <span class="n">VertexOutput</span> <span class="p">{</span>
-    <span class="c1">// This is the equivalent of gl_Position in GLSL</span>
-    <span class="p">[[</span><span class="n">builtin</span><span class="p">(</span><span class="n">position</span><span class="p">)]]</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
-    <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">;</span>
+    <span class="c1">// The builtin position attribute is passed the transformed position</span>
+    <span class="c1">// of our input vertex</span>
+    <span class="err">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
+    <span class="c1">// We can pass other attributes through as well</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">color</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
 <span class="p">};</span>
 
-<span class="p">[[</span><span class="n">stage</span><span class="p">(</span><span class="n">vertex</span><span class="p">)]]</span>
+<span class="err">@</span><span class="n">vertex</span>
 <span class="n">fn</span> <span class="n">vertex_main</span><span class="p">(</span><span class="n">vert</span><span class="o">:</span> <span class="n">VertexInput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VertexOutput</span> <span class="p">{</span>
     <span class="n">var</span> <span class="k">out</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">;</span>
     <span class="k">out</span><span class="p">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">vert</span><span class="p">.</span><span class="n">color</span><span class="p">;</span>
@@ -281,33 +285,30 @@ this route in the updated tutorial.</p>
     <span class="k">return</span> <span class="k">out</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="p">[[</span><span class="n">stage</span><span class="p">(</span><span class="n">fragment</span><span class="p">)]]</span>
-<span class="n">fn</span> <span class="nf">fragment_main</span><span class="p">(</span><span class="k">in</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[[</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span> <span class="n">float4</span> <span class="p">{</span>
+<span class="err">@</span><span class="n">fragment</span>
+<span class="n">fn</span> <span class="nf">fragment_main</span><span class="p">(</span><span class="k">in</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">float4</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">float4</span><span class="p">(</span><span class="k">in</span><span class="p">.</span><span class="n">color</span><span class="p">);</span>
 <span class="err">}</span></code></pre></figure>
 
-<p>We can pass a string containing our WGSL code to the <code class="language-plaintext highlighter-rouge">createShaderModule</code>
+<p>We pass a string containing our WGSL code to the <code class="language-plaintext highlighter-rouge">createShaderModule</code>
 method to compile them. We can check the compilation info of the resulting
 shader module to see if any error occured that caused the shader to fail to
 compile.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Setup shader modules</span>
 <span class="kd">var</span> <span class="nx">shaderModule</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createShaderModule</span><span class="p">({</span><span class="na">code</span><span class="p">:</span> <span class="nx">shaderCode</span><span class="p">});</span>
-<span class="c1">// This API is only available in Chrome right now</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">shaderModule</span><span class="p">.</span><span class="nx">compilationInfo</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">compilationInfo</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">shaderModule</span><span class="p">.</span><span class="nx">compilationInfo</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">compilationInfo</span><span class="p">.</span><span class="nx">messages</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">hadError</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Shader compilation log:</span><span class="dl">"</span><span class="p">);</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">compilationInfo</span><span class="p">.</span><span class="nx">messages</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="nx">compilationInfo</span><span class="p">.</span><span class="nx">messages</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">msg</span><span class="p">.</span><span class="nx">lineNum</span><span class="p">}</span><span class="s2">:</span><span class="p">${</span><span class="nx">msg</span><span class="p">.</span><span class="nx">linePos</span><span class="p">}</span><span class="s2"> - </span><span class="p">${</span><span class="nx">msg</span><span class="p">.</span><span class="nx">message</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
-            <span class="nx">hadError</span> <span class="o">=</span> <span class="nx">hadError</span> <span class="o">||</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">type</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">hadError</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Shader failed to compile</span><span class="dl">"</span><span class="p">);</span>
-            <span class="k">return</span><span class="p">;</span>
-        <span class="p">}</span>
+<span class="kd">var</span> <span class="nx">compilationInfo</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">shaderModule</span><span class="p">.</span><span class="nx">getCompilationInfo</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">compilationInfo</span><span class="p">.</span><span class="nx">messages</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">hadError</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Shader compilation log:</span><span class="dl">"</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">compilationInfo</span><span class="p">.</span><span class="nx">messages</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="nx">compilationInfo</span><span class="p">.</span><span class="nx">messages</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">msg</span><span class="p">.</span><span class="nx">lineNum</span><span class="p">}</span><span class="s2">:</span><span class="p">${</span><span class="nx">msg</span><span class="p">.</span><span class="nx">linePos</span><span class="p">}</span><span class="s2"> - </span><span class="p">${</span><span class="nx">msg</span><span class="p">.</span><span class="nx">message</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+        <span class="nx">hadError</span> <span class="o">=</span> <span class="nx">hadError</span> <span class="o">||</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">type</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">hadError</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Shader failed to compile</span><span class="dl">"</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
@@ -496,12 +497,20 @@ to the current swap chain image. As the image will change each frame
 to the current swap chain image, we don’t set it just yet.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">renderPassDesc</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">colorAttachments</span><span class="p">:</span> <span class="p">[{</span><span class="na">view</span><span class="p">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="na">loadValue</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}],</span>
+    <span class="na">colorAttachments</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="c1">// view will be set to the current render target each frame</span>
+        <span class="na">view</span><span class="p">:</span> <span class="kc">undefined</span><span class="p">,</span>
+        <span class="na">loadOp</span><span class="p">:</span> <span class="dl">"</span><span class="s2">clear</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">loadValue</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="na">storeOp</span><span class="p">:</span> <span class="dl">"</span><span class="s2">store</span><span class="dl">"</span>
+    <span class="p">}],</span>
     <span class="na">depthStencilAttachment</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">view</span><span class="p">:</span> <span class="nx">depthTexture</span><span class="p">.</span><span class="nx">createView</span><span class="p">(),</span>
-        <span class="na">depthLoadValue</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="na">depthLoadOp</span><span class="p">:</span> <span class="dl">"</span><span class="s2">clear</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">depthClearValue</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="na">depthStoreOp</span><span class="p">:</span> <span class="dl">"</span><span class="s2">store</span><span class="dl">"</span><span class="p">,</span>
-        <span class="na">stencilLoadValue</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="na">stencilLoadOp</span><span class="p">:</span> <span class="dl">"</span><span class="s2">clear</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">stencilClearValue</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="na">stencilStoreOp</span><span class="p">:</span> <span class="dl">"</span><span class="s2">store</span><span class="dl">"</span>
     <span class="p">}</span>
 <span class="p">};</span></code></pre></figure>
@@ -540,7 +549,7 @@ canvas as shown below!</p>
     <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dataBuf</span><span class="p">);</span>
     <span class="nx">renderPass</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">endPass</span><span class="p">();</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
     <span class="nx">device</span><span class="p">.</span><span class="nx">queue</span><span class="p">.</span><span class="nx">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">finish</span><span class="p">()]);</span>
     <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
 <span class="p">};</span>
@@ -560,7 +569,7 @@ canvas as shown below!</p>
         </i></figcaption>
     </div>
 </div>
-<script src="/assets/webgpu/triangle-updated-aug-29.js"></script>
+<script src="/assets/webgpu/triangle-updated-apr-11.js"></script>
 
 <h2 id="wrapping-up">Wrapping Up</h2>
 
@@ -568,7 +577,7 @@ canvas as shown below!</p>
 glTF model viewer together. In the next post, we’ll look at how
 to pass additional data to our shaders (e.g., uniform buffers), using
 bind groups. If you run into issues getting the example to work,
-<a href="/assets/webgpu/triangle-updated-aug-29.js">check out the code</a> for rendering the triangle in Figure 3,
+<a href="/assets/webgpu/triangle-updated-apr-11.js">check out the code</a> for rendering the triangle in Figure 3,
 or get in touch via <a href="https://twitter.com/_wusher">Twitter</a> or email.</p>
 
 <p>Although WebGPU is in its early stages, here are a few useful resources
@@ -594,7 +603,7 @@ which are also worth checking out:</p>
 			
 			
 			<div class="col-6 text-right">
-				<a href="/graphics/2021/08/30/0-to-gltf-bind-groups" title="From 0 to glTF with WebGPU: Bind Groups - Updated">
+				<a href="/graphics/2023/04/11/0-to-gltf-bind-groups" title="From 0 to glTF with WebGPU: Bind Groups - Updated for Chrome 113 Release">
 					Next &nbsp<span class="fa fa-chevron-right" aria-hidden="true"></span></a>
 			</div>
 			

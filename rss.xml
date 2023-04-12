@@ -5,12 +5,12 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Sun, 12 Feb 2023 17:09:45 -0800</lastBuildDate>
-		<pubDate>Sun, 12 Feb 2023 17:09:45 -0800</pubDate>
+		<lastBuildDate>Tue, 11 Apr 2023 19:33:19 -0700</lastBuildDate>
+		<pubDate>Tue, 11 Apr 2023 19:33:19 -0700</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
-			<title>From 0 to glTF with WebGPU: Bind Groups - Updated</title>
+			<title>From 0 to glTF with WebGPU: Bind Groups - Updated for Chrome 113 Release</title>
 			<description>
 &lt;p&gt;This tutorial is an updated version of my previous one and updates the
 code listing to match the finalizing WebGPU APIs. If you’ve read
@@ -28,19 +28,19 @@ parameters in the shader. In WebGPU, the association of data to parameters is ma
 In this post, we’ll use Bind Groups to pass a uniform buffer containing a view
 transform to our vertex shader, allowing us to add camera controls to our triangle
 from the previous post.
-If you haven’t read the &lt;a href=&quot;/graphics/2021/08/29/0-to-gltf-triangle&quot;&gt;updated first post in this series&lt;/a&gt;
+If you haven’t read the &lt;a href=&quot;/graphics/2023/04/10/0-to-gltf-triangle&quot;&gt;updated first post in this series&lt;/a&gt;
 I recommend reading that first, as we’ll continue directly off the code written there.&lt;/p&gt;
 
 
-				&lt;a href=&quot;https://www.willusher.io//graphics/2021/08/30/0-to-gltf-bind-groups&quot;&gt;Continue Reading&lt;/a&gt;
+				&lt;a href=&quot;https://www.willusher.io//graphics/2023/04/11/0-to-gltf-bind-groups&quot;&gt;Continue Reading&lt;/a&gt;
 			</description>
-			<link>https://www.willusher.io//graphics/2021/08/30/0-to-gltf-bind-groups</link>
-			<guid>https://www.willusher.io//graphics/2021/08/30/0-to-gltf-bind-groups</guid>
-			<pubDate>Mon, 30 Aug 2021 00:00:00 -0700</pubDate>
+			<link>https://www.willusher.io//graphics/2023/04/11/0-to-gltf-bind-groups</link>
+			<guid>https://www.willusher.io//graphics/2023/04/11/0-to-gltf-bind-groups</guid>
+			<pubDate>Tue, 11 Apr 2023 00:00:00 -0700</pubDate>
 		</item>
 		
 		<item>
-			<title>From 0 to glTF with WebGPU: The First Triangle - Updated</title>
+			<title>From 0 to glTF with WebGPU: The First Triangle - Updated for Chrome 113 Release</title>
 			<description>
 &lt;p&gt;This tutorial is an updated version of my previous one and updates the
 code listing to match the finalizing WebGPU APIs. If you’ve read
@@ -67,11 +67,11 @@ This post marks our initial step on this journey, where we’ll setup
 a WebGPU context and get a triangle on the screen.&lt;/p&gt;
 
 
-				&lt;a href=&quot;https://www.willusher.io//graphics/2021/08/29/0-to-gltf-triangle&quot;&gt;Continue Reading&lt;/a&gt;
+				&lt;a href=&quot;https://www.willusher.io//graphics/2023/04/10/0-to-gltf-triangle&quot;&gt;Continue Reading&lt;/a&gt;
 			</description>
-			<link>https://www.willusher.io//graphics/2021/08/29/0-to-gltf-triangle</link>
-			<guid>https://www.willusher.io//graphics/2021/08/29/0-to-gltf-triangle</guid>
-			<pubDate>Sun, 29 Aug 2021 00:00:00 -0700</pubDate>
+			<link>https://www.willusher.io//graphics/2023/04/10/0-to-gltf-triangle</link>
+			<guid>https://www.willusher.io//graphics/2023/04/10/0-to-gltf-triangle</guid>
+			<pubDate>Mon, 10 Apr 2023 00:00:00 -0700</pubDate>
 		</item>
 		
 		<item>
@@ -193,7 +193,7 @@ If you haven’t read the &lt;a href=&quot;/graphics/2020/06/15/0-to-gltf-triang
 I recommend reading that first, as we’ll continue directly off the code written there.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;This post has been updated to reflect changes to the WebGPU API!&lt;/strong&gt; Please
-see the &lt;a href=&quot;/graphics/2021/08/30/0-to-gltf-bind-groups&quot;&gt;updated post.&lt;/a&gt;&lt;/p&gt;
+see the &lt;a href=&quot;/graphics/2023/04/11/0-to-gltf-bind-groups&quot;&gt;updated post.&lt;/a&gt;&lt;/p&gt;
 
 
 				&lt;a href=&quot;https://www.willusher.io//graphics/2020/06/20/0-to-gltf-bind-groups&quot;&gt;Continue Reading&lt;/a&gt;
@@ -221,7 +221,7 @@ This post marks our initial step on this journey, where we’ll setup
 a WebGPU context and get a triangle on the screen.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;This post has been updated to reflect changes to the WebGPU API!&lt;/strong&gt; Please
-see the &lt;a href=&quot;/graphics/2021/08/29/0-to-gltf-triangle&quot;&gt;updated post.&lt;/a&gt;&lt;/p&gt;
+see the &lt;a href=&quot;/graphics/2023/04/10/0-to-gltf-triangle&quot;&gt;updated post.&lt;/a&gt;&lt;/p&gt;
 
 
 				&lt;a href=&quot;https://www.willusher.io//graphics/2020/06/15/0-to-gltf-triangle&quot;&gt;Continue Reading&lt;/a&gt;
