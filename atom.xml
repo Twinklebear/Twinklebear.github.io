@@ -3,7 +3,7 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2023-04-11T19:33:19-07:00</updated>
+	<updated>2023-04-12T19:47:56-07:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
@@ -19,7 +19,8 @@
 &lt;p&gt;This tutorial is an updated version of my previous one and updates the
 code listing to match the finalizing WebGPU APIs. If you’ve read
 the previous version of this tutorial you can skim through the code
-listings to get up to date.&lt;/p&gt;
+listings to get up to date.
+The code for the blog series is also available &lt;a href=&quot;https://github.com/Twinklebear/webgpu-0-to-gltf&quot;&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;In this second post of the series we’ll learn about Bind Groups,
 which let us pass buffers and textures to our shaders.
@@ -54,7 +55,8 @@ For an easy way to get started, I recommend grabbing my
 &lt;a href=&quot;https://github.com/Twinklebear/webgpu-webpack-starter&quot;&gt;WebGPU + webpack starter template&lt;/a&gt;
 which includes the code from this tutorial. You can start by deleting the code there and
 rewriting it following this tutorial, or follow along in the code
-as you read this page.&lt;/p&gt;
+as you read this page.
+The code for the blog series is also available &lt;a href=&quot;https://github.com/Twinklebear/webgpu-0-to-gltf&quot;&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;WebGPU is a modern graphics API for the web, in development by the
 major browser vendors. When compared to WebGL, WebGPU provides more direct
