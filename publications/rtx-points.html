@@ -99,7 +99,7 @@
         
 		
 		<figure>
-			<img class="img-fluid" src="https://i.imgur.com/clMvtsl.png"/>
+			<img class="img-fluid" src="https://cdn.willusher.io/img/clMvtsl.png"/>
 			<figcaption class="text-left mt-2">
 				<b>Fig. 1: </b><i>a-c) Illustrations of the tetrahedral mesh point location kernels evaluated in this paper. a) Our reference method builds a BVH over the tets and performs both BVH traversal and point-in-tet tests in software (black) using CUDA. b) <font face='monospace'>rtx-bvh</font> uses an RTX-accelerated BVH over tets and triggers hardware BVH traversal (green) by tracing infinitesimal rays at the sample points, while still performing point-tet tests in software (black). c) <font face='monospace'>rtx-rep-faces</font> and <font face='monospace'>rtx-shrd-faces</font> use both hardware BVH traversal and triangle intersection (green) by tracing rays against the tetrahedras' faces. d) An image from the unstructured-data volume ray marcher used to evaluate our point location kernels, showing the 35.7M tet Agulhas Current data set rendered interactively on an NVIDIA TITAN RTX (34FPS at 1024<sup>2</sup> pixels)</i>
 			</figcaption>
