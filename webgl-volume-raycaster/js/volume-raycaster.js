@@ -22,7 +22,7 @@ var gl = null;
 var shader = null;
 var volumeTexture = null;
 var colormapTex = null;
-var fileRegex = /.*\/(\w+)_(\d+)x(\d+)x(\d+)_(\w+)\.*/;
+var fileRegex = /(\w+)_(\d+)x(\d+)x(\d+)_(\w+)\.*/;
 var proj = null;
 var camera = null;
 var projView = null;
@@ -38,15 +38,15 @@ const center = vec3.set(vec3.create(), 0.5, 0.5, 0.5);
 const up = vec3.set(vec3.create(), 0.0, 1.0, 0.0);
 
 var volumes = {
-	"Fuel": "7d87jcsh0qodk78/fuel_64x64x64_uint8.raw",
-	"Neghip": "zgocya7h33nltu9/neghip_64x64x64_uint8.raw",
-	"Hydrogen Atom": "jwbav8s3wmmxd5x/hydrogen_atom_128x128x128_uint8.raw",
-	"Boston Teapot": "w4y88hlf2nbduiv/boston_teapot_256x256x178_uint8.raw",
-	"Engine": "ld2sqwwd3vaq4zf/engine_256x256x128_uint8.raw",
-	"Bonsai": "rdnhdxmxtfxe0sa/bonsai_256x256x256_uint8.raw",
-	"Foot": "ic0mik3qv4vqacm/foot_256x256x256_uint8.raw",
-	"Skull": "5rfjobn0lvb7tmo/skull_256x256x256_uint8.raw",
-	"Aneurysm": "3ykigaiym8uiwbp/aneurism_256x256x256_uint8.raw",
+	"Fuel": "fuel_64x64x64_uint8.raw",
+	"Neghip": "neghip_64x64x64_uint8.raw",
+	"Hydrogen Atom": "hydrogen_atom_128x128x128_uint8.raw",
+	"Boston Teapot": "boston_teapot_256x256x178_uint8.raw",
+	"Engine": "engine_256x256x128_uint8.raw",
+	"Bonsai": "bonsai_256x256x256_uint8.raw",
+	"Foot": "foot_256x256x256_uint8.raw",
+	"Skull": "skull_256x256x256_uint8.raw",
+	"Aneurysm": "aneurism_256x256x256_uint8.raw",
 };
 
 var colormaps = {
@@ -62,7 +62,7 @@ var loadVolume = function(file, onload) {
 	var m = file.match(fileRegex);
 	var volDims = [parseInt(m[2]), parseInt(m[3]), parseInt(m[4])];
 	
-	var url = "https://www.dl.dropboxusercontent.com/s/" + file + "?dl=1";
+	var url = "https://cdn.willusher.io/demo-volumes/" + file;
 	var req = new XMLHttpRequest();
 	var loadingProgressText = document.getElementById("loadingText");
 	var loadingProgressBar = document.getElementById("loadingProgressBar");
@@ -137,7 +137,7 @@ var selectVolume = function() {
 
 				// Reset the sampling rate and camera for new volumes
 				if (newVolumeUpload) {
-					camera = new ArcballCamera(defaultEye, center, up, 2, [WIDTH, HEIGHT]);
+					camera = new ArcballCamera(defaultEye, center, up, 1, [WIDTH, HEIGHT]);
 					samplingRate = 1.0;
 					gl.uniform1f(shader.uniforms["dt_scale"], samplingRate);
 				}
@@ -202,7 +202,7 @@ window.onload = function(){
 	proj = mat4.perspective(mat4.create(), 60 * Math.PI / 180.0,
 		WIDTH / HEIGHT, 0.1, 100);
 
-	camera = new ArcballCamera(defaultEye, center, up, 2, [WIDTH, HEIGHT]);
+	camera = new ArcballCamera(defaultEye, center, up, 1, [WIDTH, HEIGHT]);
 	projView = mat4.create();
 
 	// Register mouse and touch listeners
