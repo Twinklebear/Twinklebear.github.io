@@ -3,7 +3,7 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2023-04-26T22:06:53-07:00</updated>
+	<updated>2023-04-27T16:21:35-07:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
@@ -307,7 +307,7 @@ which lets us skip creating an occlusion hit group entirely.&lt;/p&gt;
 		<id>https://www.willusher.io//webgl/2019/01/13/volume-rendering-with-webgl</id>
 		<content type="html">
 &lt;figure&gt;
-	&lt;img class=&quot;img-fluid&quot; src=&quot;https://cdn.willusher.io/img/YqdyKCj.png&quot; /&gt;
+	&lt;img class=&quot;img-fluid&quot; src=&quot;https://cdn.willusher.io/img/YqdyKCj.webp&quot; /&gt;
 	
 	&lt;figcaption&gt;&lt;i&gt;Figure 1:
 	Example volume renderings, using the WebGL volume renderer described in this post.
