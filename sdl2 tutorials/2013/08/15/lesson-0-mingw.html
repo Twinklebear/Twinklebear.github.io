@@ -99,10 +99,10 @@
 		
 <p>To build the projects with mingw we’ll be using a lightweight makefile that will set the
 include and library paths along with linking our dependencies for us. The makefile assumes
-that you’ve placed the SDL mingw development libraries under <code class="language-plaintext highlighter-rouge">C:/SDL2-2.0.0-mingw/</code> and that
+that you’ve placed the SDL mingw development libraries under <code class="highlighter-rouge">C:/SDL2-2.0.0-mingw/</code> and that
 you’re using the 32bit version of mingw and the 32bit libraries. You should change this to 
 match your compiler (32/64bit) and the location of your SDL folder. To use makefiles with mingw call
-<code class="language-plaintext highlighter-rouge">mingw32-make.exe</code> in the folder containing the makefile.</p>
+<code class="highlighter-rouge">mingw32-make.exe</code> in the folder containing the makefile.</p>
 
 <p>If you’re unfamiliar with Makefiles a basic introduction can be found <a href="http://mrbook.org/blog/tutorials/make/">here</a>.</p>
 
@@ -115,39 +115,43 @@ match your compiler (32/64bit) and the location of your SDL folder. To use makef
 </span><span class="nv">SDL_LIB</span> <span class="o">=</span> <span class="nt">-LC</span>:/SDL2-2.0.0-mingw/i686-w64-mingw32/lib <span class="nt">-lSDL2main</span> <span class="nt">-lSDL2</span>
 <span class="nv">SDL_INCLUDE</span> <span class="o">=</span> <span class="nt">-IC</span>:/SDL2-2.0.0-mingw/i686-w64-mingw32/include
 <span class="c"># If your compiler is a bit older you may need to change -std=c++11 to -std=c++0x
-</span><span class="nv">CXXFLAGS</span> <span class="o">=</span> <span class="nt">-Wall</span> <span class="nt">-c</span> <span class="nt">-std</span><span class="o">=</span>c++11 <span class="p">$(</span>SDL_INCLUDE<span class="p">)</span>
-<span class="nv">LDFLAGS</span> <span class="o">=</span> <span class="nt">-lmingw32</span> <span class="nt">-mwindows</span> <span class="nt">-mconsole</span> <span class="p">$(</span>SDL_LIB<span class="p">)</span>
+</span><span class="nv">CXXFLAGS</span> <span class="o">=</span> <span class="nt">-Wall</span> <span class="nt">-c</span> <span class="nt">-std</span><span class="o">=</span>c++11 <span class="nv">$(SDL_INCLUDE)</span>
+<span class="nv">LDFLAGS</span> <span class="o">=</span> <span class="nt">-lmingw32</span> <span class="nt">-mwindows</span> <span class="nt">-mconsole</span> <span class="nv">$(SDL_LIB)</span>
 <span class="nv">EXE</span> <span class="o">=</span> SDL_Lesson0.exe
 
-<span class="nl">all</span><span class="o">:</span> <span class="nf">$(EXE)</span>
+<span class="nl">all</span><span class="o">:</span> <span class="nf">$(EXE)
+</span>
 
-<span class="nl">$(EXE)</span><span class="o">:</span> <span class="nf">main.o</span>
-	<span class="p">$(</span>CXX<span class="p">)</span> <span class="nv">$&lt;</span> <span class="p">$(</span>LDFLAGS<span class="p">)</span> <span class="nt">-o</span> <span class="nv">$@</span>
+<span class="nl">$(EXE)</span><span class="o">:</span> <span class="nf">main.o
+</span>
+	<span class="nv">$(CXX)</span> <span class="nv">$&lt;</span> <span class="nv">$(LDFLAGS)</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
-<span class="nl">main.o</span><span class="o">:</span> <span class="nf">main.cpp</span>
-	<span class="p">$(</span>CXX<span class="p">)</span> <span class="p">$(</span>CXXFLAGS<span class="p">)</span> <span class="nv">$&lt;</span> <span class="nt">-o</span> <span class="nv">$@</span>
+<span class="nl">main.o</span><span class="o">:</span> <span class="nf">main.cpp
+</span>
+	<span class="nv">$(CXX)</span> <span class="nv">$(CXXFLAGS)</span> <span class="nv">$&lt;</span> <span class="nt">-o</span> <span class="nv">$@</span>
 
-<span class="nl">clean</span><span class="o">:</span>
-	del <span class="k">*</span>.o <span class="o">&amp;&amp;</span> del <span class="p">$(</span>EXE<span class="p">)</span></code></pre></figure>
+<span class="nl">clean</span><span class="o">:</span><span class="nf">
+</span>
+	del <span class="k">*</span>.o <span class="o">&amp;&amp;</span> del <span class="nv">$(EXE)</span></code></pre></figure>
 
 <p><br /></p>
 
 <p>This makefile is configured to build our project with a console alongside the window since
 we’ll be writing our error and debug output to stdout.
 If you want to use a better file logging method or distribute your program and not have
-a console open up you’ll want to remove the console flag (<code class="language-plaintext highlighter-rouge">-mconsole</code>) from the linker flags.</p>
+a console open up you’ll want to remove the console flag (<code class="highlighter-rouge">-mconsole</code>) from the linker flags.</p>
 
 <h2 id="the-test-program">The Test Program</h2>
 <p>The program we’re building for this lesson is a simple sanity check for SDL. It will 
 <a href="https://wiki.libsdl.org/SDL_Init">initialize</a> the SDL video subsystem, check for any
 <a href="https://wiki.libsdl.org/SDL_GetError">errors</a> and then <a href="https://wiki.libsdl.org/SDL_Quit">quit</a>.
-The source file should be titled <code class="language-plaintext highlighter-rouge">main.cpp</code>, or you can change the main.o build dependency
+The source file should be titled <code class="highlighter-rouge">main.cpp</code>, or you can change the main.o build dependency
 in the makefile to match your source file. Before we can run this program we’ll need to copy the SDL
 binary into our executable’s directory. SDL2.dll can be found in the bin directory in the mingw folders,
 you should use the one for the architecture you compiled for (32/64bit).</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-#include</span> <span class="cpf">&lt;SDL2/SDL.h&gt;</span><span class="cp">
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include &lt;iostream&gt;
+#include &lt;SDL2/SDL.h&gt;
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span><span class="p">){</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
@@ -194,6 +198,10 @@ properly. If an error occurs make sure you’ve followed all the setup steps pro
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
+
+    <!-- 100% privacy friendly analytics -->
+    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 
 </body>
 </html>

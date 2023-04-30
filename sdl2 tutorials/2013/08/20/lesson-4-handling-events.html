@@ -99,13 +99,13 @@
 		
 <p>In this lesson we’ll learn the basics of reading user input with SDL, in this simple example we’ll interpret any input
 as the user wanting to quit our application.
-To read events SDL provides the <a href="http://wiki.libsdl.org/SDL_Event"><code class="language-plaintext highlighter-rouge">SDL_Event</code></a> union
-and functions to get events from the queue such as <a href="http://wiki.libsdl.org/SDL_PollEvent"><code class="language-plaintext highlighter-rouge">SDL_PollEvent</code></a>.
+To read events SDL provides the <a href="http://wiki.libsdl.org/SDL_Event"><code class="highlighter-rouge">SDL_Event</code></a> union
+and functions to get events from the queue such as <a href="http://wiki.libsdl.org/SDL_PollEvent"><code class="highlighter-rouge">SDL_PollEvent</code></a>.
 The code for this lesson is built off of the lesson 3 code, if you need that code to start from grab it on <a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/tree/master/Lesson3">Github</a> and let’s get started!</p>
 
 <!--more-->
 
-<p>The first change we need to make is to load our new image to display a prompt for input. Grab it below and use our <code class="language-plaintext highlighter-rouge">loadTexture</code> function to load it up as we did previously.</p>
+<p>The first change we need to make is to load our new image to display a prompt for input. Grab it below and use our <code class="highlighter-rouge">loadTexture</code> function to load it up as we did previously.</p>
 
 <p><a href="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson4/image.png">
 	<img width="500" height="auto" class="centered" src="https://github.com/Twinklebear/TwinklebearDev-Lessons/raw/master/res/Lesson4/image.png" />
@@ -115,8 +115,10 @@ The code for this lesson is built off of the lesson 3 code, if you need that cod
 <p>We’ll be adding a main loop to keep the program running until the user quits so that they can use it as long as they want to, instead of for some fixed delay period. The structure of this loop will be very basic.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">quit</span><span class="p">){</span>
-	<span class="c1">//Read user input &amp; handle it</span>
-	<span class="c1">//Render our scene</span>
+	<span class="c1">//Read user input &amp; handle it
+</span>
+	<span class="c1">//Render our scene
+</span>
 <span class="p">}</span></code></pre></figure>
 
 <p><br /></p>
@@ -129,29 +131,33 @@ mouse and press a key the event queue would look like this.</p>
 
 <p><img width="600" height="auto" class="centered" src="/assets/img/lesson_4/evntqueue.png" /></p>
 
-<p>When we call <code class="language-plaintext highlighter-rouge">SDL_PollEvent</code> we get the event at the front of the queue, which corresponds to the oldest
+<p>When we call <code class="highlighter-rouge">SDL_PollEvent</code> we get the event at the front of the queue, which corresponds to the oldest
 event since we last polled. Polling an event removes it from the queue, if we wanted to retrieve
-some events without removing them we could use <a href="http://wiki.libsdl.org/SDL_PeepEvents"><code class="language-plaintext highlighter-rouge">SDL_PeepEvents</code></a> with the 
-<code class="language-plaintext highlighter-rouge">SDL_PEEKEVENT</code> flag, but that’s beyond the scope of this introduction. I encourage you to read the docs and check
+some events without removing them we could use <a href="http://wiki.libsdl.org/SDL_PeepEvents"><code class="highlighter-rouge">SDL_PeepEvents</code></a> with the 
+<code class="highlighter-rouge">SDL_PEEKEVENT</code> flag, but that’s beyond the scope of this introduction. I encourage you to read the docs and check
 it out later!</p>
 
 <h2 id="processing-the-events">Processing the Events</h2>
 <p>In our main loop we’ll want to read in every event that’s occurred since the previous frame and handle them, 
-we can do this by putting <a href="http://wiki.libsdl.org/SDL_PollEvent"><code class="language-plaintext highlighter-rouge">SDL_PollEvent</code></a> in a while loop, since the function will return 1 if an event was read in
+we can do this by putting <a href="http://wiki.libsdl.org/SDL_PollEvent"><code class="highlighter-rouge">SDL_PollEvent</code></a> in a while loop, since the function will return 1 if an event was read in
 and 0 if not. Since all we’ll do is quit the program when we get an event we’ll set a quit bool to track
 whether the main loop should exit or not. So our event processing loop could look like this.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//e is an SDL_Event variable we've declared before entering the main loop</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//e is an SDL_Event variable we've declared before entering the main loop
+</span>
 <span class="k">while</span> <span class="p">(</span><span class="n">SDL_PollEvent</span><span class="p">(</span><span class="o">&amp;</span><span class="n">e</span><span class="p">)){</span>
-	<span class="c1">//If user closes the window</span>
+	<span class="c1">//If user closes the window
+</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDL_QUIT</span><span class="p">){</span>
 		<span class="n">quit</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 	<span class="p">}</span>
-	<span class="c1">//If user presses any key</span>
+	<span class="c1">//If user presses any key
+</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDL_KEYDOWN</span><span class="p">){</span>
 		<span class="n">quit</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 	<span class="p">}</span>
-	<span class="c1">//If user clicks the mouse</span>
+	<span class="c1">//If user clicks the mouse
+</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDL_MOUSEBUTTONDOWN</span><span class="p">){</span>
 		<span class="n">quit</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 	<span class="p">}</span>
@@ -159,15 +165,16 @@ whether the main loop should exit or not. So our event processing loop could loo
 
 <p><br /></p>
 
-<p>The <code class="language-plaintext highlighter-rouge">SDL_QUIT</code> event occurs when the user closes our window, <code class="language-plaintext highlighter-rouge">SDL_KEYDOWN</code> occurs when a key is pressed and
-<code class="language-plaintext highlighter-rouge">SDL_MOUSEBUTTONDOWN</code> occurs if a mouse button is pressed. These are just a few of the wide variety of events
+<p>The <code class="highlighter-rouge">SDL_QUIT</code> event occurs when the user closes our window, <code class="highlighter-rouge">SDL_KEYDOWN</code> occurs when a key is pressed and
+<code class="highlighter-rouge">SDL_MOUSEBUTTONDOWN</code> occurs if a mouse button is pressed. These are just a few of the wide variety of events
 that we can receive and I strongly recommend reading up about the other types in the
-<a href="http://wiki.libsdl.org/SDL_Event"><code class="language-plaintext highlighter-rouge">SDL_Event</code> documentation</a>.</p>
+<a href="http://wiki.libsdl.org/SDL_Event"><code class="highlighter-rouge">SDL_Event</code> documentation</a>.</p>
 
 <h2 id="completing-the-main-loop">Completing the Main Loop</h2>
 <p>The final part of our main loop will take care of rendering our scene using the same methods as before. When we combine this with our event handling code our basic main loop becomes:</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//Our event structure</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//Our event structure
+</span>
 <span class="n">SDL_Event</span> <span class="n">e</span><span class="p">;</span>
 <span class="kt">bool</span> <span class="n">quit</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">quit</span><span class="p">){</span>
@@ -182,7 +189,8 @@ that we can receive and I strongly recommend reading up about the other types in
 			<span class="n">quit</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
-	<span class="c1">//Render the scene</span>
+	<span class="c1">//Render the scene
+</span>
 	<span class="n">SDL_RenderClear</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span>
 	<span class="n">renderTexture</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
 	<span class="n">SDL_RenderPresent</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span>
@@ -225,6 +233,10 @@ If you have any issues double check your code and/or send me an email or tweet.<
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
+
+    <!-- 100% privacy friendly analytics -->
+    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 
 </body>
 </html>
