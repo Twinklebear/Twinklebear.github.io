@@ -109,12 +109,12 @@ project and let’s get started!</p>
 
 <h2 id="starting-sdl">Starting SDL</h2>
 <p>To use SDL we first need to initialize the various SDL subsystems we want to use. This is done through
-<a href="http://wiki.libsdl.org/moin.fcg/SDL_Init"><code class="highlighter-rouge">SDL_Init</code></a> which takes a set of 
+<a href="http://wiki.libsdl.org/moin.fcg/SDL_Init"><code class="language-plaintext highlighter-rouge">SDL_Init</code></a> which takes a set of 
 <a href="http://wiki.libsdl.org/moin.fcg/SDL_Init#Remarks">flags</a> or’d together specifying the subsystems we’d like to initialize.
 For now we just need the video subsystem but we’ll add more flags as we require more features. Note that the event
 handling system is initialized automatically when the video system is if not explicitly requested by itself while
 the file I/O and threading systems are initialized by default.
-If everything goes ok <code class="highlighter-rouge">SDL_Init</code> will return 0, if not we’ll want to print out the error and quit.</p>
+If everything goes ok <code class="language-plaintext highlighter-rouge">SDL_Init</code> will return 0, if not we’ll want to print out the error and quit.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">if</span> <span class="p">(</span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
 	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"SDL_Init Error: "</span> <span class="o">&lt;&lt;</span> <span class="n">SDL_GetError</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
@@ -125,8 +125,8 @@ If everything goes ok <code class="highlighter-rouge">SDL_Init</code> will retur
 
 <h2 id="opening-a-window">Opening a Window</h2>
 <p>We’ll need a window to display our render in, we can create one with 
-<a href="http://wiki.libsdl.org/moin.fcg/SDL_CreateWindow"><code class="highlighter-rouge">SDL_CreateWindow</code></a> which takes a title for the window,
-the x and y position to create it at, the window width and height and some <a href="http://wiki.libsdl.org/moin.fcg/SDL_WindowFlags">flags</a> to set properties of the window and returns an <code class="highlighter-rouge">SDL_Window*</code>. This pointer will be <code class="highlighter-rouge">NULL</code> if anything went
+<a href="http://wiki.libsdl.org/moin.fcg/SDL_CreateWindow"><code class="language-plaintext highlighter-rouge">SDL_CreateWindow</code></a> which takes a title for the window,
+the x and y position to create it at, the window width and height and some <a href="http://wiki.libsdl.org/moin.fcg/SDL_WindowFlags">flags</a> to set properties of the window and returns an <code class="language-plaintext highlighter-rouge">SDL_Window*</code>. This pointer will be <code class="language-plaintext highlighter-rouge">NULL</code> if anything went
 wrong when creating the window. If an error does occur we need to clean up SDL before exiting the program.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">SDL_Window</span> <span class="o">*</span><span class="n">win</span> <span class="o">=</span> <span class="n">SDL_CreateWindow</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">,</span> <span class="n">SDL_WINDOW_SHOWN</span><span class="p">);</span>
@@ -139,11 +139,11 @@ wrong when creating the window. If an error does occur we need to clean up SDL b
 <p><br /></p>
 
 <h2 id="creating-a-renderer">Creating a Renderer</h2>
-<p>Now we can create a renderer to draw to the window using <a href="http://wiki.libsdl.org/moin.fcg/SDL_CreateRenderer"><code class="highlighter-rouge">SDL_CreateRenderer</code></a>. This function takes the window to associate the renderer with, the index of the rendering driver
+<p>Now we can create a renderer to draw to the window using <a href="http://wiki.libsdl.org/moin.fcg/SDL_CreateRenderer"><code class="language-plaintext highlighter-rouge">SDL_CreateRenderer</code></a>. This function takes the window to associate the renderer with, the index of the rendering driver
 to be used (or -1 to select the first that meets our requirements) and various 
 <a href="http://wiki.libsdl.org/moin.fcg/SDL_RendererFlags">flags</a> used to specify what sort of renderer we want.
-Here we’re requesting a hardware accelerated renderer with vsync enabled. We’ll get back an <code class="highlighter-rouge">SDL_Renderer*</code> which will be
-<code class="highlighter-rouge">NULL</code> if something went wrong. If an error does occur we need to clean up anything we’ve previously created and quit
+Here we’re requesting a hardware accelerated renderer with vsync enabled. We’ll get back an <code class="language-plaintext highlighter-rouge">SDL_Renderer*</code> which will be
+<code class="language-plaintext highlighter-rouge">NULL</code> if something went wrong. If an error does occur we need to clean up anything we’ve previously created and quit
 SDL before exiting the program.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">SDL_Renderer</span> <span class="o">*</span><span class="n">ren</span> <span class="o">=</span> <span class="n">SDL_CreateRenderer</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">SDL_RENDERER_ACCELERATED</span> <span class="o">|</span> <span class="n">SDL_RENDERER_PRESENTVSYNC</span><span class="p">);</span>
@@ -158,11 +158,11 @@ SDL before exiting the program.</p>
 
 <h2 id="loading-a-bitmap-image">Loading a Bitmap Image</h2>
 <p>To render a BMP image we’ll need to load it into memory and then onto the rendering platform we’re 
-using (in this case the GPU). We can load the image with <a href="http://wiki.libsdl.org/moin.fcg/SDL_LoadBMP"><code class="highlighter-rouge">SDL_LoadBMP</code></a>
-which gives us back a <a href="http://wiki.libsdl.org/moin.fcg/SDL_Surface"><code class="highlighter-rouge">SDL_Surface*</code></a> that we can then take and upload to a <a href="http://wiki.libsdl.org/moin.fcg/SDL_Texture"><code class="highlighter-rouge">SDL_Texture</code></a> that the renderer is able to use.</p>
+using (in this case the GPU). We can load the image with <a href="http://wiki.libsdl.org/moin.fcg/SDL_LoadBMP"><code class="language-plaintext highlighter-rouge">SDL_LoadBMP</code></a>
+which gives us back a <a href="http://wiki.libsdl.org/moin.fcg/SDL_Surface"><code class="language-plaintext highlighter-rouge">SDL_Surface*</code></a> that we can then take and upload to a <a href="http://wiki.libsdl.org/moin.fcg/SDL_Texture"><code class="language-plaintext highlighter-rouge">SDL_Texture</code></a> that the renderer is able to use.</p>
 
 <p>SDL_LoadBMP takes the filepath of our image, which you should change to match your project structure, and gives us back
-an <code class="highlighter-rouge">SDL_Surface*</code> or <code class="highlighter-rouge">NULL</code> if something went wrong.</p>
+an <code class="language-plaintext highlighter-rouge">SDL_Surface*</code> or <code class="language-plaintext highlighter-rouge">NULL</code> if something went wrong.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">imagePath</span> <span class="o">=</span> <span class="n">getResourcePath</span><span class="p">(</span><span class="s">"Lesson1"</span><span class="p">)</span> <span class="o">+</span> <span class="s">"hello.bmp"</span><span class="p">;</span>
 <span class="n">SDL_Surface</span> <span class="o">*</span><span class="n">bmp</span> <span class="o">=</span> <span class="n">SDL_LoadBMP</span><span class="p">(</span><span class="n">imagePath</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
@@ -176,8 +176,8 @@ an <code class="highlighter-rouge">SDL_Surface*</code> or <code class="highlight
 
 <p><br /></p>
 
-<p>With the image loaded we can now upload it to the renderer using <a href="http://wiki.libsdl.org/moin.fcg/SDL_CreateTextureFromSurface"><code class="highlighter-rouge">SDL_CreateTextureFromSurface</code></a>. We pass in the rendering context to upload to and the image in memory (the <code class="highlighter-rouge">SDL_Surface</code>)
-and get back the loaded texture, if something went wrong we’ll get back <code class="highlighter-rouge">NULL</code>. We’re also done with the original
+<p>With the image loaded we can now upload it to the renderer using <a href="http://wiki.libsdl.org/moin.fcg/SDL_CreateTextureFromSurface"><code class="language-plaintext highlighter-rouge">SDL_CreateTextureFromSurface</code></a>. We pass in the rendering context to upload to and the image in memory (the <code class="language-plaintext highlighter-rouge">SDL_Surface</code>)
+and get back the loaded texture, if something went wrong we’ll get back <code class="language-plaintext highlighter-rouge">NULL</code>. We’re also done with the original
 surface at this point so we’ll free it now.</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">SDL_Texture</span> <span class="o">*</span><span class="n">tex</span> <span class="o">=</span> <span class="n">SDL_CreateTextureFromSurface</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">bmp</span><span class="p">);</span>
@@ -196,37 +196,32 @@ surface at this point so we’ll free it now.</p>
 <p>All that’s left to do is get our texture on the screen! First we’ll <a href="http://wiki.libsdl.org/moin.fcg/SDL_RenderClear">clear</a>
 the renderer, then <a href="http://wiki.libsdl.org/moin.fcg/SDL_RenderCopy">render our texture</a> and then 
 <a href="http://wiki.libsdl.org/moin.fcg/SDL_RenderPresent">present</a> the updated screen to show the result. Since
-we want to render the whole image and have it stretch to fill the screen we’ll pass <code class="highlighter-rouge">NULL</code> as the source
-and destination rectangles for <code class="highlighter-rouge">SDL_RenderCopy</code>. We’ll also
+we want to render the whole image and have it stretch to fill the screen we’ll pass <code class="language-plaintext highlighter-rouge">NULL</code> as the source
+and destination rectangles for <code class="language-plaintext highlighter-rouge">SDL_RenderCopy</code>. We’ll also
 want to keep the window open for a bit so we can see the result before the program exits, so we’ll add in a call
-to <a href="http://wiki.libsdl.org/moin.fcg/SDL_Delay"><code class="highlighter-rouge">SDL_Delay</code></a>.</p>
+to <a href="http://wiki.libsdl.org/moin.fcg/SDL_Delay"><code class="language-plaintext highlighter-rouge">SDL_Delay</code></a>.</p>
 
 <p>We’ll place all this rendering code within the main loop of our program, which for now will be a simple for loop.
 Each iteration through our loop we’ll sleep for a second, so we can increase or decrease the counter to make our
 program run for a longer or shorter period. When we get to event handling we’ll instead track a boolean that indicates
 if the user wants to quit our program (eg. clicked the X on the window) and exit our loop in that case.</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//A sleepy rendering loop, wait for 3 seconds and render and present the screen each time
-</span>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">//A sleepy rendering loop, wait for 3 seconds and render and present the screen each time</span>
 <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-	<span class="c1">//First clear the renderer
-</span>
+	<span class="c1">//First clear the renderer</span>
 	<span class="n">SDL_RenderClear</span><span class="p">(</span><span class="n">ren</span><span class="p">);</span>
-	<span class="c1">//Draw the texture
-</span>
+	<span class="c1">//Draw the texture</span>
 	<span class="n">SDL_RenderCopy</span><span class="p">(</span><span class="n">ren</span><span class="p">,</span> <span class="n">tex</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-	<span class="c1">//Update the screen
-</span>
+	<span class="c1">//Update the screen</span>
 	<span class="n">SDL_RenderPresent</span><span class="p">(</span><span class="n">ren</span><span class="p">);</span>
-	<span class="c1">//Take a quick break after all that hard work
-</span>
+	<span class="c1">//Take a quick break after all that hard work</span>
 	<span class="n">SDL_Delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
 <p><br /></p>
 
 <h2 id="cleaning-up">Cleaning Up</h2>
-<p>Before we exit we’ve got to destroy all the objects we created through the various <code class="highlighter-rouge">SDL_DestroyX</code> functions and 
+<p>Before we exit we’ve got to destroy all the objects we created through the various <code class="language-plaintext highlighter-rouge">SDL_DestroyX</code> functions and 
 quit SDL. <strong>Error handling note:</strong> previously in the program we may have encountered an error and exited early,
 in which case we’d have to destroy any SDL objects we had created and quit SDL to properly clean up before exiting.
 This part of the error handling is omitted from the lessons since they’re such small examples
@@ -274,10 +269,6 @@ In the <a href="/sdl2%20tutorials/2014/08/01/postscript-1-easy-cleanup">postscri
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
-
-    <!-- 100% privacy friendly analytics -->
-    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 
     <script defer data-domain="willusher.io" src="https://pan.wushernet.com/js/script.js"></script>
 

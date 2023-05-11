@@ -147,7 +147,7 @@ by index. As a simple example the following snippet returns the number of BxDFs 
     <span class="k">self</span><span class="py">.bxdfs</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.filter</span><span class="p">(|</span><span class="k">ref</span> <span class="n">x</span><span class="p">|</span> <span class="n">x</span><span class="nf">.matches</span><span class="p">(</span><span class="n">flags</span><span class="p">))</span><span class="nf">.count</span><span class="p">()</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>A more interesting example is taken from the <code class="highlighter-rouge">BSDF::eval</code> method. This method computes the contribution of all BxDFs
+<p>A more interesting example is taken from the <code class="language-plaintext highlighter-rouge">BSDF::eval</code> method. This method computes the contribution of all BxDFs
 for some pair of incident and outgoing light directions and returns the total color.</p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">self</span><span class="py">.bxdfs</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.filter_map</span><span class="p">(|</span><span class="k">ref</span> <span class="n">x</span><span class="p">|</span> <span class="k">if</span> <span class="n">x</span><span class="nf">.matches</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="p">{</span> <span class="nf">Some</span><span class="p">(</span><span class="n">x</span><span class="nf">.eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">w_o</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">w_i</span><span class="p">))</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="nb">None</span> <span class="p">})</span>
@@ -169,17 +169,12 @@ a ray for intersection with all the instances of geometry in the scene
 as a fold operation! By capturing the ray as a mutable borrow in the closure and modifying its max_t member after each
 intersection we can use the following to find the nearest intersection and return it, or None if nothing was hit.</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">/// Test the ray for intersections against the objects in the scene.
-</span>
-<span class="c">/// Returns Some(Intersection) if an intersection was found and None if not.
-</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="cd">/// Test the ray for intersections against the objects in the scene.</span>
+<span class="cd">/// Returns Some(Intersection) if an intersection was found and None if not.</span>
 <span class="k">pub</span> <span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Intersection</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="c">// We can always return the next hit found since the ray's max_t value is updated
-</span>
-    <span class="c">// after an intersection is found. Thus if we find another hit we know that one
-</span>
-    <span class="c">// occured before any previous ones.
-</span>
+    <span class="c1">// We can always return the next hit found since the ray's max_t value is updated</span>
+    <span class="c1">// after an intersection is found. Thus if we find another hit we know that one</span>
+    <span class="c1">// occured before any previous ones.</span>
     <span class="k">self</span><span class="py">.instances</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.fold</span><span class="p">(</span><span class="nb">None</span><span class="p">,</span> <span class="p">|</span><span class="n">p</span><span class="p">,</span> <span class="k">ref</span> <span class="n">i</span><span class="p">|</span>
                                 <span class="k">match</span> <span class="n">i</span><span class="nf">.intersect</span><span class="p">(</span><span class="n">ray</span><span class="p">)</span> <span class="p">{</span>
                                     <span class="nf">Some</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nf">Some</span><span class="p">(</span><span class="n">h</span><span class="p">),</span>
@@ -211,10 +206,10 @@ and makes it very difficult to implement <a href="http://www.luxrender.net/wiki/
 renderer it’s worth it to support this minimal level of synchronization between threads, to avoid hurting performance too much
 this synchronization should be kept as lightweight as possible, ideally using only atomics.</p>
 
-<p>In tray I followed PBRT and implemented the framebuffer using atomic floats with C++’s <code class="highlighter-rouge">std::atomic&lt;float&gt;</code> type, updating pixel values
+<p>In tray I followed PBRT and implemented the framebuffer using atomic floats with C++’s <code class="language-plaintext highlighter-rouge">std::atomic&lt;float&gt;</code> type, updating pixel values
 using compare exchange loops. This same method is also possible to implement in Rust by either directly using the LLVM intrinsics
-or working through the <a href="http://doc.rust-lang.org/std/sync/atomic/struct.AtomicUsize.html"><code class="highlighter-rouge">AtomicUsize</code></a> type to create an atomic float
-identical to <code class="highlighter-rouge">std::atomic&lt;float&gt;</code>. To implement the atomic float method I would still need to write some minor bits of unsafe code to
+or working through the <a href="http://doc.rust-lang.org/std/sync/atomic/struct.AtomicUsize.html"><code class="language-plaintext highlighter-rouge">AtomicUsize</code></a> type to create an atomic float
+identical to <code class="language-plaintext highlighter-rouge">std::atomic&lt;float&gt;</code>. To implement the atomic float method I would still need to write some minor bits of unsafe code to
 transmute the bits of the float to a usize to go through AtomicUsize, so I decided to try Rust’s safe lock-free multi-producer
 single-consumer channel in <a href="http://doc.rust-lang.org/std/sync/mpsc/">std::sync::mpsc</a> first,
 as this wouldn’t require any unsafe code on my end. I still chose to divide up work in the same way I did previously with an array
@@ -250,7 +245,7 @@ start taking more than one sample per pixel. Here we’re just hitting an uncomm
 result, at least that’s what I hope is the case.</p>
 
 <p>This version is also run without any architecture specific optimizations (to my knowledge) such as taking advantage of any available
-SIMD instructions like you would get when compiling C or C++ with <code class="highlighter-rouge">-march=native</code>. There is a flag to pass to rustc to
+SIMD instructions like you would get when compiling C or C++ with <code class="language-plaintext highlighter-rouge">-march=native</code>. There is a flag to pass to rustc to
 enable these optimizations however I’m not sure how to pass it to rustc through Cargo.
 It looks to currently be an open issue, <a href="https://github.com/rust-lang/cargo/issues/544">#544</a> and
 <a href="https://github.com/rust-lang/cargo/issues/1137">#1137</a>, if it is possible now please do let me know.
@@ -263,11 +258,9 @@ struct. This works pretty nicely although I ran into some minor annoyances. Curr
 it must be in a Box as well, even though the Arc has it’s own box (this may have changed with unsized types, see below).
 That is to say if we had a trait Geometry and we wanted to share some instance between threads we can’t currently write:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// This doesn't work!
-</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c1">// This doesn't work!</span>
 <span class="k">let</span> <span class="n">geom</span> <span class="o">=</span> <span class="nn">Arc</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Sphere</span><span class="p">::</span><span class="nf">new</span><span class="p">())</span> <span class="k">as</span> <span class="nb">Arc</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span><span class="p">;</span>
-<span class="c">// Instead we must box the sphere first
-</span>
+<span class="c1">// Instead we must box the sphere first</span>
 <span class="k">let</span> <span class="n">geom_correct</span> <span class="o">=</span> <span class="nn">Arc</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Box</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">Sphere</span><span class="p">::</span><span class="nf">new</span><span class="p">())</span> <span class="k">as</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span><span class="p">);</span></code></pre></figure>
 
 <p>Additionally it’s not possible to immutably borrow an object across multiple threads even if it can be proven that the object
@@ -335,10 +328,6 @@ The code for the Rust ray tracer is MIT licensed and available on <a href="https
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
-
-    <!-- 100% privacy friendly analytics -->
-    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 
     <script defer data-domain="willusher.io" src="https://pan.wushernet.com/js/script.js"></script>
 
