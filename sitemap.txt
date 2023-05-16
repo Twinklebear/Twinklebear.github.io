@@ -59,6 +59,7 @@ https://www.willusher.io//publications/isp-jsfi
 https://www.willusher.io//publications/vtkm
 https://www.willusher.io//publications/pkd
 
+https://www.willusher.io//graphics/2023/05/16/0-to-gltf-first-mesh
 https://www.willusher.io//graphics/2023/04/11/0-to-gltf-bind-groups
 https://www.willusher.io//graphics/2023/04/10/0-to-gltf-triangle
 https://www.willusher.io//graphics/2020/12/20/rt-dive-m1

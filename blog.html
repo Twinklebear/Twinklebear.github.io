@@ -94,6 +94,19 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2023/05/16/0-to-gltf-first-mesh"><h3>From 0 to glTF with WebGPU: Rendering the First glTF Mesh</h3></a>
+        <p>May 16, 2023</p>
+		
+<p>Now that we’ve seen how to draw a triangle in the <a href="https://www.willusher.io/graphics/2023/04/10/0-to-gltf-triangle">first post</a> and hook up camera controls so we can look around in the <a href="https://www.willusher.io/graphics/2023/04/11/0-to-gltf-bind-groups">second post</a>, we’re at the point where the avocado really hits the screen and we can start drawing our first glTF primitives! I say the avocado hits the screen because that’s the glTF test model we’ll be using. You can grab it from the <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/Avocado">Khronos glTF samples repo</a>. glTF files come in two flavors (minus other extension specific versions), a standard “.gltf” version that stores the JSON header in one file and binary data and textures in separate files, and a “.glb” version, that combines the JSON header and all binary or texture data into a single file. We’ll be loading .glb files in this series to simplify how many files we have to deal with to get a model into the renderer, so grab the glTF-Binary <a href="https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Avocado/glTF-Binary/Avocado.glb">Avocado.glb</a> and let’s get started!</p>
+
+
+
+		<a href="/graphics/2023/05/16/0-to-gltf-first-mesh">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/graphics/2023/04/11/0-to-gltf-bind-groups"><h3>From 0 to glTF with WebGPU: Bind Groups - Updated for Chrome 113 Release</h3></a>
         <p>April 11, 2023</p>
 		
@@ -211,52 +224,6 @@ that I put together to monitor the progress of the encoding tasks.</p>
 
 
 		<a href="/general/2020/11/15/hw-accel-encoding-rpi4">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/general/2020/11/13/vis2020-streaming-infrastructure"><h3>The VIS 2020 Streaming Infrastructure</h3></a>
-        <p>November 13, 2020</p>
-		
-<p>Now that it’s been a bit over a week since VIS 2020 ended I thought I’d
-write up some information on the streaming infrastructure
-we used during conference. For context, <a href="http://ieeevis.org/year/2020/welcome">IEEE VIS 2020</a>,
-like all conferences this year and likely well into the next, was held as a virtual event.
-VIS 2020 was “hosted” by the University of Utah, as it was originally planned (pre-COVID) to
-be held in Salt Lake City. My advisor was one of the co-chairs, and asked if I’d volunteer
-to be on the Technology Committee for VIS 2020. The role of this committee is to manage the technical
-aspects of streaming the event. The change to a virtual format brings a lot of challenges,
-especially when pivoting later in the planning cycle (the past in-person events are typically
-over a year in the making).
-However, the virtual format also brings improvements in terms of accessibility, cost to attendees,
-environmental impact, and archiving.</p>
-
-<p>This post will be one part technical documentation and one
-part reflection. The feedback we received for VIS 2020 was overwhelmingly positive,
-and thus I hope that both the technical documentation on how we ran the event
-and the reflection on what worked and didn’t are helpful to organizers planning virtual
-events through the next year.</p>
-
-<p>Before we begin, I must of course mention that this was not a solo effort.
-Alex Bock and Martin Falk were also on the Tech committee and provided valuable
-advice about their experience running <a href="https://conferences.eg.org/egev20/">EGEV 2020</a> as a virtual event earlier this year,
-which was also well received. We followed the same model for VIS, which aims to keep
-the feeling of a live conference while reducing surface area for technical issues.
-I must also mention the amazing work done by Alper Sarikaya, Hendrik Strobelt,
-Jagoda Walny, and Steve Petruzza on the web committee setting up the
-<a href="https://virtual.ieeevis.org/">virtual conference webpage</a>.
-The webpage was adapted from <a href="https://github.com/Mini-Conf/Mini-Conf">mini-conf</a>,
-originally written by Alexander Rush and Hendrik Strobelt.
-Alper <a href="https://alper.datav.is/blog/2020/11/virtual-ieee-vis-website/">has written up a blog post about this</a>,
-so I won’t cover it here.
-Finally, during the event we had a rotation of about 24 student volunteers
-who were responsible for managing the streams and assisting presenters
-with technical issues, without whom the event would not have been possible.</p>
-
-
-
-		<a href="/general/2020/11/13/vis2020-streaming-infrastructure">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
 		</div>
 	</div>

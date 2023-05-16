@@ -195,9 +195,11 @@ interpolated, e.g. 2/3D positions, RGB colors or even transformations (our goal)
 define a trait for types that can be linearly interpolated:</p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">trait</span> <span class="n">Interpolate</span> <span class="p">{</span>
-    <span class="c1">// Linearly interpolate between `self` and `other` using `t`, for example this could return:</span>
-    <span class="c1">// self * (1.0 - t) + other * t</span>
-    <span class="k">fn</span> <span class="nf">interpolate</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">Self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="k">Self</span><span class="p">;</span>
+    <span class="c">// Linearly interpolate between `self` and `other` using `t`, for example this could return:
+</span>
+    <span class="c">// self * (1.0 - t) + other * t
+</span>
+    <span class="k">fn</span> <span class="nf">interpolate</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
 <p>For convenience we can even provide a default implementation for any types which can be multiplied by a float,
@@ -205,11 +207,14 @@ added to each other and copied to return the result. Then if someone uses our In
 won’t necessarily need to write this simple implementation themselves. Instead they would only need to provide it
 in the case that their type needed some special handling (e.g. spherical linear interpolation for quaternions).</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c1">// Mul&lt;f32, Output = T&gt; - This type can be multiplied by itself and returns a result of its type.</span>
-<span class="c1">// Add&lt;Output = T&gt; - This type can be added together and return a result of its type.</span>
-<span class="c1">// Copy - This type is bitwise copyable</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// Mul&lt;f32, Output = T&gt; - This type can be multiplied by itself and returns a result of its type.
+</span>
+<span class="c">// Add&lt;Output = T&gt; - This type can be added together and return a result of its type.
+</span>
+<span class="c">// Copy - This type is bitwise copyable
+</span>
 <span class="k">impl</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="nb">Mul</span><span class="o">&lt;</span><span class="nb">f32</span><span class="p">,</span> <span class="n">Output</span> <span class="o">=</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">+</span> <span class="nb">Add</span><span class="o">&lt;</span><span class="n">Output</span> <span class="o">=</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">+</span> <span class="nb">Copy</span><span class="o">&gt;</span> <span class="n">Interpolate</span> <span class="k">for</span> <span class="n">T</span> <span class="p">{</span>
-    <span class="k">fn</span> <span class="nf">interpolate</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">Self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="k">Self</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">interpolate</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">f32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
         <span class="o">*</span><span class="k">self</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="o">*</span><span class="n">other</span> <span class="o">*</span> <span class="n">t</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
@@ -217,14 +222,17 @@ in the case that their type needed some special handling (e.g. spherical linear 
 <p>The B-Spline curve provided by the library can operate on any type that implements Interpolate and Copy. Copy
 is required again because Interpolate does not imply the type has implemented Copy and we need it to save
 intermediate results and return the final interpolated value. As a bonus since the B-Spline struct is
-templated on the type being interpolated there’s no virtual function overhead when calling <code class="language-plaintext highlighter-rouge">interpolate</code>.</p>
+templated on the type being interpolated there’s no virtual function overhead when calling <code class="highlighter-rouge">interpolate</code>.</p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">BSpline</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Interpolate</span> <span class="o">+</span> <span class="nb">Copy</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="c1">// Degree of the polynomial that we use to make the curve segments</span>
+    <span class="c">// Degree of the polynomial that we use to make the curve segments
+</span>
     <span class="n">degree</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
-    <span class="c1">// Control points for the curve</span>
+    <span class="c">// Control points for the curve
+</span>
     <span class="n">control_points</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="c1">// The knot vector</span>
+    <span class="c">// The knot vector
+</span>
     <span class="n">knots</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">f32</span><span class="o">&gt;</span><span class="p">,</span>
 <span class="p">}</span></code></pre></figure>
 
