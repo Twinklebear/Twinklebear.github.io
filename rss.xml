@@ -5,14 +5,24 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Tue, 16 May 2023 14:01:17 -0700</lastBuildDate>
-		<pubDate>Tue, 16 May 2023 14:01:17 -0700</pubDate>
+		<lastBuildDate>Thu, 18 May 2023 15:15:07 -0700</lastBuildDate>
+		<pubDate>Thu, 18 May 2023 15:15:07 -0700</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
 			<title>From 0 to glTF with WebGPU: Rendering the First glTF Mesh</title>
 			<description>
 &lt;p&gt;Now that we’ve seen how to draw a triangle in the &lt;a href=&quot;https://www.willusher.io/graphics/2023/04/10/0-to-gltf-triangle&quot;&gt;first post&lt;/a&gt; and hook up camera controls so we can look around in the &lt;a href=&quot;https://www.willusher.io/graphics/2023/04/11/0-to-gltf-bind-groups&quot;&gt;second post&lt;/a&gt;, we’re at the point where the avocado really hits the screen and we can start drawing our first glTF primitives! I say the avocado hits the screen because that’s the glTF test model we’ll be using. You can grab it from the &lt;a href=&quot;https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/Avocado&quot;&gt;Khronos glTF samples repo&lt;/a&gt;. glTF files come in two flavors (minus other extension specific versions), a standard “.gltf” version that stores the JSON header in one file and binary data and textures in separate files, and a “.glb” version, that combines the JSON header and all binary or texture data into a single file. We’ll be loading .glb files in this series to simplify how many files we have to deal with to get a model into the renderer, so grab the glTF-Binary &lt;a href=&quot;https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Avocado/glTF-Binary/Avocado.glb&quot;&gt;Avocado.glb&lt;/a&gt; and let’s get started!&lt;/p&gt;
+
+&lt;figure&gt;
+	&lt;img class=&quot;img-fluid&quot; src=&quot;https://cdn.willusher.io/webgpu-0-to-gltf/first-mesh-avocado.png&quot; /&gt;
+	
+	&lt;figcaption&gt;&lt;b&gt;Figure 1:&lt;/b&gt;
+	&lt;i&gt;It takes quite a bit to get Avocado.glb on the screen, but this
+    beautiful image of our expected final (and delicious) result should
+    be enough motivation to keep us going!
+    &lt;/i&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
 
 
 				&lt;a href=&quot;https://www.willusher.io//graphics/2023/05/16/0-to-gltf-first-mesh&quot;&gt;Continue Reading&lt;/a&gt;

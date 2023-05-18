@@ -99,6 +99,16 @@
 		
 <p>Now that we’ve seen how to draw a triangle in the <a href="https://www.willusher.io/graphics/2023/04/10/0-to-gltf-triangle">first post</a> and hook up camera controls so we can look around in the <a href="https://www.willusher.io/graphics/2023/04/11/0-to-gltf-bind-groups">second post</a>, we’re at the point where the avocado really hits the screen and we can start drawing our first glTF primitives! I say the avocado hits the screen because that’s the glTF test model we’ll be using. You can grab it from the <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/Avocado">Khronos glTF samples repo</a>. glTF files come in two flavors (minus other extension specific versions), a standard “.gltf” version that stores the JSON header in one file and binary data and textures in separate files, and a “.glb” version, that combines the JSON header and all binary or texture data into a single file. We’ll be loading .glb files in this series to simplify how many files we have to deal with to get a model into the renderer, so grab the glTF-Binary <a href="https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Avocado/glTF-Binary/Avocado.glb">Avocado.glb</a> and let’s get started!</p>
 
+<figure>
+	<img class="img-fluid" src="https://cdn.willusher.io/webgpu-0-to-gltf/first-mesh-avocado.png" />
+	
+	<figcaption><b>Figure 1:</b>
+	<i>It takes quite a bit to get Avocado.glb on the screen, but this
+    beautiful image of our expected final (and delicious) result should
+    be enough motivation to keep us going!
+    </i></figcaption>
+</figure>
+
 
 
 		<a href="/graphics/2023/05/16/0-to-gltf-first-mesh">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>

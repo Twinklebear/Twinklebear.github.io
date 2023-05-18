@@ -100,6 +100,16 @@
 		
 <p>Now that we’ve seen how to draw a triangle in the <a href="https://www.willusher.io/graphics/2023/04/10/0-to-gltf-triangle">first post</a> and hook up camera controls so we can look around in the <a href="https://www.willusher.io/graphics/2023/04/11/0-to-gltf-bind-groups">second post</a>, we’re at the point where the avocado really hits the screen and we can start drawing our first glTF primitives! I say the avocado hits the screen because that’s the glTF test model we’ll be using. You can grab it from the <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/Avocado">Khronos glTF samples repo</a>. glTF files come in two flavors (minus other extension specific versions), a standard “.gltf” version that stores the JSON header in one file and binary data and textures in separate files, and a “.glb” version, that combines the JSON header and all binary or texture data into a single file. We’ll be loading .glb files in this series to simplify how many files we have to deal with to get a model into the renderer, so grab the glTF-Binary <a href="https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Avocado/glTF-Binary/Avocado.glb">Avocado.glb</a> and let’s get started!</p>
 
+<figure>
+	<img class="img-fluid" src="https://cdn.willusher.io/webgpu-0-to-gltf/first-mesh-avocado.png" />
+	
+	<figcaption><b>Figure 1:</b>
+	<i>It takes quite a bit to get Avocado.glb on the screen, but this
+    beautiful image of our expected final (and delicious) result should
+    be enough motivation to keep us going!
+    </i></figcaption>
+</figure>
+
 <!--more-->
 
 <h1 id="gltf-concepts">glTF Concepts</h1>
@@ -114,7 +124,7 @@
 <figure>
 	<img class="img-fluid" src="https://cdn.willusher.io/webgpu-0-to-gltf/gltf-concepts.svg" />
 	
-	<figcaption><b>Figure 1:</b>
+	<figcaption><b>Figure 2:</b>
 	<i>The GLTF concepts we'll be looking at in this post and their relationships. A mesh is made of multiple primitives. Primitives can reference multiple accessors that provide data for their attributes. Accessors provide type information for data referenced in buffer views. Buffer views reference regions of a binary buffer provided with the file.
     </i></figcaption>
 </figure>
@@ -238,7 +248,7 @@
 <figure>
 	<img class="img-fluid" src="https://cdn.willusher.io/webgpu-0-to-gltf/gltf-accessors-interleaved.svg" />
 	
-	<figcaption><b>Figure 2:</b>
+	<figcaption><b>Figure 3:</b>
 	<i>Buffer, BufferView and Accessor configuration for a buffer storing interleaved vertex attributes.
     </i></figcaption>
 </figure>
@@ -249,7 +259,7 @@
 <figure>
 	<img class="img-fluid" src="https://cdn.willusher.io/webgpu-0-to-gltf/gltf-accessors-absolute-offset.svg" />
 	
-	<figcaption><b>Figure 3:</b>
+	<figcaption><b>Figure 4:</b>
 	<i>Buffer, BufferView and Accessor configuration for a buffer storing packed vertex attributes. The accessor offset is used to access the normal vector attribute within the same buffer view.
     </i></figcaption>
 </figure>
@@ -260,7 +270,7 @@
 <figure>
 	<img class="img-fluid" src="https://cdn.willusher.io/webgpu-0-to-gltf/gltf-accessors-interleaved-and-absolute-offset.svg" />
 	
-	<figcaption><b>Figure 4:</b>
+	<figcaption><b>Figure 5:</b>
 	<i>Buffer, BufferView and Accessor configuration for accessing interleaved vertex attribute data at an additional absolute offset within a buffer view.
     </i></figcaption>
 </figure>
@@ -350,7 +360,7 @@
 <figure>
 	<img class="img-fluid" src="https://cdn.willusher.io/webgpu-0-to-gltf/glb-layout.svg" />
 	
-	<figcaption><b>Figure 5:</b>
+	<figcaption><b>Figure 6:</b>
 	<i>The glb file layout.
     </i></figcaption>
 </figure>
