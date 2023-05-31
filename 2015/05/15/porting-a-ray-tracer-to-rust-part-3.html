@@ -240,13 +240,11 @@ the caller can run eg. intersection tests. Additionally we’d like to return wh
 (eg. this is information about the nearest hit triangle) and we’d like it to be possible for this function to be inlined as it will be
 called a lot in our rendering loop. Using Rust’s traits we can meet all these demands handily.</p>
 
-<p>We’ll start by putting together a <code class="highlighter-rouge">Boundable</code> trait for types that can report their bounds in space:</p>
+<p>We’ll start by putting together a <code class="language-plaintext highlighter-rouge">Boundable</code> trait for types that can report their bounds in space:</p>
 
-<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c">// Trait implemented by scene objects that can report an AABB describing their bounds
-</span>
+<figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="c1">// Trait implemented by scene objects that can report an AABB describing their bounds</span>
 <span class="k">pub</span> <span class="k">trait</span> <span class="n">Boundable</span> <span class="p">{</span>
-    <span class="c">// Get an AABB reporting the object's bounds in space
-</span>
+    <span class="c1">// Get an AABB reporting the object's bounds in space</span>
     <span class="k">fn</span> <span class="nf">bounds</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">BBox</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
@@ -277,7 +275,7 @@ the call. This actually turned out to be a tough error to work through and the R
         <span class="k">where</span> <span class="n">F</span><span class="p">:</span> <span class="nf">Fn</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">Ray</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">R</span><span class="o">&gt;</span></code></pre></figure>
 
 <p>Now to traverse geometry in the BVH and intersect the instances or triangles within is as simple as passing a closure! For example,
-here’s the intersect call of a <code class="highlighter-rouge">BVH&lt;Instance&gt;</code> in scene.rs. Here our Fn takes a &amp;mut Ray and &amp;Instance and returns an Option<Intersection>
+here’s the intersect call of a <code class="language-plaintext highlighter-rouge">BVH&lt;Instance&gt;</code> in scene.rs. Here our Fn takes a &amp;mut Ray and &amp;Instance and returns an Option<Intersection>
 which represents the closest intersection with an instance found. The BVH will then traverse the hierarchy and call our function
 on the geometry in each leaf node that our ray enters.</Intersection></p>
 
@@ -295,7 +293,7 @@ to see the compiler error yourself (this may change as the compiler on playpen i
 to make sense of the error I asked folks on the Rust IRC, who have always been
 extremely helpful. They pointed out that I need to tie the lifetime of the &amp;T passed to the caller’s Fn
 with the lifetime of the BVH itself, thus indicating to the compiler that the reference will be valid as
-long as the BVH is alive. This is done with the <code class="highlighter-rouge">'a</code> lifetime annotations in the intersect function signature.</p>
+long as the BVH is alive. This is done with the <code class="language-plaintext highlighter-rouge">'a</code> lifetime annotations in the intersect function signature.</p>
 
 <p>Without the help of people in IRC this probably would have taken much longer to figure out (if I could have figured it
 out at all). Since Rust is a very young language the documentation and compiler are still being worked on and I think
@@ -321,7 +319,7 @@ a BVH on the mesh’s triangles we end up with a very simple mesh type. The stru
 <span class="p">}</span></code></pre></figure>
 
 <p>Testing the triangles of the mesh for intersection is the same as testing for intersections against Instances
-of geometry, but instead we return an <code class="highlighter-rouge">Option&lt;DifferentialGeometry&gt;</code>.</p>
+of geometry, but instead we return an <code class="language-plaintext highlighter-rouge">Option&lt;DifferentialGeometry&gt;</code>.</p>
 
 <figure class="highlight"><pre><code class="language-rust" data-lang="rust"><span class="k">impl</span> <span class="n">Geometry</span> <span class="k">for</span> <span class="n">Mesh</span> <span class="p">{</span>
     <span class="k">fn</span> <span class="nf">intersect</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">ray</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nn">linalg</span><span class="p">::</span><span class="n">Ray</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="n">DifferentialGeometry</span><span class="o">&gt;</span> <span class="p">{</span>
@@ -342,8 +340,8 @@ Cargo is very smooth.</p>
 OBJ loader I use in my C++ projects, <a href="https://github.com/syoyo/tinyobjloader">tinyobjloader</a>. To figure out how
 to publish the crate online I followed <a href="http://doc.crates.io/crates-io.html#publishing-crates">the guide on publishing</a>
 and <a href="https://crates.io/crates/tobj">here it is</a>! Adding this library as dependency to tray_rust can be done
-by adding <code class="highlighter-rouge">tobj = "0.0.8"</code> to the <code class="highlighter-rouge">[dependencies]</code> list in the project’s Cargo.toml and the crate will be downloaded and available for use
-via <code class="highlighter-rouge">extern crate tobj;</code>.</p>
+by adding <code class="language-plaintext highlighter-rouge">tobj = "0.0.8"</code> to the <code class="language-plaintext highlighter-rouge">[dependencies]</code> list in the project’s Cargo.toml and the crate will be downloaded and available for use
+via <code class="language-plaintext highlighter-rouge">extern crate tobj;</code>.</p>
 
 <p>For some extra fun I used the Travis-CI integration discussed in Huon’s “Travis on the Train” series
 (<a href="http://huonw.github.io/blog/2015/04/helping-travis-catch-the-rustc-train/">part 1</a>,
@@ -371,7 +369,7 @@ where components are scaled by (1500, 1500, 1500 / 1.66) for (R, G, B) in the fi
 in the files are stored in little Endian double precision and in chunks, so all the red values come first, followed by green and then blue.
 To load these binary files I made use of the <a href="https://crates.io/crates/byteorder">byteorder crate</a>, which brings up another cool feature of Rust:
 extension traits. It’s possible for libraries to add new traits to existing types, extending them with new methods. This is kept in check
-by only having traits be in scope if you use them, eg. <code class="highlighter-rouge">use my_lib::CoolTrait</code> will make CoolTrait’s methods available on implementing types.
+by only having traits be in scope if you use them, eg. <code class="language-plaintext highlighter-rouge">use my_lib::CoolTrait</code> will make CoolTrait’s methods available on implementing types.
 The byteorder crate extends methods on types that implement <a href="http://doc.rust-lang.org/std/io/trait.Read.html">Read</a> with
 <a href="http://burntsushi.net/rustdoc/byteorder/trait.ReadBytesExt.html">ReadBytesExt</a>
 (see the Implementors section at the bottom) to add on typed binary io methods. This makes integrating new libraries with

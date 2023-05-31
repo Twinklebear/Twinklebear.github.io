@@ -171,36 +171,36 @@ volume, and are attenuated as they traverse it due to absorption by the volume.
 If we trace rays from the eye through the volume, we can
 compute they light received at the eye by integrating the ray through
 the volume, to accumulate the emission and absorption along the ray.
-Given a ray from the eye which enters the volume at <script type="math/tex">s = 0</script> and exits it at
-<script type="math/tex">s = L</script>, we can compute the light which
+Given a ray from the eye which enters the volume at \(s = 0\) and exits it at
+\(s = L\), we can compute the light which
 is received at the eye using the following integral:</p>
 
-<script type="math/tex; mode=display">C(r) = \int_0^L C(s) \mu(s) e^{-\int_0^s \mu(t) dt} ds</script>
+\[C(r) = \int_0^L C(s) \mu(s) e^{-\int_0^s \mu(t) dt} ds\]
 
 <p>As the ray passes through the volume, we integrate
-the emitted color <script type="math/tex">C(s)</script> and absorption <script type="math/tex">\mu(s)</script>
-at each point <script type="math/tex">s</script> along the ray. The emitted color at each point is attenuated as it returns
+the emitted color \(C(s)\) and absorption \(\mu(s)\)
+at each point \(s\) along the ray. The emitted color at each point is attenuated as it returns
 to the eye by the volume’s absorption up to that point, which is computed with the
-<script type="math/tex">e^{-\int_0^s \mu(t) dt}</script> term.</p>
+\(e^{-\int_0^s \mu(t) dt}\) term.</p>
 
 <p>In general, this integral cannot be computed analytically, and
-we must use a numeric approximation. We approximate the integral by taking a set of <script type="math/tex">N</script>
-samples along the ray on the interval <script type="math/tex">s = [0, L]</script>, each a distance <script type="math/tex">\Delta s</script> apart
+we must use a numeric approximation. We approximate the integral by taking a set of \(N\)
+samples along the ray on the interval \(s = [0, L]\), each a distance \(\Delta s\) apart
 (Figure 3), and summing these samples together. The attenuation term at
 each sample point becomes a product series, accumulating the absorption at
 previous samples.</p>
 
-<script type="math/tex; mode=display">C(r) = \sum_{i=0}^N C(i \Delta s) \mu (i \Delta s) \Delta s
-			\prod_{j=0}^{i-1} e^{-\mu(j \Delta s) \Delta s}</script>
+\[C(r) = \sum_{i=0}^N C(i \Delta s) \mu (i \Delta s) \Delta s
+			\prod_{j=0}^{i-1} e^{-\mu(j \Delta s) \Delta s}\]
 
 <p>To simplify this sum further, we approximate the
-previous attenuation term (<script type="math/tex">e^{-\mu(j \Delta s) \Delta s}</script>)
+previous attenuation term (\(e^{-\mu(j \Delta s) \Delta s}\))
 by its Taylor series. We also introduce alpha
-<script type="math/tex">\alpha(i \Delta s) = \mu(i \Delta s) \Delta s</script>
+\(\alpha(i \Delta s) = \mu(i \Delta s) \Delta s\)
 for convenience. This yields the front-to-back alpha compositing equation:</p>
 
-<script type="math/tex; mode=display">C(r) = \sum_{i=0}^N C(i \Delta s) \alpha (i \Delta s)
-			\prod_{j=0}^{i-1} (1 - \alpha(j \Delta s))</script>
+\[C(r) = \sum_{i=0}^N C(i \Delta s) \alpha (i \Delta s)
+			\prod_{j=0}^{i-1} (1 - \alpha(j \Delta s))\]
 
 <figure>
 	<img class="img-fluid" width="80%" src="/assets/img/webgl-volumes/volume-rendering-cloud-labelled.svg" />
@@ -213,16 +213,16 @@ for convenience. This yields the front-to-back alpha compositing equation:</p>
 <p>The above equation amounts to a for loop, where we step the ray through
 the volume, and accumulate the color and opacity iteratively as we go.
 This loop continues until the ray either leaves the volume,
-or the accumulated color has become opaque (<script type="math/tex">\alpha = 1</script>).
+or the accumulated color has become opaque (\(\alpha = 1\)).
 The iterative computation of the above sum is done using the familiar
 front-to-back compositing equations:</p>
 
-<script type="math/tex; mode=display">\hat{C}_i = \hat{C}_{i-1} + (1 - \alpha_{i-1}) \hat{C}(i \Delta s)</script>
+\[\hat{C}_i = \hat{C}_{i-1} + (1 - \alpha_{i-1}) \hat{C}(i \Delta s)\]
 
-<script type="math/tex; mode=display">\alpha_i = \alpha_{i - 1} + (1 - \alpha_{i-1}) \alpha(i \Delta s)</script>
+\[\alpha_i = \alpha_{i - 1} + (1 - \alpha_{i-1}) \alpha(i \Delta s)\]
 
 <p>In these final equations we use pre-multiplied opacity for
-correct blending, <script type="math/tex">\hat{C}(i\Delta s) = C(i\Delta s) \alpha(i \Delta s)</script>.</p>
+correct blending, \(\hat{C}(i\Delta s) = C(i\Delta s) \alpha(i \Delta s)\).</p>
 
 <p>To render an image of the volume we just need to trace a ray
 from the eye through each pixel, and perform the above
@@ -319,13 +319,13 @@ each fragment a bit cheaper. However, these directions
 may not be normalized when we get them in the fragment
 shader, so we’ll still need to normalize them.</p>
 
-<p>We’ll render the bounding box as a unit <script type="math/tex">[0, 1]</script>
+<p>We’ll render the bounding box as a unit \([0, 1]\)
 cube, and scale it by the volume axes to support non-uniform sized
 volumes. The eye position is transformed into the unit cube,
 and the ray direction is computed in this space. Raymarching in
 the unit cube space will allow us to simplify our texture sampling
 operations during the raymarching in the fragment shader, since we’ll already be in the
-<script type="math/tex">[0, 1]</script> texture coordinate space of the 3D volume.</p>
+\([0, 1]\) texture coordinate space of the 3D volume.</p>
 
 <p>The vertex shader we’ll use is shown below, the rasterized
 back faces colored by the view ray direction are shown in Figure 7.</p>
@@ -340,13 +340,11 @@ back faces colored by the view ray direction are shown in Figure 7.</p>
 <span class="k">flat</span> <span class="k">out</span> <span class="kt">vec3</span> <span class="n">transformed_eye</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// Translate the cube to center it at the origin.
-</span>
+	<span class="c1">// Translate the cube to center it at the origin.</span>
 	<span class="kt">vec3</span> <span class="n">volume_translation</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="n">volume_scale</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">;</span>
 	<span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">proj_view</span> <span class="o">*</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="n">volume_scale</span> <span class="o">+</span> <span class="n">volume_translation</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
-	<span class="c1">// Compute eye position and ray directions in the unit cube space
-</span>
+	<span class="c1">// Compute eye position and ray directions in the unit cube space</span>
 	<span class="n">transformed_eye</span> <span class="o">=</span> <span class="p">(</span><span class="n">eye_pos</span> <span class="o">-</span> <span class="n">volume_translation</span><span class="p">)</span> <span class="o">/</span> <span class="n">volume_scale</span><span class="p">;</span>
 	<span class="n">vray_dir</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">-</span> <span class="n">transformed_eye</span><span class="p">;</span>
 <span class="p">};</span></code></pre></figure>
@@ -366,7 +364,7 @@ in the vertex shader, we’ll need a few more inputs to the fragment shader
 to render the volume. Of course, the first thing we’ll need is a 3D texture
 sampler to sample the volume.
 However, the volume is just a block of scalar values,
-if we used these scalars directly as the color (<script type="math/tex">C(s)</script>) and opacity (<script type="math/tex">\alpha(s)</script>) values,
+if we used these scalars directly as the color (\(C(s)\)) and opacity (\(\alpha(s)\)) values,
 the rendered grayscale image may not be very useful to the user. For example,
 it would not be possible to highlight regions of interest with different colors,
 or to make noise and background regions transparent to hide them.</p>
@@ -381,25 +379,25 @@ transfer functions exist, a typical one acts as a simple color lookup table,
 and can be represented as a 1D color and opacity texture (RGBA). To apply the transfer
 function when raymarching the volume, we can sample the
 transfer function’s texture using the scalar value sampled from the volume texture.
-The returned color and opacity values are then used as <script type="math/tex">C(s)</script> and
-<script type="math/tex">\alpha(s)</script> for the sample.</p>
+The returned color and opacity values are then used as \(C(s)\) and
+\(\alpha(s)\) for the sample.</p>
 
 <p>The final additional input we need for our fragment shader are the volume dimensions,
-which we’ll use to compute a ray step size (<script type="math/tex">\Delta s</script>) to sample
+which we’ll use to compute a ray step size (\(\Delta s\)) to sample
 each voxel along the ray at least once. As the <a href="http://www.pbr-book.org/3ed-2018/Geometry_and_Transformations/Rays.html">conventional equation for a ray</a>
-is <script type="math/tex">r(t) = \vec{o} + t \vec{d}</script>, we will switch the terminology in the code to match,
-and refer to <script type="math/tex">\Delta s</script> as <script type="math/tex">\texttt{dt}</script>. Similarly, the range along the ray overlapped by
-the volume, <script type="math/tex">s = [0, L]</script>, will be referred to as <script type="math/tex">[\texttt{tmin}, \texttt{tmax}]</script>.</p>
+is \(r(t) = \vec{o} + t \vec{d}\), we will switch the terminology in the code to match,
+and refer to \(\Delta s\) as \(\texttt{dt}\). Similarly, the range along the ray overlapped by
+the volume, \(s = [0, L]\), will be referred to as \([\texttt{tmin}, \texttt{tmax}]\).</p>
 
 <p>To raymarch the volume in our fragment shader, we will do the following:</p>
 
 <ol>
   <li>Normalize the view ray direction received as input from the vertex shader;</li>
-  <li>Intersect the view ray against the volume bounds to determine the interval <script type="math/tex">[\texttt{tmin}, \texttt{tmax}]</script>
+  <li>Intersect the view ray against the volume bounds to determine the interval \([\texttt{tmin}, \texttt{tmax}]\)
  to raymarch over to render the volume;</li>
-  <li>Compute the step size <script type="math/tex">\texttt{dt}</script> such that each voxel is sampled at least once;</li>
-  <li>Starting from the entry point at <script type="math/tex">r(\texttt{tmin})</script>, step the ray through the volume until
- the exit point at <script type="math/tex">r(\texttt{tmax})</script>.
+  <li>Compute the step size \(\texttt{dt}\) such that each voxel is sampled at least once;</li>
+  <li>Starting from the entry point at \(r(\texttt{tmin})\), step the ray through the volume until
+ the exit point at \(r(\texttt{tmax})\).
     <ol>
       <li>At each point, sample the volume and use the transfer function to assign a color
  and opacity;</li>
@@ -422,8 +420,7 @@ additional comments marking each step in the process.</p>
 <span class="k">precision</span> <span class="kt">highp</span> <span class="kt">float</span><span class="p">;</span>
 
 <span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">sampler3D</span> <span class="n">volume</span><span class="p">;</span>
-<span class="c1">// WebGL doesn't support 1D textures, so we use a 2D texture for the transfer function
-</span>
+<span class="c1">// WebGL doesn't support 1D textures, so we use a 2D texture for the transfer function</span>
 <span class="k">uniform</span> <span class="kt">highp</span> <span class="kt">sampler2D</span> <span class="n">transfer_fcn</span><span class="p">;</span>
 <span class="k">uniform</span> <span class="kt">ivec3</span> <span class="n">volume_dims</span><span class="p">;</span>
 
@@ -446,55 +443,40 @@ additional comments marking each step in the process.</p>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// Step 1: Normalize the view ray
-</span>
+	<span class="c1">// Step 1: Normalize the view ray</span>
 	<span class="kt">vec3</span> <span class="n">ray_dir</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">vray_dir</span><span class="p">);</span>
 
-	<span class="c1">// Step 2: Intersect the ray with the volume bounds to find the interval
-</span>
-	<span class="c1">// along the ray overlapped by the volume.
-</span>
+	<span class="c1">// Step 2: Intersect the ray with the volume bounds to find the interval</span>
+	<span class="c1">// along the ray overlapped by the volume.</span>
 	<span class="kt">vec2</span> <span class="n">t_hit</span> <span class="o">=</span> <span class="n">intersect_box</span><span class="p">(</span><span class="n">transformed_eye</span><span class="p">,</span> <span class="n">ray_dir</span><span class="p">);</span>
 	<span class="k">if</span> <span class="p">(</span><span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="p">{</span>
 		<span class="k">discard</span><span class="p">;</span>
 	<span class="p">}</span>
-	<span class="c1">// We don't want to sample voxels behind the eye if it's
-</span>
-	<span class="c1">// inside the volume, so keep the starting point at or in front
-</span>
-	<span class="c1">// of the eye
-</span>
+	<span class="c1">// We don't want to sample voxels behind the eye if it's</span>
+	<span class="c1">// inside the volume, so keep the starting point at or in front</span>
+	<span class="c1">// of the eye</span>
 	<span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">t_hit</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
 
-	<span class="c1">// Step 3: Compute the step size to march through the volume grid
-</span>
+	<span class="c1">// Step 3: Compute the step size to march through the volume grid</span>
 	<span class="kt">vec3</span> <span class="n">dt_vec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">/</span> <span class="p">(</span><span class="kt">vec3</span><span class="p">(</span><span class="n">volume_dims</span><span class="p">)</span> <span class="o">*</span> <span class="n">abs</span><span class="p">(</span><span class="n">ray_dir</span><span class="p">));</span>
 	<span class="kt">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">dt_vec</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">dt_vec</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dt_vec</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
 
-	<span class="c1">// Step 4: Starting from the entry point, march the ray through the volume
-</span>
-	<span class="c1">// and sample it
-</span>
+	<span class="c1">// Step 4: Starting from the entry point, march the ray through the volume</span>
+	<span class="c1">// and sample it</span>
 	<span class="kt">vec3</span> <span class="n">p</span> <span class="o">=</span> <span class="n">transformed_eye</span> <span class="o">+</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">ray_dir</span><span class="p">;</span>
 	<span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">t</span> <span class="o">=</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">x</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">t_hit</span><span class="p">.</span><span class="n">y</span><span class="p">;</span> <span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// Step 4.1: Sample the volume, and color it by the transfer function.
-</span>
-		<span class="c1">// Note that here we don't use the opacity from the transfer function,
-</span>
-		<span class="c1">// and just use the sample value as the opacity
-</span>
+		<span class="c1">// Step 4.1: Sample the volume, and color it by the transfer function.</span>
+		<span class="c1">// Note that here we don't use the opacity from the transfer function,</span>
+		<span class="c1">// and just use the sample value as the opacity</span>
 		<span class="kt">float</span> <span class="n">val</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">p</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
 		<span class="kt">vec4</span> <span class="n">val_color</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">texture</span><span class="p">(</span><span class="n">transfer_fcn</span><span class="p">,</span> <span class="kt">vec2</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)).</span><span class="n">rgb</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
 
-		<span class="c1">// Step 4.2: Accumulate the color and opacity using the front-to-back
-</span>
-		<span class="c1">// compositing equation
-</span>
+		<span class="c1">// Step 4.2: Accumulate the color and opacity using the front-to-back</span>
+		<span class="c1">// compositing equation</span>
 		<span class="n">color</span><span class="p">.</span><span class="n">rgb</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">color</span><span class="p">.</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">val_color</span><span class="p">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">val_color</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
 		<span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">color</span><span class="p">.</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">val_color</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
 
-		<span class="c1">// Optimization: break out of the loop when the color is near opaque
-</span>
+		<span class="c1">// Optimization: break out of the loop when the color is near opaque</span>
 		<span class="k">if</span> <span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">95</span><span class="p">)</span> <span class="p">{</span>
 			<span class="k">break</span><span class="p">;</span>
 		<span class="p">}</span>

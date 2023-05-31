@@ -174,7 +174,7 @@
 
 <h2 id="buffers">Buffers</h2>
 
-<p>The buffers entry for a glb file is pretty straightforward. A glb file that doesn’t use any extensions will have a single binary buffer following the JSON data. The length of this buffer is specified in bytes, in the <code class="highlighter-rouge">byteLength</code> member of the Buffer object. glTF files using separate binary files or Base64 encoding can have multiple entries here, referring to different binary files or containing different Base64 encoded binary data. The buffer entry for the Avocado.glb is shown below.</p>
+<p>The buffers entry for a glb file is pretty straightforward. A glb file that doesn’t use any extensions will have a single binary buffer following the JSON data. The length of this buffer is specified in bytes, in the <code class="language-plaintext highlighter-rouge">byteLength</code> member of the Buffer object. glTF files using separate binary files or Base64 encoding can have multiple entries here, referring to different binary files or containing different Base64 encoded binary data. The buffer entry for the Avocado.glb is shown below.</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"buffers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -187,7 +187,7 @@
 
 <p>The binary data for our glTF file is packed into a single binary buffer which can contain vertex data, textures, etc. The buffer views are used to create virtual sub-buffers, or views, of this single large binary buffer to access specific vertex data, texture data, etc.</p>
 
-<p>A bufferview must specify the buffer it references, <code class="highlighter-rouge">buffer</code>, and the size of the view in bytes, <code class="highlighter-rouge">byteLength</code>. The buffer view can optionally specify an offset from the start of the buffer that the view begins at, <code class="highlighter-rouge">byteOffset</code>, and the stride between elements in the buffer, <code class="highlighter-rouge">byteStride</code>. The <code class="highlighter-rouge">byteOffset</code> and <code class="highlighter-rouge">byteLength</code> together allow defining views of subregions of the buffer. The <code class="highlighter-rouge">byteStride</code> can be used to define a view containing interleaved data, for example a buffer that interleaves positions and normals for each vertex as position0, normal0, position1, normal1, etc. If the <code class="highlighter-rouge">byteStride</code> is not provided, the buffer is assumed to be tightly packed with elements of size defined by the accessor. Note that <code class="highlighter-rouge">byteStride</code> is required if multiple accessors reference a single buffer view.</p>
+<p>A bufferview must specify the buffer it references, <code class="language-plaintext highlighter-rouge">buffer</code>, and the size of the view in bytes, <code class="language-plaintext highlighter-rouge">byteLength</code>. The buffer view can optionally specify an offset from the start of the buffer that the view begins at, <code class="language-plaintext highlighter-rouge">byteOffset</code>, and the stride between elements in the buffer, <code class="language-plaintext highlighter-rouge">byteStride</code>. The <code class="language-plaintext highlighter-rouge">byteOffset</code> and <code class="language-plaintext highlighter-rouge">byteLength</code> together allow defining views of subregions of the buffer. The <code class="language-plaintext highlighter-rouge">byteStride</code> can be used to define a view containing interleaved data, for example a buffer that interleaves positions and normals for each vertex as position0, normal0, position1, normal1, etc. If the <code class="language-plaintext highlighter-rouge">byteStride</code> is not provided, the buffer is assumed to be tightly packed with elements of size defined by the accessor. Note that <code class="language-plaintext highlighter-rouge">byteStride</code> is required if multiple accessors reference a single buffer view.</p>
 
 <p>There are some less common optional properties that can also be specified, see the <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#buffers-and-buffer-views">spec</a> for details.</p>
 
@@ -238,7 +238,7 @@
 
 <h2 id="accessors">Accessors</h2>
 
-<p>An accessor takes the data defined by a buffer view and specifies how it should be interpreted by the application. The accessor specifies the component type of the data, <code class="highlighter-rouge">componentType</code>, (e.g., int, float), the type of the elements, <code class="highlighter-rouge">type</code>, (scalar, vec2, vec3, etc.), and the number of elements, <code class="highlighter-rouge">count</code>. Accessors can optionally specify an additional offset, <code class="highlighter-rouge">byteOffset</code> , from the start of the referenced buffer view. More details about these parameters and optional ones can be found in the <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#accessors">spec</a>.</p>
+<p>An accessor takes the data defined by a buffer view and specifies how it should be interpreted by the application. The accessor specifies the component type of the data, <code class="language-plaintext highlighter-rouge">componentType</code>, (e.g., int, float), the type of the elements, <code class="language-plaintext highlighter-rouge">type</code>, (scalar, vec2, vec3, etc.), and the number of elements, <code class="language-plaintext highlighter-rouge">count</code>. Accessors can optionally specify an additional offset, <code class="language-plaintext highlighter-rouge">byteOffset</code> , from the start of the referenced buffer view. More details about these parameters and optional ones can be found in the <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#accessors">spec</a>.</p>
 
 <p>The accessor offset can be used to apply an offset to access different elements in an interleaved buffer, or to apply an additional absolute offset to access a set of elements at some offset within the same buffer view. In WebGPU we have two options for how we pass the byte offset for a vertex attribute, and where we pass it will depend on whether the accessor is referring to interleaved data or is applying an additional absolute offset. For simplicity, later in this post we will pass it in the most generic location.</p>
 
@@ -325,9 +325,9 @@
 
 <p>Finally, we can take a look at how meshes are specified in glTF. A mesh object itself is just a list of primitives, an optional name, and a few other optional parameters that we won’t need here (see the <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-mesh">spec</a>). The real work of specifying the geometry for a mesh is done by its primitives.</p>
 
-<p>The primitives array of the mesh specifies the different geometric primitives that make up the mesh. The attributes for each primitive maps each attribute’s name to an accessor that provides the data. The <code class="highlighter-rouge">POSITION</code> attribute is required, other optional attributes are defined by the <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#meshes">spec</a> and applications can also add custom attributes as well. A list of vertex indices for indexed rendering can be provided by specifying the accessor referencing the index data. Each primitive can also specify a material and topology mode (e.g., points, lines, triangles), along with other <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-mesh-primitive">optional parameters</a>.</p>
+<p>The primitives array of the mesh specifies the different geometric primitives that make up the mesh. The attributes for each primitive maps each attribute’s name to an accessor that provides the data. The <code class="language-plaintext highlighter-rouge">POSITION</code> attribute is required, other optional attributes are defined by the <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#meshes">spec</a> and applications can also add custom attributes as well. A list of vertex indices for indexed rendering can be provided by specifying the accessor referencing the index data. Each primitive can also specify a material and topology mode (e.g., points, lines, triangles), along with other <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-mesh-primitive">optional parameters</a>.</p>
 
-<p>The meshes for the Avocado are listed below. The Avocado contains a single primitive, who’s <code class="highlighter-rouge">POSITION</code> attribute references accessor 3. This accessor (above) provides vec3 float data (this format is required by the spec) for the vertex positions.</p>
+<p>The meshes for the Avocado are listed below. The Avocado contains a single primitive, who’s <code class="language-plaintext highlighter-rouge">POSITION</code> attribute references accessor 3. This accessor (above) provides vec3 float data (this format is required by the spec) for the vertex positions.</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"meshes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -371,13 +371,13 @@
 
 <p>Now that we’re familiar with the parts of the glTF file we need and know how to read a binary glTF file, we’re ready to load up a glb file and import the data to render our Avocado! We’re going to start with simply loading the primitives for the first mesh we find in the file. This will work for our Avocado and a number of other simple single-mesh glTF files available in the Khronos test model repo and online.</p>
 
-<p>We’ll load the file from bottom to top, in the same order that we discussed the components in detail above. The final <code class="highlighter-rouge">uploadGLB</code> function and supporting classes can be found in the repo on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/3-first-mesh/src/glb.js">GitHub</a>.</p>
+<p>We’ll load the file from bottom to top, in the same order that we discussed the components in detail above. The final <code class="language-plaintext highlighter-rouge">uploadGLB</code> function and supporting classes can be found in the repo on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/3-first-mesh/src/glb.js">GitHub</a>.</p>
 
 <h2 id="reading-the-header">Reading the Header</h2>
 
-<p>First, we need to read the glb header, load the JSON chunk, and create a buffer corresponding to the binary chunk. Our function <code class="highlighter-rouge">uploadGLB</code> takes an ArrayBuffer, <code class="highlighter-rouge">buffer</code>, containing the glb file data, and the WebGPU Device, <code class="highlighter-rouge">device</code>, to upload the data to.</p>
+<p>First, we need to read the glb header, load the JSON chunk, and create a buffer corresponding to the binary chunk. Our function <code class="language-plaintext highlighter-rouge">uploadGLB</code> takes an ArrayBuffer, <code class="language-plaintext highlighter-rouge">buffer</code>, containing the glb file data, and the WebGPU Device, <code class="language-plaintext highlighter-rouge">device</code>, to upload the data to.</p>
 
-<p>First, we create a <code class="highlighter-rouge">Uint32Array</code> over the glb file data that contains both the glb header and JSON chunk header.</p>
+<p>First, we create a <code class="language-plaintext highlighter-rouge">Uint32Array</code> over the glb file data that contains both the glb header and JSON chunk header.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">function</span> <span class="nx">uploadGLB</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">device</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// glB has a JSON chunk and a binary chunk, potentially followed by</span>
@@ -419,11 +419,11 @@
 
 <h2 id="reading-the-buffer-and-bufferviews">Reading the Buffer and BufferViews</h2>
 
-<p>We’ll introduce two classes, <code class="highlighter-rouge">GLTFBuffer</code> and <code class="highlighter-rouge">GLTFBufferView</code> to represent the gltf buffer and buffer view objects in our app.</p>
+<p>We’ll introduce two classes, <code class="language-plaintext highlighter-rouge">GLTFBuffer</code> and <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> to represent the gltf buffer and buffer view objects in our app.</p>
 
-<p>First we can create the <code class="highlighter-rouge">GLTFBuffer</code>. Although the glb spec allows the JSON to reference other external buffers in addition to the single embedded buffer, we’re targeting just the simple and common use case that there’s a single buffer which is the binary chunk.</p>
+<p>First we can create the <code class="language-plaintext highlighter-rouge">GLTFBuffer</code>. Although the glb spec allows the JSON to reference other external buffers in addition to the single embedded buffer, we’re targeting just the simple and common use case that there’s a single buffer which is the binary chunk.</p>
 
-<p>The <code class="highlighter-rouge">GLTFBuffer</code> class is a straightforward mapping of the GLTF buffer object. We create a new <code class="highlighter-rouge">Uint8Array</code> view over the glb buffer passed to the constructor at the binary chunk’s starting offset with the binary chunk’s size.</p>
+<p>The <code class="language-plaintext highlighter-rouge">GLTFBuffer</code> class is a straightforward mapping of the GLTF buffer object. We create a new <code class="language-plaintext highlighter-rouge">Uint8Array</code> view over the glb buffer passed to the constructor at the binary chunk’s starting offset with the binary chunk’s size.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFBuffer</span> <span class="p">{</span>
@@ -433,7 +433,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>We can then create a <code class="highlighter-rouge">GLTFBuffer</code> referencing the data in the binary chunk</p>
+<p>We can then create a <code class="language-plaintext highlighter-rouge">GLTFBuffer</code> referencing the data in the binary chunk</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// within uploadGLB</span>
 <span class="c1">// Make a GLTFBuffer that is a view of the entire binary chunk's data,</span>
@@ -442,11 +442,11 @@
 <span class="kd">var</span> <span class="nx">binaryChunk</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GLTFBuffer</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">28</span> <span class="o">+</span> <span class="nx">header</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">binaryHeader</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 </code></pre></div></div>
 
-<p>The next object we need to read are the buffer views, which we represent with the <code class="highlighter-rouge">GLTFBufferView</code> class. The constructor for <code class="highlighter-rouge">GLTFBufferView</code> makes a new <code class="highlighter-rouge">Uint8Array</code> view over just the region of the binary chunk that the view covers. Note that the <code class="highlighter-rouge">subarray</code> API creates a view over the underlying <code class="highlighter-rouge">ArrayBuffer</code>, it does not make a copy. Another design choice here is that we don’t need to track the offset for buffer views after creating the view, because this offset is baked into the view object we create in the constructor.</p>
+<p>The next object we need to read are the buffer views, which we represent with the <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> class. The constructor for <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> makes a new <code class="language-plaintext highlighter-rouge">Uint8Array</code> view over just the region of the binary chunk that the view covers. Note that the <code class="language-plaintext highlighter-rouge">subarray</code> API creates a view over the underlying <code class="language-plaintext highlighter-rouge">ArrayBuffer</code>, it does not make a copy. Another design choice here is that we don’t need to track the offset for buffer views after creating the view, because this offset is baked into the view object we create in the constructor.</p>
 
-<p>The <code class="highlighter-rouge">GLTFBufferView</code> provides two additional methods, <code class="highlighter-rouge">addUsage</code> and <code class="highlighter-rouge">upload</code>. The latter is self-descriptive, it creates a GPU buffer and upload the buffer view to it. The <code class="highlighter-rouge">addUsage</code> method is used when parsing the rest of the scene data to ensure that the GPU buffer we create will have the correct usage flags set for it, e.g., to allow binding it as a vertex or index buffer.</p>
+<p>The <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> provides two additional methods, <code class="language-plaintext highlighter-rouge">addUsage</code> and <code class="language-plaintext highlighter-rouge">upload</code>. The latter is self-descriptive, it creates a GPU buffer and upload the buffer view to it. The <code class="language-plaintext highlighter-rouge">addUsage</code> method is used when parsing the rest of the scene data to ensure that the GPU buffer we create will have the correct usage flags set for it, e.g., to allow binding it as a vertex or index buffer.</p>
 
-<p>We also track a flag <code class="highlighter-rouge">needsUpload</code> to determine which buffer views actually need to be uploaded to the GPU. Image data is also access through buffer views in glb files, however we don’t need to upload the PNG or JPG binary data to the GPU since we will instead decode it to a texture. When parsing the rest of the scene we’ll flag buffers that need to be uploaded to the GPU so that we can upload just what we need.</p>
+<p>We also track a flag <code class="language-plaintext highlighter-rouge">needsUpload</code> to determine which buffer views actually need to be uploaded to the GPU. Image data is also access through buffer views in glb files, however we don’t need to upload the PNG or JPG binary data to the GPU since we will instead decode it to a texture. When parsing the rest of the scene we’ll flag buffers that need to be uploaded to the GPU so that we can upload just what we need.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFBufferView</span> <span class="p">{</span>
@@ -493,7 +493,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Next we can loop through the bufferViews specified in the JSON chunk and create corresponding <code class="highlighter-rouge">GLTFBufferView</code> objects for them. The buffer view constructor takes the buffer to make a view over and the JSON object describing the buffer view being created.</p>
+<p>Next we can loop through the bufferViews specified in the JSON chunk and create corresponding <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> objects for them. The buffer view constructor takes the buffer to make a view over and the JSON object describing the buffer view being created.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// within uploadGLB</span>
 <span class="c1">// Create GLTFBufferView objects for all the buffer views in the glTF file</span>
@@ -503,7 +503,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>At the end of <code class="highlighter-rouge">uploadGLB</code>, after we’ve loaded all the meshes and scene objects, we loop through the buffer views and upload those that need to be uploaded to the GPU based on which ones were marked as <code class="highlighter-rouge">needsUpload</code> during the scene loading step.</p>
+<p>At the end of <code class="language-plaintext highlighter-rouge">uploadGLB</code>, after we’ve loaded all the meshes and scene objects, we loop through the buffer views and upload those that need to be uploaded to the GPU based on which ones were marked as <code class="language-plaintext highlighter-rouge">needsUpload</code> during the scene loading step.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// at the end of uploadGLB before returning the mesh</span>
 <span class="c1">// Upload the buffer views used by mesh</span>
@@ -516,11 +516,11 @@
 
 <h2 id="reading-the-accessors">Reading the Accessors</h2>
 
-<p>The next object up the chain are accessors, which we represent with the <code class="highlighter-rouge">GLTFAccessor</code> class shown below. The constructor takes the <code class="highlighter-rouge">GLTFBufferView</code> and the JSON object describing the accessor and constructs the object. The object is a direct mapping of the JSON accessor data, with the addition of storing a reference to the buffer view instead of just an index to it.</p>
+<p>The next object up the chain are accessors, which we represent with the <code class="language-plaintext highlighter-rouge">GLTFAccessor</code> class shown below. The constructor takes the <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> and the JSON object describing the accessor and constructs the object. The object is a direct mapping of the JSON accessor data, with the addition of storing a reference to the buffer view instead of just an index to it.</p>
 
-<p>The accessor also provides a utility getter, <code class="highlighter-rouge">byteStride</code> , to compute the stride in bytes between elements referenced by the accessor. If the buffer view specifies a byte stride we use this stride, otherwise the elements are assumed to be packed and we use the size of the accessor type as the stride. If not byte stride is specified for the buffer view it will default to 0, thus we pick between the two with a max.</p>
+<p>The accessor also provides a utility getter, <code class="language-plaintext highlighter-rouge">byteStride</code> , to compute the stride in bytes between elements referenced by the accessor. If the buffer view specifies a byte stride we use this stride, otherwise the elements are assumed to be packed and we use the size of the accessor type as the stride. If not byte stride is specified for the buffer view it will default to 0, thus we pick between the two with a max.</p>
 
-<p>The utility functions <code class="highlighter-rouge">gltfTypeSize</code> and <code class="highlighter-rouge">gltfVertexType</code> are omitted from the post to keep it focused, these can be found on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/3-first-mesh/src/glb.js">Github</a>.</p>
+<p>The utility functions <code class="language-plaintext highlighter-rouge">gltfTypeSize</code> and <code class="language-plaintext highlighter-rouge">gltfVertexType</code> are omitted from the post to keep it focused, these can be found on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/3-first-mesh/src/glb.js">Github</a>.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFAccessor</span> <span class="p">{</span>
@@ -548,7 +548,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Back within <code class="highlighter-rouge">uploadGLB</code>, we can create the accessors after the loop creating the buffer views. The process is the same, we loop through the JSON data describing the accessors and create the objects, passing the referenced buffer view and the accessor JSON object to the constructor.</p>
+<p>Back within <code class="language-plaintext highlighter-rouge">uploadGLB</code>, we can create the accessors after the loop creating the buffer views. The process is the same, we loop through the JSON data describing the accessors and create the objects, passing the referenced buffer view and the accessor JSON object to the constructor.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// within uploadGLB</span>
 <span class="c1">// Create GLTFAccessor objects for the accessors in the glTF file</span>
@@ -565,11 +565,11 @@
 
 <h2 id="reading-the-meshs-primitives">Reading the Mesh’s Primitives</h2>
 
-<p>With the accessors, buffer views, and buffers in place we can now load our mesh’s primitives. We’ll represent each primitive with the <code class="highlighter-rouge">GLTFPrimitive</code> class shown below. We’re just going to render the mesh geometry to start, and ignore any additional attributes. The <code class="highlighter-rouge">GLTFPrimitive</code> constructor takes the accessors for the vertex indices and positions, and the rendering topology (triangles, triangle strip, etc.). We’ll also start by only supporting triangles or triangle strips.</p>
+<p>With the accessors, buffer views, and buffers in place we can now load our mesh’s primitives. We’ll represent each primitive with the <code class="language-plaintext highlighter-rouge">GLTFPrimitive</code> class shown below. We’re just going to render the mesh geometry to start, and ignore any additional attributes. The <code class="language-plaintext highlighter-rouge">GLTFPrimitive</code> constructor takes the accessors for the vertex indices and positions, and the rendering topology (triangles, triangle strip, etc.). We’ll also start by only supporting triangles or triangle strips.</p>
 
 <p>In the constructor we also mark the required buffer usages for the views and mark them as needing upload to the GPU so that our primitive can use the data during rendering. If indices are provided for the primitive we must add the index buffer usage flag to the underlying buffer view. Similarly, we must add the vertex buffer usage flag to the accessor’s buffer view. The index and vertex buffers will need to be uploaded to the GPU, and</p>
 
-<p>The <code class="highlighter-rouge">GLTFPrimitive</code> has two methods that we’ll use later for rendering, <code class="highlighter-rouge">buildRenderPipeline</code> and <code class="highlighter-rouge">render</code>. We’ll look at those in detail later when we get to rendering our mesh.</p>
+<p>The <code class="language-plaintext highlighter-rouge">GLTFPrimitive</code> has two methods that we’ll use later for rendering, <code class="language-plaintext highlighter-rouge">buildRenderPipeline</code> and <code class="language-plaintext highlighter-rouge">render</code>. We’ll look at those in detail later when we get to rendering our mesh.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFPrimitive</span> <span class="p">{</span>
@@ -604,7 +604,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">GLTFMesh</code> class is pretty simple. It just takes the name of the mesh and the list of primitives that make up the mesh.</p>
+<p>The <code class="language-plaintext highlighter-rouge">GLTFMesh</code> class is pretty simple. It just takes the name of the mesh and the list of primitives that make up the mesh.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFMesh</span> <span class="p">{</span>
@@ -628,11 +628,11 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>With everything in place we can now load the GLTF primitives and the mesh from the file. In this post we’re just going to load the first mesh defined in the file, so we take <code class="highlighter-rouge">jsonChunk.meshes[0]</code> and then loop through its primitives to create the <code class="highlighter-rouge">GLTFPrimitive</code> objects. Another restriction we’ll have is that we only support triangles and triangle trip topologies for now. Our primitive importing loop will throw an error if we encounter an unsupported primitive type for now.</p>
+<p>With everything in place we can now load the GLTF primitives and the mesh from the file. In this post we’re just going to load the first mesh defined in the file, so we take <code class="language-plaintext highlighter-rouge">jsonChunk.meshes[0]</code> and then loop through its primitives to create the <code class="language-plaintext highlighter-rouge">GLTFPrimitive</code> objects. Another restriction we’ll have is that we only support triangles and triangle trip topologies for now. Our primitive importing loop will throw an error if we encounter an unsupported primitive type for now.</p>
 
-<p>To create each primitive we then need to find the accessors for its indices (if provided) and vertex positions (required). The indices are provided as a distinct member of the primitive’s JSON object, while the positions are listed in the primitive attributes map as the <code class="highlighter-rouge">POSITION</code> attribute. The <code class="highlighter-rouge">POSITION</code> attribute is required by the glTF spec to be provided.</p>
+<p>To create each primitive we then need to find the accessors for its indices (if provided) and vertex positions (required). The indices are provided as a distinct member of the primitive’s JSON object, while the positions are listed in the primitive attributes map as the <code class="language-plaintext highlighter-rouge">POSITION</code> attribute. The <code class="language-plaintext highlighter-rouge">POSITION</code> attribute is required by the glTF spec to be provided.</p>
 
-<p>Once we’ve imported all the primitives we can create the mesh. The <code class="highlighter-rouge">GLTFRenderMode</code> constants are omitted for brevity, and can be found on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/3-first-mesh/src/glb.js">Github</a>.</p>
+<p>Once we’ve imported all the primitives we can create the mesh. The <code class="language-plaintext highlighter-rouge">GLTFRenderMode</code> constants are omitted for brevity, and can be found on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/3-first-mesh/src/glb.js">Github</a>.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// within uploadGLB</span>
 <span class="c1">// Load the first mesh</span>
@@ -691,19 +691,19 @@
 
 <h1 id="rendering-the-mesh">Rendering the Mesh</h1>
 
-<p>We’ve put in a lot of work getting our mesh data loaded from the glb file, but we’re almost there! To render the mesh we need to render each of its primitives. To render each primitive we’re going to implement the two methods we saw earlier: <code class="highlighter-rouge">GLTFPrimitive.buildRenderPipeline</code> , responsible for creating the rendering pipeline for the primitive, and <code class="highlighter-rouge">GLTFPrimitive.render</code> , which will encode the rendering commands for the primitive.</p>
+<p>We’ve put in a lot of work getting our mesh data loaded from the glb file, but we’re almost there! To render the mesh we need to render each of its primitives. To render each primitive we’re going to implement the two methods we saw earlier: <code class="language-plaintext highlighter-rouge">GLTFPrimitive.buildRenderPipeline</code> , responsible for creating the rendering pipeline for the primitive, and <code class="language-plaintext highlighter-rouge">GLTFPrimitive.render</code> , which will encode the rendering commands for the primitive.</p>
 
 <p>You might be wondering, “won’t this be really inefficient for large scenes where my GLTF file has 100’s-1000’s (or more) primitives?”, and you’re right! Creating a rendering pipeline for each individual primitive is not a scalable approach. We’ll come back to how we can optimize this simple approach in a later post, but it’s enough to get us started for now.</p>
 
 <h2 id="building-a-render-pipeline-for-each-primitive">Building a Render Pipeline for Each Primitive</h2>
 
-<p>First we need to build a render pipeline for each primitive. This is done in the <code class="highlighter-rouge">GLTFPrimitive.buildRenderPipeline</code> method, shown below. To allow some re-use across primitives we will use the same shader for all of them, as right now we don’t need to handle differences in attributes or material usage between primitives. This is passed as the <code class="highlighter-rouge">shaderModule</code> parameter. We’ll also be sharing the same uniform buffer containing the camera parameters across all primitives, this bind group layout is passed as the <code class="highlighter-rouge">uniformsBGLayout</code> . We also need the output color format and depth formats to build the render pipeline. The app rendering our primitive passes these through to us as <code class="highlighter-rouge">colorFormat</code> and <code class="highlighter-rouge">depthFormat</code> respectively.</p>
+<p>First we need to build a render pipeline for each primitive. This is done in the <code class="language-plaintext highlighter-rouge">GLTFPrimitive.buildRenderPipeline</code> method, shown below. To allow some re-use across primitives we will use the same shader for all of them, as right now we don’t need to handle differences in attributes or material usage between primitives. This is passed as the <code class="language-plaintext highlighter-rouge">shaderModule</code> parameter. We’ll also be sharing the same uniform buffer containing the camera parameters across all primitives, this bind group layout is passed as the <code class="language-plaintext highlighter-rouge">uniformsBGLayout</code> . We also need the output color format and depth formats to build the render pipeline. The app rendering our primitive passes these through to us as <code class="language-plaintext highlighter-rouge">colorFormat</code> and <code class="language-plaintext highlighter-rouge">depthFormat</code> respectively.</p>
 
-<p>The setup here is actually not that different from the previous posts. The main changes are that we now use the positions accessor’s <code class="highlighter-rouge">byteStride</code> as the vertex attribute array stride, and compute the vertex type for it from the accessor’s type. It’s worth noting that for GLTF, the <code class="highlighter-rouge">POSITION</code> attribute must always be <code class="highlighter-rouge">float32x3</code>.</p>
+<p>The setup here is actually not that different from the previous posts. The main changes are that we now use the positions accessor’s <code class="language-plaintext highlighter-rouge">byteStride</code> as the vertex attribute array stride, and compute the vertex type for it from the accessor’s type. It’s worth noting that for GLTF, the <code class="language-plaintext highlighter-rouge">POSITION</code> attribute must always be <code class="language-plaintext highlighter-rouge">float32x3</code>.</p>
 
-<p>A key point here is that we do not pass the position accessor’s <code class="highlighter-rouge">byteOffset</code> as the attribute offset in the vertex state. In WebGPU, there are two ways to pass a byte offset for a vertex attribute. It can either be set in the vertex state, where it is treated as an offset within <code class="highlighter-rouge">arrayStride</code> for accessing interleaved attributes, or as a global offset applied to the buffer when calling <code class="highlighter-rouge">setVertexBuffer</code>. The attribute offset set in the vertex state is specifically for interleaved attributes, and thus WebGPU requires that <code class="highlighter-rouge">offset + sizeof(format)</code> is less than the <code class="highlighter-rouge">arrayStride</code> of the buffer. However, the offset applied in <code class="highlighter-rouge">setVertexBuffer</code> has no such restriction, as it applies an absolute offset in bytes from the start of the buffer. Passing the offset in <code class="highlighter-rouge">setVertexBuffer</code> doesn’t prevent us from supporting interleaved attributes, but it does mean we need to bind the same buffer twice. Since we’re only supporting one attribute right now anyways, the position, we’ll simply apply the offset in <code class="highlighter-rouge">setVertexBuffer</code>to simplify handling the different offset size possibilities in GLTF.</p>
+<p>A key point here is that we do not pass the position accessor’s <code class="language-plaintext highlighter-rouge">byteOffset</code> as the attribute offset in the vertex state. In WebGPU, there are two ways to pass a byte offset for a vertex attribute. It can either be set in the vertex state, where it is treated as an offset within <code class="language-plaintext highlighter-rouge">arrayStride</code> for accessing interleaved attributes, or as a global offset applied to the buffer when calling <code class="language-plaintext highlighter-rouge">setVertexBuffer</code>. The attribute offset set in the vertex state is specifically for interleaved attributes, and thus WebGPU requires that <code class="language-plaintext highlighter-rouge">offset + sizeof(format)</code> is less than the <code class="language-plaintext highlighter-rouge">arrayStride</code> of the buffer. However, the offset applied in <code class="language-plaintext highlighter-rouge">setVertexBuffer</code> has no such restriction, as it applies an absolute offset in bytes from the start of the buffer. Passing the offset in <code class="language-plaintext highlighter-rouge">setVertexBuffer</code> doesn’t prevent us from supporting interleaved attributes, but it does mean we need to bind the same buffer twice. Since we’re only supporting one attribute right now anyways, the position, we’ll simply apply the offset in <code class="language-plaintext highlighter-rouge">setVertexBuffer</code>to simplify handling the different offset size possibilities in GLTF.</p>
 
-<p>The last change difference is that, if we’re rendering a triangle strip, WebGPU requires us to include the index format as part of the pipeline.  This is handled when creating the <code class="highlighter-rouge">primitive</code> object for the pipeline descriptor.</p>
+<p>The last change difference is that, if we’re rendering a triangle strip, WebGPU requires us to include the index format as part of the pipeline.  This is handled when creating the <code class="language-plaintext highlighter-rouge">primitive</code> object for the pipeline descriptor.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js GLTFPrimitive.buildRenderPipeline implementation</span>
 <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
@@ -771,7 +771,7 @@
 
 <h2 id="rendering-each-primitive">Rendering Each Primitive</h2>
 
-<p>Now we can use our rendering pipeline in <code class="highlighter-rouge">GLTFPrimitive.render</code> to render our primitive! The render method takes as input a render pass encoder to encode our rendering commands into and the global uniforms bindgroup to bind.</p>
+<p>Now we can use our rendering pipeline in <code class="language-plaintext highlighter-rouge">GLTFPrimitive.render</code> to render our primitive! The render method takes as input a render pass encoder to encode our rendering commands into and the global uniforms bindgroup to bind.</p>
 
 <p>The rendering process is similar to what we’ve seen in previous posts, with the main changes being that we need to set the accessor’s byte offset and length when binding the vertex buffer, and potentially use an index buffer for indexed rendering. When binding the index buffer we must also apply its accessor’s byte offset and length.</p>
 
@@ -806,7 +806,7 @@
 
 <h2 id="putting-it-together-to-render-the-entire-mesh">Putting it Together to Render the Entire Mesh</h2>
 
-<p>The <code class="highlighter-rouge">GLTFMesh</code> versions of <code class="highlighter-rouge">buildRenderPipeline</code> and <code class="highlighter-rouge">render</code> are straightforward. We’ve delegated all the work to the primitives, where the actual geometry data lives, so the mesh just loops through its primitives and calls the respective functions.</p>
+<p>The <code class="language-plaintext highlighter-rouge">GLTFMesh</code> versions of <code class="language-plaintext highlighter-rouge">buildRenderPipeline</code> and <code class="language-plaintext highlighter-rouge">render</code> are straightforward. We’ve delegated all the work to the primitives, where the actual geometry data lives, so the mesh just loops through its primitives and calls the respective functions.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js GLTFMesh.buildRenderPipeline and GLTFMesh.render implementations</span>
 <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
@@ -861,7 +861,7 @@
     <span class="nx">bindGroupLayout</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>I’ve also included a file upload form in the example app so users can upload their own glb files to try out. To support that we find the file upload form by its id and attach an <code class="highlighter-rouge">onchange</code> listener</p>
+<p>I’ve also included a file upload form in the example app so users can upload their own glb files to try out. To support that we find the file upload form by its id and attach an <code class="language-plaintext highlighter-rouge">onchange</code> listener</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in the async lambda in app.js</span>
 <span class="c1">// Setup onchange listener for file uploads</span>
@@ -889,9 +889,9 @@
 
 <p>In the previous posts we passed position and color data through as vertex attributes to make our triangle look a bit more interesting. However, we now only have position data for our mesh file and need to update our shader vertex inputs. We could just color it by a solid color, but it will be hard to see the surface details of the meshes to tell if we’ve loaded them properly.</p>
 
-<p>Instead, we can compute the geometry normal on the fly in the fragment shader by computing fragment derivatives on the world space position of the object. We can take the derivative of the position along the x and y axes and compute the cross product to find the normal. After normalizing it, the normal will be in the <code class="highlighter-rouge">[-1, 1]</code> range, which we can rescale into <code class="highlighter-rouge">[0, 1]</code> for use as a color.</p>
+<p>Instead, we can compute the geometry normal on the fly in the fragment shader by computing fragment derivatives on the world space position of the object. We can take the derivative of the position along the x and y axes and compute the cross product to find the normal. After normalizing it, the normal will be in the <code class="language-plaintext highlighter-rouge">[-1, 1]</code> range, which we can rescale into <code class="language-plaintext highlighter-rouge">[0, 1]</code> for use as a color.</p>
 
-<p>Our updated shader code is shown below. We’ve removed the <code class="highlighter-rouge">color</code> attribute from the <code class="highlighter-rouge">VertexInput</code> struct to match the render pipeline, which now only provides position data. The position data also comes in as a <code class="highlighter-rouge">float3</code> from gltf, so we’ve changed the type of <code class="highlighter-rouge">position</code> as well. To compute the geometry normal in the fragment shader we now output the world space position from the vertex shader in the <code class="highlighter-rouge">VertexOutput</code> member. The fragment shader then computes fragment derivatives of <code class="highlighter-rouge">world_pos</code> to compute the normal.</p>
+<p>Our updated shader code is shown below. We’ve removed the <code class="language-plaintext highlighter-rouge">color</code> attribute from the <code class="language-plaintext highlighter-rouge">VertexInput</code> struct to match the render pipeline, which now only provides position data. The position data also comes in as a <code class="language-plaintext highlighter-rouge">float3</code> from gltf, so we’ve changed the type of <code class="language-plaintext highlighter-rouge">position</code> as well. To compute the geometry normal in the fragment shader we now output the world space position from the vertex shader in the <code class="language-plaintext highlighter-rouge">VertexOutput</code> member. The fragment shader then computes fragment derivatives of <code class="language-plaintext highlighter-rouge">world_pos</code> to compute the normal.</p>
 
 <div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">alias</span> <span class="n">float4</span> <span class="o">=</span> <span class="kt">vec4</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="n">alias</span> <span class="n">float3</span> <span class="o">=</span> <span class="kt">vec3</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
@@ -946,7 +946,7 @@
     <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>Our render loop is the same as before, we wait for the <code class="highlighter-rouge">animationFrame</code> promise, update the view parameters, and start encoding a render pass. Then we simply call <code class="highlighter-rouge">glbMesh.render</code> to render our mesh.</p>
+<p>Our render loop is the same as before, we wait for the <code class="language-plaintext highlighter-rouge">animationFrame</code> promise, update the view parameters, and start encoding a render pass. Then we simply call <code class="language-plaintext highlighter-rouge">glbMesh.render</code> to render our mesh.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in the async lambda in app.js</span>
 <span class="c1">// Render!</span>

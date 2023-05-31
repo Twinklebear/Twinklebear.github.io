@@ -148,6 +148,10 @@
 		</div>
 		
 		<div class="col-6 mb-1 col-md-3 mb-md-0">
+			<a href="/projects#WebGPU Marching Cubes">WebGPU Marching Cubes</a>
+		</div>
+		
+		<div class="col-6 mb-1 col-md-3 mb-md-0">
 			<a href="/projects#WebGPU Volume Animation Player">WebGPU Volume Animation Player</a>
 		</div>
 		
@@ -304,7 +308,7 @@
 		</div>
 
 		<div class="col-12">
-			<p>A volume path tracer implemented in WebGPU. The renderer uses Woodcock sampling to traverse and sample the volume and scientific visualization-style coloring to provide interactive physically-based visualization of 3D grid volumes. Try it out <a href="https://www.willusher.io/webgpu-volume-pathtracer/">online</a>! May require Chrome Canary.</p>
+			<p>A volume path tracer implemented in WebGPU. The renderer uses Woodcock sampling to traverse and sample the volume and scientific visualization-style coloring to provide interactive physically-based visualization of 3D grid volumes. Try it out <a href="https://www.willusher.io/webgpu-volume-pathtracer/">online</a>!</p>
 
 			<a href="https://github.com/Twinklebear/webgpu-volume-pathtracer">
 				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgpu-volume-pathtracer.svg">
@@ -336,7 +340,7 @@
 		</div>
 
 		<div class="col-12">
-			<p>A glTF WebGPU renderer and loader written from scratch. Supports uploading glTF binary files to render them with a basic material color model. GLTF primitives are rendered as WebGPU render bundles, with shaders generated for materials/attributes and cached using a shader caching system. Try it out <a href="https://www.willusher.io/webgpu-gltf/">online</a>! May require Chrome Canary.</p>
+			<p>A glTF WebGPU renderer and loader written from scratch. Supports uploading glTF binary files to render them with a basic material color model. GLTF primitives are rendered as WebGPU render bundles, with shaders generated for materials/attributes and cached using a shader caching system. Try it out <a href="https://www.willusher.io/webgpu-gltf/">online</a>!</p>
 
 			<a href="https://github.com/Twinklebear/webgpu-gltf">
 				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgpu-gltf.svg">
@@ -402,7 +406,7 @@
 		</div>
 
 		<div class="col-12">
-			<p>WebGPU Block-Compressed Marching Cubes is an algorithm for interactive isosurface extraction on massive compressed data sets that runs entirely on the GPU in the browser using WebGPU. The technique works on block-compressed volumes using ZFP’s fixed-rate compression algorithm. To compute an isosurface the required blocks of the data are decompressed and cached on the fly using a GPU-driven LRU cache. This enables interactive visualization of large volumes entirely in the browser. This work was published at LDAV in 2020, you can learn more <a href="/publications/teraweb">in the paper</a>, <a href="https://github.com/Twinklebear/webgpu-bcmc">get the code on Github</a>, or try it out <a href="https://www.willusher.io/webgpu-bcmc/webgpu_bcmc.html">online</a>! May require Chrome Canary.</p>
+			<p>WebGPU Block-Compressed Marching Cubes is an algorithm for interactive isosurface extraction on massive compressed data sets that runs entirely on the GPU in the browser using WebGPU. The technique works on block-compressed volumes using ZFP’s fixed-rate compression algorithm. To compute an isosurface the required blocks of the data are decompressed and cached on the fly using a GPU-driven LRU cache. This enables interactive visualization of large volumes entirely in the browser. This work was published at LDAV in 2020, you can learn more <a href="/publications/teraweb">in the paper</a>, <a href="https://github.com/Twinklebear/webgpu-bcmc">get the code on Github</a>, or try it out <a href="https://www.willusher.io/webgpu-bcmc/webgpu_bcmc.html">online</a>!</p>
 
 			<a href="https://github.com/Twinklebear/webgpu-bcmc">
 				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgpu-bcmc.svg">
@@ -424,6 +428,38 @@
 			
 			<div class="col-6 mt-2 mt-sm-0 col-sm-3">
 				<img class="img-fluid" src="https://cdn.willusher.io/img/bcmc-miranda.webp">
+			</div>
+			
+		</div>
+
+        <div class="col-10 mx-auto mt-4 border-bottom border-secondary">
+        </div>
+	</div>
+
+	<div class="col-12 row mt-4" id="WebGPU Marching Cubes">
+		<div class="col-12">
+			<h2><b>WebGPU Marching Cubes</b></h2>
+		</div>
+
+		<div class="col-12">
+			<p>A GPU parallel implementation of the classic <a href="https://en.wikipedia.org/wiki/Marching_cubes">Marching Cubes</a> algorithm using WebGPU. Work is parallelized over the dual grid to find active voxels, active voxel IDs are compacted down via exclusive scans and compactions, vertices are output to a single buffer for rendering by computing vertex offsets via an exclusive scan and then writing vertices to the offsets for each voxel in parallel. Try it out <a href="https://www.willusher.io/webgpu-marching-cubes/">online</a>!</p>
+
+			<a href="https://github.com/Twinklebear/webgpu-marching-cubes">
+				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgpu-marching-cubes.svg">
+			</a>
+		</div>
+		<div class="row mt-0 mt-sm-3 justify-content-center col-12 mx-auto">
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://cdn.willusher.io/img/webgpu-marching-cubes-bonsai.webp">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://cdn.willusher.io/img/webgpu-marching-cubes-foot.webp">
+			</div>
+			
+			<div class="col-12 mt-2 mt-sm-0 col-sm-4">
+				<img class="img-fluid" src="https://cdn.willusher.io/img/webgpu-marching-cubes-skull.webp">
 			</div>
 			
 		</div>
@@ -570,7 +606,7 @@ Built on top of <a href="https://github.com/Twinklebear/webgl-util">webgl-util <
 		</div>
 
 		<div class="col-12 col-sm-8">
-			<p>An implicit isosurface raycaster using WebGPU. Ray-isosurface intersections are computed using the technique described by Marmitt et al. ‘Fast and Accurate Ray-Voxel Intersection Techniques for Iso-Surface Ray Tracing’, 2004. Try it out <a href="https://www.willusher.io/webgpu-isosurface-raycaster/#Skull">online</a>! May require Chrome Canary.</p>
+			<p>An implicit isosurface raycaster using WebGPU. Ray-isosurface intersections are computed using the technique described by Marmitt et al. ‘Fast and Accurate Ray-Voxel Intersection Techniques for Iso-Surface Ray Tracing’, 2004. Try it out <a href="https://www.willusher.io/webgpu-isosurface-raycaster/#Skull">online</a>!</p>
 
 			<a href="https://github.com/Twinklebear/webgpu-isosurface-raycaster">
 				<img class="img-fluid" style="display:inline" src="assets/img/gh-cards/Twinklebear/webgpu-isosurface-raycaster.svg">
