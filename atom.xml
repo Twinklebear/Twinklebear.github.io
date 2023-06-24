@@ -3,12 +3,36 @@
 	<title>Will Usher's Blog</title>
 	<link href="https://www.willusher.io//atom.xml" rel="self"/>
 	<link href="https://www.willusher.io/"/>
-	<updated>2023-05-30T17:22:35-07:00</updated>
+	<updated>2023-06-24T14:09:46-07:00</updated>
 	<id>https://www.willusher.io/</id>
 	<author>
 		<name>Will Usher</name>
 		<email>will@willusher.io</email>
 	</author>
+	
+	<entry>
+		<title>From 0 to glTF with WebGPU: Rendering the Full glTF Scene</title>
+		<link href="https://www.willusher.io//graphics/2023/06/24/0-to-gltf-full-scene"/>
+		<updated>2023-06-24T00:00:00-07:00</updated>
+		<id>https://www.willusher.io//graphics/2023/06/24/0-to-gltf-full-scene</id>
+		<content type="html">
+&lt;figure&gt;
+  &lt;img class=&quot;img-fluid&quot; src=&quot;https://cdn.willusher.io/webgpu-0-to-gltf/broken-to-fixed-engine.webp&quot; /&gt;
+  
+  &lt;figcaption&gt;&lt;b&gt;Figure 1:&lt;/b&gt;
+  &lt;i&gt;In this post, we&apos;ll look at how to fix our terribly broken 2 Cylinder Engine.
+  Left: A buggy render of 2CylinderEngine.glb achieved when ignoring the glTF node transformations.
+  Right: The correct rendering with meshes positioned based on the hierarchy of transforms
+  specified in the glTF node tree.
+  &lt;/i&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;Loading and drawing our first mesh from a glTF file was quite a bit of work in the &lt;a href=&quot;https://www.willusher.io/graphics/2023/05/16/0-to-gltf-first-mesh&quot;&gt;previous post&lt;/a&gt;, but with this core piece in place we can start adding a lot more functionality to our renderer pretty quickly. If you tried loading up glTF files into the renderer from the previous post, you may have noticed that they didn’t look how you expected. This is because glTF files often contain many meshes that make up different parts of the scene geometry, most of which will be missing since we only loaded the first mesh last time. If we just add a simple loop through the meshes to load and draw them all we’ll frequently end up with a scene like the broken engine on the left in the image above. This is because the meshes are reference and transformed by the glTF node hierarchy, and we need to load and handle these nested transformations to render the correct scene shown on the right. The test model we’ll be using for this post is the &lt;a href=&quot;https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/2CylinderEngine&quot;&gt;2CylinderEngine&lt;/a&gt; from the Khronos glTF samples repo, which has nested transformations in its node hierarchy that make it a great test case. So grab &lt;a href=&quot;https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/2CylinderEngine/glTF-Binary/2CylinderEngine.glb&quot;&gt;2CylinderEngine.glb&lt;/a&gt; and let’s get started!&lt;/p&gt;
+
+
+			&lt;a href=&quot;https://www.willusher.io//graphics/2023/06/24/0-to-gltf-full-scene&quot;&gt;Continue Reading&lt;/a&gt;
+		</content>
+	</entry>
 	
 	<entry>
 		<title>From 0 to glTF with WebGPU: Rendering the First glTF Mesh</title>

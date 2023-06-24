@@ -94,6 +94,30 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2023/06/24/0-to-gltf-full-scene"><h3>From 0 to glTF with WebGPU: Rendering the Full glTF Scene</h3></a>
+        <p>June 24, 2023</p>
+		
+<figure>
+  <img class="img-fluid" src="https://cdn.willusher.io/webgpu-0-to-gltf/broken-to-fixed-engine.webp" />
+  
+  <figcaption><b>Figure 1:</b>
+  <i>In this post, we'll look at how to fix our terribly broken 2 Cylinder Engine.
+  Left: A buggy render of 2CylinderEngine.glb achieved when ignoring the glTF node transformations.
+  Right: The correct rendering with meshes positioned based on the hierarchy of transforms
+  specified in the glTF node tree.
+  </i></figcaption>
+</figure>
+
+<p>Loading and drawing our first mesh from a glTF file was quite a bit of work in the <a href="https://www.willusher.io/graphics/2023/05/16/0-to-gltf-first-mesh">previous post</a>, but with this core piece in place we can start adding a lot more functionality to our renderer pretty quickly. If you tried loading up glTF files into the renderer from the previous post, you may have noticed that they didn’t look how you expected. This is because glTF files often contain many meshes that make up different parts of the scene geometry, most of which will be missing since we only loaded the first mesh last time. If we just add a simple loop through the meshes to load and draw them all we’ll frequently end up with a scene like the broken engine on the left in the image above. This is because the meshes are reference and transformed by the glTF node hierarchy, and we need to load and handle these nested transformations to render the correct scene shown on the right. The test model we’ll be using for this post is the <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/2CylinderEngine">2CylinderEngine</a> from the Khronos glTF samples repo, which has nested transformations in its node hierarchy that make it a great test case. So grab <a href="https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/2CylinderEngine/glTF-Binary/2CylinderEngine.glb">2CylinderEngine.glb</a> and let’s get started!</p>
+
+
+
+		<a href="/graphics/2023/06/24/0-to-gltf-full-scene">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/graphics/2023/05/16/0-to-gltf-first-mesh"><h3>From 0 to glTF with WebGPU: Rendering the First glTF Mesh</h3></a>
         <p>May 16, 2023</p>
 		
@@ -212,28 +236,6 @@ performance comparisons against the M1.</p>
 
 
 		<a href="/graphics/2020/12/20/rt-dive-m1">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/general/2020/11/15/hw-accel-encoding-rpi4"><h3>Hardware Accelerated Video Encoding on the Raspberry Pi 4 on Ubuntu 20.04 64-bit</h3></a>
-        <p>November 15, 2020</p>
-		
-<p>I recently picked up a Raspberry Pi 4 8GB model to use for some lightweight server tasks
-on my home network. After setting up Pi-Hole, OpenVPN, Plex, and Samba,
-I got curious about using it to re-encode some videos I had. The videos are on
-an external drive being monitored by Plex and shared on the network by Samba,
-and some are quite large since they’re at a (likely unnecessarily) high bitrate.
-Trimming them down would help save a bit of space, and gives me an excuse to
-play around with Python, FFmpeg, and the Pi’s hardware accelerated video encoder.
-In this post, I’ll cover how to get FFmpeg setup to use the Pi 4’s video encoding
-hardware on a 64-bit OS and the little encoding manager/dashboard, <a href="https://github.com/Twinklebear/fbed">FBED</a>,
-that I put together to monitor the progress of the encoding tasks.</p>
-
-
-
-		<a href="/general/2020/11/15/hw-accel-encoding-rpi4">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
 		</div>
 	</div>
