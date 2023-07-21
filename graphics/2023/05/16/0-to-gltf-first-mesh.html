@@ -540,6 +540,10 @@
         <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">elementSize</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">byteStride</span><span class="p">);</span>
     <span class="p">}</span>
 
+    <span class="kd">get</span> <span class="nx">byteLength</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">byteStride</span><span class="p">;</span>
+    <span class="p">}</span>
+
     <span class="c1">// Get the vertex attribute type for accessors that are</span>
     <span class="c1">// used as vertex attributes</span>
     <span class="kd">get</span> <span class="nx">vertexType</span><span class="p">()</span> <span class="p">{</span>
@@ -790,13 +794,13 @@
     <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">gpuBuffer</span><span class="p">,</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">byteOffset</span><span class="p">,</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">);</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setIndexBuffer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">gpuBuffer</span><span class="p">,</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">vertexType</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">byteOffset</span><span class="p">,</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">);</span>
         <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">drawIndexed</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
