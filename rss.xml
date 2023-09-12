@@ -5,8 +5,8 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Tue, 22 Aug 2023 20:08:20 -0700</lastBuildDate>
-		<pubDate>Tue, 22 Aug 2023 20:08:20 -0700</pubDate>
+		<lastBuildDate>Tue, 12 Sep 2023 10:49:07 +0800</lastBuildDate>
+		<pubDate>Tue, 12 Sep 2023 10:49:07 +0800</pubDate>
 		<ttl>60</ttl>
 		
 		<item>
@@ -30,7 +30,7 @@
 			</description>
 			<link>https://www.willusher.io//graphics/2023/06/24/0-to-gltf-full-scene</link>
 			<guid>https://www.willusher.io//graphics/2023/06/24/0-to-gltf-full-scene</guid>
-			<pubDate>Sat, 24 Jun 2023 00:00:00 -0700</pubDate>
+			<pubDate>Sat, 24 Jun 2023 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -53,7 +53,7 @@
 			</description>
 			<link>https://www.willusher.io//graphics/2023/05/16/0-to-gltf-first-mesh</link>
 			<guid>https://www.willusher.io//graphics/2023/05/16/0-to-gltf-first-mesh</guid>
-			<pubDate>Tue, 16 May 2023 00:00:00 -0700</pubDate>
+			<pubDate>Tue, 16 May 2023 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -84,7 +84,7 @@ I recommend reading that first, as we’ll continue directly off the code writte
 			</description>
 			<link>https://www.willusher.io//graphics/2023/04/11/0-to-gltf-bind-groups</link>
 			<guid>https://www.willusher.io//graphics/2023/04/11/0-to-gltf-bind-groups</guid>
-			<pubDate>Tue, 11 Apr 2023 00:00:00 -0700</pubDate>
+			<pubDate>Tue, 11 Apr 2023 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -120,7 +120,7 @@ a WebGPU context and get a triangle on the screen.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//graphics/2023/04/10/0-to-gltf-triangle</link>
 			<guid>https://www.willusher.io//graphics/2023/04/10/0-to-gltf-triangle</guid>
-			<pubDate>Mon, 10 Apr 2023 00:00:00 -0700</pubDate>
+			<pubDate>Mon, 10 Apr 2023 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -153,7 +153,7 @@ performance comparisons against the M1.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//graphics/2020/12/20/rt-dive-m1</link>
 			<guid>https://www.willusher.io//graphics/2020/12/20/rt-dive-m1</guid>
-			<pubDate>Sun, 20 Dec 2020 00:00:00 -0800</pubDate>
+			<pubDate>Sun, 20 Dec 2020 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -175,7 +175,7 @@ that I put together to monitor the progress of the encoding tasks.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//general/2020/11/15/hw-accel-encoding-rpi4</link>
 			<guid>https://www.willusher.io//general/2020/11/15/hw-accel-encoding-rpi4</guid>
-			<pubDate>Sun, 15 Nov 2020 00:00:00 -0800</pubDate>
+			<pubDate>Sun, 15 Nov 2020 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -221,7 +221,7 @@ with technical issues, without whom the event would not have been possible.&lt;/
 			</description>
 			<link>https://www.willusher.io//general/2020/11/13/vis2020-streaming-infrastructure</link>
 			<guid>https://www.willusher.io//general/2020/11/13/vis2020-streaming-infrastructure</guid>
-			<pubDate>Fri, 13 Nov 2020 00:00:00 -0800</pubDate>
+			<pubDate>Fri, 13 Nov 2020 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -249,7 +249,7 @@ see the &lt;a href=&quot;/graphics/2023/04/11/0-to-gltf-bind-groups&quot;&gt;upd
 			</description>
 			<link>https://www.willusher.io//graphics/2020/06/20/0-to-gltf-bind-groups</link>
 			<guid>https://www.willusher.io//graphics/2020/06/20/0-to-gltf-bind-groups</guid>
-			<pubDate>Sat, 20 Jun 2020 00:00:00 -0700</pubDate>
+			<pubDate>Sat, 20 Jun 2020 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -277,7 +277,7 @@ see the &lt;a href=&quot;/graphics/2023/04/10/0-to-gltf-triangle&quot;&gt;update
 			</description>
 			<link>https://www.willusher.io//graphics/2020/06/15/0-to-gltf-triangle</link>
 			<guid>https://www.willusher.io//graphics/2020/06/15/0-to-gltf-triangle</guid>
-			<pubDate>Mon, 15 Jun 2020 00:00:00 -0700</pubDate>
+			<pubDate>Mon, 15 Jun 2020 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -311,7 +311,7 @@ to potentially build a unified low-level API for ray tracing.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//graphics/2019/11/20/the-sbt-three-ways</link>
 			<guid>https://www.willusher.io//graphics/2019/11/20/the-sbt-three-ways</guid>
-			<pubDate>Wed, 20 Nov 2019 00:00:00 -0800</pubDate>
+			<pubDate>Wed, 20 Nov 2019 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -343,7 +343,7 @@ which lets us skip creating an occlusion hit group entirely.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//graphics/2019/09/06/faster-shadow-rays-on-rtx</link>
 			<guid>https://www.willusher.io//graphics/2019/09/06/faster-shadow-rays-on-rtx</guid>
-			<pubDate>Fri, 06 Sep 2019 00:00:00 -0700</pubDate>
+			<pubDate>Fri, 06 Sep 2019 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -393,7 +393,7 @@ described in this post &lt;a href=&quot;https://www.willusher.io/webgl-volume-ra
 			</description>
 			<link>https://www.willusher.io//webgl/2019/01/13/volume-rendering-with-webgl</link>
 			<guid>https://www.willusher.io//webgl/2019/01/13/volume-rendering-with-webgl</guid>
-			<pubDate>Sun, 13 Jan 2019 00:00:00 -0800</pubDate>
+			<pubDate>Sun, 13 Jan 2019 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -420,7 +420,7 @@ the text. This is easy to do with the
 			</description>
 			<link>https://www.willusher.io//latex/2018/07/10/comments-in-latex</link>
 			<guid>https://www.willusher.io//latex/2018/07/10/comments-in-latex</guid>
-			<pubDate>Tue, 10 Jul 2018 00:00:00 -0700</pubDate>
+			<pubDate>Tue, 10 Jul 2018 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -446,7 +446,7 @@ if you want to try out the distributed rendering yourself.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//2016/01/02/distributed-rendering-with-rust-and-mio</link>
 			<guid>https://www.willusher.io//2016/01/02/distributed-rendering-with-rust-and-mio</guid>
-			<pubDate>Sat, 02 Jan 2016 00:00:00 -0800</pubDate>
+			<pubDate>Sat, 02 Jan 2016 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -463,7 +463,7 @@ machines spread across two clusters at my lab.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//2015/12/16/rendering-an-animation-in-rust</link>
 			<guid>https://www.willusher.io//2015/12/16/rendering-an-animation-in-rust</guid>
-			<pubDate>Wed, 16 Dec 2015 00:00:00 -0800</pubDate>
+			<pubDate>Wed, 16 Dec 2015 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -487,7 +487,7 @@ coincidence, since Rust 1.0.0 is being released &lt;a href=&quot;http://blog.rus
 			</description>
 			<link>https://www.willusher.io//2015/05/15/porting-a-ray-tracer-to-rust-part-3</link>
 			<guid>https://www.willusher.io//2015/05/15/porting-a-ray-tracer-to-rust-part-3</guid>
-			<pubDate>Fri, 15 May 2015 00:00:00 -0700</pubDate>
+			<pubDate>Fri, 15 May 2015 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -514,7 +514,7 @@ fast approaching.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//2015/01/30/porting-a-ray-tracer-to-rust-part-2</link>
 			<guid>https://www.willusher.io//2015/01/30/porting-a-ray-tracer-to-rust-part-2</guid>
-			<pubDate>Fri, 30 Jan 2015 00:00:00 -0800</pubDate>
+			<pubDate>Fri, 30 Jan 2015 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -540,7 +540,7 @@ sphere and save the image.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//2014/12/30/porting-a-ray-tracer-to-rust-part-1</link>
 			<guid>https://www.willusher.io//2014/12/30/porting-a-ray-tracer-to-rust-part-1</guid>
-			<pubDate>Tue, 30 Dec 2014 00:00:00 -0800</pubDate>
+			<pubDate>Tue, 30 Dec 2014 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -560,7 +560,7 @@ and so on.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2014/08/01/postscript-1-easy-cleanup</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2014/08/01/postscript-1-easy-cleanup</guid>
-			<pubDate>Fri, 01 Aug 2014 00:00:00 -0700</pubDate>
+			<pubDate>Fri, 01 Aug 2014 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -577,7 +577,7 @@ be sure to grab that before getting started.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2014/06/16/postscript-0-properly-finding-resource-paths</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2014/06/16/postscript-0-properly-finding-resource-paths</guid>
-			<pubDate>Mon, 16 Jun 2014 00:00:00 -0700</pubDate>
+			<pubDate>Mon, 16 Jun 2014 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -593,7 +593,7 @@ available on &lt;a href=&quot;http://www.cmake.org/cmake/help/cmake_tutorial.htm
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2014/03/06/lesson-0-cmake</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2014/03/06/lesson-0-cmake</guid>
-			<pubDate>Thu, 06 Mar 2014 00:00:00 -0800</pubDate>
+			<pubDate>Thu, 06 Mar 2014 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -610,7 +610,7 @@ take a peek at the &lt;a href=&quot;http://www.libsdl.org/projects/SDL_ttf/docs/
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/12/18/lesson-6-true-type-fonts-with-sdl_ttf</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/12/18/lesson-6-true-type-fonts-with-sdl_ttf</guid>
-			<pubDate>Wed, 18 Dec 2013 00:00:00 -0800</pubDate>
+			<pubDate>Wed, 18 Dec 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -626,7 +626,7 @@ each time but rather just which subsection of the texture.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/27/lesson-5-clipping-sprite-sheets</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/27/lesson-5-clipping-sprite-sheets</guid>
-			<pubDate>Tue, 27 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Tue, 27 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -643,7 +643,7 @@ The code for this lesson is built off of the lesson 3 code, if you need that cod
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/20/lesson-4-handling-events</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/20/lesson-4-handling-events</guid>
-			<pubDate>Tue, 20 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Tue, 20 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -662,7 +662,7 @@ and &lt;a href=&quot;http://www.libsdl.org/projects/SDL_mixer/&quot;&gt;SDL_mixe
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/18/lesson-3-sdl-extension-libraries</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/18/lesson-3-sdl-extension-libraries</guid>
-			<pubDate>Sun, 18 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Sun, 18 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -677,7 +677,7 @@ SDL error logger and learn how images are positioned and scaled when rendering w
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-2-dont-put-everything-in-main</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-2-dont-put-everything-in-main</guid>
-			<pubDate>Sat, 17 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Sat, 17 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -692,7 +692,7 @@ project and let’s get started!&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-1-hello-world</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/17/lesson-1-hello-world</guid>
-			<pubDate>Sat, 17 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Sat, 17 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -707,7 +707,7 @@ load our template and get to work. First we need a new empty C++ project.&lt;/p&
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-visual-studio</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-visual-studio</guid>
-			<pubDate>Thu, 15 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Thu, 15 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -721,7 +721,7 @@ them from the &lt;a href=&quot;http://www.libsdl.org/download-2.0.php&quot;&gt;S
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-setting-up-sdl</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-setting-up-sdl</guid>
-			<pubDate>Thu, 15 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Thu, 15 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -741,7 +741,7 @@ match your compiler (32/64bit) and the location of your SDL folder. To use makef
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mingw</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mingw</guid>
-			<pubDate>Thu, 15 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Thu, 15 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -758,7 +758,7 @@ downloads page and now have it available as a framework.&lt;/p&gt;
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mac-command-line</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-mac-command-line</guid>
-			<pubDate>Thu, 15 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Thu, 15 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -779,7 +779,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line</link>
 			<guid>https://www.willusher.io//sdl2%20tutorials/2013/08/15/lesson-0-linux-command-line</guid>
-			<pubDate>Thu, 15 Aug 2013 00:00:00 -0700</pubDate>
+			<pubDate>Thu, 15 Aug 2013 00:00:00 +0800</pubDate>
 		</item>
 		
 		
@@ -799,7 +799,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/wgpu-prog-iso</link>
 			<guid>https://www.willusher.io/publications/wgpu-prog-iso</guid>
-			<pubDate>Sun, 01 Oct 2023 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 02 Oct 2023 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -811,7 +811,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/graphwagu</link>
 			<guid>https://www.willusher.io/publications/graphwagu</guid>
-			<pubDate>Sun, 08 May 2022 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 09 May 2022 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -830,7 +830,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/exajet-animated</link>
 			<guid>https://www.willusher.io/publications/exajet-animated</guid>
-			<pubDate>Sun, 08 May 2022 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 09 May 2022 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -849,7 +849,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/dissertation</link>
 			<guid>https://www.willusher.io/publications/dissertation</guid>
-			<pubDate>Tue, 16 Mar 2021 23:00:00 -0700</pubDate>
+			<pubDate>Wed, 17 Mar 2021 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -868,7 +868,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/aggtree-io</link>
 			<guid>https://www.willusher.io/publications/aggtree-io</guid>
-			<pubDate>Sun, 16 May 2021 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 17 May 2021 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -887,7 +887,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/teraweb</link>
 			<guid>https://www.willusher.io/publications/teraweb</guid>
-			<pubDate>Sat, 24 Oct 2020 23:00:00 -0700</pubDate>
+			<pubDate>Sun, 25 Oct 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -906,7 +906,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/mscvrnt</link>
 			<guid>https://www.willusher.io/publications/mscvrnt</guid>
-			<pubDate>Mon, 26 Oct 2020 23:00:00 -0700</pubDate>
+			<pubDate>Tue, 27 Oct 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -925,7 +925,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/exabrick</link>
 			<guid>https://www.willusher.io/publications/exabrick</guid>
-			<pubDate>Mon, 26 Oct 2020 23:00:00 -0700</pubDate>
+			<pubDate>Tue, 27 Oct 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -944,7 +944,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/rtx-points-tvcg</link>
 			<guid>https://www.willusher.io/publications/rtx-points-tvcg</guid>
-			<pubDate>Mon, 30 Nov 2020 22:00:00 -0800</pubDate>
+			<pubDate>Tue, 01 Dec 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -963,7 +963,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/varprec-vis20</link>
 			<guid>https://www.willusher.io/publications/varprec-vis20</guid>
-			<pubDate>Mon, 26 Oct 2020 23:00:00 -0700</pubDate>
+			<pubDate>Tue, 27 Oct 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -982,7 +982,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/ospdisplaywall</link>
 			<guid>https://www.willusher.io/publications/ospdisplaywall</guid>
-			<pubDate>Mon, 26 Oct 2020 23:00:00 -0700</pubDate>
+			<pubDate>Tue, 27 Oct 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -994,7 +994,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/istp</link>
 			<guid>https://www.willusher.io/publications/istp</guid>
-			<pubDate>Thu, 13 Aug 2020 23:00:00 -0700</pubDate>
+			<pubDate>Fri, 14 Aug 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1013,7 +1013,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/owltubes</link>
 			<guid>https://www.willusher.io/publications/owltubes</guid>
-			<pubDate>Sat, 04 Jul 2020 23:00:00 -0700</pubDate>
+			<pubDate>Sun, 05 Jul 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1032,7 +1032,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/tamr</link>
 			<guid>https://www.willusher.io/publications/tamr</guid>
-			<pubDate>Tue, 24 Mar 2020 23:00:00 -0700</pubDate>
+			<pubDate>Wed, 25 Mar 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1051,7 +1051,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/tvcg20_oit</link>
 			<guid>https://www.willusher.io/publications/tvcg20_oit</guid>
-			<pubDate>Sun, 23 Feb 2020 22:00:00 -0800</pubDate>
+			<pubDate>Mon, 24 Feb 2020 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1070,7 +1070,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/dfb</link>
 			<guid>https://www.willusher.io/publications/dfb</guid>
-			<pubDate>Tue, 09 Jul 2019 23:00:00 -0700</pubDate>
+			<pubDate>Wed, 10 Jul 2019 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1089,7 +1089,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/tubes</link>
 			<guid>https://www.willusher.io/publications/tubes</guid>
-			<pubDate>Tue, 09 Jul 2019 23:00:00 -0700</pubDate>
+			<pubDate>Wed, 10 Jul 2019 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1108,7 +1108,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/rtx-space-skipping</link>
 			<guid>https://www.willusher.io/publications/rtx-space-skipping</guid>
-			<pubDate>Sat, 19 Oct 2019 23:00:00 -0700</pubDate>
+			<pubDate>Sun, 20 Oct 2019 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1127,7 +1127,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/rtx-points</link>
 			<guid>https://www.willusher.io/publications/rtx-points</guid>
-			<pubDate>Sun, 07 Jul 2019 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 08 Jul 2019 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1146,7 +1146,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/icpp19</link>
 			<guid>https://www.willusher.io/publications/icpp19</guid>
-			<pubDate>Sun, 04 Aug 2019 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 05 Aug 2019 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1165,7 +1165,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/amr-iso</link>
 			<guid>https://www.willusher.io/publications/amr-iso</guid>
-			<pubDate>Mon, 31 Dec 2018 22:00:00 -0800</pubDate>
+			<pubDate>Tue, 01 Jan 2019 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1184,7 +1184,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/vrnt</link>
 			<guid>https://www.willusher.io/publications/vrnt</guid>
-			<pubDate>Sun, 31 Dec 2017 22:00:00 -0800</pubDate>
+			<pubDate>Mon, 01 Jan 2018 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1203,7 +1203,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/libis-isav18</link>
 			<guid>https://www.willusher.io/publications/libis-isav18</guid>
-			<pubDate>Sun, 11 Nov 2018 22:00:00 -0800</pubDate>
+			<pubDate>Mon, 12 Nov 2018 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1222,7 +1222,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/visit-ospray</link>
 			<guid>https://www.willusher.io/publications/visit-ospray</guid>
-			<pubDate>Sun, 03 Jun 2018 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 04 Jun 2018 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1234,7 +1234,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/scasia18</link>
 			<guid>https://www.willusher.io/publications/scasia18</guid>
-			<pubDate>Mon, 19 Mar 2018 23:00:00 -0700</pubDate>
+			<pubDate>Tue, 20 Mar 2018 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1253,7 +1253,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/cvamr</link>
 			<guid>https://www.willusher.io/publications/cvamr</guid>
-			<pubDate>Sun, 26 Nov 2017 22:00:00 -0800</pubDate>
+			<pubDate>Mon, 27 Nov 2017 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1272,7 +1272,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/savr</link>
 			<guid>https://www.willusher.io/publications/savr</guid>
-			<pubDate>Sun, 11 Jun 2017 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 12 Jun 2017 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1291,7 +1291,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/isp-jsfi</link>
 			<guid>https://www.willusher.io/publications/isp-jsfi</guid>
-			<pubDate>Fri, 30 Sep 2016 23:00:00 -0700</pubDate>
+			<pubDate>Sat, 01 Oct 2016 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1303,7 +1303,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/vtkm</link>
 			<guid>https://www.willusher.io/publications/vtkm</guid>
-			<pubDate>Sun, 08 May 2016 23:00:00 -0700</pubDate>
+			<pubDate>Mon, 09 May 2016 14:00:00 +0800</pubDate>
 		</item>
 		
 		<item>
@@ -1322,7 +1322,7 @@ of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdl2-confi
 			</description>
 			<link>https://www.willusher.io/publications/pkd</link>
 			<guid>https://www.willusher.io/publications/pkd</guid>
-			<pubDate>Sat, 24 Oct 2015 23:00:00 -0700</pubDate>
+			<pubDate>Sun, 25 Oct 2015 14:00:00 +0800</pubDate>
 		</item>
 		
 	</channel>
