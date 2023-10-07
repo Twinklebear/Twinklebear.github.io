@@ -30,6 +30,7 @@ https://www.willusher.io//courses/cs6620/tr15
 https://www.willusher.io//courses/cs6620/tr16
 https://www.willusher.io//webtoys
 https://www.willusher.io//publications/wgpu-prog-iso
+https://www.willusher.io//publications/rt-sph-glyphs
 https://www.willusher.io//publications/graphwagu
 https://www.willusher.io//publications/exajet-animated
 https://www.willusher.io//publications/dissertation

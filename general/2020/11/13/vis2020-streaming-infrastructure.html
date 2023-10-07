@@ -453,56 +453,56 @@ have any effect. Instead we set this through the <a href="https://developers.goo
 The broadcast for each conference session is created below, within the <code class="language-plaintext highlighter-rouge">Session.schedule_youtube_broadcast</code>
 member in <a href="https://github.com/superministream/virtual-conference/blob/main/core/schedule.py"><code class="language-plaintext highlighter-rouge">schedule.py</code></a>.</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">title</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">make_youtube_title</span><span class="p">()</span>
-<span class="n">description</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">make_youtube_description</span><span class="p">()</span>
-<span class="n">session_time</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">session_time</span><span class="p">()</span>
-<span class="n">enable_captions</span> <span class="o">=</span> <span class="sh">"</span><span class="s">Live Captions</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="nf">special_notes</span><span class="p">()</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">make_youtube_title</span><span class="p">()</span>
+<span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">make_youtube_description</span><span class="p">()</span>
+<span class="n">session_time</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">session_time</span><span class="p">()</span>
+<span class="n">enable_captions</span> <span class="o">=</span> <span class="s">"Live Captions"</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">special_notes</span><span class="p">()</span>
 <span class="c1"># self.auth contains our authenticated credentials with the YouTube API
-</span><span class="n">broadcast_info</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">liveBroadcasts</span><span class="p">().</span><span class="nf">insert</span><span class="p">(</span>
-   <span class="n">part</span><span class="o">=</span><span class="sh">"</span><span class="s">id,snippet,contentDetails,status</span><span class="sh">"</span><span class="p">,</span>
+</span><span class="n">broadcast_info</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">liveBroadcasts</span><span class="p">().</span><span class="n">insert</span><span class="p">(</span>
+   <span class="n">part</span><span class="o">=</span><span class="s">"id,snippet,contentDetails,status"</span><span class="p">,</span>
    <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-       <span class="sh">"</span><span class="s">contentDetails</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-           <span class="sh">"</span><span class="s">closedCaptionsType</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">closedCaptionsHttpPost</span><span class="sh">"</span> <span class="k">if</span> <span class="n">enable_captions</span> <span class="k">else</span> <span class="sh">"</span><span class="s">closedCaptionsDisabled</span><span class="sh">"</span><span class="p">,</span>
-           <span class="sh">"</span><span class="s">enableContentEncryption</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-           <span class="sh">"</span><span class="s">enableDvr</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+       <span class="s">"contentDetails"</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s">"closedCaptionsType"</span><span class="p">:</span> <span class="s">"closedCaptionsHttpPost"</span> <span class="k">if</span> <span class="n">enable_captions</span> <span class="k">else</span> <span class="s">"closedCaptionsDisabled"</span><span class="p">,</span>
+           <span class="s">"enableContentEncryption"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+           <span class="s">"enableDvr"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
            <span class="c1"># Note: YouTube requires you to have 1k subscribers and 4k public watch hours
 </span>           <span class="c1"># to enable embedding live streams. You can set this to true if your account
 </span>           <span class="c1"># meets this requirement and you've enabled embedding live streams, otherwise
 </span>           <span class="c1"># you'll get an error trying to enable it.
-</span>           <span class="sh">"</span><span class="s">enableEmbed</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-           <span class="sh">"</span><span class="s">enableAutoStart</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-           <span class="sh">"</span><span class="s">enableAutoEnd</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-           <span class="sh">"</span><span class="s">recordFromStart</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-           <span class="sh">"</span><span class="s">startWithSlate</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+</span>           <span class="s">"enableEmbed"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+           <span class="s">"enableAutoStart"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+           <span class="s">"enableAutoEnd"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+           <span class="s">"recordFromStart"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+           <span class="s">"startWithSlate"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
            <span class="c1"># We must use a low latency only stream if using live captions
-</span>           <span class="sh">"</span><span class="s">latencyPreference</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">low</span><span class="sh">"</span> <span class="k">if</span> <span class="n">enable_captions</span> <span class="k">else</span> <span class="sh">"</span><span class="s">ultraLow</span><span class="sh">"</span><span class="p">,</span>
-           <span class="sh">"</span><span class="s">monitorStream</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-               <span class="sh">"</span><span class="s">enableMonitorStream</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-               <span class="sh">"</span><span class="s">broadcastStreamDelayMs</span><span class="sh">"</span><span class="p">:</span> <span class="mi">0</span>
+</span>           <span class="s">"latencyPreference"</span><span class="p">:</span> <span class="s">"low"</span> <span class="k">if</span> <span class="n">enable_captions</span> <span class="k">else</span> <span class="s">"ultraLow"</span><span class="p">,</span>
+           <span class="s">"monitorStream"</span><span class="p">:</span> <span class="p">{</span>
+               <span class="s">"enableMonitorStream"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+               <span class="s">"broadcastStreamDelayMs"</span><span class="p">:</span> <span class="mi">0</span>
            <span class="p">}</span>
        <span class="p">},</span>
-       <span class="sh">"</span><span class="s">snippet</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-           <span class="sh">"</span><span class="s">title</span><span class="sh">"</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
-           <span class="sh">"</span><span class="s">scheduledStartTime</span><span class="sh">"</span><span class="p">:</span> <span class="n">session_time</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="p">.</span><span class="n">utc</span><span class="p">).</span><span class="nf">strftime</span><span class="p">(</span><span class="sh">"</span><span class="s">%Y-%m-%dT%H:%M:%S.0Z</span><span class="sh">"</span><span class="p">),</span>
-           <span class="sh">"</span><span class="s">description</span><span class="sh">"</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+       <span class="s">"snippet"</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s">"title"</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+           <span class="s">"scheduledStartTime"</span><span class="p">:</span> <span class="n">session_time</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="p">.</span><span class="n">utc</span><span class="p">).</span><span class="n">strftime</span><span class="p">(</span><span class="s">"%Y-%m-%dT%H:%M:%S.0Z"</span><span class="p">),</span>
+           <span class="s">"description"</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
        <span class="p">},</span>
-       <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-           <span class="sh">"</span><span class="s">privacyStatus</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">public</span><span class="sh">"</span>
+       <span class="s">"status"</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s">"privacyStatus"</span><span class="p">:</span> <span class="s">"public"</span>
        <span class="p">}</span>
    <span class="p">}</span>
-<span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
+<span class="p">).</span><span class="n">execute</span><span class="p">()</span>
 
 <span class="c1"># Due to a bug in the Youtube Broadcast API we have to set the made for
 # kids flag through the videos API separately
-</span><span class="n">update_resp</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">videos</span><span class="p">().</span><span class="nf">update</span><span class="p">(</span>
-    <span class="n">part</span><span class="o">=</span><span class="sh">"</span><span class="s">id,contentDetails,status</span><span class="sh">"</span><span class="p">,</span>
+</span><span class="n">update_resp</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">videos</span><span class="p">().</span><span class="n">update</span><span class="p">(</span>
+    <span class="n">part</span><span class="o">=</span><span class="s">"id,contentDetails,status"</span><span class="p">,</span>
     <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-        <span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">broadcast_info</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span>
-        <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-            <span class="sh">"</span><span class="s">selfDeclaredMadeForKids</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="s">"id"</span><span class="p">:</span> <span class="n">broadcast_info</span><span class="p">[</span><span class="s">"id"</span><span class="p">],</span>
+        <span class="s">"status"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">"selfDeclaredMadeForKids"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">}</span>
-<span class="p">).</span><span class="nf">execute</span><span class="p">()</span></code></pre></figure>
+<span class="p">).</span><span class="n">execute</span><span class="p">()</span></code></pre></figure>
 
 <p>The most important things to note here are:</p>
 
@@ -545,17 +545,17 @@ the thumbnail image in PNG format to the caller, which we can set as the
 video thumbnail (also done in <code class="language-plaintext highlighter-rouge">schedule_youtube_broadcast</code>):</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Render the thumbnail for the session and upload it
-</span><span class="n">thumbnail_img</span> <span class="o">=</span> <span class="n">thumbnail</span><span class="p">.</span><span class="nf">render_thumbnail</span><span class="p">(</span><span class="n">thumbnail_params</span><span class="p">[</span><span class="sh">"</span><span class="s">background</span><span class="sh">"</span><span class="p">],</span>
-        <span class="n">thumbnail_params</span><span class="p">[</span><span class="sh">"</span><span class="s">bold_font</span><span class="sh">"</span><span class="p">],</span>
-        <span class="n">thumbnail_params</span><span class="p">[</span><span class="sh">"</span><span class="s">regular_font</span><span class="sh">"</span><span class="p">],</span>
-        <span class="n">self</span><span class="p">.</span><span class="nf">title_card_title</span><span class="p">(),</span>
-        <span class="n">self</span><span class="p">.</span><span class="nf">title_card_chair</span><span class="p">(),</span>
-        <span class="n">self</span><span class="p">.</span><span class="nf">title_card_schedule</span><span class="p">())</span>
+</span><span class="n">thumbnail_img</span> <span class="o">=</span> <span class="n">thumbnail</span><span class="p">.</span><span class="n">render_thumbnail</span><span class="p">(</span><span class="n">thumbnail_params</span><span class="p">[</span><span class="s">"background"</span><span class="p">],</span>
+        <span class="n">thumbnail_params</span><span class="p">[</span><span class="s">"bold_font"</span><span class="p">],</span>
+        <span class="n">thumbnail_params</span><span class="p">[</span><span class="s">"regular_font"</span><span class="p">],</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">title_card_title</span><span class="p">(),</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">title_card_chair</span><span class="p">(),</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">title_card_schedule</span><span class="p">())</span>
 
-<span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">thumbnails</span><span class="p">().</span><span class="nf">set</span><span class="p">(</span>
-    <span class="n">videoId</span><span class="o">=</span><span class="n">broadcast_info</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">],</span>
-    <span class="n">media_body</span><span class="o">=</span><span class="nc">MediaIoBaseUpload</span><span class="p">(</span><span class="n">thumbnail_img</span><span class="p">,</span> <span class="n">mimetype</span><span class="o">=</span><span class="sh">"</span><span class="s">image/png</span><span class="sh">"</span><span class="p">)</span>
-<span class="p">).</span><span class="nf">execute</span><span class="p">()</span></code></pre></figure>
+<span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">thumbnails</span><span class="p">().</span><span class="nb">set</span><span class="p">(</span>
+    <span class="n">videoId</span><span class="o">=</span><span class="n">broadcast_info</span><span class="p">[</span><span class="s">"id"</span><span class="p">],</span>
+    <span class="n">media_body</span><span class="o">=</span><span class="n">MediaIoBaseUpload</span><span class="p">(</span><span class="n">thumbnail_img</span><span class="p">,</span> <span class="n">mimetype</span><span class="o">=</span><span class="s">"image/png"</span><span class="p">)</span>
+<span class="p">).</span><span class="n">execute</span><span class="p">()</span></code></pre></figure>
 
 <h2 id="33-zoom">3.3. Zoom</h2>
 
@@ -579,64 +579,64 @@ and returns back the scheduled meeting information containing the meeting URL.
 This is done in the <code class="language-plaintext highlighter-rouge">Session.schedule_zoom</code> member in
 <a href="https://github.com/superministream/virtual-conference/blob/main/core/schedule.py"><code class="language-plaintext highlighter-rouge">schedule.py</code></a>:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">computer</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">timeslot_entry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sh">"</span><span class="s">Computer</span><span class="sh">"</span><span class="p">).</span><span class="n">value</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">computer</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">timeslot_entry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Computer"</span><span class="p">).</span><span class="n">value</span>
 
-<span class="n">headers</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">zoom</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">https://api.zoom.us/v2/users?status=active&amp;page_size=30&amp;page_number=1</span><span class="sh">"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">).</span><span class="nf">json</span><span class="p">()</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">zoom</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"https://api.zoom.us/v2/users?status=active&amp;page_size=30&amp;page_number=1"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">).</span><span class="n">json</span><span class="p">()</span>
 <span class="c1"># Find the computer assigned to host the meeting and make them the main host, all
 # others are alternative hosts. NOTE: Each computer's Zoom account is identified by
 # having its last name be its computer ID letter
 </span><span class="n">host</span> <span class="o">=</span> <span class="bp">None</span>
 <span class="n">alternative_hosts</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="sh">"</span><span class="s">users</span><span class="sh">"</span><span class="p">]:</span>
-    <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="sh">"</span><span class="s">last_name</span><span class="sh">"</span><span class="p">]</span> <span class="o">==</span> <span class="n">computer</span><span class="p">:</span>
-        <span class="n">host</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s">"users"</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s">"last_name"</span><span class="p">]</span> <span class="o">==</span> <span class="n">computer</span><span class="p">:</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s">"id"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">alternative_hosts</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">])</span>
+        <span class="n">alternative_hosts</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s">"id"</span><span class="p">])</span>
 
-<span class="n">session_time</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">session_time</span><span class="p">()</span>
+<span class="n">session_time</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">session_time</span><span class="p">()</span>
 <span class="c1"># Zoom meetings start 15min ahead of time to set up, and can run 10min over
-</span><span class="n">zoom_start</span> <span class="o">=</span> <span class="n">session_time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="nf">setup_time</span><span class="p">()</span>
-<span class="n">zoom_end</span> <span class="o">=</span> <span class="n">session_time</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nf">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">meeting_topic</span> <span class="o">=</span> <span class="n">CONFERENCE_NAME</span> <span class="o">+</span> <span class="sh">"</span><span class="s">: </span><span class="sh">"</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="nf">event_session_title</span><span class="p">()</span>
+</span><span class="n">zoom_start</span> <span class="o">=</span> <span class="n">session_time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">setup_time</span><span class="p">()</span>
+<span class="n">zoom_end</span> <span class="o">=</span> <span class="n">session_time</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">meeting_topic</span> <span class="o">=</span> <span class="n">CONFERENCE_NAME</span> <span class="o">+</span> <span class="s">": "</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">event_session_title</span><span class="p">()</span>
 <span class="c1"># Max Zoom meeting topic length is 200 characters
-</span><span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">meeting_topic</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">:</span>
+</span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">meeting_topic</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">:</span>
     <span class="n">meeting_topic</span> <span class="o">=</span> <span class="n">meeting_topic</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">199</span><span class="p">]</span>
 <span class="c1"># Max agenda length is 2000 characters
-</span><span class="n">meeting_agenda</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-<span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">meeting_agenda</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2000</span><span class="p">:</span>
+</span><span class="n">meeting_agenda</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">meeting_agenda</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2000</span><span class="p">:</span>
     <span class="n">meeting_agenda</span> <span class="o">=</span> <span class="n">meeting_agenda</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1999</span><span class="p">]</span>
 
 <span class="n">meeting_info</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="sh">"</span><span class="s">topic</span><span class="sh">"</span><span class="p">:</span> <span class="n">meeting_topic</span><span class="p">,</span>
-    <span class="sh">"</span><span class="s">type</span><span class="sh">"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="sh">"</span><span class="s">start_time</span><span class="sh">"</span><span class="p">:</span> <span class="n">zoom_start</span><span class="p">.</span><span class="nf">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="p">.</span><span class="n">utc</span><span class="p">).</span><span class="nf">strftime</span><span class="p">(</span><span class="sh">"</span><span class="s">%Y-%m-%dT%H:%M:%SZ</span><span class="sh">"</span><span class="p">),</span>
-    <span class="sh">"</span><span class="s">timezone</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">UTC</span><span class="sh">"</span><span class="p">,</span>
-    <span class="sh">"</span><span class="s">duration</span><span class="sh">"</span><span class="p">:</span> <span class="nf">int</span><span class="p">((</span><span class="n">zoom_end</span> <span class="o">-</span> <span class="n">zoom_start</span><span class="p">).</span><span class="nf">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">),</span>
-    <span class="sh">"</span><span class="s">password</span><span class="sh">"</span><span class="p">:</span> <span class="nf">generate_password</span><span class="p">(),</span>
-    <span class="sh">"</span><span class="s">agenda</span><span class="sh">"</span><span class="p">:</span> <span class="n">meeting_agenda</span><span class="p">,</span>
-    <span class="sh">"</span><span class="s">settings</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="sh">"</span><span class="s">host_video</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-        <span class="sh">"</span><span class="s">participant_video</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-        <span class="sh">"</span><span class="s">join_before_host</span><span class="sh">"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-        <span class="sh">"</span><span class="s">mute_upon_entry</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-        <span class="sh">"</span><span class="s">waiting_room</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-        <span class="sh">"</span><span class="s">audio</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">both</span><span class="sh">"</span><span class="p">,</span>
-        <span class="sh">"</span><span class="s">alternative_hosts</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">,</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">alternative_hosts</span><span class="p">),</span>
-        <span class="sh">"</span><span class="s">global_dial_in_countries</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s">"topic"</span><span class="p">:</span> <span class="n">meeting_topic</span><span class="p">,</span>
+    <span class="s">"type"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s">"start_time"</span><span class="p">:</span> <span class="n">zoom_start</span><span class="p">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="p">.</span><span class="n">utc</span><span class="p">).</span><span class="n">strftime</span><span class="p">(</span><span class="s">"%Y-%m-%dT%H:%M:%SZ"</span><span class="p">),</span>
+    <span class="s">"timezone"</span><span class="p">:</span> <span class="s">"UTC"</span><span class="p">,</span>
+    <span class="s">"duration"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">zoom_end</span> <span class="o">-</span> <span class="n">zoom_start</span><span class="p">).</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">),</span>
+    <span class="s">"password"</span><span class="p">:</span> <span class="n">generate_password</span><span class="p">(),</span>
+    <span class="s">"agenda"</span><span class="p">:</span> <span class="n">meeting_agenda</span><span class="p">,</span>
+    <span class="s">"settings"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"host_video"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="s">"participant_video"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="s">"join_before_host"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="s">"mute_upon_entry"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="s">"waiting_room"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="s">"audio"</span><span class="p">:</span> <span class="s">"both"</span><span class="p">,</span>
+        <span class="s">"alternative_hosts"</span><span class="p">:</span> <span class="s">","</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">alternative_hosts</span><span class="p">),</span>
+        <span class="s">"global_dial_in_countries"</span><span class="p">:</span> <span class="p">[</span>
             <span class="c1"># NOTE: Fill in dial in countries as appropriate for your conference
-</span>            <span class="sh">"</span><span class="s">DE</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">SE</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">JP</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">KR</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">GB</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">US</span><span class="sh">"</span><span class="p">,</span>
-            <span class="sh">"</span><span class="s">CA</span><span class="sh">"</span>
+</span>            <span class="s">"DE"</span><span class="p">,</span>
+            <span class="s">"SE"</span><span class="p">,</span>
+            <span class="s">"JP"</span><span class="p">,</span>
+            <span class="s">"KR"</span><span class="p">,</span>
+            <span class="s">"GB"</span><span class="p">,</span>
+            <span class="s">"US"</span><span class="p">,</span>
+            <span class="s">"CA"</span>
         <span class="p">]</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="n">zoom_info</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="sh">"</span><span class="s">https://api.zoom.us/v2/users/{}/meetings</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">host</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">meeting_info</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">).</span><span class="nf">json</span><span class="p">()</span></code></pre></figure>
+<span class="n">zoom_info</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="s">"https://api.zoom.us/v2/users/{}/meetings"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">host</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">meeting_info</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">).</span><span class="n">json</span><span class="p">()</span></code></pre></figure>
 
 <h2 id="34-discord">3.4. Discord</h2>
 
@@ -687,45 +687,45 @@ other items like the ICS file for the session and conference logo image.</p>
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># recipients and cc_recipients should be lists of emails or a single email string
 # attachments should be a list of MIMEBase objects, one for each attachment
 </span><span class="k">def</span> <span class="nf">send_html_email</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">cc_recipients</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">attachments</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">alternative_text</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="nc">MIMEMultipart</span><span class="p">(</span><span class="sh">"</span><span class="s">mixed</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">message</span><span class="p">.</span><span class="nf">set_charset</span><span class="p">(</span><span class="sh">"</span><span class="s">utf8</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">MIMEMultipart</span><span class="p">(</span><span class="s">"mixed"</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">.</span><span class="n">set_charset</span><span class="p">(</span><span class="s">"utf8"</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nf">type</span><span class="p">(</span><span class="n">recipients</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">recipients</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">recipients</span> <span class="o">=</span> <span class="p">[</span><span class="n">recipients</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="sh">"</span><span class="s">SUPERMINISTREAM_EMAIL_FROM</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">You must set $SUPERMINISTREAM_EMAIL_FROM to the email address to populate the from field</span><span class="sh">"</span><span class="p">)</span>
-        <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="s">"SUPERMINISTREAM_EMAIL_FROM"</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"You must set $SUPERMINISTREAM_EMAIL_FROM to the email address to populate the from field"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">all_recipients</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">recipients</span><span class="p">]</span>
-    <span class="n">message</span><span class="p">[</span><span class="sh">"</span><span class="s">to</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">recipients</span><span class="p">)</span>
-    <span class="n">message</span><span class="p">[</span><span class="sh">"</span><span class="s">from</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="sh">"</span><span class="s">SUPERMINISTREAM_EMAIL_FROM</span><span class="sh">"</span><span class="p">]</span>
+    <span class="n">all_recipients</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">recipients</span><span class="p">]</span>
+    <span class="n">message</span><span class="p">[</span><span class="s">"to"</span><span class="p">]</span> <span class="o">=</span> <span class="s">", "</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">recipients</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">[</span><span class="s">"from"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="s">"SUPERMINISTREAM_EMAIL_FROM"</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">cc_recipients</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nf">type</span><span class="p">(</span><span class="n">cc_recipients</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">cc_recipients</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
             <span class="n">cc_recipients</span> <span class="o">=</span> <span class="p">[</span><span class="n">cc_recipients</span><span class="p">]</span>
-        <span class="n">message</span><span class="p">[</span><span class="sh">"</span><span class="s">cc</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="sh">"</span><span class="s">, </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">cc_recipients</span><span class="p">)</span>
-        <span class="n">all_recipients</span> <span class="o">+=</span> <span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cc_recipients</span><span class="p">]</span>
+        <span class="n">message</span><span class="p">[</span><span class="s">"cc"</span><span class="p">]</span> <span class="o">=</span> <span class="s">", "</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">cc_recipients</span><span class="p">)</span>
+        <span class="n">all_recipients</span> <span class="o">+=</span> <span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cc_recipients</span><span class="p">]</span>
 
-    <span class="n">message</span><span class="p">[</span><span class="sh">"</span><span class="s">subject</span><span class="sh">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">subject</span>
-    <span class="n">message_text</span> <span class="o">=</span> <span class="nc">MIMEMultipart</span><span class="p">(</span><span class="sh">"</span><span class="s">alternative</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">[</span><span class="s">"subject"</span><span class="p">]</span> <span class="o">=</span> <span class="n">subject</span>
+    <span class="n">message_text</span> <span class="o">=</span> <span class="n">MIMEMultipart</span><span class="p">(</span><span class="s">"alternative"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">alternative_text</span><span class="p">:</span>
-        <span class="n">message_text</span><span class="p">.</span><span class="nf">attach</span><span class="p">(</span><span class="nc">MIMEText</span><span class="p">(</span><span class="n">alternative_text</span><span class="p">,</span> <span class="sh">"</span><span class="s">plain</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">utf8</span><span class="sh">"</span><span class="p">))</span>
-    <span class="n">message_text</span><span class="p">.</span><span class="nf">attach</span><span class="p">(</span><span class="nc">MIMEText</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="sh">"</span><span class="s">html</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">utf8</span><span class="sh">"</span><span class="p">))</span>
-    <span class="n">message</span><span class="p">.</span><span class="nf">attach</span><span class="p">(</span><span class="n">message_text</span><span class="p">)</span>
+        <span class="n">message_text</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">MIMEText</span><span class="p">(</span><span class="n">alternative_text</span><span class="p">,</span> <span class="s">"plain"</span><span class="p">,</span> <span class="s">"utf8"</span><span class="p">))</span>
+    <span class="n">message_text</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">MIMEText</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="s">"html"</span><span class="p">,</span> <span class="s">"utf8"</span><span class="p">))</span>
+    <span class="n">message</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">message_text</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">attachments</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">attachments</span><span class="p">:</span>
-            <span class="n">encoders</span><span class="p">.</span><span class="nf">encode_base64</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-            <span class="n">message</span><span class="p">.</span><span class="nf">attach</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">encoders</span><span class="p">.</span><span class="n">encode_base64</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">message</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
-    <span class="n">response</span> <span class="o">=</span> <span class="n">email</span><span class="p">.</span><span class="nf">send_raw_email</span><span class="p">(</span>
-        <span class="n">Source</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="sh">"</span><span class="s">from</span><span class="sh">"</span><span class="p">],</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">email</span><span class="p">.</span><span class="n">send_raw_email</span><span class="p">(</span>
+        <span class="n">Source</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="s">"from"</span><span class="p">],</span>
         <span class="n">Destinations</span><span class="o">=</span><span class="n">all_recipients</span><span class="p">,</span>
         <span class="n">RawMessage</span><span class="o">=</span><span class="p">{</span>
-            <span class="sh">"</span><span class="s">Data</span><span class="sh">"</span><span class="p">:</span> <span class="n">message</span><span class="p">.</span><span class="nf">as_bytes</span><span class="p">()</span>
+            <span class="s">"Data"</span><span class="p">:</span> <span class="n">message</span><span class="p">.</span><span class="n">as_bytes</span><span class="p">()</span>
         <span class="p">})</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></code></pre></figure>
+    <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></code></pre></figure>
 
 <p>In <code class="language-plaintext highlighter-rouge">Session.email_contributors</code> we generate an ICS file to send presenters that
 they can add to their calendar and attach the conference logo to have a nice official
@@ -735,21 +735,21 @@ in the <code class="language-plaintext highlighter-rouge">Session.email_contribu
 The ICS files were created using the <a href="https://pypi.org/project/ics/">ics</a> library in Python.</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Generate the ICS calendar event attachment
-</span><span class="n">calendar</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">make_calendar</span><span class="p">(</span><span class="n">with_setup_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">zoom_info</span><span class="o">=</span><span class="n">zoom_meeting_info</span><span class="p">)</span>
-<span class="n">event_attachment</span> <span class="o">=</span> <span class="nc">MIMEBase</span><span class="p">(</span><span class="sh">"</span><span class="s">application</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">plain</span><span class="sh">"</span><span class="p">)</span>
-<span class="n">event_attachment</span><span class="p">.</span><span class="nf">set_payload</span><span class="p">(</span><span class="nf">bytes</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">calendar</span><span class="p">),</span> <span class="sh">"</span><span class="s">utf8</span><span class="sh">"</span><span class="p">))</span>
-<span class="n">event_attachment</span><span class="p">.</span><span class="nf">add_header</span><span class="p">(</span><span class="sh">"</span><span class="s">Content-Disposition</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">attachment</span><span class="sh">"</span><span class="p">,</span>
-        <span class="n">filename</span><span class="o">=</span><span class="sh">"</span><span class="s">{}.ics</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">event_session_title</span><span class="p">()))</span>
+</span><span class="n">calendar</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">make_calendar</span><span class="p">(</span><span class="n">with_setup_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">zoom_info</span><span class="o">=</span><span class="n">zoom_meeting_info</span><span class="p">)</span>
+<span class="n">event_attachment</span> <span class="o">=</span> <span class="n">MIMEBase</span><span class="p">(</span><span class="s">"application"</span><span class="p">,</span> <span class="s">"plain"</span><span class="p">)</span>
+<span class="n">event_attachment</span><span class="p">.</span><span class="n">set_payload</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">calendar</span><span class="p">),</span> <span class="s">"utf8"</span><span class="p">))</span>
+<span class="n">event_attachment</span><span class="p">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">"Content-Disposition"</span><span class="p">,</span> <span class="s">"attachment"</span><span class="p">,</span>
+        <span class="n">filename</span><span class="o">=</span><span class="s">"{}.ics"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">event_session_title</span><span class="p">()))</span>
 <span class="n">attachments</span> <span class="o">=</span> <span class="p">[</span><span class="n">event_attachment</span><span class="p">]</span>
 
 <span class="c1"># Attach the image logo if we have one
 </span><span class="k">if</span> <span class="n">logo_image</span><span class="p">:</span>
     <span class="c1"># logo_image is a raw byte array read from a file in binary mode
-</span>    <span class="n">attach_img</span> <span class="o">=</span> <span class="nc">MIMEImage</span><span class="p">(</span><span class="n">logo_image</span><span class="p">)</span>
-    <span class="n">attach_img</span><span class="p">.</span><span class="nf">add_header</span><span class="p">(</span><span class="sh">"</span><span class="s">Content-Disposition</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">inline</span><span class="sh">"</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="sh">"</span><span class="s">logo_image.png</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">attach_img</span><span class="p">.</span><span class="nf">add_header</span><span class="p">(</span><span class="sh">"</span><span class="s">Content-ID</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">&lt;logo_image&gt;</span><span class="sh">"</span><span class="p">)</span>
-    <span class="n">attachments</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">attach_img</span><span class="p">)</span>
-    <span class="n">email_body</span> <span class="o">+=</span> <span class="sh">"</span><span class="s">&lt;img width=</span><span class="sh">'</span><span class="s">400</span><span class="sh">'</span><span class="s"> src=</span><span class="sh">'</span><span class="s">cid:logo_image</span><span class="sh">'</span><span class="s"> alt=</span><span class="sh">'</span><span class="s">Logo</span><span class="sh">'</span><span class="s">/&gt;</span><span class="sh">"</span></code></pre></figure>
+</span>    <span class="n">attach_img</span> <span class="o">=</span> <span class="n">MIMEImage</span><span class="p">(</span><span class="n">logo_image</span><span class="p">)</span>
+    <span class="n">attach_img</span><span class="p">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">"Content-Disposition"</span><span class="p">,</span> <span class="s">"inline"</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">"logo_image.png"</span><span class="p">)</span>
+    <span class="n">attach_img</span><span class="p">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">"Content-ID"</span><span class="p">,</span> <span class="s">"&lt;logo_image&gt;"</span><span class="p">)</span>
+    <span class="n">attachments</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">attach_img</span><span class="p">)</span>
+    <span class="n">email_body</span> <span class="o">+=</span> <span class="s">"&lt;img width='400' src='cid:logo_image' alt='Logo'/&gt;"</span></code></pre></figure>
 
 <h2 id="36-compiling-session-assets">3.6. Compiling Session Assets</h2>
 
@@ -809,44 +809,44 @@ in <a href="https://github.com/superministream/virtual-conference/blob/main/core
 The method also performs some sanity checks on the state of the stream and
 broadcast to ensure both are in the correct state to be made live.</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"> <span class="k">def</span> <span class="nf">start_streaming</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"> <span class="k">def</span> <span class="nf">start_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1"># The computer is assigned when scheduling the sessions in the previous section
-</span>    <span class="n">computer</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">timeslot_entry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sh">"</span><span class="s">Computer</span><span class="sh">"</span><span class="p">).</span><span class="n">value</span>
-    <span class="n">computer_info</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">day</span><span class="p">.</span><span class="n">database</span><span class="p">.</span><span class="nf">get_computer</span><span class="p">(</span><span class="n">computer</span><span class="p">)</span>
-    <span class="n">stream_key</span> <span class="o">=</span> <span class="n">computer_info</span><span class="p">[</span><span class="sh">"</span><span class="s">Youtube Stream Key</span><span class="sh">"</span><span class="p">].</span><span class="n">value</span>
-    <span class="n">stream_key_id</span> <span class="o">=</span> <span class="n">computer_info</span><span class="p">[</span><span class="sh">"</span><span class="s">Youtube Stream Key ID</span><span class="sh">"</span><span class="p">].</span><span class="n">value</span>
+</span>    <span class="n">computer</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">timeslot_entry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Computer"</span><span class="p">).</span><span class="n">value</span>
+    <span class="n">computer_info</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">day</span><span class="p">.</span><span class="n">database</span><span class="p">.</span><span class="n">get_computer</span><span class="p">(</span><span class="n">computer</span><span class="p">)</span>
+    <span class="n">stream_key</span> <span class="o">=</span> <span class="n">computer_info</span><span class="p">[</span><span class="s">"Youtube Stream Key"</span><span class="p">].</span><span class="n">value</span>
+    <span class="n">stream_key_id</span> <span class="o">=</span> <span class="n">computer_info</span><span class="p">[</span><span class="s">"Youtube Stream Key ID"</span><span class="p">].</span><span class="n">value</span>
 
-    <span class="n">stream_status</span><span class="p">,</span> <span class="n">stream_health</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_stream_status</span><span class="p">()</span>
-    <span class="n">broadcast_status</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_broadcast_status</span><span class="p">()</span>
+    <span class="n">stream_status</span><span class="p">,</span> <span class="n">stream_health</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_stream_status</span><span class="p">()</span>
+    <span class="n">broadcast_status</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_broadcast_status</span><span class="p">()</span>
     <span class="c1"># Broadcast could be in the ready state (configured and a stream key was bound),
 </span>    <span class="c1"># or in the created state (configured but no stream key attached yet).
-</span>    <span class="k">if</span> <span class="n">broadcast_status</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">ready</span><span class="sh">"</span> <span class="ow">and</span> <span class="n">broadcast_status</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">created</span><span class="sh">"</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Broadcast {} is in state {}, and cannot be (re-)made live</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span> <span class="n">broadcast_status</span><span class="p">))</span>
+</span>    <span class="k">if</span> <span class="n">broadcast_status</span> <span class="o">!=</span> <span class="s">"ready"</span> <span class="ow">and</span> <span class="n">broadcast_status</span> <span class="o">!=</span> <span class="s">"created"</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Broadcast {} is in state {}, and cannot be (re-)made live"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span> <span class="n">broadcast_status</span><span class="p">))</span>
         <span class="k">return</span>
 
-    <span class="k">if</span> <span class="n">stream_status</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">active</span><span class="sh">"</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Stream on computer {} (key {}) for broadcast {} is not active (currently {}), broadcast cannot be made live</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span>
-            <span class="n">computer</span><span class="p">,</span> <span class="n">stream_key</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span> <span class="n">stream_status</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">stream_status</span> <span class="o">!=</span> <span class="s">"active"</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Stream on computer {} (key {}) for broadcast {} is not active (currently {}), broadcast cannot be made live"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span>
+            <span class="n">computer</span><span class="p">,</span> <span class="n">stream_key</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span> <span class="n">stream_status</span><span class="p">))</span>
         <span class="k">return</span>
 
-    <span class="k">if</span> <span class="n">stream_health</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">good</span><span class="sh">"</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">WARNING: Stream on computer {} (key {}) is active, but not healthy. Health status is {}</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span>
+    <span class="k">if</span> <span class="n">stream_health</span> <span class="o">!=</span> <span class="s">"good"</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"WARNING: Stream on computer {} (key {}) is active, but not healthy. Health status is {}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span>
             <span class="n">computer</span><span class="p">,</span> <span class="n">stream_key</span><span class="p">,</span> <span class="n">stream_health</span><span class="p">))</span>
 
     <span class="c1"># Attach the stream to the broadcast
-</span>    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Attaching stream </span><span class="sh">'</span><span class="s">{}</span><span class="sh">'</span><span class="s"> to </span><span class="sh">'</span><span class="s">{}</span><span class="sh">'"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">stream_key</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">()))</span>
-    <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">liveBroadcasts</span><span class="p">().</span><span class="nf">bind</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span>
-        <span class="n">part</span><span class="o">=</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">,</span>
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">"Attaching stream '{}' to '{}'"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">stream_key</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">()))</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">liveBroadcasts</span><span class="p">().</span><span class="n">bind</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span>
+        <span class="n">part</span><span class="o">=</span><span class="s">"status"</span><span class="p">,</span>
         <span class="n">streamId</span><span class="o">=</span><span class="n">stream_key_id</span><span class="p">,</span>
-    <span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
+    <span class="p">).</span><span class="n">execute</span><span class="p">()</span>
 
     <span class="c1"># Make the broadcast live
-</span>    <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">liveBroadcasts</span><span class="p">().</span><span class="nf">transition</span><span class="p">(</span>
-        <span class="n">broadcastStatus</span><span class="o">=</span><span class="sh">"</span><span class="s">live</span><span class="sh">"</span><span class="p">,</span>
-        <span class="nb">id</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span>
-        <span class="n">part</span><span class="o">=</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span>
-    <span class="p">).</span><span class="nf">execute</span><span class="p">()</span></code></pre></figure>
+</span>    <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">liveBroadcasts</span><span class="p">().</span><span class="n">transition</span><span class="p">(</span>
+        <span class="n">broadcastStatus</span><span class="o">=</span><span class="s">"live"</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span>
+        <span class="n">part</span><span class="o">=</span><span class="s">"status"</span>
+    <span class="p">).</span><span class="n">execute</span><span class="p">()</span></code></pre></figure>
 
 <p>A session is finished by transitioning it to the complete state and detaching the stream key
 from the broadcast. Finally, we explicitly make the video embeddable, since they had
@@ -855,41 +855,41 @@ Note that detaching the key may not be necessary to do, I didn’t come back to 
 The session is stopped by <code class="language-plaintext highlighter-rouge">Session.stop_streaming</code>
 in <a href="https://github.com/superministream/virtual-conference/blob/main/core/schedule.py"><code class="language-plaintext highlighter-rouge">schedule.py</code></a>.</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">stop_streaming</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
-    <span class="n">computer</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">timeslot_entry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sh">"</span><span class="s">Computer</span><span class="sh">"</span><span class="p">).</span><span class="n">value</span>
-    <span class="n">broadcast_status</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_broadcast_status</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">broadcast_status</span> <span class="o">==</span> <span class="sh">"</span><span class="s">complete</span><span class="sh">"</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Broadcast {} has already been made complete, skipping redundant transition</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">()))</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">stop_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">computer</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">timeslot_entry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"Computer"</span><span class="p">).</span><span class="n">value</span>
+    <span class="n">broadcast_status</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_broadcast_status</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">broadcast_status</span> <span class="o">==</span> <span class="s">"complete"</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Broadcast {} has already been made complete, skipping redundant transition"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">()))</span>
         <span class="k">return</span>
 
-    <span class="k">if</span> <span class="n">broadcast_status</span> <span class="o">!=</span> <span class="sh">"</span><span class="s">live</span><span class="sh">"</span><span class="p">:</span>
-        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Broadcast {} is {}, not live, cannot make complete</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span> <span class="n">broadcast_status</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">broadcast_status</span> <span class="o">!=</span> <span class="s">"live"</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Broadcast {} is {}, not live, cannot make complete"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span> <span class="n">broadcast_status</span><span class="p">))</span>
         <span class="k">return</span>
 
     <span class="c1"># Transition broadcast to complete
-</span>    <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">liveBroadcasts</span><span class="p">().</span><span class="nf">transition</span><span class="p">(</span>
-        <span class="n">broadcastStatus</span><span class="o">=</span><span class="sh">"</span><span class="s">complete</span><span class="sh">"</span><span class="p">,</span>
-        <span class="nb">id</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span>
-        <span class="n">part</span><span class="o">=</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span>
-    <span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
+</span>    <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">liveBroadcasts</span><span class="p">().</span><span class="n">transition</span><span class="p">(</span>
+        <span class="n">broadcastStatus</span><span class="o">=</span><span class="s">"complete"</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span>
+        <span class="n">part</span><span class="o">=</span><span class="s">"status"</span>
+    <span class="p">).</span><span class="n">execute</span><span class="p">()</span>
 
     <span class="c1"># Detach the stream from this broadcast so it can be reused
-</span>    <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">liveBroadcasts</span><span class="p">().</span><span class="nf">bind</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span>
-        <span class="n">part</span><span class="o">=</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span>
-    <span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
+</span>    <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">liveBroadcasts</span><span class="p">().</span><span class="n">bind</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span>
+        <span class="n">part</span><span class="o">=</span><span class="s">"status"</span>
+    <span class="p">).</span><span class="n">execute</span><span class="p">()</span>
 
     <span class="c1"># Enable embedding the archived livestream, since with a new account
 </span>    <span class="c1"># we can't embed the live stream itself
-</span>    <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">videos</span><span class="p">().</span><span class="nf">update</span><span class="p">(</span>
-        <span class="n">part</span><span class="o">=</span><span class="sh">"</span><span class="s">id,contentDetails,status</span><span class="sh">"</span><span class="p">,</span>
+</span>    <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">videos</span><span class="p">().</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">part</span><span class="o">=</span><span class="s">"id,contentDetails,status"</span><span class="p">,</span>
         <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-            <span class="sh">"</span><span class="s">id</span><span class="sh">"</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span>
-            <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="sh">"</span><span class="s">embeddable</span><span class="sh">"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">"id"</span><span class="p">:</span> <span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span>
+            <span class="s">"status"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">"embeddable"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
-    <span class="p">).</span><span class="nf">execute</span><span class="p">()</span></code></pre></figure>
+    <span class="p">).</span><span class="n">execute</span><span class="p">()</span></code></pre></figure>
 
 <h2 id="42-chat-synchronization-bot">4.2. Chat Synchronization Bot</h2>
 
@@ -1001,12 +1001,12 @@ The bot fetches the live stream viewer stats through the
 <code class="language-plaintext highlighter-rouge">liveStreamingDetails</code> part:</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Session.get_broadcast_statistics in schedule.py
-</span><span class="k">def</span> <span class="nf">get_broadcast_statistics</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="nf">videos</span><span class="p">().</span><span class="nf">list</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">(),</span>
-        <span class="n">part</span><span class="o">=</span><span class="sh">"</span><span class="s">liveStreamingDetails</span><span class="sh">"</span>
-    <span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="sh">"</span><span class="s">items</span><span class="sh">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="sh">"</span><span class="s">liveStreamingDetails</span><span class="sh">"</span><span class="p">]</span></code></pre></figure>
+</span><span class="k">def</span> <span class="nf">get_broadcast_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">auth</span><span class="p">.</span><span class="n">youtube</span><span class="p">.</span><span class="n">videos</span><span class="p">().</span><span class="nb">list</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">(),</span>
+        <span class="n">part</span><span class="o">=</span><span class="s">"liveStreamingDetails"</span>
+    <span class="p">).</span><span class="n">execute</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s">"items"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s">"liveStreamingDetails"</span><span class="p">]</span></code></pre></figure>
 
 <p>The bot would request this information for the current live sessions every minute.
 After 10 minutes had passed since it last posted an update it would plot the
@@ -1023,34 +1023,34 @@ An example of the plot made by the bot is shown in Figure 3.</p>
 </span><span class="k">async</span> <span class="k">def</span> <span class="nf">update_viewer_stats</span><span class="p">():</span>
     <span class="k">global</span> <span class="n">last_send</span>
     <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
-        <span class="n">current_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">current_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
         <span class="n">elapsed</span> <span class="o">=</span> <span class="n">current_time</span> <span class="o">-</span> <span class="n">last_send</span>
-        <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">views</span> <span class="ow">in</span> <span class="n">video_stats</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">views</span> <span class="ow">in</span> <span class="n">video_stats</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">video</span> <span class="o">=</span> <span class="n">videos</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
-            <span class="n">stats</span> <span class="o">=</span> <span class="n">video</span><span class="p">.</span><span class="nf">get_broadcast_statistics</span><span class="p">()</span>
-            <span class="k">if</span> <span class="sh">"</span><span class="s">concurrentViewers</span><span class="sh">"</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
-                <span class="n">viewers</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="sh">'</span><span class="s">concurrentViewers</span><span class="sh">'</span><span class="p">])</span>
-                <span class="n">views</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">viewers</span><span class="p">)</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="n">video</span><span class="p">.</span><span class="n">get_broadcast_statistics</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s">"concurrentViewers"</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+                <span class="n">viewers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s">'concurrentViewers'</span><span class="p">])</span>
+                <span class="n">views</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">viewers</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">continue</span>
 
-            <span class="k">if</span> <span class="n">elapsed</span> <span class="o">&gt;</span> <span class="nf">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">elapsed</span> <span class="o">&gt;</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
                 <span class="n">last_send</span> <span class="o">=</span> <span class="n">current_time</span>
-                <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-                <span class="n">ax</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">views</span><span class="p">))),</span> <span class="n">views</span><span class="p">)</span>
-                <span class="n">ax</span><span class="p">.</span><span class="nf">set_ylabel</span><span class="p">(</span><span class="sh">"</span><span class="s">Viewers</span><span class="sh">"</span><span class="p">)</span>
-                <span class="n">ax</span><span class="p">.</span><span class="nf">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="nf">max</span><span class="p">(</span><span class="n">video_stats</span><span class="p">[</span><span class="n">video</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">()])</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span>
-                <span class="n">ax</span><span class="p">.</span><span class="nf">get_xaxis</span><span class="p">().</span><span class="nf">set_ticks</span><span class="p">([])</span>
-                <span class="n">plot_filename</span> <span class="o">=</span> <span class="n">video</span><span class="p">.</span><span class="nf">youtube_broadcast_id</span><span class="p">()</span> <span class="o">+</span> <span class="sh">"</span><span class="s">.png</span><span class="sh">"</span>
-                <span class="n">fig</span><span class="p">.</span><span class="nf">savefig</span><span class="p">(</span><span class="n">plot_filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="sh">"</span><span class="s">tight</span><span class="sh">"</span><span class="p">)</span>
-                <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">plot_filename</span><span class="p">,</span> <span class="sh">"</span><span class="s">rb</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+                <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="n">ax</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">views</span><span class="p">))),</span> <span class="n">views</span><span class="p">)</span>
+                <span class="n">ax</span><span class="p">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">"Viewers"</span><span class="p">)</span>
+                <span class="n">ax</span><span class="p">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">video_stats</span><span class="p">[</span><span class="n">video</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">()])</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span>
+                <span class="n">ax</span><span class="p">.</span><span class="n">get_xaxis</span><span class="p">().</span><span class="n">set_ticks</span><span class="p">([])</span>
+                <span class="n">plot_filename</span> <span class="o">=</span> <span class="n">video</span><span class="p">.</span><span class="n">youtube_broadcast_id</span><span class="p">()</span> <span class="o">+</span> <span class="s">".png"</span>
+                <span class="n">fig</span><span class="p">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">plot_filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s">"tight"</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">plot_filename</span><span class="p">,</span> <span class="s">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">prev_message</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
-                        <span class="k">await</span> <span class="n">prev_message</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="nf">delete</span><span class="p">()</span>
-                    <span class="n">prev_message</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="k">await</span> <span class="n">channels</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="nf">send</span><span class="p">(</span><span class="sh">"</span><span class="s">Viewer statistics</span><span class="sh">"</span><span class="p">,</span>
-                            <span class="nb">file</span><span class="o">=</span><span class="n">discord</span><span class="p">.</span><span class="nc">File</span><span class="p">(</span><span class="n">fp</span><span class="p">))</span>
-                <span class="n">plt</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
-                <span class="n">os</span><span class="p">.</span><span class="nf">remove</span><span class="p">(</span><span class="n">plot_filename</span><span class="p">)</span></code></pre></figure>
+                        <span class="k">await</span> <span class="n">prev_message</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">delete</span><span class="p">()</span>
+                    <span class="n">prev_message</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="k">await</span> <span class="n">channels</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">send</span><span class="p">(</span><span class="s">"Viewer statistics"</span><span class="p">,</span>
+                            <span class="nb">file</span><span class="o">=</span><span class="n">discord</span><span class="p">.</span><span class="n">File</span><span class="p">(</span><span class="n">fp</span><span class="p">))</span>
+                <span class="n">plt</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">os</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">plot_filename</span><span class="p">)</span></code></pre></figure>
 
 <div class="col-12 text-center">
 <img class="img-fluid" src="https://cdn.willusher.io/img/jEct3fA.webp" />
