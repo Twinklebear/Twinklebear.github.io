@@ -225,11 +225,11 @@ The script will pick the output target bitrate based on the video resolution, wh
 can increase or decrease as desired by editing <a href="https://github.com/Twinklebear/fbed/blob/main/fbed.py#L52-L57">the script</a>:</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Pick bitrate based on resolution, 1080p (8Mbps), 720p (5Mbps), smaller (3Mbps)
-</span><span class="n">bitrate</span> <span class="o">=</span> <span class="s">"3M"</span>
-<span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s">"height"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">720</span><span class="p">:</span>
-    <span class="n">bitrate</span> <span class="o">=</span> <span class="s">"8M"</span>
-<span class="k">elif</span> <span class="n">info</span><span class="p">[</span><span class="s">"height"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">480</span><span class="p">:</span>
-    <span class="n">bitrate</span> <span class="o">=</span> <span class="s">"5M"</span></code></pre></figure>
+</span><span class="n">bitrate</span> <span class="o">=</span> <span class="sh">"</span><span class="s">3M</span><span class="sh">"</span>
+<span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="sh">"</span><span class="s">height</span><span class="sh">"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">720</span><span class="p">:</span>
+    <span class="n">bitrate</span> <span class="o">=</span> <span class="sh">"</span><span class="s">8M</span><span class="sh">"</span>
+<span class="k">elif</span> <span class="n">info</span><span class="p">[</span><span class="sh">"</span><span class="s">height</span><span class="sh">"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">480</span><span class="p">:</span>
+    <span class="n">bitrate</span> <span class="o">=</span> <span class="sh">"</span><span class="s">5M</span><span class="sh">"</span></code></pre></figure>
 
 <p>You can also change the encoder used to select a different hardware encoder (e.g., <code class="language-plaintext highlighter-rouge">h264_nvenc</code> on Nvidia GPUs,
 <code class="language-plaintext highlighter-rouge">h264_qsv</code> on Intel GPUs, etc.) by changing the value of <code class="language-plaintext highlighter-rouge">c:v</code> in the <a href="https://github.com/Twinklebear/fbed/blob/main/fbed.py#L58-L67"><code class="language-plaintext highlighter-rouge">encoding_args</code></a>
@@ -246,12 +246,12 @@ to get progress information from FFmpeg, discussed below.</p>
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">encoding_args</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># HWAccel for RPi4, may need to pick a different encoder
 </span>    <span class="c1"># for HW accel on other systems
-</span>    <span class="s">"c:v"</span><span class="p">:</span> <span class="s">"h264_v4l2m2m"</span><span class="p">,</span>
-    <span class="s">"num_output_buffers"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
-    <span class="s">"num_capture_buffers"</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
-    <span class="s">"b:v"</span><span class="p">:</span> <span class="n">bitrate</span><span class="p">,</span>
-    <span class="s">"c:a"</span><span class="p">:</span> <span class="s">"copy"</span><span class="p">,</span>
-    <span class="s">"progress"</span><span class="p">:</span> <span class="sa">f</span><span class="s">"pipe:</span><span class="si">{</span><span class="bp">self</span><span class="p">.</span><span class="n">pipe_write</span><span class="si">}</span><span class="s">"</span>
+</span>    <span class="sh">"</span><span class="s">c:v</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">h264_v4l2m2m</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">num_output_buffers</span><span class="sh">"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">num_capture_buffers</span><span class="sh">"</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">b:v</span><span class="sh">"</span><span class="p">:</span> <span class="n">bitrate</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">c:a</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">copy</span><span class="sh">"</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">progress</span><span class="sh">"</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="s">pipe:</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">pipe_write</span><span class="si">}</span><span class="sh">"</span>
 <span class="p">}</span></code></pre></figure>
 
 <h2 id="monitoring-ffmpegs-progress">Monitoring FFmpeg’s Progress</h2>
@@ -288,7 +288,7 @@ it would take 2 hours.</p>
 and total length of the video we can compute the percentage of the video FFmpeg has
 finished so far to display a progress bar:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.0</span> <span class="o">*</span> <span class="n">out_time</span><span class="p">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">/</span> <span class="n">video_duration</span><span class="p">.</span><span class="n">total_seconds</span><span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.0</span> <span class="o">*</span> <span class="n">out_time</span><span class="p">.</span><span class="nf">total_seconds</span><span class="p">())</span> <span class="o">/</span> <span class="n">video_duration</span><span class="p">.</span><span class="nf">total_seconds</span><span class="p">()</span></code></pre></figure>
 
 <p>Since we also know how fast FFmpeg is encoding the video relative to regular playback
 speed, we can estimate how much longer it will take until the encoding is finished:</p>

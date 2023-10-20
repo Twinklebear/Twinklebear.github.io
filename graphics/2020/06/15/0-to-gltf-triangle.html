@@ -176,19 +176,19 @@ After this setup, we can load our shaders and vertex
 data, configure our render targets, and build our render pipeline, to draw
 our triangle!</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">(</span><span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">alert</span><span class="p">(</span><span class="dl">"</span><span class="s2">WebGPU is not supported/enabled in your browser</span><span class="dl">"</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">(</span><span class="k">async </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nb">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">alert</span><span class="p">(</span><span class="dl">"</span><span class="s2">WebGPU is not supported/enabled in your browser</span><span class="dl">"</span><span class="p">);</span>
         <span class="k">return</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="c1">// Get a GPU device to render with</span>
-    <span class="kd">var</span> <span class="nx">adapter</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">.</span><span class="nx">requestAdapter</span><span class="p">();</span>
-    <span class="kd">var</span> <span class="nx">device</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">adapter</span><span class="p">.</span><span class="nx">requestDevice</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">adapter</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">.</span><span class="nf">requestAdapter</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">device</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">adapter</span><span class="p">.</span><span class="nf">requestDevice</span><span class="p">();</span>
 
     <span class="c1">// Get a context to display our rendered image on the canvas</span>
-    <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">webgpu-canvas</span><span class="dl">"</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">"</span><span class="s2">gpupresent</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">webgpu-canvas</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nf">getContext</span><span class="p">(</span><span class="dl">"</span><span class="s2">gpupresent</span><span class="dl">"</span><span class="p">);</span>
 
     <span class="c1">// Setup shader modules</span>
     <span class="c1">// ....</span>
@@ -301,30 +301,30 @@ bytecode and writes it to stdout.</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1">#!/usr/bin/env python3
 </span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">subprocess</span>
 
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"Usage &lt;glslc&gt; &lt;shader&gt; &lt;var_name&gt; [glslc_args...]"</span><span class="p">)</span>
-    <span class="n">sys</span><span class="p">.</span><span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Usage &lt;glslc&gt; &lt;shader&gt; &lt;var_name&gt; [glslc_args...]</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">sys</span><span class="p">.</span><span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">glslc</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">shader</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 <span class="n">var_name</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 
-<span class="n">compiled_shader</span> <span class="o">=</span> <span class="s">""</span>
-<span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">glslc</span><span class="p">,</span> <span class="n">shader</span><span class="p">,</span> <span class="s">"-mfmt=c"</span><span class="p">]</span>
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
-    <span class="n">args</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">:])</span>
+<span class="n">compiled_shader</span> <span class="o">=</span> <span class="sh">""</span>
+<span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">glslc</span><span class="p">,</span> <span class="n">shader</span><span class="p">,</span> <span class="sh">"</span><span class="s">-mfmt=c</span><span class="sh">"</span><span class="p">]</span>
+<span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="n">args</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">:])</span>
 
-<span class="n">subprocess</span><span class="p">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"a.spv"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">compiled_code</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="n">compiled_shader</span> <span class="o">=</span> <span class="s">"const "</span> <span class="o">+</span> <span class="n">var_name</span> <span class="o">+</span> <span class="s">" = new Uint32Array(["</span> <span class="o">+</span> <span class="n">compiled_code</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">"]);</span><span class="se">\n</span><span class="s">"</span>
+<span class="n">subprocess</span><span class="p">.</span><span class="nf">check_output</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+<span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">"</span><span class="s">a.spv</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">compiled_code</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">()</span>
+    <span class="n">compiled_shader</span> <span class="o">=</span> <span class="sh">"</span><span class="s">const </span><span class="sh">"</span> <span class="o">+</span> <span class="n">var_name</span> <span class="o">+</span> <span class="sh">"</span><span class="s"> = new Uint32Array([</span><span class="sh">"</span> <span class="o">+</span> <span class="n">compiled_code</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="sh">"</span><span class="s">]);</span><span class="se">\n</span><span class="sh">"</span>
 
-<span class="n">os</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"a.spv"</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">compiled_shader</span><span class="p">)</span></code></pre></figure>
+<span class="n">os</span><span class="p">.</span><span class="nf">remove</span><span class="p">(</span><span class="sh">"</span><span class="s">a.spv</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">compiled_shader</span><span class="p">)</span></code></pre></figure>
 
 <p>To compile a shader you can run the script and pass the glslc compiler, your shader,
 and the variable name to use for the array. The compiled shader bytecode array will
@@ -346,16 +346,16 @@ to call in the shader.</p>
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Setup shader modules</span>
 
 <span class="c1">// Embedded SPV bytecode for our shaders</span>
-<span class="kd">const</span> <span class="nx">triangle_vert_spv</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Uint32Array</span><span class="p">([</span><span class="cm">/* .... */</span><span class="p">]);</span>
-<span class="kd">const</span> <span class="nx">triangle_frag_spv</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Uint32Array</span><span class="p">([</span><span class="cm">/* .... */</span><span class="p">]);</span>
+<span class="kd">const</span> <span class="nx">triangle_vert_spv</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Uint32Array</span><span class="p">([</span><span class="cm">/* .... */</span><span class="p">]);</span>
+<span class="kd">const</span> <span class="nx">triangle_frag_spv</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Uint32Array</span><span class="p">([</span><span class="cm">/* .... */</span><span class="p">]);</span>
 
-<span class="kd">var</span> <span class="nx">vertModule</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createShaderModule</span><span class="p">({</span><span class="na">code</span><span class="p">:</span> <span class="nx">triangle_vert_spv</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">vertModule</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createShaderModule</span><span class="p">({</span><span class="na">code</span><span class="p">:</span> <span class="nx">triangle_vert_spv</span><span class="p">});</span>
 <span class="kd">var</span> <span class="nx">vertexStage</span> <span class="o">=</span>  <span class="p">{</span>
     <span class="na">module</span><span class="p">:</span> <span class="nx">vertModule</span><span class="p">,</span>
     <span class="na">entryPoint</span><span class="p">:</span> <span class="dl">"</span><span class="s2">main</span><span class="dl">"</span>
 <span class="p">};</span>
 
-<span class="kd">var</span> <span class="nx">fragModule</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createShaderModule</span><span class="p">({</span><span class="na">code</span><span class="p">:</span> <span class="nx">triangle_frag_spv</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">fragModule</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createShaderModule</span><span class="p">({</span><span class="na">code</span><span class="p">:</span> <span class="nx">triangle_frag_spv</span><span class="p">});</span>
 <span class="kd">var</span> <span class="nx">fragmentStage</span> <span class="o">=</span>  <span class="p">{</span>
     <span class="na">module</span><span class="p">:</span> <span class="nx">fragModule</span><span class="p">,</span>
     <span class="na">entryPoint</span><span class="p">:</span> <span class="dl">"</span><span class="s2">main</span><span class="dl">"</span>
@@ -389,14 +389,14 @@ Finally, we have to unmap the buffer before using it later in rendering.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Specify vertex data</span>
 <span class="c1">// Allocate room for the vertex data: 3 vertices, each with 2 float4's</span>
-<span class="kd">var</span> <span class="nx">dataBuf</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">dataBuf</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBuffer</span><span class="p">({</span>
     <span class="na">size</span><span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
     <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">,</span>
     <span class="na">mappedAtCreation</span><span class="p">:</span> <span class="kc">true</span>
 <span class="p">});</span>
 
 <span class="c1">// Interleaved positions and colors</span>
-<span class="k">new</span> <span class="nb">Float32Array</span><span class="p">(</span><span class="nx">dataBuf</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="kd">set</span><span class="p">([</span>
+<span class="k">new</span> <span class="nc">Float32Array</span><span class="p">(</span><span class="nx">dataBuf</span><span class="p">.</span><span class="nf">getMappedRange</span><span class="p">()).</span><span class="nf">set</span><span class="p">([</span>
     <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1">// position</span>
     <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
     <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// position</span>
@@ -404,7 +404,7 @@ Finally, we have to unmap the buffer before using it later in rendering.</p>
     <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// position</span>
     <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="c1">// color</span>
 <span class="p">]);</span>
-<span class="nx">dataBuf</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span></code></pre></figure>
+<span class="nx">dataBuf</span><span class="p">.</span><span class="nf">unmap</span><span class="p">();</span></code></pre></figure>
 
 <p>In the rendering pipeline, we’ll specify an array of
 <a href="https://gpuweb.github.io/gpuweb/#dictdef-gpuvertexbufferlayoutdescriptor"><code class="language-plaintext highlighter-rouge">GPUVertexBufferLayoutDescriptor</code></a>
@@ -478,7 +478,7 @@ they’ll be used as output attachments.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Setup render outputs</span>
 <span class="kd">var</span> <span class="nx">swapChainFormat</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">bgra8unorm</span><span class="dl">"</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">swapChain</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">configureSwapChain</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">swapChain</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">configureSwapChain</span><span class="p">({</span>
     <span class="na">device</span><span class="p">:</span> <span class="nx">device</span><span class="p">,</span>
     <span class="na">format</span><span class="p">:</span> <span class="nx">swapChainFormat</span><span class="p">,</span>
     <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUTextureUsage</span><span class="p">.</span><span class="nx">OUTPUT_ATTACHMENT</span>
@@ -492,7 +492,7 @@ directly to this texture and thus specify it will be used as
 an output attachment.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">depthFormat</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">depth24plus-stencil8</span><span class="dl">"</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">depthTexture</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createTexture</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">depthTexture</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createTexture</span><span class="p">({</span>
     <span class="na">size</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">width</span><span class="p">:</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span>
         <span class="na">height</span><span class="p">:</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span>
@@ -527,9 +527,9 @@ chain format. We’ll also use our depth buffer, and specify the depth state
 describing how the depth buffer should be used.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create render pipeline</span>
-<span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span><span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[]});</span>
+<span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createPipelineLayout</span><span class="p">({</span><span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[]});</span>
 
-<span class="kd">var</span> <span class="nx">renderPipeline</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createRenderPipeline</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">renderPipeline</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createRenderPipeline</span><span class="p">({</span>
     <span class="na">layout</span><span class="p">:</span> <span class="nx">layout</span><span class="p">,</span>
     <span class="na">vertexStage</span><span class="p">:</span> <span class="nx">vertexStage</span><span class="p">,</span>
     <span class="na">fragmentStage</span><span class="p">:</span> <span class="nx">fragmentStage</span><span class="p">,</span>
@@ -563,7 +563,7 @@ to the current swap chain image, we don’t set it just yet.</p>
         <span class="na">loadValue</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="p">}],</span>
     <span class="na">depthStencilAttachment</span><span class="p">:</span> <span class="p">{</span>
-        <span class="na">attachment</span><span class="p">:</span> <span class="nx">depthTexture</span><span class="p">.</span><span class="nx">createView</span><span class="p">(),</span>
+        <span class="na">attachment</span><span class="p">:</span> <span class="nx">depthTexture</span><span class="p">.</span><span class="nf">createView</span><span class="p">(),</span>
         <span class="na">depthLoadValue</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="na">depthStoreOp</span><span class="p">:</span> <span class="dl">"</span><span class="s2">store</span><span class="dl">"</span><span class="p">,</span>
         <span class="na">stencilLoadValue</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -596,22 +596,22 @@ canvas as shown below!</p>
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Render!</span>
 <span class="kd">var</span> <span class="nx">frame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Update the color output image to the current swap chain render target</span>
-    <span class="nx">renderPassDesc</span><span class="p">.</span><span class="nx">colorAttachments</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">attachment</span> <span class="o">=</span> <span class="nx">swapChain</span><span class="p">.</span><span class="nx">getCurrentTexture</span><span class="p">().</span><span class="nx">createView</span><span class="p">();</span>
+    <span class="nx">renderPassDesc</span><span class="p">.</span><span class="nx">colorAttachments</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">attachment</span> <span class="o">=</span> <span class="nx">swapChain</span><span class="p">.</span><span class="nf">getCurrentTexture</span><span class="p">().</span><span class="nf">createView</span><span class="p">();</span>
 
-    <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createCommandEncoder</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createCommandEncoder</span><span class="p">();</span>
     
-    <span class="kd">var</span> <span class="nx">renderPass</span> <span class="o">=</span> <span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">beginRenderPass</span><span class="p">(</span><span class="nx">renderPassDesc</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">renderPass</span> <span class="o">=</span> <span class="nx">commandEncoder</span><span class="p">.</span><span class="nf">beginRenderPass</span><span class="p">(</span><span class="nx">renderPassDesc</span><span class="p">);</span>
 
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setPipeline</span><span class="p">(</span><span class="nx">renderPipeline</span><span class="p">);</span>
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dataBuf</span><span class="p">);</span>
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">setPipeline</span><span class="p">(</span><span class="nx">renderPipeline</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dataBuf</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">draw</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">endPass</span><span class="p">();</span>
-    <span class="nx">device</span><span class="p">.</span><span class="nx">defaultQueue</span><span class="p">.</span><span class="nx">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">finish</span><span class="p">()]);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">endPass</span><span class="p">();</span>
+    <span class="nx">device</span><span class="p">.</span><span class="nx">defaultQueue</span><span class="p">.</span><span class="nf">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nf">finish</span><span class="p">()]);</span>
 
-    <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
+    <span class="nf">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span></code></pre></figure>
+<span class="nf">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span></code></pre></figure>
 
 <div class="col-12 row">
     <div class="col-12 d-flex justify-content-center">

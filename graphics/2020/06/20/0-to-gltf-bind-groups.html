@@ -222,7 +222,7 @@ specifying that pipelines created using the layout (i.e., our rendering pipeline
 will use bind groups matching the bind group layouts specified.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create the bind group layout</span>
-<span class="kd">var</span> <span class="nx">bindGroupLayout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBindGroupLayout</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">bindGroupLayout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBindGroupLayout</span><span class="p">({</span>
     <span class="na">entries</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
             <span class="na">binding</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -234,7 +234,7 @@ will use bind groups matching the bind group layouts specified.</p>
 <span class="p">});</span>
 
 <span class="c1">// Create the pipeline layout, specifying which bind group layouts will be used</span>
-<span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span><span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[</span><span class="nx">bindGroupLayout</span><span class="p">]});</span></code></pre></figure>
+<span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createPipelineLayout</span><span class="p">({</span><span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[</span><span class="nx">bindGroupLayout</span><span class="p">]});</span></code></pre></figure>
 
 <h2 id="creating-a-uniform-buffer-and-bind-group">Creating a Uniform Buffer and Bind Group</h2>
 
@@ -244,7 +244,7 @@ The latter usage will allow us to update the buffer’s data each frame
 by copying in a new view transform.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create a buffer to store the view parameters</span>
-<span class="kd">var</span> <span class="nx">viewParamsBuffer</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">viewParamsBuffer</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBuffer</span><span class="p">({</span>
     <span class="na">size</span><span class="p">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
     <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">UNIFORM</span> <span class="o">|</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_DST</span>
 <span class="p">});</span></code></pre></figure>
@@ -260,7 +260,7 @@ need to match; however, for each binding index specified in the layout,
 a matching binding must be specified in the bind group.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create a bind group which places our view params buffer at binding 0</span>
-<span class="kd">var</span> <span class="nx">bindGroup</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBindGroup</span><span class="p">({</span>
+<span class="kd">var</span> <span class="nx">bindGroup</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBindGroup</span><span class="p">({</span>
     <span class="na">layout</span><span class="p">:</span> <span class="nx">bindGroupLayout</span><span class="p">,</span>
     <span class="na">entries</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
@@ -287,28 +287,28 @@ all we’ll need in the end is to update the view transform based on
 the user’s inputs.</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// Create an Arcball camera and view projection matrix</span>
-<span class="kd">var</span> <span class="nx">camera</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ArcballCamera</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="kd">var</span> <span class="nx">camera</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArcballCamera</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
     <span class="mf">0.5</span><span class="p">,</span> <span class="p">[</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">]);</span>
 
 <span class="c1">// Create a perspective projection matrix</span>
-<span class="kd">var</span> <span class="nx">projection</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">perspective</span><span class="p">(</span><span class="nx">mat4</span><span class="p">.</span><span class="nx">create</span><span class="p">(),</span> <span class="mi">50</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">,</span>
+<span class="kd">var</span> <span class="nx">projection</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">perspective</span><span class="p">(</span><span class="nx">mat4</span><span class="p">.</span><span class="nf">create</span><span class="p">(),</span> <span class="mi">50</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">,</span>
     <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
 
 <span class="c1">// Matrix which will store the computed projection * view matrix</span>
-<span class="kd">var</span> <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">create</span><span class="p">();</span>
 
 <span class="c1">// Controller utility for interacting with the canvas and driving the Arcball camera</span>
-<span class="kd">var</span> <span class="nx">controller</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Controller</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">controller</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Controller</span><span class="p">();</span>
 <span class="nx">controller</span><span class="p">.</span><span class="nx">mousemove</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">prev</span><span class="p">,</span> <span class="nx">cur</span><span class="p">,</span> <span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">buttons</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">camera</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nx">prev</span><span class="p">,</span> <span class="nx">cur</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">buttons</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">camera</span><span class="p">.</span><span class="nf">rotate</span><span class="p">(</span><span class="nx">prev</span><span class="p">,</span> <span class="nx">cur</span><span class="p">);</span>
 
-    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">buttons</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">camera</span><span class="p">.</span><span class="nx">pan</span><span class="p">([</span><span class="nx">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="nx">prev</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">prev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]]);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">buttons</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">camera</span><span class="p">.</span><span class="nf">pan</span><span class="p">([</span><span class="nx">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="nx">prev</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">prev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">cur</span><span class="p">[</span><span class="mi">1</span><span class="p">]]);</span>
     <span class="p">}</span>
 <span class="p">};</span>
-<span class="nx">controller</span><span class="p">.</span><span class="nx">wheel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amt</span><span class="p">)</span> <span class="p">{</span> <span class="nx">camera</span><span class="p">.</span><span class="nx">zoom</span><span class="p">(</span><span class="nx">amt</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">);</span> <span class="p">};</span>
-<span class="nx">controller</span><span class="p">.</span><span class="nx">registerForCanvas</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span></code></pre></figure>
+<span class="nx">controller</span><span class="p">.</span><span class="nx">wheel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">amt</span><span class="p">)</span> <span class="p">{</span> <span class="nx">camera</span><span class="p">.</span><span class="nf">zoom</span><span class="p">(</span><span class="nx">amt</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">);</span> <span class="p">};</span>
+<span class="nx">controller</span><span class="p">.</span><span class="nf">registerForCanvas</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span></code></pre></figure>
 
 <h2 id="updating-the-view-transform-during-rendering">Updating the View Transform During Rendering</h2>
 
@@ -335,34 +335,34 @@ view transform applied, as shown below!</p>
 
 <figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">frame</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">renderPassDesc</span><span class="p">.</span><span class="nx">colorAttachments</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">attachment</span> <span class="o">=</span>
-        <span class="nx">swapChain</span><span class="p">.</span><span class="nx">getCurrentTexture</span><span class="p">().</span><span class="nx">createView</span><span class="p">();</span>
+        <span class="nx">swapChain</span><span class="p">.</span><span class="nf">getCurrentTexture</span><span class="p">().</span><span class="nf">createView</span><span class="p">();</span>
 
     <span class="c1">// Compute and upload the combined projection and view matrix</span>
-    <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">mul</span><span class="p">(</span><span class="nx">projView</span><span class="p">,</span> <span class="nx">projection</span><span class="p">,</span> <span class="nx">camera</span><span class="p">.</span><span class="nx">camera</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">upload</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
+    <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">mul</span><span class="p">(</span><span class="nx">projView</span><span class="p">,</span> <span class="nx">projection</span><span class="p">,</span> <span class="nx">camera</span><span class="p">.</span><span class="nx">camera</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">upload</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBuffer</span><span class="p">({</span>
         <span class="na">size</span><span class="p">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
         <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_SRC</span><span class="p">,</span>
         <span class="na">mappedAtCreation</span><span class="p">:</span> <span class="kc">true</span>
     <span class="p">});</span>
-    <span class="k">new</span> <span class="nb">Float32Array</span><span class="p">(</span><span class="nx">upload</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="kd">set</span><span class="p">(</span><span class="nx">projView</span><span class="p">);</span>
-    <span class="nx">upload</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span>
+    <span class="k">new</span> <span class="nc">Float32Array</span><span class="p">(</span><span class="nx">upload</span><span class="p">.</span><span class="nf">getMappedRange</span><span class="p">()).</span><span class="nf">set</span><span class="p">(</span><span class="nx">projView</span><span class="p">);</span>
+    <span class="nx">upload</span><span class="p">.</span><span class="nf">unmap</span><span class="p">();</span>
 
-    <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createCommandEncoder</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createCommandEncoder</span><span class="p">();</span>
 
     <span class="c1">// Copy the upload buffer to our uniform buffer</span>
-    <span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">copyBufferToBuffer</span><span class="p">(</span><span class="nx">upload</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">viewParamsBuffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
+    <span class="nx">commandEncoder</span><span class="p">.</span><span class="nf">copyBufferToBuffer</span><span class="p">(</span><span class="nx">upload</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">viewParamsBuffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
 
-    <span class="kd">var</span> <span class="nx">renderPass</span> <span class="o">=</span> <span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">beginRenderPass</span><span class="p">(</span><span class="nx">renderPassDesc</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">renderPass</span> <span class="o">=</span> <span class="nx">commandEncoder</span><span class="p">.</span><span class="nf">beginRenderPass</span><span class="p">(</span><span class="nx">renderPassDesc</span><span class="p">);</span>
 
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setPipeline</span><span class="p">(</span><span class="nx">renderPipeline</span><span class="p">);</span>
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dataBuf</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">setPipeline</span><span class="p">(</span><span class="nx">renderPipeline</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">dataBuf</span><span class="p">);</span>
     <span class="c1">// Set the bind group to its associated slot</span>
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">setBindGroup</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">bindGroup</span><span class="p">);</span>
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">setBindGroup</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">bindGroup</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">draw</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">endPass</span><span class="p">();</span>
-    <span class="nx">device</span><span class="p">.</span><span class="nx">defaultQueue</span><span class="p">.</span><span class="nx">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">finish</span><span class="p">()]);</span>
-    <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">endPass</span><span class="p">();</span>
+    <span class="nx">device</span><span class="p">.</span><span class="nx">defaultQueue</span><span class="p">.</span><span class="nf">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nf">finish</span><span class="p">()]);</span>
+    <span class="nf">requestAnimationFrame</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
 <div class="col-12 row">

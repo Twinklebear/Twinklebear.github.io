@@ -209,10 +209,10 @@
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Flatten the glTF node tree to flatten the hierarchical transforms</span>
 <span class="c1">// The root node is included in the flattened tree</span>
-<span class="kd">function</span> <span class="nx">flattenTree</span><span class="p">(</span><span class="nx">allNodes</span><span class="p">,</span> <span class="nx">node</span><span class="p">,</span> <span class="nx">parent_transform</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">flattenTree</span><span class="p">(</span><span class="nx">allNodes</span><span class="p">,</span> <span class="nx">node</span><span class="p">,</span> <span class="nx">parent_transform</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">flattened</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="kd">var</span> <span class="nx">tfm</span> <span class="o">=</span> <span class="nx">readNodeTransform</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">tfm</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">mul</span><span class="p">(</span><span class="nx">tfm</span><span class="p">,</span> <span class="nx">parent_transform</span><span class="p">,</span> <span class="nx">tfm</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">tfm</span> <span class="o">=</span> <span class="nf">readNodeTransform</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">tfm</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">mul</span><span class="p">(</span><span class="nx">tfm</span><span class="p">,</span> <span class="nx">parent_transform</span><span class="p">,</span> <span class="nx">tfm</span><span class="p">);</span>
 
     <span class="c1">// Add the flattened current node</span>
     <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="p">{</span>
@@ -220,12 +220,12 @@
         <span class="na">mesh</span><span class="p">:</span> <span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">mesh</span><span class="dl">"</span><span class="p">],</span>
         <span class="na">camera</span><span class="p">:</span> <span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">camera</span><span class="dl">"</span><span class="p">],</span>
     <span class="p">};</span>
-    <span class="nx">flattened</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+    <span class="nx">flattened</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
 
     <span class="c1">// Loop through the node's children and recursively flatten them as well</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">children</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">children</span><span class="dl">"</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">flattened</span><span class="p">.</span><span class="nx">push</span><span class="p">(...</span><span class="nx">flattenTree</span><span class="p">(</span><span class="nx">allNodes</span><span class="p">,</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">children</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">children</span><span class="dl">"</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">flattened</span><span class="p">.</span><span class="nf">push</span><span class="p">(...</span><span class="nf">flattenTree</span><span class="p">(</span><span class="nx">allNodes</span><span class="p">,</span>
                                           <span class="nx">allNodes</span><span class="p">[</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">children</span><span class="dl">"</span><span class="p">][</span><span class="nx">i</span><span class="p">]],</span>
                                           <span class="nx">tfm</span><span class="p">));</span>
         <span class="p">}</span>
@@ -236,11 +236,11 @@
 
 <p>To read a node’s transform we write another function, <code class="language-plaintext highlighter-rouge">readNodeTransform</code>. A glTF node’s transform can either be specified through a column major matrix or a rotation quaternion, translation, and scale. We’re using using the <a href="https://glmatrix.net/">glMatrix library</a> for matrix math operations here.</p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">readNodeTransform</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">matrix</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">readNodeTransform</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">matrix</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">matrix</span><span class="dl">"</span><span class="p">];</span>
         <span class="c1">// Both glTF and gl matrix are column major</span>
-        <span class="k">return</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">fromValues</span><span class="p">(</span><span class="nx">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="k">return</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">fromValues</span><span class="p">(</span><span class="nx">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="nx">m</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
             <span class="nx">m</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
             <span class="nx">m</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
@@ -260,17 +260,17 @@
         <span class="kd">var</span> <span class="nx">scale</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
         <span class="kd">var</span> <span class="nx">rotation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
         <span class="kd">var</span> <span class="nx">translation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">scale</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">scale</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
             <span class="nx">scale</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">scale</span><span class="dl">"</span><span class="p">];</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">rotation</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">rotation</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
             <span class="nx">rotation</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">rotation</span><span class="dl">"</span><span class="p">];</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">translation</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">translation</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
             <span class="nx">translation</span> <span class="o">=</span> <span class="nx">node</span><span class="p">[</span><span class="dl">"</span><span class="s2">translation</span><span class="dl">"</span><span class="p">];</span>
         <span class="p">}</span>
-        <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
-        <span class="k">return</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">fromRotationTranslationScale</span><span class="p">(</span><span class="nx">m</span><span class="p">,</span> <span class="nx">rotation</span><span class="p">,</span> <span class="nx">translation</span><span class="p">,</span> <span class="nx">scale</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">create</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">fromRotationTranslationScale</span><span class="p">(</span><span class="nx">m</span><span class="p">,</span> <span class="nx">rotation</span><span class="p">,</span> <span class="nx">translation</span><span class="p">,</span> <span class="nx">scale</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -279,16 +279,16 @@
 
 <p>We’ll introduce two new classes, <code class="language-plaintext highlighter-rouge">GLTFScene</code> and <code class="language-plaintext highlighter-rouge">GLTFNode</code> to represent glTF scene and node objects respectively. The <code class="language-plaintext highlighter-rouge">GLTFScene</code> simply takes a flattened list of nodes that make up the scene. The nodes are expected to have been flattened by calling <code class="language-plaintext highlighter-rouge">flattenTree</code></p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFScene</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFScene</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">;</span>
   <span class="p">}</span>
 
-  <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span> <span class="nx">shaderModule</span><span class="p">,</span> <span class="nx">colorFormat</span><span class="p">,</span> <span class="nx">depthFormat</span><span class="p">,</span> <span class="nx">uniformsBGLayout</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span> <span class="nx">shaderModule</span><span class="p">,</span> <span class="nx">colorFormat</span><span class="p">,</span> <span class="nx">depthFormat</span><span class="p">,</span> <span class="nx">uniformsBGLayout</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Covered in the next section</span>
   <span class="p">}</span>
 
-  <span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Covered in the next section</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -296,18 +296,18 @@
 
 <p>The <code class="language-plaintext highlighter-rouge">GLTFNode</code> takes the node name, transform, and mesh.</p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFNode</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">transform</span><span class="p">,</span> <span class="nx">mesh</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFNode</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">transform</span><span class="p">,</span> <span class="nx">mesh</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">transform</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">mesh</span> <span class="o">=</span> <span class="nx">mesh</span><span class="p">;</span>
   <span class="p">}</span>
 
-  <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span> <span class="nx">shaderModule</span><span class="p">,</span> <span class="nx">colorFormat</span><span class="p">,</span> <span class="nx">depthFormat</span><span class="p">,</span> <span class="nx">uniformsBGLayout</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span> <span class="nx">shaderModule</span><span class="p">,</span> <span class="nx">colorFormat</span><span class="p">,</span> <span class="nx">depthFormat</span><span class="p">,</span> <span class="nx">uniformsBGLayout</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Covered in the next section</span>
   <span class="p">}</span>
 
-  <span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Covered in the next section</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -320,32 +320,32 @@
 <span class="c1">// Build the default GLTFScene, we just take all the mesh nodes for now</span>
 <span class="kd">var</span> <span class="nx">defaultSceneNodes</span> <span class="o">=</span> <span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">scenes</span><span class="dl">"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="dl">"</span><span class="s2">nodes</span><span class="dl">"</span><span class="p">];</span>
 <span class="c1">// If we have a default scene, load it, otherwise we use the first scene</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">scenes</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+<span class="k">if </span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">scenes</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
   <span class="nx">defaultSceneNodes</span> <span class="o">=</span> <span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">scenes</span><span class="dl">"</span><span class="p">][</span><span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">scene</span><span class="dl">"</span><span class="p">]][</span><span class="dl">"</span><span class="s2">nodes</span><span class="dl">"</span><span class="p">];</span>
 <span class="p">}</span>
 <span class="kd">var</span> <span class="nx">defaultNodes</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">defaultSceneNodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">defaultSceneNodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// Get each node referenced by the scene and flatten it and its children</span>
   <span class="c1">// out to a single-level scene so that we don't need to keep track of nested</span>
   <span class="c1">// transforms in the renderer</span>
   <span class="c1">// We'll need to put a bit more thought here when we start handling animated nodes</span>
   <span class="c1">// in the hierarchy. For now this is fine.</span>
   <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">nodes</span><span class="dl">"</span><span class="p">][</span><span class="nx">defaultSceneNodes</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
-  <span class="kd">var</span> <span class="nx">nodeTransform</span> <span class="o">=</span> <span class="nx">readNodeTransform</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">flattenedNodes</span> <span class="o">=</span> <span class="nx">flattenTree</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">nodes</span><span class="dl">"</span><span class="p">],</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">nodeTransform</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">nodeTransform</span> <span class="o">=</span> <span class="nf">readNodeTransform</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">flattenedNodes</span> <span class="o">=</span> <span class="nf">flattenTree</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">nodes</span><span class="dl">"</span><span class="p">],</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">nodeTransform</span><span class="p">);</span>
 
   <span class="c1">// Add all the mesh nodes in the flattened node list to the scene's default nodes</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">flattenedNodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">flattenedNodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">flattenedNodes</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">fn</span><span class="p">[</span><span class="dl">"</span><span class="s2">mesh</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
-      <span class="nx">defaultNodes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">GLTFNode</span><span class="p">(</span><span class="nx">n</span><span class="p">[</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">],</span> <span class="nx">fn</span><span class="p">[</span><span class="dl">"</span><span class="s2">matrix</span><span class="dl">"</span><span class="p">],</span> <span class="nx">meshes</span><span class="p">[</span><span class="nx">fn</span><span class="p">[</span><span class="dl">"</span><span class="s2">mesh</span><span class="dl">"</span><span class="p">]]));</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">fn</span><span class="p">[</span><span class="dl">"</span><span class="s2">mesh</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+      <span class="nx">defaultNodes</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="k">new</span> <span class="nc">GLTFNode</span><span class="p">(</span><span class="nx">n</span><span class="p">[</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">],</span> <span class="nx">fn</span><span class="p">[</span><span class="dl">"</span><span class="s2">matrix</span><span class="dl">"</span><span class="p">],</span> <span class="nx">meshes</span><span class="p">[</span><span class="nx">fn</span><span class="p">[</span><span class="dl">"</span><span class="s2">mesh</span><span class="dl">"</span><span class="p">]]));</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">loading-text</span><span class="dl">"</span><span class="p">).</span><span class="nx">hidden</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">loading-text</span><span class="dl">"</span><span class="p">).</span><span class="nx">hidden</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
-<span class="k">return</span> <span class="k">new</span> <span class="nx">GLTFScene</span><span class="p">(</span><span class="nx">defaultNodes</span><span class="p">);</span>
+<span class="k">return</span> <span class="k">new</span> <span class="nc">GLTFScene</span><span class="p">(</span><span class="nx">defaultNodes</span><span class="p">);</span>
 </code></pre></div></div>
 
 <h1 id="drawing-gltf-scenes-and-nodes">Drawing glTF Scenes and Nodes</h1>
@@ -356,17 +356,17 @@
 
 <p>The <code class="language-plaintext highlighter-rouge">GLTFScene</code> (<a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/4-full-scene/src/glb.js#L391">code</a>) is the entry point to dispatch <code class="language-plaintext highlighter-rouge">buildRenderPipeline</code> and <code class="language-plaintext highlighter-rouge">render</code> to the <code class="language-plaintext highlighter-rouge">GLTFNodes</code>. In <code class="language-plaintext highlighter-rouge">buildRenderPipeline</code> the scene just calls down to each of its nodes, but in <code class="language-plaintext highlighter-rouge">render</code> we can lift binding the view params bind group up, so that each mesh primitive no longer makes this redundant call.</p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFScene</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span> <span class="p">{...}</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFScene</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">nodes</span><span class="p">)</span> <span class="p">{...}</span>
 
-  <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+  <span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                       <span class="nx">shaderModule</span><span class="p">,</span>
                       <span class="nx">colorFormat</span><span class="p">,</span>
                       <span class="nx">depthFormat</span><span class="p">,</span>
                       <span class="nx">uniformsBGLayout</span><span class="p">)</span>
   <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                                         <span class="nx">shaderModule</span><span class="p">,</span>
                                         <span class="nx">colorFormat</span><span class="p">,</span>
                                         <span class="nx">depthFormat</span><span class="p">,</span>
@@ -374,13 +374,13 @@
     <span class="p">}</span>
   <span class="p">}</span>
 
-  <span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Setting bind group 0 containing the view params is shared by all</span>
     <span class="c1">// Nodes, Meshes, Primitives, so we can simply lift the call up here</span>
     <span class="c1">// and remove it from GLTFPrimitive.render</span>
-    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setBindGroup</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">);</span>
+    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">setBindGroup</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">);</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -390,35 +390,35 @@
 
 <p>The <code class="language-plaintext highlighter-rouge">GLTFNode</code> (<a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/4-full-scene/src/glb.js#L352">code</a>) is responsible for passing the transform to be applied to the mesh being rendered. As mentioned previously, this will be passed through a new uniform buffer. We’ll introduce a new bind group to hold the node parameters, which for now is just the transformation matrix. In <code class="language-plaintext highlighter-rouge">buildRenderPipeline</code> the <code class="language-plaintext highlighter-rouge">GLTFNode</code> creates and uploads the node transform and creates a new bind group referencing it. The bind group layout is passed on to the <code class="language-plaintext highlighter-rouge">GLTFMesh</code> and <code class="language-plaintext highlighter-rouge">GLTFPrimitive</code>, which we modify to take this new parameter and pass it to the pipeline layout creation call.</p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFNode</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">transform</span><span class="p">,</span> <span class="nx">mesh</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFNode</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">transform</span><span class="p">,</span> <span class="nx">mesh</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">transform</span> <span class="o">=</span> <span class="nx">transform</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">mesh</span> <span class="o">=</span> <span class="nx">mesh</span><span class="p">;</span>
   <span class="p">}</span>
 
-  <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span> <span class="nx">shaderModule</span><span class="p">,</span> <span class="nx">colorFormat</span><span class="p">,</span> <span class="nx">depthFormat</span><span class="p">,</span> <span class="nx">uniformsBGLayout</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span> <span class="nx">shaderModule</span><span class="p">,</span> <span class="nx">colorFormat</span><span class="p">,</span> <span class="nx">depthFormat</span><span class="p">,</span> <span class="nx">uniformsBGLayout</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Upload the node transform</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBuf</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBuf</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBuffer</span><span class="p">({</span>
       <span class="na">size</span><span class="p">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
       <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">UNIFORM</span> <span class="o">|</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_DST</span><span class="p">,</span>
       <span class="na">mappedAtCreation</span><span class="p">:</span> <span class="kc">true</span>
     <span class="p">});</span>
-    <span class="k">new</span> <span class="nb">Float32Array</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBuf</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="kd">set</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">transform</span><span class="p">)</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBuf</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span>
+    <span class="k">new</span> <span class="nc">Float32Array</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBuf</span><span class="p">.</span><span class="nf">getMappedRange</span><span class="p">()).</span><span class="nf">set</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">transform</span><span class="p">)</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBuf</span><span class="p">.</span><span class="nf">unmap</span><span class="p">();</span>
 
-    <span class="kd">var</span> <span class="nx">bindGroupLayout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBindGroupLayout</span><span class="p">({</span>
+    <span class="kd">var</span> <span class="nx">bindGroupLayout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBindGroupLayout</span><span class="p">({</span>
       <span class="na">entries</span><span class="p">:</span> <span class="p">[{</span>
         <span class="na">binding</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="na">visibility</span><span class="p">:</span> <span class="nx">GPUShaderStage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">,</span>
         <span class="na">buffer</span><span class="p">:</span> <span class="p">{</span><span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uniform</span><span class="dl">"</span><span class="p">}}]</span>
     <span class="p">});</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBG</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBindGroup</span><span class="p">({</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBG</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBindGroup</span><span class="p">({</span>
       <span class="na">layout</span><span class="p">:</span> <span class="nx">bindGroupLayout</span><span class="p">,</span>
       <span class="na">entries</span><span class="p">:</span> <span class="p">[{</span><span class="na">binding</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="na">resource</span><span class="p">:</span> <span class="p">{</span><span class="na">buffer</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBuf</span><span class="p">}}]</span>
     <span class="p">});</span>
 
-    <span class="k">this</span><span class="p">.</span><span class="nx">mesh</span><span class="p">.</span><span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">mesh</span><span class="p">.</span><span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                                   <span class="nx">shaderModule</span><span class="p">,</span>
                                   <span class="nx">colorFormat</span><span class="p">,</span>
                                   <span class="nx">depthFormat</span><span class="p">,</span>
@@ -426,10 +426,10 @@
                                   <span class="nx">bindGroupLayout</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Bind the node parameters bind group containing the node transform</span>
-    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setBindGroup</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBG</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">mesh</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">);</span>
+    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">setBindGroup</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodeParamsBG</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">mesh</span><span class="p">.</span><span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -440,10 +440,10 @@
 
 <p>This change is straightforward for the <code class="language-plaintext highlighter-rouge">GLTFMesh</code></p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFMesh</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">primitives</span><span class="p">)</span> <span class="p">{...}</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFMesh</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">primitives</span><span class="p">)</span> <span class="p">{...}</span>
 
-  <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+  <span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                       <span class="nx">shaderModule</span><span class="p">,</span>
                       <span class="nx">colorFormat</span><span class="p">,</span>
                       <span class="nx">depthFormat</span><span class="p">,</span>
@@ -452,8 +452,8 @@
   <span class="p">{</span>
     <span class="c1">// Only change: take the nodeParamsBGLayout and pass it down to our</span>
     <span class="c1">// primitives to use in building their pipeline layout</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                                              <span class="nx">shaderModule</span><span class="p">,</span>
                                              <span class="nx">colorFormat</span><span class="p">,</span>
                                              <span class="nx">depthFormat</span><span class="p">,</span>
@@ -463,16 +463,16 @@
   <span class="p">}</span>
 
   <span class="c1">// No longer need to take and pass the view params bind group</span>
-  <span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">)</span> <span class="p">{...}</span>
+  <span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">)</span> <span class="p">{...}</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
 <p>Finally, at the <code class="language-plaintext highlighter-rouge">GLTFPrimitive</code> we take the nodeParamsBGLayout and include it in our pipeline layout</p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFPrimitive</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="nx">positions</span><span class="p">,</span> <span class="nx">indices</span><span class="p">,</span> <span class="nx">topology</span><span class="p">)</span> <span class="p">{...}</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFPrimitive</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">positions</span><span class="p">,</span> <span class="nx">indices</span><span class="p">,</span> <span class="nx">topology</span><span class="p">)</span> <span class="p">{...}</span>
 
-  <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+  <span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                       <span class="nx">shaderModule</span><span class="p">,</span>
                       <span class="nx">colorFormat</span><span class="p">,</span>
                       <span class="nx">depthFormat</span><span class="p">,</span>
@@ -490,12 +490,12 @@
 
     <span class="c1">// Same as before, topology setup</span>
     <span class="kd">var</span> <span class="nx">primitive</span> <span class="o">=</span> <span class="p">{</span><span class="na">topology</span><span class="p">:</span> <span class="dl">"</span><span class="s2">triangle-list</span><span class="dl">"</span><span class="p">};</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">topology</span> <span class="o">==</span> <span class="nx">GLTFRenderMode</span><span class="p">.</span><span class="nx">TRIANGLE_STRIP</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">topology</span> <span class="o">==</span> <span class="nx">GLTFRenderMode</span><span class="p">.</span><span class="nx">TRIANGLE_STRIP</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">primitive</span><span class="p">.</span><span class="nx">topology</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">triangle-strip</span><span class="dl">"</span><span class="p">;</span>
       <span class="nx">primitive</span><span class="p">.</span><span class="nx">stripIndexFormat</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">vertexType</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span>
+    <span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createPipelineLayout</span><span class="p">({</span>
       <span class="c1">// New: Pass the nodeParamsBGLayout as another bind group layout</span>
       <span class="c1">// in our pipeline</span>
       <span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[</span><span class="nx">uniformsBGLayout</span><span class="p">,</span> <span class="nx">nodeParamsBGLayout</span><span class="p">]</span>
@@ -504,9 +504,9 @@
     <span class="c1">// renderPipeline creation is the same as before</span>
   <span class="p">}</span>
 
-  <span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Removed: no longer need to bind the view params bind group</span>
-    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setPipeline</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">renderPipeline</span><span class="p">);</span>
+    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">setPipeline</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">renderPipeline</span><span class="p">);</span>
 
     <span class="c1">// Rest of rendering code is the same as before</span>
   <span class="p">}</span>

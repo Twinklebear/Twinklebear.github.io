@@ -379,7 +379,7 @@
 
 <p>First, we create a <code class="language-plaintext highlighter-rouge">Uint32Array</code> over the glb file data that contains both the glb header and JSON chunk header.</p>
 
-<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">function</span> <span class="nx">uploadGLB</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">device</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">function</span> <span class="nf">uploadGLB</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">device</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// glB has a JSON chunk and a binary chunk, potentially followed by</span>
     <span class="c1">// other chunks specifying extension specific data, which we ignore</span>
     <span class="c1">// since we don't support any extensions.</span>
@@ -391,29 +391,29 @@
     <span class="c1">// JSON chunk header</span>
     <span class="c1">// - chunkLength: u32 (size of the chunk, in bytes)</span>
     <span class="c1">// - chunkType: u32 (expect: 0x4E4F534A for the JSON chunk)</span>
-    <span class="kd">var</span> <span class="nx">header</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Uint32Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">header</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Uint32Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
     <span class="c1">// Validate glb file contains correct magic value</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">header</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x46546C67</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Provided file is not a glB file</span><span class="dl">"</span><span class="p">)</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">header</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x46546C67</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Provided file is not a glB file</span><span class="dl">"</span><span class="p">)</span>
     <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">header</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Provided file is glTF 2.0 file</span><span class="dl">"</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">header</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Provided file is glTF 2.0 file</span><span class="dl">"</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="c1">// Validate that first chunk is JSON</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">header</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x4E4F534A</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Invalid glB: The first chunk of the glB file is not a JSON chunk!</span><span class="dl">"</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">header</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x4E4F534A</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Invalid glB: The first chunk of the glB file is not a JSON chunk!</span><span class="dl">"</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="c1">// Decode the JSON chunk of the glB file to a JSON object</span>
     <span class="kd">var</span> <span class="nx">jsonChunk</span> <span class="o">=</span>
-        <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="k">new</span> <span class="nx">TextDecoder</span><span class="p">(</span><span class="dl">"</span><span class="s2">utf-8</span><span class="dl">"</span><span class="p">).</span><span class="nx">decode</span><span class="p">(</span><span class="k">new</span> <span class="nb">Uint8Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="nx">header</span><span class="p">[</span><span class="mi">3</span><span class="p">])));</span>
+        <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="k">new</span> <span class="nc">TextDecoder</span><span class="p">(</span><span class="dl">"</span><span class="s2">utf-8</span><span class="dl">"</span><span class="p">).</span><span class="nf">decode</span><span class="p">(</span><span class="k">new</span> <span class="nc">Uint8Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="nx">header</span><span class="p">[</span><span class="mi">3</span><span class="p">])));</span>
 
     <span class="c1">// Read the binary chunk header</span>
     <span class="c1">// - chunkLength: u32 (size of the chunk, in bytes)</span>
     <span class="c1">// - chunkType: u32 (expect: 0x46546C67 for the binary chunk)</span>
-    <span class="kd">var</span> <span class="nx">binaryHeader</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Uint32Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">20</span> <span class="o">+</span> <span class="nx">header</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">binaryHeader</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x004E4942</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Invalid glB: The second chunk of the glB file is not a binary chunk!</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">binaryHeader</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Uint32Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">20</span> <span class="o">+</span> <span class="nx">header</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">binaryHeader</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x004E4942</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Invalid glB: The second chunk of the glB file is not a binary chunk!</span><span class="dl">"</span><span class="p">);</span>
     <span class="p">}</span>
 </code></pre></div></div>
 
@@ -426,9 +426,9 @@
 <p>The <code class="language-plaintext highlighter-rouge">GLTFBuffer</code> class is a straightforward mapping of the GLTF buffer object. We create a new <code class="language-plaintext highlighter-rouge">Uint8Array</code> view over the glb buffer passed to the constructor at the binary chunk’s starting offset with the binary chunk’s size.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFBuffer</span> <span class="p">{</span>
-    <span class="kd">constructor</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">offset</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Uint8Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">offset</span><span class="p">,</span> <span class="nx">size</span><span class="p">);</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFBuffer</span> <span class="p">{</span>
+    <span class="nf">constructor</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">offset</span><span class="p">,</span> <span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Uint8Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">offset</span><span class="p">,</span> <span class="nx">size</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -439,7 +439,7 @@
 <span class="c1">// Make a GLTFBuffer that is a view of the entire binary chunk's data,</span>
 <span class="c1">// we'll use this to create buffer views within the chunk for memory referenced</span>
 <span class="c1">// by objects in the glTF scene</span>
-<span class="kd">var</span> <span class="nx">binaryChunk</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GLTFBuffer</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">28</span> <span class="o">+</span> <span class="nx">header</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">binaryHeader</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="kd">var</span> <span class="nx">binaryChunk</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">GLTFBuffer</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="mi">28</span> <span class="o">+</span> <span class="nx">header</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">binaryHeader</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 </code></pre></div></div>
 
 <p>The next object we need to read are the buffer views, which we represent with the <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> class. The constructor for <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> makes a new <code class="language-plaintext highlighter-rouge">Uint8Array</code> view over just the region of the binary chunk that the view covers. Note that the <code class="language-plaintext highlighter-rouge">subarray</code> API creates a view over the underlying <code class="language-plaintext highlighter-rouge">ArrayBuffer</code>, it does not make a copy. Another design choice here is that we don’t need to track the offset for buffer views after creating the view, because this offset is baked into the view object we create in the constructor.</p>
@@ -449,21 +449,21 @@
 <p>We also track a flag <code class="language-plaintext highlighter-rouge">needsUpload</code> to determine which buffer views actually need to be uploaded to the GPU. Image data is also access through buffer views in glb files, however we don’t need to upload the PNG or JPG binary data to the GPU since we will instead decode it to a texture. When parsing the rest of the scene we’ll flag buffers that need to be uploaded to the GPU so that we can upload just what we need.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFBufferView</span> <span class="p">{</span>
-    <span class="kd">constructor</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFBufferView</span> <span class="p">{</span>
+    <span class="nf">constructor</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span> <span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="nx">view</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteLength</span><span class="dl">"</span><span class="p">];</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">byteStride</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">view</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteStride</span><span class="dl">"</span><span class="p">]</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">view</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteStride</span><span class="dl">"</span><span class="p">]</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">byteStride</span> <span class="o">=</span> <span class="nx">view</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteStride</span><span class="dl">"</span><span class="p">];</span>
         <span class="p">}</span>
 
         <span class="c1">// Create the buffer view. Note that subarray creates a new typed</span>
         <span class="c1">// view over the same array buffer, we do not make a copy here.</span>
         <span class="kd">var</span> <span class="nx">viewOffset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">view</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteOffset</span><span class="dl">"</span><span class="p">]</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">view</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteOffset</span><span class="dl">"</span><span class="p">]</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">viewOffset</span> <span class="o">=</span> <span class="nx">view</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteOffset</span><span class="dl">"</span><span class="p">];</span>
         <span class="p">}</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">view</span> <span class="o">=</span> <span class="nx">buffer</span><span class="p">.</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">subarray</span><span class="p">(</span><span class="nx">viewOffset</span><span class="p">,</span> <span class="nx">viewOffset</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">view</span> <span class="o">=</span> <span class="nx">buffer</span><span class="p">.</span><span class="nx">buffer</span><span class="p">.</span><span class="nf">subarray</span><span class="p">(</span><span class="nx">viewOffset</span><span class="p">,</span> <span class="nx">viewOffset</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">needsUpload</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">gpuBuffer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -473,20 +473,20 @@
     <span class="c1">// When this buffer is referenced as vertex data or index data we</span>
     <span class="c1">// add the corresponding usage flag here so that the GPU buffer can</span>
     <span class="c1">// be created properly.</span>
-    <span class="nx">addUsage</span><span class="p">(</span><span class="nx">usage</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">addUsage</span><span class="p">(</span><span class="nx">usage</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">usage</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">usage</span> <span class="o">|</span> <span class="nx">usage</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="c1">// Upload the buffer view to a GPU buffer</span>
-    <span class="nx">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// Note: must align to 4 byte size when mapped at creation is true</span>
-        <span class="kd">var</span> <span class="nx">buf</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">({</span>
-            <span class="na">size</span><span class="p">:</span> <span class="nx">alignTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="kd">var</span> <span class="nx">buf</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBuffer</span><span class="p">({</span>
+            <span class="na">size</span><span class="p">:</span> <span class="nf">alignTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
             <span class="na">usage</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">usage</span><span class="p">,</span>
             <span class="na">mappedAtCreation</span><span class="p">:</span> <span class="kc">true</span>
         <span class="p">});</span>
-        <span class="k">new</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="kd">constructor</span><span class="p">)(</span><span class="nx">buf</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">()).</span><span class="kd">set</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">);</span>
-        <span class="nx">buf</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span>
+        <span class="k">new </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="kd">constructor</span><span class="p">)(</span><span class="nx">buf</span><span class="p">.</span><span class="nf">getMappedRange</span><span class="p">()).</span><span class="nf">set</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">);</span>
+        <span class="nx">buf</span><span class="p">.</span><span class="nf">unmap</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">gpuBuffer</span> <span class="o">=</span> <span class="nx">buf</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">needsUpload</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">}</span>
@@ -498,8 +498,8 @@
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// within uploadGLB</span>
 <span class="c1">// Create GLTFBufferView objects for all the buffer views in the glTF file</span>
 <span class="kd">var</span> <span class="nx">bufferViews</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">bufferViews</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">bufferViews</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">GLTFBufferView</span><span class="p">(</span><span class="nx">binaryChunk</span><span class="p">,</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">]));</span>
+<span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">bufferViews</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">bufferViews</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="k">new</span> <span class="nc">GLTFBufferView</span><span class="p">(</span><span class="nx">binaryChunk</span><span class="p">,</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">]));</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -507,9 +507,9 @@
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// at the end of uploadGLB before returning the mesh</span>
 <span class="c1">// Upload the buffer views used by mesh</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">bufferViews</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">needsUpload</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">);</span>
+<span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">bufferViews</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">needsUpload</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -523,31 +523,31 @@
 <p>The utility functions <code class="language-plaintext highlighter-rouge">gltfTypeSize</code> and <code class="language-plaintext highlighter-rouge">gltfVertexType</code> are omitted from the post to keep it focused, these can be found on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/3-first-mesh/src/glb.js">Github</a>.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFAccessor</span> <span class="p">{</span>
-    <span class="kd">constructor</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">accessor</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFAccessor</span> <span class="p">{</span>
+    <span class="nf">constructor</span><span class="p">(</span><span class="nx">view</span><span class="p">,</span> <span class="nx">accessor</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="nx">accessor</span><span class="p">[</span><span class="dl">"</span><span class="s2">count</span><span class="dl">"</span><span class="p">];</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">componentType</span> <span class="o">=</span> <span class="nx">accessor</span><span class="p">[</span><span class="dl">"</span><span class="s2">componentType</span><span class="dl">"</span><span class="p">];</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">gltfType</span> <span class="o">=</span> <span class="nx">parseGltfType</span><span class="p">(</span><span class="nx">accessor</span><span class="p">[</span><span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">]);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">gltfType</span> <span class="o">=</span> <span class="nf">parseGltfType</span><span class="p">(</span><span class="nx">accessor</span><span class="p">[</span><span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">]);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">view</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">byteOffset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">accessor</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteOffset</span><span class="dl">"</span><span class="p">]</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">accessor</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteOffset</span><span class="dl">"</span><span class="p">]</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">byteOffset</span> <span class="o">=</span> <span class="nx">accessor</span><span class="p">[</span><span class="dl">"</span><span class="s2">byteOffset</span><span class="dl">"</span><span class="p">];</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="kd">get</span> <span class="nx">byteStride</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">elementSize</span> <span class="o">=</span> <span class="nx">gltfTypeSize</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">componentType</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">gltfType</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">elementSize</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">byteStride</span><span class="p">);</span>
+    <span class="kd">get</span> <span class="nf">byteStride</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">elementSize</span> <span class="o">=</span> <span class="nf">gltfTypeSize</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">componentType</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">gltfType</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">max</span><span class="p">(</span><span class="nx">elementSize</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">byteStride</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="kd">get</span> <span class="nx">byteLength</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">get</span> <span class="nf">byteLength</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">byteStride</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="c1">// Get the vertex attribute type for accessors that are</span>
     <span class="c1">// used as vertex attributes</span>
-    <span class="kd">get</span> <span class="nx">vertexType</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">gltfVertexType</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">componentType</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">gltfType</span><span class="p">);</span>
+    <span class="kd">get</span> <span class="nf">vertexType</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">gltfVertexType</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">componentType</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">gltfType</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -560,10 +560,10 @@
 <span class="c1">// accessors for types we don't support yet. For example, a model with animation</span>
 <span class="c1">// may have a MAT4 accessor, which we currently don't support.</span>
 <span class="kd">var</span> <span class="nx">accessors</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">accessors</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">accessors</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">accessorInfo</span> <span class="o">=</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">accessors</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
     <span class="kd">var</span> <span class="nx">viewID</span> <span class="o">=</span> <span class="nx">accessorInfo</span><span class="p">[</span><span class="dl">"</span><span class="s2">bufferView</span><span class="dl">"</span><span class="p">];</span>
-    <span class="nx">accessors</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">GLTFAccessor</span><span class="p">(</span><span class="nx">bufferViews</span><span class="p">[</span><span class="nx">viewID</span><span class="p">],</span> <span class="nx">accessorInfo</span><span class="p">));</span>
+    <span class="nx">accessors</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="k">new</span> <span class="nc">GLTFAccessor</span><span class="p">(</span><span class="nx">bufferViews</span><span class="p">[</span><span class="nx">viewID</span><span class="p">],</span> <span class="nx">accessorInfo</span><span class="p">));</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -576,24 +576,24 @@
 <p>The <code class="language-plaintext highlighter-rouge">GLTFPrimitive</code> has two methods that we’ll use later for rendering, <code class="language-plaintext highlighter-rouge">buildRenderPipeline</code> and <code class="language-plaintext highlighter-rouge">render</code>. We’ll look at those in detail later when we get to rendering our mesh.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFPrimitive</span> <span class="p">{</span>
-    <span class="kd">constructor</span><span class="p">(</span><span class="nx">positions</span><span class="p">,</span> <span class="nx">indices</span><span class="p">,</span> <span class="nx">topology</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFPrimitive</span> <span class="p">{</span>
+    <span class="nf">constructor</span><span class="p">(</span><span class="nx">positions</span><span class="p">,</span> <span class="nx">indices</span><span class="p">,</span> <span class="nx">topology</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">positions</span> <span class="o">=</span> <span class="nx">positions</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">indices</span> <span class="o">=</span> <span class="nx">indices</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">topology</span> <span class="o">=</span> <span class="nx">topology</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">renderPipeline</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="c1">// Set usage for the positions data and flag it as needing upload</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">needsUpload</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">addUsage</span><span class="p">(</span><span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nf">addUsage</span><span class="p">(</span><span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">VERTEX</span><span class="p">);</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">// Set usage for the indices data and flag it as needing upload</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">needsUpload</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">addUsage</span><span class="p">(</span><span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">INDEX</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nf">addUsage</span><span class="p">(</span><span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">INDEX</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+    <span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                         <span class="nx">shaderModule</span><span class="p">,</span>
                         <span class="nx">colorFormat</span><span class="p">,</span>
                         <span class="nx">depthFormat</span><span class="p">,</span>
@@ -602,7 +602,7 @@
         <span class="c1">// More on this later!</span>
     <span class="p">}</span>
 
-    <span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// More on this later!</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -611,13 +611,13 @@
 <p>The <code class="language-plaintext highlighter-rouge">GLTFMesh</code> class is pretty simple. It just takes the name of the mesh and the list of primitives that make up the mesh.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js, outside uploadGLB</span>
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">GLTFMesh</span> <span class="p">{</span>
-    <span class="kd">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">primitives</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFMesh</span> <span class="p">{</span>
+    <span class="nf">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">primitives</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span> <span class="o">=</span> <span class="nx">primitives</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+    <span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                         <span class="nx">shaderModule</span><span class="p">,</span>
                         <span class="nx">colorFormat</span><span class="p">,</span>
                         <span class="nx">depthFormat</span><span class="p">,</span>
@@ -626,7 +626,7 @@
         <span class="c1">// More on this later!</span>
     <span class="p">}</span>
 
-    <span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// More on this later!</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -643,21 +643,21 @@
 <span class="kd">var</span> <span class="nx">mesh</span> <span class="o">=</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">meshes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">meshPrimitives</span> <span class="o">=</span> <span class="p">[];</span>
 <span class="c1">// Loop through the mesh's primitives and load them</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">mesh</span><span class="p">.</span><span class="nx">primitives</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">mesh</span><span class="p">.</span><span class="nx">primitives</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">prim</span> <span class="o">=</span> <span class="nx">mesh</span><span class="p">.</span><span class="nx">primitives</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
     <span class="kd">var</span> <span class="nx">topology</span> <span class="o">=</span> <span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">mode</span><span class="dl">"</span><span class="p">];</span>
     <span class="c1">// Default is triangles if mode specified</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">topology</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">topology</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">topology</span> <span class="o">=</span> <span class="nx">GLTFRenderMode</span><span class="p">.</span><span class="nx">TRIANGLES</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">topology</span> <span class="o">!=</span> <span class="nx">GLTFRenderMode</span><span class="p">.</span><span class="nx">TRIANGLES</span> <span class="o">&amp;&amp;</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">topology</span> <span class="o">!=</span> <span class="nx">GLTFRenderMode</span><span class="p">.</span><span class="nx">TRIANGLES</span> <span class="o">&amp;&amp;</span>
         <span class="nx">topology</span> <span class="o">!=</span> <span class="nx">GLTFRenderMode</span><span class="p">.</span><span class="nx">TRIANGLE_STRIP</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">`Unsupported primitive mode </span><span class="p">${</span><span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">mode</span><span class="dl">"</span><span class="p">]}</span><span class="s2">`</span><span class="p">);</span>
+        <span class="k">throw</span> <span class="nc">Error</span><span class="p">(</span><span class="s2">`Unsupported primitive mode </span><span class="p">${</span><span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">mode</span><span class="dl">"</span><span class="p">]}</span><span class="s2">`</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="c1">// Find the vertex indices accessor if provided</span>
     <span class="kd">var</span> <span class="nx">indices</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">accessors</span><span class="dl">"</span><span class="p">][</span><span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">indices</span><span class="dl">"</span><span class="p">]]</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">[</span><span class="dl">"</span><span class="s2">accessors</span><span class="dl">"</span><span class="p">][</span><span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">indices</span><span class="dl">"</span><span class="p">]]</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">indices</span> <span class="o">=</span> <span class="nx">accessors</span><span class="p">[</span><span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">indices</span><span class="dl">"</span><span class="p">]];</span>
     <span class="p">}</span>
 
@@ -665,18 +665,18 @@
     <span class="c1">// While we only want the position attribute right now, we'll load</span>
     <span class="c1">// the others later as well.</span>
     <span class="kd">var</span> <span class="nx">positions</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">attributes</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">attributes</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">accessor</span> <span class="o">=</span> <span class="nx">accessors</span><span class="p">[</span><span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">attributes</span><span class="dl">"</span><span class="p">][</span><span class="nx">attr</span><span class="p">]];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">attr</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">POSITION</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">attr</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">POSITION</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">positions</span> <span class="o">=</span> <span class="nx">accessor</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="c1">// Add the primitive to the mesh's list of primitives</span>
-    <span class="nx">meshPrimitives</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">GLTFPrimitive</span><span class="p">(</span><span class="nx">positions</span><span class="p">,</span> <span class="nx">indices</span><span class="p">,</span> <span class="nx">topology</span><span class="p">));</span>
+    <span class="nx">meshPrimitives</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="k">new</span> <span class="nc">GLTFPrimitive</span><span class="p">(</span><span class="nx">positions</span><span class="p">,</span> <span class="nx">indices</span><span class="p">,</span> <span class="nx">topology</span><span class="p">));</span>
 <span class="p">}</span>
 <span class="c1">// Create the GLTFMesh</span>
-<span class="kd">var</span> <span class="nx">mesh</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GLTFMesh</span><span class="p">(</span><span class="nx">mesh</span><span class="p">[</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">],</span> <span class="nx">meshPrimitives</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">mesh</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">GLTFMesh</span><span class="p">(</span><span class="nx">mesh</span><span class="p">[</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">],</span> <span class="nx">meshPrimitives</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>Finally, before we return the mesh we loaded we have to loop through the buffer views and upload any that were marked as “needs upload” to the GPU so that the data will be available during rendering.</p>
@@ -684,9 +684,9 @@
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// at the end of uploadGLB</span>
 <span class="c1">// Upload the buffers as mentioned above before returning the mesh</span>
 <span class="c1">// Upload the buffer views used by mesh</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">bufferViews</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">needsUpload</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">);</span>
+<span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">bufferViews</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">needsUpload</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">bufferViews</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
@@ -710,7 +710,7 @@
 <p>The last change difference is that, if we’re rendering a triangle strip, WebGPU requires us to include the index format as part of the pipeline.  This is handled when creating the <code class="language-plaintext highlighter-rouge">primitive</code> object for the pipeline descriptor.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js GLTFPrimitive.buildRenderPipeline implementation</span>
-<span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+<span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                     <span class="nx">shaderModule</span><span class="p">,</span>
                     <span class="nx">colorFormat</span><span class="p">,</span>
                     <span class="nx">depthFormat</span><span class="p">,</span>
@@ -750,16 +750,16 @@
     <span class="c1">// the primitive topology to triangle list, and check if it's</span>
     <span class="c1">// instead a triangle strip</span>
     <span class="kd">var</span> <span class="nx">primitive</span> <span class="o">=</span> <span class="p">{</span><span class="na">topology</span><span class="p">:</span> <span class="dl">"</span><span class="s2">triangle-list</span><span class="dl">"</span><span class="p">};</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">topology</span> <span class="o">==</span> <span class="nx">GLTFRenderMode</span><span class="p">.</span><span class="nx">TRIANGLE_STRIP</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">topology</span> <span class="o">==</span> <span class="nx">GLTFRenderMode</span><span class="p">.</span><span class="nx">TRIANGLE_STRIP</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">primitive</span><span class="p">.</span><span class="nx">topology</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">triangle-strip</span><span class="dl">"</span><span class="p">;</span>
         <span class="nx">primitive</span><span class="p">.</span><span class="nx">stripIndexFormat</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">vertexType</span><span class="p">;</span>
     <span class="p">}</span>
   
-    <span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createPipelineLayout</span><span class="p">({</span>
+    <span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createPipelineLayout</span><span class="p">({</span>
         <span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="p">[</span><span class="nx">uniformsBGLayout</span><span class="p">]</span>
     <span class="p">});</span>
   
-    <span class="k">this</span><span class="p">.</span><span class="nx">renderPipeline</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createRenderPipeline</span><span class="p">({</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">renderPipeline</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createRenderPipeline</span><span class="p">({</span>
         <span class="na">layout</span><span class="p">:</span> <span class="nx">layout</span><span class="p">,</span>
         <span class="na">vertex</span><span class="p">:</span> <span class="nx">vertexState</span><span class="p">,</span>
         <span class="na">fragment</span><span class="p">:</span> <span class="nx">fragmentState</span><span class="p">,</span>
@@ -782,28 +782,28 @@
 <p>Then we can draw our primitive!</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js GLTFPrimitive.render implementation</span>
-<span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setPipeline</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">renderPipeline</span><span class="p">);</span>
-    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setBindGroup</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">);</span>
+<span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">setPipeline</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">renderPipeline</span><span class="p">);</span>
+    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">setBindGroup</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">);</span>
 
     <span class="c1">// Apply the accessor's byteOffset here to handle both global and interleaved</span>
     <span class="c1">// offsets for the buffer. Setting the offset here allows handling both cases,</span>
     <span class="c1">// with the downside that we must repeatedly bind the same buffer at different</span>
     <span class="c1">// offsets if we're dealing with interleaved attributes.</span>
     <span class="c1">// Since we only handle positions at the moment, this isn't a problem.</span>
-    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
+    <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">setVertexBuffer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">gpuBuffer</span><span class="p">,</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">byteOffset</span><span class="p">,</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">);</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">setIndexBuffer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">gpuBuffer</span><span class="p">,</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">setIndexBuffer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">gpuBuffer</span><span class="p">,</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">vertexType</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">byteOffset</span><span class="p">,</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">byteLength</span><span class="p">);</span>
-        <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">drawIndexed</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
+        <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">drawIndexed</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nx">draw</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
+        <span class="nx">renderPassEncoder</span><span class="p">.</span><span class="nf">draw</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -813,7 +813,7 @@
 <p>The <code class="language-plaintext highlighter-rouge">GLTFMesh</code> versions of <code class="language-plaintext highlighter-rouge">buildRenderPipeline</code> and <code class="language-plaintext highlighter-rouge">render</code> are straightforward. We’ve delegated all the work to the primitives, where the actual geometry data lives, so the mesh just loops through its primitives and calls the respective functions.</p>
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in glb.js GLTFMesh.buildRenderPipeline and GLTFMesh.render implementations</span>
-<span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+<span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                     <span class="nx">shaderModule</span><span class="p">,</span>
                     <span class="nx">colorFormat</span><span class="p">,</span>
                     <span class="nx">depthFormat</span><span class="p">,</span>
@@ -821,8 +821,8 @@
 <span class="p">{</span>
     <span class="c1">// We take a pretty simple approach to start. Just loop through</span>
     <span class="c1">// all the primitives and build their respective render pipelines</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
             <span class="nx">shaderModule</span><span class="p">,</span>
             <span class="nx">colorFormat</span><span class="p">,</span>
             <span class="nx">depthFormat</span><span class="p">,</span>
@@ -830,11 +830,11 @@
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
+<span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// We take a pretty simple approach to start. Just loop through</span>
     <span class="c1">// all the primitives and call their individual draw methods</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">);</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">primitives</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">render</span><span class="p">(</span><span class="nx">renderPassEncoder</span><span class="p">,</span> <span class="nx">uniformsBG</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -855,10 +855,10 @@
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in the async lambda in app.js</span>
 <span class="c1">// Load the packaged GLB file, Avocado.glb</span>
-<span class="kd">var</span> <span class="nx">glbMesh</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">avocadoGlb</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">arrayBuffer</span><span class="p">()).</span><span class="nx">then</span><span class="p">(</span><span class="nx">buf</span> <span class="o">=&gt;</span> <span class="nx">uploadGLB</span><span class="p">(</span><span class="nx">buf</span><span class="p">,</span> <span class="nx">device</span><span class="p">));</span>
+<span class="kd">var</span> <span class="nx">glbMesh</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">fetch</span><span class="p">(</span><span class="nx">avocadoGlb</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nf">arrayBuffer</span><span class="p">()).</span><span class="nf">then</span><span class="p">(</span><span class="nx">buf</span> <span class="o">=&gt;</span> <span class="nf">uploadGLB</span><span class="p">(</span><span class="nx">buf</span><span class="p">,</span> <span class="nx">device</span><span class="p">));</span>
 
-<span class="nx">glbMesh</span><span class="p">.</span><span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+<span class="nx">glbMesh</span><span class="p">.</span><span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
     <span class="nx">shaderModule</span><span class="p">,</span>
     <span class="nx">swapChainFormat</span><span class="p">,</span>
     <span class="nx">depthFormat</span><span class="p">,</span>
@@ -869,22 +869,22 @@
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in the async lambda in app.js</span>
 <span class="c1">// Setup onchange listener for file uploads</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">uploadGLB</span><span class="dl">"</span><span class="p">).</span><span class="nx">onchange</span> <span class="o">=</span>
-    <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">();</span>
-        <span class="nx">reader</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error reading GLB file</span><span class="dl">"</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">uploadGLB</span><span class="dl">"</span><span class="p">).</span><span class="nx">onchange</span> <span class="o">=</span>
+    <span class="nf">function </span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileReader</span><span class="p">();</span>
+        <span class="nx">reader</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="nf">function </span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error reading GLB file</span><span class="dl">"</span><span class="p">);</span>
         <span class="p">};</span>
-        <span class="nx">reader</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="nx">glbMesh</span> <span class="o">=</span> <span class="nx">uploadGLB</span><span class="p">(</span><span class="nx">reader</span><span class="p">.</span><span class="nx">result</span><span class="p">,</span> <span class="nx">device</span><span class="p">)</span>
-            <span class="nx">glbMesh</span><span class="p">.</span><span class="nx">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
+        <span class="nx">reader</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="nf">function </span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">glbMesh</span> <span class="o">=</span> <span class="nf">uploadGLB</span><span class="p">(</span><span class="nx">reader</span><span class="p">.</span><span class="nx">result</span><span class="p">,</span> <span class="nx">device</span><span class="p">)</span>
+            <span class="nx">glbMesh</span><span class="p">.</span><span class="nf">buildRenderPipeline</span><span class="p">(</span><span class="nx">device</span><span class="p">,</span>
                 <span class="nx">shaderModule</span><span class="p">,</span>
                 <span class="nx">swapChainFormat</span><span class="p">,</span>
                 <span class="nx">depthFormat</span><span class="p">,</span>
                 <span class="nx">bindGroupLayout</span><span class="p">);</span>
         <span class="p">};</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span>
-            <span class="nx">reader</span><span class="p">.</span><span class="nx">readAsArrayBuffer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span>
+            <span class="nx">reader</span><span class="p">.</span><span class="nf">readAsArrayBuffer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
         <span class="p">}</span>
     <span class="p">};</span>
 </code></pre></div></div>
@@ -943,10 +943,10 @@
 <span class="c1">// Adjust camera position and near/far plans to have a better view</span>
 <span class="c1">// of the Avocado when it's loaded</span>
 <span class="kd">var</span> <span class="nx">camera</span> <span class="o">=</span>
-    <span class="k">new</span> <span class="nx">ArcballCamera</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="k">new</span> <span class="nc">ArcballCamera</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
                       <span class="mf">0.5</span><span class="p">,</span> <span class="p">[</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">]);</span>
-<span class="kd">var</span> <span class="nx">proj</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">perspective</span><span class="p">(</span>
-    <span class="nx">mat4</span><span class="p">.</span><span class="nx">create</span><span class="p">(),</span> <span class="mi">50</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">,</span>
+<span class="kd">var</span> <span class="nx">proj</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">perspective</span><span class="p">(</span>
+    <span class="nx">mat4</span><span class="p">.</span><span class="nf">create</span><span class="p">(),</span> <span class="mi">50</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">,</span>
     <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
 </code></pre></div></div>
 
@@ -954,33 +954,33 @@
 
 <div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in the async lambda in app.js</span>
 <span class="c1">// Render!</span>
-<span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">await</span> <span class="nx">animationFrame</span><span class="p">();</span>
+<span class="k">while </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">await</span> <span class="nf">animationFrame</span><span class="p">();</span>
 
     <span class="c1">// Update camera buffer</span>
-    <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nx">mul</span><span class="p">(</span><span class="nx">projView</span><span class="p">,</span> <span class="nx">proj</span><span class="p">,</span> <span class="nx">camera</span><span class="p">.</span><span class="nx">camera</span><span class="p">);</span>
+    <span class="nx">projView</span> <span class="o">=</span> <span class="nx">mat4</span><span class="p">.</span><span class="nf">mul</span><span class="p">(</span><span class="nx">projView</span><span class="p">,</span> <span class="nx">proj</span><span class="p">,</span> <span class="nx">camera</span><span class="p">.</span><span class="nx">camera</span><span class="p">);</span>
 
-    <span class="kd">var</span> <span class="nx">upload</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">(</span>
+    <span class="kd">var</span> <span class="nx">upload</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createBuffer</span><span class="p">(</span>
         <span class="p">{</span><span class="na">size</span><span class="p">:</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="na">usage</span><span class="p">:</span> <span class="nx">GPUBufferUsage</span><span class="p">.</span><span class="nx">COPY_SRC</span><span class="p">,</span> <span class="na">mappedAtCreation</span><span class="p">:</span> <span class="kc">true</span><span class="p">});</span>
     <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Float32Array</span><span class="p">(</span><span class="nx">upload</span><span class="p">.</span><span class="nx">getMappedRange</span><span class="p">());</span>
-        <span class="nx">map</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="nx">projView</span><span class="p">);</span>
-        <span class="nx">upload</span><span class="p">.</span><span class="nx">unmap</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Float32Array</span><span class="p">(</span><span class="nx">upload</span><span class="p">.</span><span class="nf">getMappedRange</span><span class="p">());</span>
+        <span class="nx">map</span><span class="p">.</span><span class="nf">set</span><span class="p">(</span><span class="nx">projView</span><span class="p">);</span>
+        <span class="nx">upload</span><span class="p">.</span><span class="nf">unmap</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="nx">renderPassDesc</span><span class="p">.</span><span class="nx">colorAttachments</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">view</span> <span class="o">=</span>
-        <span class="nx">context</span><span class="p">.</span><span class="nx">getCurrentTexture</span><span class="p">().</span><span class="nx">createView</span><span class="p">();</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">getCurrentTexture</span><span class="p">().</span><span class="nf">createView</span><span class="p">();</span>
 
-    <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nx">createCommandEncoder</span><span class="p">();</span>
-    <span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">copyBufferToBuffer</span><span class="p">(</span><span class="nx">upload</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">viewParamsBuffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">commandEncoder</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createCommandEncoder</span><span class="p">();</span>
+    <span class="nx">commandEncoder</span><span class="p">.</span><span class="nf">copyBufferToBuffer</span><span class="p">(</span><span class="nx">upload</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">viewParamsBuffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
 
-    <span class="kd">var</span> <span class="nx">renderPass</span> <span class="o">=</span> <span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">beginRenderPass</span><span class="p">(</span><span class="nx">renderPassDesc</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">renderPass</span> <span class="o">=</span> <span class="nx">commandEncoder</span><span class="p">.</span><span class="nf">beginRenderPass</span><span class="p">(</span><span class="nx">renderPassDesc</span><span class="p">);</span>
 
     <span class="c1">// Render our mesh!</span>
-    <span class="nx">glbMesh</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">renderPass</span><span class="p">,</span> <span class="nx">viewParamBG</span><span class="p">);</span>
+    <span class="nx">glbMesh</span><span class="p">.</span><span class="nf">render</span><span class="p">(</span><span class="nx">renderPass</span><span class="p">,</span> <span class="nx">viewParamBG</span><span class="p">);</span>
 
-    <span class="nx">renderPass</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
-    <span class="nx">device</span><span class="p">.</span><span class="nx">queue</span><span class="p">.</span><span class="nx">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nx">finish</span><span class="p">()]);</span>
+    <span class="nx">renderPass</span><span class="p">.</span><span class="nf">end</span><span class="p">();</span>
+    <span class="nx">device</span><span class="p">.</span><span class="nx">queue</span><span class="p">.</span><span class="nf">submit</span><span class="p">([</span><span class="nx">commandEncoder</span><span class="p">.</span><span class="nf">finish</span><span class="p">()]);</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
