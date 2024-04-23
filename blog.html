@@ -94,6 +94,21 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2024/04/22/webgpu-marching-cubes"><h3>GPU Compute in the Browser at the Speed of Native: WebGPU Marching Cubes</h3></a>
+        <p>April 22, 2024</p>
+		
+<p>WebGPU is a powerful GPU-API for the web, providing support for advanced low-overhead rendering pipelines and GPU compute pipelines. WebGPU’s support for GPU compute shaders and storage buffers are a key distinction from WebGL, which lacks these features, and make it possible to bring powerful GPU-parallel applications to run entirely in the browser. These applications can range from GPGPU (e.g., simulations, data processing/analysis, machine learning, etc.) to GPU compute driven rendering pipelines, and applications across the spectrum.</p>
+
+<p>In this post, we’ll evaluate WebGPU compute performance against native Vulkan by implementing the classic Marching Cubes algorithm in WebGPU. Marching Cubes is a nearly embarrassingly parallel algorithm, with two global reduction steps that must take place to synchronize work items and thread output locations. This makes it a great first GPU-parallel algorithm to try out on a new platform, as it has enough complexity to stress the API in a few different ways beyond simple parallel kernel dispatches but isn’t so complex as to take an substantial amount of time to implement or be bottlenecked by CPU performance.</p>
+
+
+
+		<a href="/graphics/2024/04/22/webgpu-marching-cubes">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/graphics/2023/06/24/0-to-gltf-full-scene"><h3>From 0 to glTF with WebGPU: Rendering the Full glTF Scene</h3></a>
         <p>June 24, 2023</p>
 		
@@ -203,39 +218,6 @@ a WebGPU context and get a triangle on the screen.</p>
 
 
 		<a href="/graphics/2023/04/10/0-to-gltf-triangle">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/graphics/2020/12/20/rt-dive-m1"><h3>A Dive into Ray Tracing Performance on the Apple M1</h3></a>
-        <p>December 20, 2020</p>
-		
-<p>The Apple M1 available in the MacBook Air, MacBook Pro 13”, and Mac Mini has
-been the focus of a ton of benchmarking writeups and blog posts about
-the new chip. The performance overall, and especially performance/watt,
-that Apple has achieved with the chip is very impressive.
-As a ray tracing person, what caught my eye the most was the
-performance AnandTech reported in their
-<a href="https://www.anandtech.com/show/16252/mac-mini-apple-m1-tested/2">CineBench benchmarks</a>.
-These scores were 1.6x higher than I got on my old Haswell desktop and 2x
-higher than my new Tiger Lake laptop!
-I had also been interested in trying out the new
-<a href="https://developer.apple.com/videos/play/wwdc2020/10012/">ray tracing API for Metal</a>
-that was announced at WWDC this year,
-which bears some resemblance to the DirectX, Vulkan, and OptiX GPU ray tracing APIs.
-So, I decided to pick up a Mac Mini to do some testing
-on my own interactive path tracing project,
-<a href="https://github.com/Twinklebear/ChameleonRT">ChameleonRT</a>,
-and to get it running on the new Metal ray tracing API.
-In this post, we’ll take a look at the new Metal ray tracing
-API to see how it lines up with DirectX, Vulkan, OptiX and Embree,
-then we’ll make some fair (and some extremely unfair) ray tracing
-performance comparisons against the M1.</p>
-
-
-
-		<a href="/graphics/2020/12/20/rt-dive-m1">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
 		</div>
 	</div>

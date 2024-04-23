@@ -5,9 +5,24 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Sun, 24 Mar 2024 15:51:25 -0700</lastBuildDate>
-		<pubDate>Sun, 24 Mar 2024 15:51:25 -0700</pubDate>
+		<lastBuildDate>Mon, 22 Apr 2024 19:24:16 -0700</lastBuildDate>
+		<pubDate>Mon, 22 Apr 2024 19:24:16 -0700</pubDate>
 		<ttl>60</ttl>
+		
+		<item>
+			<title>GPU Compute in the Browser at the Speed of Native: WebGPU Marching Cubes</title>
+			<description>
+&lt;p&gt;WebGPU is a powerful GPU-API for the web, providing support for advanced low-overhead rendering pipelines and GPU compute pipelines. WebGPU’s support for GPU compute shaders and storage buffers are a key distinction from WebGL, which lacks these features, and make it possible to bring powerful GPU-parallel applications to run entirely in the browser. These applications can range from GPGPU (e.g., simulations, data processing/analysis, machine learning, etc.) to GPU compute driven rendering pipelines, and applications across the spectrum.&lt;/p&gt;
+
+&lt;p&gt;In this post, we’ll evaluate WebGPU compute performance against native Vulkan by implementing the classic Marching Cubes algorithm in WebGPU. Marching Cubes is a nearly embarrassingly parallel algorithm, with two global reduction steps that must take place to synchronize work items and thread output locations. This makes it a great first GPU-parallel algorithm to try out on a new platform, as it has enough complexity to stress the API in a few different ways beyond simple parallel kernel dispatches but isn’t so complex as to take an substantial amount of time to implement or be bottlenecked by CPU performance.&lt;/p&gt;
+
+
+				&lt;a href=&quot;https://www.willusher.io//graphics/2024/04/22/webgpu-marching-cubes&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io//graphics/2024/04/22/webgpu-marching-cubes</link>
+			<guid>https://www.willusher.io//graphics/2024/04/22/webgpu-marching-cubes</guid>
+			<pubDate>Mon, 22 Apr 2024 00:00:00 -0700</pubDate>
+		</item>
 		
 		<item>
 			<title>From 0 to glTF with WebGPU: Rendering the Full glTF Scene</title>
