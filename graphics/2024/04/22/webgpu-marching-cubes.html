@@ -108,6 +108,26 @@
 
 <p><a href="https://en.wikipedia.org/wiki/Marching_cubes">Marching Cubes</a> is a classic algorithm in computer graphics for 3D surface reconstruction that was first introduced in 1987 by Lorensen and Cline. Given a scalar field defined over a 3D grid, Marching Cubes can be used to compute a triangle mesh of the surface at a given scalar value. The initial motivation for Marching Cubes was medical visualization, where given a 3D volume from a CT or MRI scan, the algorithm was used to compute surfaces representing bone or tissue for display. Marching Cubes and its follow-on algorithms are widely used in scientific visualization to compute surfaces on simulation data sets and medical imaging volumes; and can also be applied to rendering mathematical implicit surfaces defined over a 3D grid domain.</p>
 
+<p>The algorithm is a bit easier to first understand in 2D, where it turns into the <a href="https://en.wikipedia.org/wiki/Marching_squares">Marching Squares</a> algorithm.
+Given a grid with values defined in each cell, we want to compute contour lines on the grid placed at a given value.
+For example, on a map we may want to draw elevation lines at a certain elevation.
+The Marching Squares algorithm proceeds as shown in the figure below.
+Marching Cubes can be seen as generalization of Marching Squares into 3D, although the Marching Cubes algorithm was actually published first
+and Marching Squares was a simplification of it into 2D.</p>
+
+<figure>
+    <img class="img-fluid" src="https://cdn.willusher.io/img/2024-04-22-wgpu-mc-marching-squares.png" />
+    
+    <figcaption><b>Figure 1:</b>
+    <i>
+Given the cell-centered grid (a), we shift to the Dual Grid (b, in blue), where values are defined at the vertices instead of the cell centers.
+Within a cell (c) we can now classify it into a contour case based on the values at its vertices (d). We compute a bitmask of 4 bits (one per vertex),
+where the bit is set if the vertex value is below the contour value, and 0 if it's above or equal to it. This bitmask is then
+used as an index value into a case table that defines the edges that the contour crosses of the cell (e).
+  </i>
+  </figcaption>
+</figure>
+
 <p>Although we’ll focus on a standard GPU-parallel implementation of Marching Cubes here, we need some understanding of how the algorithm processes the data and interdependencies in the algorithm (if any) to see how it can be parallelized. For a more thorough discussion of Marching Cubes in a scalar execution context, see <a href="http://paulbourke.net/geometry/polygonise/">Paul Bourke’s excellent write-up</a>. Another cool write up that explains the basics of Marching Cubes starting from 2D <a href="https://blog.42yeah.is/algorithm/2023/07/15/marching-cubes.html">is this write up by 42yeah</a>.</p>
 
 <p>To construct the triangle mesh representing the entire surface, Marching Cubes breaks the problem down to the task of computing the individual pieces of the surface that pass through each voxel. There are a number of possibilities for how the surface may pass through a voxel: it could be that the surface cuts the cell in half, clips a corner of it, passes through at some angle, or does not pass through at all. Each voxel has 8 vertices, each of which can be either inside or outside the surface, giving us a total of 2^8 = 256 possible configurations for a voxel. For each voxel we compute an 8-bit mask, where a 1 is marked for vertices below the desired surface value. The voxel bit mask is used to index into a triangulation case table that stores the list of edges that are intersected by each triangle in the voxel’s local surface. Each voxel’s surface can contain up to 5 triangles, following from the triangulation cases defined in the original Marching Cubes paper.</p>
@@ -115,7 +135,7 @@
 <figure>
 	<img class="img-fluid" src="https://cdn.willusher.io/img/2024-04-22-wgpu-mc-tritable-case.png" />
 	
-	<figcaption><b>Figure 1:</b>
+	<figcaption><b>Figure 2:</b>
 	<i>
     Case 1 in the Marching Cubes triangle table: The isosurface crosses edges 
     0, 3, and 8, defining a single triangle within the cell. The case index
@@ -151,7 +171,7 @@
 <figure>
 	<img class="img-fluid" src="https://cdn.willusher.io/img/2024-04-22-wgpu-mc-vertex-grid-to-dual.png" />
 	
-	<figcaption><b>Figure 2:</b>
+	<figcaption><b>Figure 3:</b>
 	<i>
     Cell-centered grids are widely used in simulation and data scanning systems;
     however, Marching Cubes requires values defined at the vertices.
