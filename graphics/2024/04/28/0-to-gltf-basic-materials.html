@@ -1,0 +1,774 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="origin-trial" content="AoMftca5+Dstn4K7mCd1AKVcenGb0/EBkqJgonux6w6fVXhyJ2iHs9LuZKA36+gcaypMdBLAaIpkES6VMXoJtg8AAABQeyJvcmlnaW4iOiJodHRwczovL3d3dy53aWxsdXNoZXIuaW86NDQzIiwiZmVhdHVyZSI6IldlYkdQVSIsImV4cGlyeSI6MTY0MzE1NTE5OX0=">
+
+	<title>From 0 to glTF with WebGPU: Basic Materials and Textures</title>
+	
+		<meta name="description" content="">
+	
+    <meta name="author" content="Will Usher">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Should I be including font-awesome from bootstrap? Or just the 5.0 version? -->
+    <!--<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>-->
+    <script defer src="https://kit.fontawesome.com/b56adde3a3.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+	<link href="/assets/molokai.css" rel="stylesheet">
+	<link href="/assets/custom.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/assets/img/identicon.ico">
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+		<div class="container">
+			<a class="navbar-brand" href="/">Will Usher</a>
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+				data-target="#navbar_responsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbar_responsive">
+				<ul class="navbar-nav mr-auto">
+				
+				
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/projects" class="nav-link">
+							Projects</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/blog" class="nav-link">
+							Blog</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/pages/sdl2" class="nav-link">
+							SDL2 Tutorials</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/news" class="nav-link">
+							News</a></li>
+						
+					  
+					
+				  
+					
+					  
+					  
+						<li class="nav-item"><a href="/archive" class="nav-link">
+							Archive</a></li>
+						
+					  
+					
+				  
+				</ul>
+			</div><!-- nav.collaps -->
+		</div>
+	</nav>
+
+	<div class="container content mb-4">
+		
+
+<h1 class="display-4">From 0 to glTF with WebGPU: Basic Materials and Textures</h1>
+
+<div class="row justify-content-center">
+	<div class="col-9">
+        <p>April 28, 2024</p>
+		
+<figure>
+  <img class="img-fluid" src="https://willusherio.b-cdn.net/webgpu-0-to-gltf/basic-material-textures-ts-duck.png" />
+    
+    <figcaption><b>Figure 1:</b>
+    The happy duck we’ll be able to render at the end of this post
+    <i>
+  </i>
+  </figcaption>
+</figure>
+
+<p>Now that we can load up complex scene hierarchies from glTF files and render them correctly, let’s start getting some more interesting colors on screen! glTF defines a <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#appendix-b-brdf-implementation">physically based BRDF</a>, with support for metallic and roughness properties, along with normal, emission and occlusion texture maps. There are a number of <a href="https://github.com/KhronosGroup/glTF/blob/main/extensions/README.md">extensions</a> on top of this basic material model (the <code class="language-plaintext highlighter-rouge">KHR_materials_*</code> extensions) that add even more advanced material definitions.</p>
+
+<p>We’ll keep it simple to start. Today we’re going to take the first step of loading the base glTF material parameters and textures from the glB file and passing them to our shader. In the shader we’ll color the object by its base color properties, without applying any lighting or material model yet.</p>
+
+<!--more-->
+
+<h1 id="code-changes-from-the-previous-post">Code Changes from the Previous Post</h1>
+
+<p>If you’re following along from the <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/tree/main/4-full-scene-ts">previous lesson’s code</a>, I’ve made a few cleanups while writing this lesson to make it easier to keep growing the lesson’s codebase:</p>
+
+<ul>
+  <li>Split up the different <code class="language-plaintext highlighter-rouge">GLTF*</code> classes into separate files instead of having it all in <code class="language-plaintext highlighter-rouge">import_glb.ts</code></li>
+  <li>Split up the JSON importing work in <code class="language-plaintext highlighter-rouge">uploadGLB</code> to a few separate functions that load each individual part: <code class="language-plaintext highlighter-rouge">loadBufferViews</code>, <code class="language-plaintext highlighter-rouge">loadAccessors</code>, <code class="language-plaintext highlighter-rouge">loadMeshes</code></li>
+</ul>
+
+<p>I’ve also stopped writing the JavaScript versions of these posts, the rest of the series will be in TypeScript only. The full code for this post can be found on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/tree/main/5-textures-ts">Github</a>.</p>
+
+<h1 id="loading-gltf-images-samplers-and-textures">Loading glTF Images, Samplers and Textures</h1>
+
+<p>Each texture in the glTF file references an image and, optionally, a sampler. The image defines the data for the texture, while the sampler defines the way that texture coordinates should be looked up within the image and how texels should be interpolated. The texture references the image and sampler by their index in the corresponding image and sampler array, similar to how accessors reference buffer views.</p>
+
+<p>The texture array from Duck.glb is shown below. We have a single texture, which uses sampler 0 and image (source) 0:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"textures"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"sampler"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The glTF images elements can either reference a file by URI, or a buffer view that contains the texture data. Since we’re only loading glB files in this series, we would expect to always have the texture data embedded in the file and will assume we always have a buffer view like below. The image specifies the buffer view containing its data, and the type of data within that buffer view. In this case, it’s a PNG.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"images"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"bufferView"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"mimeType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/png"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Note that it’s not required that all images in a glB file use buffer views for their data, for example I could have a glB file with lower resolution textures that can be downloaded quickly, that references higher resolution textures by URL that I can fetch asynchronously. We won’t be dealing with these kinds of files in this series though.</p>
+
+<p>Finally, the glTF samplers specify how we should lookup and interpolate texels in the image when rendering. These parameters map directly to the WebGL/OpenGL <code class="language-plaintext highlighter-rouge">glTexParameter</code> parameter values. The mag/min filter parameters define the texture filtering under magnification and minification, respectively, by directly specifying the OpenGL enum parameter value. Similarly, wrapS and wrapT specify the texture wrapping mode to be used for samples out of the texture bounds.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"samplers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"magFilter"</span><span class="p">:</span><span class="w"> </span><span class="mi">9729</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"minFilter"</span><span class="p">:</span><span class="w"> </span><span class="mi">9986</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"wrapS"</span><span class="p">:</span><span class="w"> </span><span class="mi">10497</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"wrapT"</span><span class="p">:</span><span class="w"> </span><span class="mi">10497</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>We’ll load the data “bottom-up” by first loading the image and sampler data, then loading the texture data. That way we have objects representing the images and samplers that the textures can share.</p>
+
+<h2 id="parsing-samplers-into-gltfsamplers">Parsing Samplers into GLTFSamplers</h2>
+
+<p>The samplers are simple enough to load, we’ll start by defining some enums that store the glTF sampler parameter values so we don’t need to just remember some magic numbers.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kr">enum</span> <span class="nx">GLTFTextureFilter</span> <span class="p">{</span>
+  <span class="nx">NEAREST</span> <span class="o">=</span> <span class="mi">9728</span><span class="p">,</span>
+  <span class="nx">LINEAR</span> <span class="o">=</span> <span class="mi">9729</span><span class="p">,</span>
+  <span class="nx">NEAREST_MIPMAP_NEAREST</span> <span class="o">=</span> <span class="mi">9984</span><span class="p">,</span>
+  <span class="nx">LINEAR_MIPMAP_NEAREST</span> <span class="o">=</span> <span class="mi">9985</span><span class="p">,</span>
+  <span class="nx">NEAREST_MIPMAP_LINEAR</span> <span class="o">=</span> <span class="mi">9986</span><span class="p">,</span>
+  <span class="nx">LINEAR_MIPMAP_LINEAR</span> <span class="o">=</span> <span class="mi">9987</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kr">enum</span> <span class="nx">GLTFTextureWrap</span> <span class="p">{</span>
+  <span class="nx">REPEAT</span> <span class="o">=</span> <span class="mi">10497</span><span class="p">,</span>
+  <span class="nx">CLAMP_TO_EDGE</span> <span class="o">=</span> <span class="mi">33071</span><span class="p">,</span>
+  <span class="nx">MIRRORED_REPEAT</span> <span class="o">=</span> <span class="mi">33648</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Along with some utility functions to get the corresponding WebGPU <code class="language-plaintext highlighter-rouge">GPUFilterMode</code>, <code class="language-plaintext highlighter-rouge">GPUMipMapFilterMode</code>, and <code class="language-plaintext highlighter-rouge">GPUAddressMode</code> from the GLTF enums:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">function</span> <span class="nf">gltfTextureFilterMode</span><span class="p">(</span><span class="nx">filter</span><span class="p">:</span> <span class="nx">GLTFTextureFilter</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch </span><span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">NEAREST_MIPMAP_NEAREST</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">NEAREST_MIPMAP_LINEAR</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">NEAREST</span><span class="p">:</span>
+      <span class="k">return</span> <span class="dl">"</span><span class="s2">nearest</span><span class="dl">"</span> <span class="k">as</span> <span class="nx">GPUFilterMode</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">LINEAR_MIPMAP_NEAREST</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">LINEAR_MIPMAP_LINEAR</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">LINEAR</span><span class="p">:</span>
+      <span class="k">return</span> <span class="dl">"</span><span class="s2">linear</span><span class="dl">"</span> <span class="k">as</span> <span class="nx">GPUFilterMode</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">function</span> <span class="nf">gltfTextureMipMapMode</span><span class="p">(</span><span class="nx">filter</span><span class="p">:</span> <span class="nx">GLTFTextureFilter</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch </span><span class="p">(</span><span class="nx">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">NEAREST_MIPMAP_NEAREST</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">LINEAR_MIPMAP_NEAREST</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">NEAREST</span><span class="p">:</span>
+      <span class="k">return</span> <span class="dl">"</span><span class="s2">nearest</span><span class="dl">"</span> <span class="k">as</span> <span class="nx">GPUMipmapFilterMode</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">LINEAR_MIPMAP_LINEAR</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">NEAREST_MIPMAP_LINEAR</span><span class="p">:</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">LINEAR</span><span class="p">:</span>
+      <span class="k">return</span> <span class="dl">"</span><span class="s2">linear</span><span class="dl">"</span> <span class="k">as</span> <span class="nx">GPUMipmapFilterMode</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">function</span> <span class="nf">gltfAddressMode</span><span class="p">(</span><span class="nx">mode</span><span class="p">:</span> <span class="nx">GLTFTextureWrap</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch </span><span class="p">(</span><span class="nx">mode</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureWrap</span><span class="p">.</span><span class="nx">REPEAT</span><span class="p">:</span>
+      <span class="k">return</span> <span class="dl">"</span><span class="s2">repeat</span><span class="dl">"</span> <span class="k">as</span> <span class="nx">GPUAddressMode</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureWrap</span><span class="p">.</span><span class="nx">CLAMP_TO_EDGE</span><span class="p">:</span>
+      <span class="k">return</span> <span class="dl">"</span><span class="s2">clamp-to-edge</span><span class="dl">"</span> <span class="k">as</span> <span class="nx">GPUAddressMode</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nx">GLTFTextureWrap</span><span class="p">.</span><span class="nx">MIRRORED_REPEAT</span><span class="p">:</span>
+      <span class="k">return</span> <span class="dl">"</span><span class="s2">mirror-repeat</span><span class="dl">"</span> <span class="k">as</span> <span class="nx">GPUAddressMode</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We can now define a <code class="language-plaintext highlighter-rouge">GLTFSampler</code> class which will take these GLTF sampler parameters and convert them to their WebGPU equivalents, although for now we’re ignoring mip maps. The class also provides a <code class="language-plaintext highlighter-rouge">create</code> method that will create the actual <code class="language-plaintext highlighter-rouge">GPUSampler</code> object with the specified sampler parameters. The <code class="language-plaintext highlighter-rouge">GPUSampler</code> is what we will pass to our shaders later on to use when sampling the texture.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFSampler</span> <span class="p">{</span>
+  <span class="nl">magFilter</span><span class="p">:</span> <span class="nx">GPUFilterMode</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">linear</span><span class="dl">"</span><span class="p">;</span>
+  <span class="nl">minFilter</span><span class="p">:</span> <span class="nx">GPUFilterMode</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">linear</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="nl">wrapU</span><span class="p">:</span> <span class="nx">GPUAddressMode</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">repeat</span><span class="dl">"</span><span class="p">;</span>
+  <span class="nl">wrapV</span><span class="p">:</span> <span class="nx">GPUAddressMode</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">repeat</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="nl">sampler</span><span class="p">:</span> <span class="nx">GPUSampler</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="nf">constructor</span><span class="p">(</span>
+    <span class="nx">magFilter</span><span class="p">:</span> <span class="nx">GLTFTextureFilter</span><span class="p">,</span>
+    <span class="nx">minFilter</span><span class="p">:</span> <span class="nx">GLTFTextureFilter</span><span class="p">,</span>
+    <span class="nx">wrapU</span><span class="p">:</span> <span class="nx">GLTFTextureWrap</span><span class="p">,</span>
+    <span class="nx">wrapV</span><span class="p">:</span> <span class="nx">GLTFTextureWrap</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">magFilter</span> <span class="o">=</span> <span class="nf">gltfTextureFilterMode</span><span class="p">(</span><span class="nx">magFilter</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">minFilter</span> <span class="o">=</span> <span class="nf">gltfTextureFilterMode</span><span class="p">(</span><span class="nx">minFilter</span><span class="p">);</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">wrapU</span> <span class="o">=</span> <span class="nf">gltfAddressMode</span><span class="p">(</span><span class="nx">wrapU</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">wrapV</span> <span class="o">=</span> <span class="nf">gltfAddressMode</span><span class="p">(</span><span class="nx">wrapV</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Create the GPU sampler</span>
+  <span class="nf">create</span><span class="p">(</span><span class="nx">device</span><span class="p">:</span> <span class="nx">GPUDevice</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">sampler</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createSampler</span><span class="p">({</span>
+      <span class="na">magFilter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">magFilter</span><span class="p">,</span>
+      <span class="na">minFilter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">minFilter</span><span class="p">,</span>
+      <span class="na">addressModeU</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">wrapU</span><span class="p">,</span>
+      <span class="na">addressModeV</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">wrapV</span><span class="p">,</span>
+      <span class="na">mipmapFilter</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nearest</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>All that’s left to do is add a function in <code class="language-plaintext highlighter-rouge">import_glb.ts</code> that takes the JSON chunk and loads up any samplers within it and returns them. We have to handle the case that there are no samplers in the file, the file can omit samplers even if it has textures.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">loadSamplers</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">:</span> <span class="kr">any</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">samplers</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">samplers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[];</span>
+  <span class="p">}</span>
+
+  <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">s</span> <span class="k">of</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">samplers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">samplers</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span>
+      <span class="k">new</span> <span class="nc">GLTFSampler</span><span class="p">(</span>
+        <span class="nx">s</span><span class="p">[</span><span class="dl">"</span><span class="s2">magFilter</span><span class="dl">"</span><span class="p">]</span> <span class="k">as</span> <span class="nx">GLTFTextureFilter</span><span class="p">,</span>
+        <span class="nx">s</span><span class="p">[</span><span class="dl">"</span><span class="s2">minFilter</span><span class="dl">"</span><span class="p">]</span> <span class="k">as</span> <span class="nx">GLTFTextureFilter</span><span class="p">,</span>
+        <span class="nx">s</span><span class="p">[</span><span class="dl">"</span><span class="s2">wrapS</span><span class="dl">"</span><span class="p">]</span> <span class="k">as</span> <span class="nx">GLTFTextureWrap</span><span class="p">,</span>
+        <span class="nx">s</span><span class="p">[</span><span class="dl">"</span><span class="s2">wrapT</span><span class="dl">"</span><span class="p">]</span> <span class="k">as</span> <span class="nx">GLTFTextureWrap</span>
+      <span class="p">)</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">samplers</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="loading-images-into-gltfimages">Loading Images into GLTFImages</h2>
+
+<p>Next, we need to load the image data out of the glB file by going through the images in the file, getting the data each of their buffer view’s references and turning it into an <code class="language-plaintext highlighter-rouge">ImageBitmap</code> that we can upload to the GPU.</p>
+
+<p>We’ll actually start by defining an enum that we’ll need later, <code class="language-plaintext highlighter-rouge">ImageUsage</code>, which records how an image is being used by materials in the scene. Images in a glTF file can be used in a number of material inputs:</p>
+
+<ul>
+  <li><a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#_material_pbrmetallicroughness_basecolortexture">Base Color</a>: the texture contains sRGB color data</li>
+  <li><a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#_material_pbrmetallicroughness_metallicroughnesstexture">Metallic + Roughness</a>: the blue channel stores the metalness values, the green channel stores roughness. Texture values are in linear space</li>
+  <li><a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#_material_normaltexture">Normal</a>: the texture stores tangent-space normal, with RGB = XYZ. Texture values are in linear space</li>
+  <li><a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#_material_occlusiontexture">Occlusion</a>: the R channel of the texture stores occlusion values. Texture values are in linear space</li>
+  <li><a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#_material_emissivetexture">Emission</a>: the texture contains sRGB emission values</li>
+</ul>
+
+<p>In order to pick the right texture format, <code class="language-plaintext highlighter-rouge">rgba8unorm-srgb</code> or <code class="language-plaintext highlighter-rouge">rgba8unorm</code>, we need to know how a texture is used in the materials referencing it.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kr">enum</span> <span class="nx">ImageUsage</span> <span class="p">{</span>
+  <span class="nx">BASE_COLOR</span><span class="p">,</span>
+  <span class="nx">METALLIC_ROUGHNESS</span><span class="p">,</span>
+  <span class="nx">NORMAL</span><span class="p">,</span>
+  <span class="nx">OCCLUSION</span><span class="p">,</span>
+  <span class="nx">EMISSION</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now let’s define our <code class="language-plaintext highlighter-rouge">GLTFImage</code> class. It will take an <code class="language-plaintext highlighter-rouge">ImageBitmap</code>, track its usage, and let us upload it to the GPU to produce a <code class="language-plaintext highlighter-rouge">GPUTexture</code> and <code class="language-plaintext highlighter-rouge">GPUTextureView</code> that we can pass to our shaders. Most of the work happens in <code class="language-plaintext highlighter-rouge">GPUTexture::upload</code>. Here we actually upload the <code class="language-plaintext highlighter-rouge">ImageBitmap</code> to a texture on the GPU using <a href="https://gpuweb.github.io/gpuweb/#dom-gpuqueue-copyexternalimagetotexture">copyExternalImageToTexture</a> . It’s worth noting that this code assumes each image will only have one usage, i.e., that an image used as a base color texture won’t also be used as a normal texture. This is likely a safe assumption, but if this is not the case in some interesting files, we could support creating an sRGB and non-sRGB texture view and the material can get the appropriate view for its usage.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Stores the image data texture for an image in the file</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFImage</span> <span class="p">{</span>
+  <span class="nl">bitmap</span><span class="p">:</span> <span class="nx">ImageBitmap</span><span class="p">;</span>
+
+  <span class="c1">// How the texture is used in the materials</span>
+  <span class="c1">// referencing it</span>
+  <span class="nl">usage</span><span class="p">:</span> <span class="nx">ImageUsage</span> <span class="o">=</span> <span class="nx">ImageUsage</span><span class="p">.</span><span class="nx">BASE_COLOR</span><span class="p">;</span>
+
+  <span class="nl">image</span><span class="p">:</span> <span class="nx">GPUTexture</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="nl">view</span><span class="p">:</span> <span class="nx">GPUTextureView</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">bitmap</span><span class="p">:</span> <span class="nx">ImageBitmap</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">bitmap</span> <span class="o">=</span> <span class="nx">bitmap</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Set the usage mode for the image</span>
+  <span class="nf">setUsage</span><span class="p">(</span><span class="nx">usage</span><span class="p">:</span> <span class="nx">ImageUsage</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">usage</span> <span class="o">=</span> <span class="nx">usage</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Upload the image to the GPU and create the view</span>
+  <span class="nf">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">:</span> <span class="nx">GPUDevice</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Pick the right texture format to use based on the</span>
+    <span class="c1">// image's usage</span>
+    <span class="kd">let</span> <span class="nx">format</span><span class="p">:</span> <span class="nx">GPUTextureFormat</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">rgba8unorm-srgb</span><span class="dl">"</span><span class="p">;</span>
+    <span class="k">switch </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">usage</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="nx">ImageUsage</span><span class="p">.</span><span class="nx">BASE_COLOR</span><span class="p">:</span>
+        <span class="nx">format</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">rgba8unorm-srgb</span><span class="dl">"</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nx">ImageUsage</span><span class="p">.</span><span class="nx">METALLIC_ROUGHNESS</span><span class="p">:</span>
+        <span class="nx">format</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">rgba8unorm</span><span class="dl">"</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nx">ImageUsage</span><span class="p">.</span><span class="nx">NORMAL</span><span class="p">:</span>
+      <span class="k">case</span> <span class="nx">ImageUsage</span><span class="p">.</span><span class="nx">OCCLUSION</span><span class="p">:</span>
+      <span class="k">case</span> <span class="nx">ImageUsage</span><span class="p">.</span><span class="nx">EMISSION</span><span class="p">:</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Unhandled image format for now, TODO!</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">const</span> <span class="nx">imgSize</span> <span class="o">=</span> <span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">bitmap</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">bitmap</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">image</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createTexture</span><span class="p">({</span>
+      <span class="na">size</span><span class="p">:</span> <span class="nx">imgSize</span><span class="p">,</span>
+      <span class="na">format</span><span class="p">:</span> <span class="nx">format</span><span class="p">,</span>
+      <span class="c1">// Note: the render attachment usage is required for</span>
+      <span class="c1">// copyExternalImageToTexture we aren't going to actually</span>
+      <span class="c1">// render to these images ourselves</span>
+      <span class="na">usage</span><span class="p">:</span>
+        <span class="nx">GPUTextureUsage</span><span class="p">.</span><span class="nx">TEXTURE_BINDING</span> <span class="o">|</span>
+        <span class="nx">GPUTextureUsage</span><span class="p">.</span><span class="nx">COPY_DST</span> <span class="o">|</span>
+        <span class="nx">GPUTextureUsage</span><span class="p">.</span><span class="nx">RENDER_ATTACHMENT</span><span class="p">,</span>
+    <span class="p">});</span>
+
+    <span class="nx">device</span><span class="p">.</span><span class="nx">queue</span><span class="p">.</span><span class="nf">copyExternalImageToTexture</span><span class="p">(</span>
+      <span class="p">{</span> <span class="na">source</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">bitmap</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">texture</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">image</span> <span class="p">},</span>
+      <span class="nx">imgSize</span>
+    <span class="p">);</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">view</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nf">createView</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>With the <code class="language-plaintext highlighter-rouge">GLTFImage</code> implemented, we can now write a function to load all the images in the glTF file into <code class="language-plaintext highlighter-rouge">GLTFImages</code> for use later on. To create an image bitmap from the binary data referenced by the <code class="language-plaintext highlighter-rouge">GLTFBufferView</code> we first create a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob">Blob</a> from the view and specify the mimeType. We can then pass the <code class="language-plaintext highlighter-rouge">Blob</code> to <a href="https://developer.mozilla.org/en-US/docs/Web/API/createImageBitmap">createImageBitmap</a> to create an <code class="language-plaintext highlighter-rouge">ImageBitmap</code> that we can pass to <code class="language-plaintext highlighter-rouge">copyExternalImageToTexture</code>.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nf">loadImages</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">:</span> <span class="kr">any</span><span class="p">,</span> <span class="nx">bufferViews</span><span class="p">:</span> <span class="nx">GLTFBufferView</span><span class="p">[])</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">images</span><span class="p">:</span> <span class="nx">GLTFImage</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">images</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">images</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">img</span> <span class="k">of</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">images</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">bv</span> <span class="o">=</span> <span class="nx">bufferViews</span><span class="p">[</span><span class="nx">img</span><span class="p">[</span><span class="dl">"</span><span class="s2">bufferView</span><span class="dl">"</span><span class="p">]];</span>
+    <span class="kd">const</span> <span class="nx">blob</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Blob</span><span class="p">([</span><span class="nx">bv</span><span class="p">.</span><span class="nx">view</span><span class="p">],</span> <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="nx">img</span><span class="p">[</span><span class="dl">"</span><span class="s2">mimeType</span><span class="dl">"</span><span class="p">]</span> <span class="p">});</span>
+    <span class="kd">const</span> <span class="nx">bitmap</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">createImageBitmap</span><span class="p">(</span><span class="nx">blob</span><span class="p">);</span>
+    <span class="nx">images</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="k">new</span> <span class="nc">GLTFImage</span><span class="p">(</span><span class="nx">bitmap</span><span class="p">));</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">images</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="loading-the-gltftextures">Loading the GLTFTextures</h2>
+
+<p>All the hard work is done by the <code class="language-plaintext highlighter-rouge">GLTFSampler</code> and <code class="language-plaintext highlighter-rouge">GLTFImage</code>, the <code class="language-plaintext highlighter-rouge">GLTFTexture</code> just references a sampler and image source to combine them. Since the <code class="language-plaintext highlighter-rouge">GLTFTexture</code> is what’s going to be stored by the material, it’s convenient to implement <code class="language-plaintext highlighter-rouge">setUsage</code> on it as well to simply pass the usage flag through to the referenced image.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFTexture</span> <span class="p">{</span>
+  <span class="nl">sampler</span><span class="p">:</span> <span class="nx">GLTFSampler</span><span class="p">;</span>
+  <span class="nl">image</span><span class="p">:</span> <span class="nx">GLTFImage</span><span class="p">;</span>
+
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">sampler</span><span class="p">:</span> <span class="nx">GLTFSampler</span><span class="p">,</span> <span class="nx">image</span><span class="p">:</span> <span class="nx">GLTFImage</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">sampler</span> <span class="o">=</span> <span class="nx">sampler</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">image</span> <span class="o">=</span> <span class="nx">image</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Set the texture's image usage flag</span>
+  <span class="nf">setUsage</span><span class="p">(</span><span class="nx">usage</span><span class="p">:</span> <span class="nx">ImageUsage</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nf">setUsage</span><span class="p">(</span><span class="nx">usage</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Loading the textures from the glTF file is similarly simple, with one caveat. It’s valid to not specify a sampler at all! In this case, the <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#_texture_sampler">importer is expected to use an appropriate default filtering mode and repeat addressing</a>. We handle this by creating a default sampler to use if no sampler was referenced and adding it to the samplers list if it was used so that we can create it on the device later on.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">loadTextures</span><span class="p">(</span>
+  <span class="nx">jsonChunk</span><span class="p">:</span> <span class="kr">any</span><span class="p">,</span>
+  <span class="nx">images</span><span class="p">:</span> <span class="nx">GLTFImage</span><span class="p">[],</span>
+  <span class="nx">samplers</span><span class="p">:</span> <span class="nx">GLTFSampler</span><span class="p">[]</span>
+<span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">textures</span><span class="p">:</span> <span class="nx">GLTFTexture</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">textures</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">textures</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kd">const</span> <span class="nx">defaultSampler</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">GLTFSampler</span><span class="p">(</span>
+    <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">LINEAR</span><span class="p">,</span>
+    <span class="nx">GLTFTextureFilter</span><span class="p">.</span><span class="nx">LINEAR</span><span class="p">,</span>
+    <span class="nx">GLTFTextureWrap</span><span class="p">.</span><span class="nx">REPEAT</span><span class="p">,</span>
+    <span class="nx">GLTFTextureWrap</span><span class="p">.</span><span class="nx">REPEAT</span>
+  <span class="p">);</span>
+  <span class="kd">let</span> <span class="nx">usedDefaultSampler</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+  <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">t</span> <span class="k">of</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">textures</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">sampler</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">if </span><span class="p">(</span><span class="dl">"</span><span class="s2">sampler</span><span class="dl">"</span> <span class="k">in</span> <span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">sampler</span> <span class="o">=</span> <span class="nx">samplers</span><span class="p">[</span><span class="nx">t</span><span class="p">[</span><span class="dl">"</span><span class="s2">sampler</span><span class="dl">"</span><span class="p">]];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// If no sampler was specified, use the default</span>
+      <span class="nx">sampler</span> <span class="o">=</span> <span class="nx">defaultSampler</span><span class="p">;</span>
+      <span class="nx">usedDefaultSampler</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">textures</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="k">new</span> <span class="nc">GLTFTexture</span><span class="p">(</span><span class="nx">sampler</span><span class="p">,</span> <span class="nx">images</span><span class="p">[</span><span class="nx">t</span><span class="p">[</span><span class="dl">"</span><span class="s2">source</span><span class="dl">"</span><span class="p">]]));</span>
+  <span class="p">}</span>
+  <span class="c1">// If we used the default sampler add it to the samplers list so its</span>
+  <span class="c1">// GPU resources will be created</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">usedDefaultSampler</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">samplers</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">defaultSampler</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">textures</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="loading-gltfmaterials">Loading GLTFMaterials</h1>
+
+<p><a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-material">Materials in glTF</a> specify the PBR model parameters and textures, as shown below for the Duck. Here we have a base color texture reference, along with metallic and emissive factors.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">"materials"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"pbrMetallicRoughness"</span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"baseColorTexture"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nl">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span><span class="w">
+      </span><span class="nl">"metallicFactor"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"emissiveFactor"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>We’ll represent these with the <code class="language-plaintext highlighter-rouge">GLTFMaterial</code> class, shown below. When provided textures, the material class will mark them with their corresponding usage in the material. The <code class="language-plaintext highlighter-rouge">GLTFMaterial::upload</code> method will upload the <code class="language-plaintext highlighter-rouge">baseColorFactor</code>, <code class="language-plaintext highlighter-rouge">metallicFactor</code> and <code class="language-plaintext highlighter-rouge">roughnessFactor</code> parameters to a uniform buffer and create a bind group referencing the material parameters (uniform buffer and any relevant textures). This is omitted for brevity, but can be found on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/5-textures-ts/src/gltf_material.ts">Github</a>.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">class</span> <span class="nc">GLTFMaterial</span> <span class="p">{</span>
+  <span class="nl">baseColorFactor</span><span class="p">:</span> <span class="nx">vec4</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
+  <span class="nl">baseColorTexture</span><span class="p">:</span> <span class="nx">GLTFTexture</span> <span class="o">|</span> <span class="kc">null</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="nl">metallicFactor</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="nl">roughnessFactor</span><span class="p">:</span> <span class="kr">number</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="nl">metallicRoughnessTexture</span><span class="p">:</span> <span class="nx">GLTFTexture</span> <span class="o">|</span> <span class="kc">null</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="c1">// Uniform buffer holding the material factor params</span>
+  <span class="nl">paramBuffer</span><span class="p">:</span> <span class="nx">GPUBuffer</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="c1">// Bind group layout and bind groups for the material parameters</span>
+  <span class="nl">bindGroupLayout</span><span class="p">:</span> <span class="nx">GPUBindGroupLayout</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="nl">bindGroup</span><span class="p">:</span> <span class="nx">GPUBindGroup</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="nf">constructor</span><span class="p">(</span>
+    <span class="nx">baseColorFactor</span><span class="p">:</span> <span class="nx">vec4</span><span class="p">,</span>
+    <span class="nx">baseColorTexture</span><span class="p">:</span> <span class="nx">GLTFTexture</span> <span class="o">|</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">metallicFactor</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+    <span class="nx">roughnessFactor</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+    <span class="nx">metallicRoughnessTexture</span><span class="p">:</span> <span class="nx">GLTFTexture</span> <span class="o">|</span> <span class="kc">null</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">baseColorFactor</span> <span class="o">=</span> <span class="nx">baseColorFactor</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">baseColorTexture</span> <span class="o">=</span> <span class="nx">baseColorTexture</span><span class="p">;</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">baseColorTexture</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">baseColorTexture</span><span class="p">.</span><span class="nf">setUsage</span><span class="p">(</span><span class="nx">ImageUsage</span><span class="p">.</span><span class="nx">BASE_COLOR</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">metallicFactor</span> <span class="o">=</span> <span class="nx">metallicFactor</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">roughnessFactor</span> <span class="o">=</span> <span class="nx">roughnessFactor</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">metallicRoughnessTexture</span> <span class="o">=</span> <span class="nx">metallicRoughnessTexture</span><span class="p">;</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">metallicRoughnessTexture</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">metallicRoughnessTexture</span><span class="p">.</span><span class="nf">setUsage</span><span class="p">(</span><span class="nx">ImageUsage</span><span class="p">.</span><span class="nx">METALLIC_ROUGHNESS</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Upload params buffer and create the bind group and bind group layout</span>
+  <span class="c1">// for the material params</span>
+  <span class="nf">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">:</span> <span class="nx">GPUDevice</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// See github...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We’ll load the materials from the file by adding a new <code class="language-plaintext highlighter-rouge">loadMaterials</code> function, that goes through any materials in the file and constructs the corresponding <code class="language-plaintext highlighter-rouge">GLTFMaterial</code>. If any values are missing from the material we apply the default value from the spec.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">loadMaterials</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">:</span> <span class="kr">any</span><span class="p">,</span> <span class="nx">textures</span><span class="p">:</span> <span class="nx">GLTFTexture</span><span class="p">[])</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">materials</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">m</span> <span class="k">of</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">materials</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">pbrMR</span> <span class="o">=</span> <span class="nx">m</span><span class="p">[</span><span class="dl">"</span><span class="s2">pbrMetallicRoughness</span><span class="dl">"</span><span class="p">];</span>
+    <span class="c1">// Default base color factor of 1, 1, 1</span>
+    <span class="kd">const</span> <span class="nx">baseColorFactor</span> <span class="o">=</span> <span class="nx">pbrMR</span><span class="p">[</span><span class="dl">"</span><span class="s2">baseColorFactor</span><span class="dl">"</span><span class="p">]</span> <span class="o">??</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="kd">const</span> <span class="nx">metallicFactor</span> <span class="o">=</span> <span class="nx">pbrMR</span><span class="p">[</span><span class="dl">"</span><span class="s2">metallicFactor</span><span class="dl">"</span><span class="p">]</span> <span class="o">??</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">roughnessFactor</span> <span class="o">=</span> <span class="nx">pbrMR</span><span class="p">[</span><span class="dl">"</span><span class="s2">roughnessFactor</span><span class="dl">"</span><span class="p">]</span> <span class="o">??</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="kd">let</span> <span class="nx">baseColorTexture</span><span class="p">:</span> <span class="nx">GLTFTexture</span> <span class="o">|</span> <span class="kc">null</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">if </span><span class="p">(</span><span class="dl">"</span><span class="s2">baseColorTexture</span><span class="dl">"</span> <span class="k">in</span> <span class="nx">pbrMR</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">baseColorTexture</span> <span class="o">=</span> <span class="nx">textures</span><span class="p">[</span><span class="nx">pbrMR</span><span class="p">[</span><span class="dl">"</span><span class="s2">baseColorTexture</span><span class="dl">"</span><span class="p">][</span><span class="dl">"</span><span class="s2">index</span><span class="dl">"</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="kd">let</span> <span class="nx">metallicRoughnessTexture</span><span class="p">:</span> <span class="nx">GLTFTexture</span> <span class="o">|</span> <span class="kc">null</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">if </span><span class="p">(</span><span class="dl">"</span><span class="s2">metallicRoughnessTexture</span><span class="dl">"</span> <span class="k">in</span> <span class="nx">pbrMR</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">metallicRoughnessTexture</span> <span class="o">=</span>
+        <span class="nx">textures</span><span class="p">[</span><span class="nx">pbrMR</span><span class="p">[</span><span class="dl">"</span><span class="s2">metallicRoughnessTexture</span><span class="dl">"</span><span class="p">][</span><span class="dl">"</span><span class="s2">index</span><span class="dl">"</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="nx">materials</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span>
+      <span class="k">new</span> <span class="nc">GLTFMaterial</span><span class="p">(</span>
+        <span class="nx">baseColorFactor</span><span class="p">,</span>
+        <span class="nx">baseColorTexture</span><span class="p">,</span>
+        <span class="nx">metallicFactor</span><span class="p">,</span>
+        <span class="nx">roughnessFactor</span><span class="p">,</span>
+        <span class="nx">metallicRoughnessTexture</span>
+      <span class="p">)</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">materials</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="loading-and-using-materials-for-primitives">Loading and Using Materials for Primitives</h1>
+
+<p>When we were loading primitives before, we skipped the “material” field that each primitive has. Now it’s time to come back and load it. Since we’re applying textures, we also will start loading the <code class="language-plaintext highlighter-rouge">TEXCOORDS_0</code> attribute that can also be specified on a primitive. The mesh loading code has been split out to <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/5-textures-ts/src/import_glb.ts#L238-L289">loadMeshes</a> as part of the code organization cleanup from the previous step. This function will now also take the <code class="language-plaintext highlighter-rouge">GLTFMaterial[]</code> array so that we can pass the corresponding material to each primitive when it’s created. We’ll also modify the <code class="language-plaintext highlighter-rouge">GLTFPrimitive</code> constructor to take a <code class="language-plaintext highlighter-rouge">GLTFMaterial</code> as a parameter and store it as a member variable.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">loadMeshes</span><span class="p">(</span>
+  <span class="nx">jsonChunk</span><span class="p">:</span> <span class="kr">any</span><span class="p">,</span>
+  <span class="nx">accessors</span><span class="p">:</span> <span class="nx">GLTFAccessor</span><span class="p">[],</span>
+  <span class="nx">materials</span><span class="p">:</span> <span class="nx">GLTFMaterial</span><span class="p">[]</span>
+<span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">meshes</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">mesh</span> <span class="k">of</span> <span class="nx">jsonChunk</span><span class="p">.</span><span class="nx">meshes</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">meshPrimitives</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">prim</span> <span class="k">of</span> <span class="nx">mesh</span><span class="p">.</span><span class="nx">primitives</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Get topology and indices as before...</span>
+
+      <span class="c1">// Get the positions and the texture coordinates</span>
+      <span class="kd">let</span> <span class="nx">positions</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="kd">let</span> <span class="nx">texcoords</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">attr</span> <span class="k">in</span> <span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">attributes</span><span class="dl">"</span><span class="p">])</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">accessor</span> <span class="o">=</span> <span class="nx">accessors</span><span class="p">[</span><span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">attributes</span><span class="dl">"</span><span class="p">][</span><span class="nx">attr</span><span class="p">]];</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">attr</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">POSITION</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">positions</span> <span class="o">=</span> <span class="nx">accessor</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">attr</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">TEXCOORD_0</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">texcoords</span> <span class="o">=</span> <span class="nx">accessor</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="c1">// Lookup the material for the primitive</span>
+      <span class="kd">let</span> <span class="nx">mat</span> <span class="o">=</span> <span class="nx">materials</span><span class="p">[</span><span class="nx">prim</span><span class="p">[</span><span class="dl">"</span><span class="s2">material</span><span class="dl">"</span><span class="p">]];</span>
+
+      <span class="c1">// Add the primitive to the mesh's list of primitives</span>
+      <span class="nx">meshPrimitives</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span>
+        <span class="k">new</span> <span class="nc">GLTFPrimitive</span><span class="p">(</span><span class="nx">mat</span><span class="p">,</span> <span class="nx">positions</span><span class="p">,</span> <span class="nx">indices</span><span class="p">,</span> <span class="nx">texcoords</span><span class="p">,</span> <span class="nx">topology</span><span class="p">)</span>
+      <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">meshes</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="k">new</span> <span class="nc">GLTFMesh</span><span class="p">(</span><span class="nx">mesh</span><span class="p">[</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">],</span> <span class="nx">meshPrimitives</span><span class="p">));</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">meshes</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="updating-gltfprimitivebuildrenderpipeline">Updating GLTFPrimitive::buildRenderPipeline</h2>
+
+<p>Our <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/5-textures-ts/src/gltf_primitive.ts">GLTFPrimitive</a> gets two additions in <code class="language-plaintext highlighter-rouge">buildRenderPipeline</code> :</p>
+
+<ul>
+  <li>Adding the texture coordinates attribute, if it has texture coordinates</li>
+  <li>Adding the material bind group layout to its render pipeline’s bind group layouts</li>
+</ul>
+
+<p>Our <code class="language-plaintext highlighter-rouge">vertexState</code> will now be built as shown below. We add the position attribute buffer as before, and now, if we have texture coordinates, we add the texture coordinates vertex buffer as well.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">vertexBuffers</span><span class="p">:</span> <span class="nx">GPUVertexBufferLayout</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="na">arrayStride</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">byteStride</span><span class="p">,</span>
+    <span class="na">attributes</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">format</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">positions</span><span class="p">.</span><span class="nx">elementType</span> <span class="k">as</span> <span class="nx">GPUVertexFormat</span><span class="p">,</span>
+        <span class="na">offset</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="na">shaderLocation</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+<span class="p">];</span>
+<span class="k">if </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">texcoords</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">vertexBuffers</span><span class="p">.</span><span class="nf">push</span><span class="p">({</span>
+    <span class="na">arrayStride</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">texcoords</span><span class="p">.</span><span class="nx">byteStride</span><span class="p">,</span>
+    <span class="na">attributes</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">format</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">texcoords</span><span class="p">.</span><span class="nx">elementType</span> <span class="k">as</span> <span class="nx">GPUVertexFormat</span><span class="p">,</span>
+        <span class="na">offset</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="na">shaderLocation</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// Vertex attribute state and shader stage</span>
+<span class="kd">let</span> <span class="nx">vertexState</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">// Shader stage info</span>
+  <span class="na">module</span><span class="p">:</span> <span class="nx">shaderModule</span><span class="p">,</span>
+  <span class="na">entryPoint</span><span class="p">:</span> <span class="dl">"</span><span class="s2">vertex_main</span><span class="dl">"</span><span class="p">,</span>
+  <span class="c1">// Vertex buffer info</span>
+  <span class="na">buffers</span><span class="p">:</span> <span class="nx">vertexBuffers</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>We’ll also now add the primitive’s material bind group layout to its pipeline:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Add the material bind group layout</span>
+<span class="nx">bindGroupLayouts</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">material</span><span class="p">.</span><span class="nx">bindGroupLayout</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">layout</span> <span class="o">=</span> <span class="nx">device</span><span class="p">.</span><span class="nf">createPipelineLayout</span><span class="p">({</span>
+  <span class="na">bindGroupLayouts</span><span class="p">:</span> <span class="nx">bindGroupLayouts</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h1 id="updating-uploadglb">Updating uploadGLB</h1>
+
+<p>We can now add calls to our loader functions in <code class="language-plaintext highlighter-rouge">uploadGLB</code> . We start by loading all the buffer views, and accessors, after which we get the images, samplers, textures and materials. Finally we can load the meshes. Once all the data has been loaded from the file we know what usage our GPU objects have and can upload them.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Load the buffer views</span>
+<span class="kd">const</span> <span class="nx">bufferViews</span> <span class="o">=</span> <span class="nf">loadBufferViews</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">,</span> <span class="nx">binaryChunk</span><span class="p">);</span>
+<span class="c1">// Load the GLTF accessors</span>
+<span class="kd">const</span> <span class="nx">accessors</span> <span class="o">=</span> <span class="nf">loadAccessors</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">,</span> <span class="nx">bufferViews</span><span class="p">);</span>
+<span class="c1">// Load and decode all the images in the file</span>
+<span class="kd">const</span> <span class="nx">images</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">loadImages</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">,</span> <span class="nx">bufferViews</span><span class="p">);</span>
+<span class="c1">// Load all the samplers in the file</span>
+<span class="kd">const</span> <span class="nx">samplers</span> <span class="o">=</span> <span class="nf">loadSamplers</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">);</span>
+<span class="c1">// Load all the textures, which just combine a sampler + image</span>
+<span class="kd">const</span> <span class="nx">textures</span> <span class="o">=</span> <span class="nf">loadTextures</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">,</span> <span class="nx">images</span><span class="p">,</span> <span class="nx">samplers</span><span class="p">);</span>
+<span class="c1">// Load all the materials</span>
+<span class="kd">const</span> <span class="nx">materials</span> <span class="o">=</span> <span class="nf">loadMaterials</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">,</span> <span class="nx">textures</span><span class="p">);</span>
+<span class="c1">// Load all meshes</span>
+<span class="kd">const</span> <span class="nx">meshes</span> <span class="o">=</span> <span class="nf">loadMeshes</span><span class="p">(</span><span class="nx">jsonChunk</span><span class="p">,</span> <span class="nx">accessors</span><span class="p">,</span> <span class="nx">materials</span><span class="p">);</span>
+
+<span class="c1">// Upload data to the GPU</span>
+
+<span class="c1">// Upload the buffer views used by mesh</span>
+<span class="nx">bufferViews</span><span class="p">.</span><span class="nf">forEach</span><span class="p">((</span><span class="nx">bv</span><span class="p">:</span> <span class="nx">GLTFBufferView</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">bv</span><span class="p">.</span><span class="nx">needsUpload</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">bv</span><span class="p">.</span><span class="nf">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="c1">// Upload all images, now that we know their usage and can</span>
+<span class="c1">// pick the right GPU texture format</span>
+<span class="nx">images</span><span class="p">.</span><span class="nf">forEach</span><span class="p">((</span><span class="nx">img</span><span class="p">:</span> <span class="nx">GLTFImage</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">img</span><span class="p">.</span><span class="nf">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="c1">// Create all samplers</span>
+<span class="nx">samplers</span><span class="p">.</span><span class="nf">forEach</span><span class="p">((</span><span class="nx">s</span><span class="p">:</span> <span class="nx">GLTFSampler</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="nx">device</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="c1">// Create bind groups and UBOs for materials</span>
+<span class="nx">materials</span><span class="p">.</span><span class="nf">forEach</span><span class="p">((</span><span class="nx">mat</span><span class="p">:</span> <span class="nx">GLTFMaterial</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">mat</span><span class="p">.</span><span class="nf">upload</span><span class="p">(</span><span class="nx">device</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h1 id="updating-the-shader-to-use-the-material">Updating the Shader to use the Material</h1>
+
+<p>Since we’re not using a fancy material or lighting model yet to implement the GLTFMaterial, our changes to the <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/5-textures-ts/src/gltf_prim.wgsl">shader code</a> are pretty simple. First, we’ll add new vertex inputs and outputs to pass the texture coordinates through from the vertex shader to the fragment shader, along with a new <code class="language-plaintext highlighter-rouge">float2</code> alias.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">alias</span> <span class="n">float2</span> <span class="o">=</span> <span class="kt">vec2</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">VertexInput</span> <span class="p">{</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">position</span><span class="o">:</span> <span class="n">float3</span><span class="p">,</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">texcoords</span><span class="o">:</span> <span class="n">float2</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">VertexOutput</span> <span class="p">{</span>
+    <span class="err">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="n">position</span><span class="o">:</span> <span class="n">float4</span><span class="p">,</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">world_pos</span><span class="o">:</span> <span class="n">float3</span><span class="p">,</span>
+    <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">texcoords</span><span class="o">:</span> <span class="n">float2</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Our material parameters will be passed as uniforms, samplers, and textures in the material bind group. Let’s add these definitions to our shader:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">MaterialParams</span> <span class="p">{</span>
+    <span class="nl">base_color_factor:</span> <span class="n">float4</span><span class="p">,</span>
+    <span class="nl">metallic_factor:</span> <span class="n">f32</span><span class="p">,</span>
+    <span class="nl">roughness_factor:</span> <span class="n">f32</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="err">@</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="err">@</span><span class="n">binding</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">var</span><span class="o">&lt;</span><span class="k">uniform</span><span class="o">&gt;</span> <span class="n">material_params</span><span class="o">:</span> <span class="n">MaterialParams</span><span class="p">;</span>
+
+<span class="err">@</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="err">@</span><span class="n">binding</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">var</span> <span class="n">base_color_sampler</span><span class="o">:</span> <span class="n">sampler</span><span class="p">;</span>
+
+<span class="err">@</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="err">@</span><span class="n">binding</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">var</span> <span class="n">base_color_texture</span><span class="o">:</span> <span class="n">texture_2d</span><span class="o">&lt;</span><span class="n">f32</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Finally, in the fragment shader we can use the material parameters to color the fragment. Since we’re now dealing with sRGB textures and want our rendering to be gamma correct, I’ve also added a <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/5-textures-ts/src/gltf_prim.wgsl#L45-L50">linear_to_srgb</a> utility function in the shader to convert our linear color values back to sRGB for display.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">@</span><span class="n">fragment</span>
+<span class="n">fn</span> <span class="nf">fragment_main</span><span class="p">(</span><span class="k">in</span><span class="o">:</span> <span class="n">VertexOutput</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="err">@</span><span class="n">location</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">float4</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="n">base_color</span> <span class="o">=</span> <span class="n">textureSample</span><span class="p">(</span><span class="n">base_color_texture</span><span class="p">,</span> <span class="n">base_color_sampler</span><span class="p">,</span> <span class="k">in</span><span class="p">.</span><span class="n">texcoords</span><span class="p">);</span>
+    <span class="n">var</span> <span class="n">color</span> <span class="o">=</span> <span class="n">material_params</span><span class="p">.</span><span class="n">base_color_factor</span> <span class="o">*</span> <span class="n">base_color</span><span class="p">;</span>
+
+    <span class="n">color</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">linear_to_srgb</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">color</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">linear_to_srgb</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="n">color</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">linear_to_srgb</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+    <span class="n">color</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">color</span><span class="p">;</span>
+<span class="err">}</span>
+</code></pre></div></div>
+
+<h1 id="results">Results</h1>
+
+<p>That’s it! With everything in, you should see a nicely rendered Duck like shown below. The full code, and the Duck model (from the glTF sample models repo) can be found on <a href="https://github.com/Twinklebear/webgpu-0-to-gltf/tree/main/5-textures-ts">Github</a>. You can run the demo embedded below, or directly <a href="https://www.willusher.io/webgpu-0-to-gltf/5-textures-ts">here</a>. If you try out a few models you might find the code crashes or doesn’t render materials correctly in some cases. This is because we have some built in assumptions in the code now, that all primitives will have materials, textures are always using texcoord 0, etc. We’ll come back to this later when we look at dynamically creating shaders specific to each primitive configuration.</p>
+
+<div class="embed-responsive embed-responsive-4by3">
+<iframe class="embed-responsive-item" src="https://www.willusher.io/webgpu-0-to-gltf/5-textures-ts">
+</iframe>
+</div>
+
+		<hr>
+		<div class="col-12 row">
+			
+			<div class="col-md-6 justify-content-left">
+				<a href="/graphics/2024/04/22/webgpu-marching-cubes" title="GPU Compute in the Browser at the Speed of Native: WebGPU Marching Cubes">
+					<span class="fa fa-chevron-left" aria-hidden="true"></span>&nbsp Previous</a>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+
+
+
+	</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+
+    <script defer data-domain="willusher.io" src="https://pan.wushernet.com/js/script.js"></script>
+
+</body>
+</html>
+
+
+

@@ -61,6 +61,7 @@ https://www.willusher.io//publications/isp-jsfi
 https://www.willusher.io//publications/vtkm
 https://www.willusher.io//publications/pkd
 
+https://www.willusher.io//graphics/2024/04/28/0-to-gltf-basic-materials
 https://www.willusher.io//graphics/2024/04/22/webgpu-marching-cubes
 https://www.willusher.io//graphics/2023/06/24/0-to-gltf-full-scene
 https://www.willusher.io//graphics/2023/05/16/0-to-gltf-first-mesh

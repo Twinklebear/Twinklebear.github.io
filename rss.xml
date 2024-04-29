@@ -5,9 +5,34 @@
 		<title>Will Usher's Blog</title>
 		<description>Computer Graphics and Programming</description>
 		<link>https://www.willusher.io/</link>
-		<lastBuildDate>Sun, 28 Apr 2024 10:47:45 -0700</lastBuildDate>
-		<pubDate>Sun, 28 Apr 2024 10:47:45 -0700</pubDate>
+		<lastBuildDate>Sun, 28 Apr 2024 20:04:24 -0700</lastBuildDate>
+		<pubDate>Sun, 28 Apr 2024 20:04:24 -0700</pubDate>
 		<ttl>60</ttl>
+		
+		<item>
+			<title>From 0 to glTF with WebGPU: Basic Materials and Textures</title>
+			<description>
+&lt;figure&gt;
+  &lt;img class=&quot;img-fluid&quot; src=&quot;https://willusherio.b-cdn.net/webgpu-0-to-gltf/basic-material-textures-ts-duck.png&quot; /&gt;
+    
+    &lt;figcaption&gt;&lt;b&gt;Figure 1:&lt;/b&gt;
+    The happy duck we’ll be able to render at the end of this post
+    &lt;i&gt;
+  &lt;/i&gt;
+  &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;Now that we can load up complex scene hierarchies from glTF files and render them correctly, let’s start getting some more interesting colors on screen! glTF defines a &lt;a href=&quot;https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#appendix-b-brdf-implementation&quot;&gt;physically based BRDF&lt;/a&gt;, with support for metallic and roughness properties, along with normal, emission and occlusion texture maps. There are a number of &lt;a href=&quot;https://github.com/KhronosGroup/glTF/blob/main/extensions/README.md&quot;&gt;extensions&lt;/a&gt; on top of this basic material model (the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;KHR_materials_*&lt;/code&gt; extensions) that add even more advanced material definitions.&lt;/p&gt;
+
+&lt;p&gt;We’ll keep it simple to start. Today we’re going to take the first step of loading the base glTF material parameters and textures from the glB file and passing them to our shader. In the shader we’ll color the object by its base color properties, without applying any lighting or material model yet.&lt;/p&gt;
+
+
+				&lt;a href=&quot;https://www.willusher.io//graphics/2024/04/28/0-to-gltf-basic-materials&quot;&gt;Continue Reading&lt;/a&gt;
+			</description>
+			<link>https://www.willusher.io//graphics/2024/04/28/0-to-gltf-basic-materials</link>
+			<guid>https://www.willusher.io//graphics/2024/04/28/0-to-gltf-basic-materials</guid>
+			<pubDate>Sun, 28 Apr 2024 00:00:00 -0700</pubDate>
+		</item>
 		
 		<item>
 			<title>GPU Compute in the Browser at the Speed of Native: WebGPU Marching Cubes</title>

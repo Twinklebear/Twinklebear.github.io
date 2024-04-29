@@ -94,6 +94,31 @@
 <div class="row mt-4 justify-content-center">
 	
 	<div class="col-9 mb-2">
+		<a href="/graphics/2024/04/28/0-to-gltf-basic-materials"><h3>From 0 to glTF with WebGPU: Basic Materials and Textures</h3></a>
+        <p>April 28, 2024</p>
+		
+<figure>
+  <img class="img-fluid" src="https://willusherio.b-cdn.net/webgpu-0-to-gltf/basic-material-textures-ts-duck.png" />
+    
+    <figcaption><b>Figure 1:</b>
+    The happy duck we’ll be able to render at the end of this post
+    <i>
+  </i>
+  </figcaption>
+</figure>
+
+<p>Now that we can load up complex scene hierarchies from glTF files and render them correctly, let’s start getting some more interesting colors on screen! glTF defines a <a href="https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#appendix-b-brdf-implementation">physically based BRDF</a>, with support for metallic and roughness properties, along with normal, emission and occlusion texture maps. There are a number of <a href="https://github.com/KhronosGroup/glTF/blob/main/extensions/README.md">extensions</a> on top of this basic material model (the <code class="language-plaintext highlighter-rouge">KHR_materials_*</code> extensions) that add even more advanced material definitions.</p>
+
+<p>We’ll keep it simple to start. Today we’re going to take the first step of loading the base glTF material parameters and textures from the glB file and passing them to our shader. In the shader we’ll color the object by its base color properties, without applying any lighting or material model yet.</p>
+
+
+
+		<a href="/graphics/2024/04/28/0-to-gltf-basic-materials">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
+		</div>
+	</div>
+	
+	<div class="col-9 mb-2">
 		<a href="/graphics/2024/04/22/webgpu-marching-cubes"><h3>GPU Compute in the Browser at the Speed of Native: WebGPU Marching Cubes</h3></a>
         <p>April 22, 2024</p>
 		
@@ -182,42 +207,6 @@ I recommend reading that first, as we’ll continue directly off the code writte
 
 
 		<a href="/graphics/2023/04/11/0-to-gltf-bind-groups">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
-		</div>
-	</div>
-	
-	<div class="col-9 mb-2">
-		<a href="/graphics/2023/04/10/0-to-gltf-triangle"><h3>From 0 to glTF with WebGPU: The First Triangle - Updated for Chrome 113 Release</h3></a>
-        <p>April 10, 2023</p>
-		
-<p>This tutorial is an updated version of my previous one and updates the
-code listing to match the finalizing WebGPU APIs. If you’ve read
-the previous version of this tutorial you can skim through the code
-listings to get up to date.
-For an easy way to get started, I recommend grabbing my
-<a href="https://github.com/Twinklebear/webgpu-webpack-starter">WebGPU + webpack starter template</a>
-which includes the code from this tutorial. You can start by deleting the code there and
-rewriting it following this tutorial, or follow along in the code
-as you read this page.
-The code for the blog series is also available <a href="https://github.com/Twinklebear/webgpu-0-to-gltf">on GitHub</a>.</p>
-
-<p>WebGPU is a modern graphics API for the web, in development by the
-major browser vendors. When compared to WebGL, WebGPU provides more direct
-control over the GPU to allow applications to leverage the hardware
-more efficiently, similar to Vulkan and DirectX 12.
-WebGPU also exposes additional GPU capabilities not available in WebGL, such as compute
-shaders and storage buffers, enabling powerful GPU compute applications
-to run on the web. As with the switch from OpenGL to Vulkan, WebGPU
-exposes more complexity to the user than WebGL, though the API strikes
-a good balance between complexity and usability, and overall is quite nice to work with.
-In this series, we’ll learn the key aspects of WebGPU from the ground up,
-with the goal of going from zero to a basic glTF model renderer.
-This post marks our initial step on this journey, where we’ll setup
-a WebGPU context and get a triangle on the screen.</p>
-
-
-
-		<a href="/graphics/2023/04/10/0-to-gltf-triangle">Continue &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 		<div class="col-12 mt-2 mx-auto border-bottom border-secondary">
 		</div>
 	</div>
