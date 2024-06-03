@@ -29,3 +29,7 @@ blockquote {
   padding-left: 0.5em;
   font-style: italic;
 }
+
+.pubLink:hover {
+  background-color: var(--bs-gray-200);
+}

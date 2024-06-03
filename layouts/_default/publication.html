@@ -1,106 +1,93 @@
 {{ define "main" }}
 <main aria-role="main">
-  <header class="homepage-header mt-2">
-    <div class="col-12 text-center">
-      <h1 class="display-5">{{- .Title -}}</h1>
-      <h4>{{ .Params.Authors }}</h4>
-      <p>In <i>{{ .Params.Venue }}</i>, {{ .Params.Year }}.
-      {{ if .Params.Award }}
-      <b><i class='bx bx-award' ></i><i>{{ .Params.Award }}</i></b>
-      {{ end }}
-      </p>
-      <!-- -->
-      {{ if .Params.Teaser }}
-      <figure>
-        <img class="img-fluid" src="{{ .Params.Teaser }}" />
-        <figcaption class="text-start mt-2">
-          <b>Fig. 1: </b><i>{{- .Params.Teaser_Caption | .RenderString -}}</i>
-        </figcaption>
-      </figure>
-      {{ end }}
-    </div>
+  <div class="col-12 text-center">
+    <h1 class="display-5">{{- .Title -}}</h1>
+    <h4>{{ .Params.Authors }}</h4>
+    <p>In <i>{{ .Params.Venue }}</i>, {{ .Params.Year }}.
+    {{ if .Params.Award }}
+    <b><i class='bx bx-award' ></i><i>{{ .Params.Award }}</i></b>
+    {{ end }}
+    </p>
+    <!-- -->
+    {{ if .Params.Teaser }}
+    <figure>
+      <img class="img-fluid" src="{{ .Params.Teaser }}" />
+      <figcaption class="text-start mt-2">
+        <b>Fig. 1: </b><i>{{- .Params.Teaser_Caption | .RenderString -}}</i>
+      </figcaption>
+    </figure>
+    {{ end }}
+  </div>
 
-    <div class="col-12 mt-2">
-      <h2>Abstract</h2>
-      <p>{{- .Params.Abstract | .RenderString -}}</p>
-    </div>
+  <div class="col-12 mt-2">
+    <h2>Abstract</h2>
+    <p>{{- .Params.Abstract | .RenderString -}}</p>
+  </div>
 
-    <div class="col-12 mt-2">
-      <h2>Content</h2>
-      <div class="container row justify-content-center text-center">
-        <div class="col-md-2 col-6 mb-2 mb-md-0">
-          <a href="{{ .Params.Paper_Pdf }}">
-          <div class="card">
+  <div class="col-12 mt-2">
+    <h2>Content</h2>
+    <div class="container row justify-content-center text-center">
+      <div class="col-md-2 col-6 mb-2 mb-md-0">
+        <a href="{{ .Params.Paper_Pdf }}">
+          <div class="card pubLink">
             <img src="/img/pdf.svg" width="100%" />
             <div class="card-body">
               <h5 class="card-title">
                 PDF
               </h5>
             </div>
-          </a>
+        </a>
           </div>
-        </div>
+      </div>
 
-        {{ if .Params.Doi }}
-        <div class="col-md-2 col-6 mb-2 mb-md-0">
-          <div class="card">
-            <a href="https://dx.doi.org/{{ .Params.Doi }}">
+      {{ if .Params.Doi }}
+      <div class="col-md-2 col-6 mb-2 mb-md-0">
+        <div class="card pubLink">
+          <a href="https://dx.doi.org/{{ .Params.Doi }}">
             <img src="/img/link-external.svg" width="100%" />
             <div class="card-body">
               <h5 class="card-title">
-                  Publisher's Version
+                Publisher's Version
               </h5>
             </div>
-            </a>
-          </div>
+          </a>
         </div>
-        {{ end }}
-        <!-- -->
-        {{ range .Params.Extra_links }}
-        <div class="col-md-2 col-6 mb-2 mb-md-0">
-          <div class="card">
-            <a href="{{ .link }}">
+      </div>
+      {{ end }}
+      <!-- -->
+      {{ range .Params.Extra_links }}
+      <div class="col-md-2 col-6 mb-2 mb-md-0">
+        <div class="card pubLink">
+          <a href="{{ .link }}">
             <img src="{{ .image }}" width="100%" />
             <div class="card-body">
               <h5 class="card-title">
                 {{ .title }} {{ if .image }}
-                  {{ end }}
+                {{ end }}
               </h5>
             </div>
-            </a>
-          </div>
+          </a>
         </div>
-
-        {{ end }}
       </div>
-    </div>
 
-    <div class="col-12 mt-2">
-      <h2>BibTeX</h2>
-      <pre>
-      {{- .Params.Bibtex -}}
-      </pre>
+      {{ end }}
     </div>
+  </div>
 
-    {{ if .Params.Supplemental_Video }}
-    <div class="col-12 mt-2">
-      <h2>Supplemental Video</h2>
-      <div class="ratio ratio-16x9">
-        <iframe allowfullscreen src="{{ .Params.Supplemental_Video }}">
-        </iframe>
-      </div>
-    </div>
-    {{ end }}
-    <!-- -->
-    {{ if .Params.Presentation_Video }}
-    <div class="col-12 mt-2">
-      <h2>Presentation Video</h2>
-      <div class="ratio ratio-16x9">
-        <iframe allowfullscreen src="{{ .Params.Presentation_Video }}">
-        </iframe>
-      </div>
-    </div>
-    {{ end }}
-  </header>
+  <div class="col-12 mt-2">
+    <h2>BibTeX
+      <a
+          class="bib mr-2"
+          href="javascript:void(0);"
+          data-clipboard-text="{{ .Params.Bibtex }}"
+          data-bs-toggle="popover"
+          data-bs-content="Copied!"
+          tabindex="0"
+          ><i class="bx bx-clipboard"></i></a>
+    </h2>
+    <pre>
+      {{ highlight .Params.Bibtex "bib" }}
+    </pre>
+  </div>
 </main>
 {{ end }}
