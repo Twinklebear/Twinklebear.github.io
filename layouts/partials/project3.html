@@ -1,0 +1,28 @@
+<!-- Layout with a 1/2 text 1/2 video embed row + row of images -->
+<div class="col-12 col-lg-6">
+  <p>{{- .description | markdownify -}}</p>
+  <a href="https://github.com/{{ .gh_user }}/{{ .gh_repo }}">
+    <img
+      class="img-fluid"
+      style="display: inline"
+      src="/img/gh-cards/{{ .gh_user }}/{{ .gh_repo }}.svg"
+    />
+  </a>
+</div>
+<div class="col-12 col-lg-6 mt-2 mt-lg-0">
+  <div class="ratio ratio-16x9">
+    <iframe
+      allowfullscreen
+      src="{{ .youtube }}"
+    >
+    </iframe>
+  </div>
+</div>
+
+<div class="col-12 row mt-4 mx-auto">
+  {{ range .images }}
+  <div class="col-3">
+    <img class="img-fluid rounded" src="{{ .url }}" />
+  </div>
+  {{ end }}
+</div>

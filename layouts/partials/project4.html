@@ -1,0 +1,14 @@
+<!-- Layout with 1/2 text and 1/2 image row -->
+<div class="col-12 col-lg-6">
+  <p>{{- .description | markdownify -}}</p>
+  <a href="https://github.com/{{ .gh_user }}/{{ .gh_repo }}">
+    <img
+      class="img-fluid"
+      style="display: inline"
+      src="/img/gh-cards/{{ .gh_user }}/{{ .gh_repo }}.svg"
+    />
+  </a>
+</div>
+<div class="col-12 col-lg-6 mt-2 mt-lg-0">
+  <img class="img-fluid rounded" src="{{ .image }}" />
+</div>

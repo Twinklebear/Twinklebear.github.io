@@ -1,0 +1,13 @@
+{{ .Title }} {{ .Summary }}
+
+{{ .Params.Authors }}
+
+<pre>
+{{ .Params.Bibtex }}
+</pre>
+
+<i>{{ .Params.Abstract }}</i>
+
+<a href="{{ ref . .RelPermalink }}">{{ .Params.Short_Title }}</a>
+
+<p>rel permalink = {{ .RelPermalink }}</p>

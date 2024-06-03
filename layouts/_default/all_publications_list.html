@@ -1,0 +1,13 @@
+{{ define "main" }}
+<main aria-role="main">
+  <header class="homepage-header">
+    <div class="col-12">
+      <h1 class="display-4">{{- .Title -}}</h1>
+      {{ $allpubs := where .Site.RegularPages "Section" "publications" }}
+      {{ range $allpubs }}
+      {{ .Render "publication_listing" }} {{ end }}
+    </div>
+  </header>
+</main>
+
+{{ end }}

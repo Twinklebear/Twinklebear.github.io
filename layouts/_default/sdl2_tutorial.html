@@ -1,0 +1,66 @@
+{{ define "main" }}
+<section id="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 row">
+        <h1 id="title" class="display-4">{{ .Title }}</h1>
+        <div class="col-10">
+          <p id="date">{{ .Date.Format "Mon Jan 2, 2006" }}</p>
+          <article id="content">{{ .Content }}</article>
+        </div>
+        <div class="col-2">
+          <h5><a href="/sdl2">Tutorial Index</a></h5>
+          <h5>Helpful Links</h5>
+            <a href="http://wiki.libsdl.org/moin.fcg/FrontPage">SDL Documentation</a>
+            <br />
+            <a href="https://discourse.libsdl.org/">SDL Forums</a>
+            <br />
+            <a href="https://en.cppreference.com/w/">C++ Reference</a>
+            <br />
+            <a href="https://github.com/Twinklebear/TwinklebearDev-Lessons">Code on Github</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<aside id="meta">
+  <!--
+  <div>
+    {{ with .GetTerms "topics" }}
+    <ul id="topics">
+      {{ range . }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{ end }}
+    </ul>
+    {{ end }} {{ with .GetTerms "tags" }}
+    <ul id="tags">
+      {{ range . }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{ end }}
+    </ul>
+    {{ end }}
+  </div>
+  -->
+  <div class="container">
+    <div class="row">
+      <div class="col-10 mb-4 row">
+        <div class="col-6 text-start">
+          {{ with .PrevInSection }}
+          <a class="previous" href="{{ .RelPermalink }}"
+            ><i class="bx bxs-chevron-left"></i>Previous Post: {{ .LinkTitle
+            }}</a
+          >
+          {{ end }}
+        </div>
+        <div class="col-6 text-end">
+          {{ with .NextInSection }}
+          <a class="next" href="{{ .RelPermalink }}"
+            >Next Post: {{ .LinkTitle }}<i class="bx bxs-chevron-right"></i
+          ></a>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+{{ end }}

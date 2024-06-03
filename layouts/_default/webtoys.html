@@ -1,0 +1,43 @@
+{{ define "main" }}
+<section id="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 id="title" class="display-4">{{ .Title }}</h1>
+        <div class="col-12">
+          <article id="content" class="lead bg-light pb-2 pt-2 mb-2 ps-4 pe-4 bg-light rounded">
+           {{ .Content }}
+          </article>
+
+          <div class="col-12">
+            {{ range (where $.Site.Data.projects.projects "webtoy" 1) }}
+            <div class="row" id="{{ .title }}">
+              <h2>
+                {{ .title }}
+                <a href="https://github.com/{{ .gh_user }}/{{ .gh_repo }}">
+                  <i class="bx bxl-github"></i
+                  ></a>
+              </h2>
+              {{ if eq .layout 1 }}
+              {{ partial "project1.html" . }}
+              {{ else if eq .layout 2 }}
+              {{ partial "project2.html" . }}
+              {{ else if eq .layout 3 }}
+              {{ partial "project3.html" . }}
+              {{ else if eq .layout 4 }}
+              {{ partial "project4.html" . }}
+              {{ else }}
+              <h1>Unknown Project layout {{ .layout }} for {{ .title }}</h1>
+              </p>
+              {{ end }}
+              <h2 class="text-center"><i class='bx bx-dots-horizontal-rounded'></i></h2>
+            </div>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+{{ end }}

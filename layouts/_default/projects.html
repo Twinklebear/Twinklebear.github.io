@@ -1,0 +1,49 @@
+{{ define "main" }}
+<main aria-role="main">
+  <header class="homepage-header">
+    <h1 class="display-4">{{- .Title -}}</h1>
+    {{ with .Params.subtitle }}
+    <span class="subtitle">{{ . }}</span>
+    {{ end }}
+  </header>
+  <div class="homepage-content row">
+    <!-- Note that the content for index.html, as a sort of list page, will pull from content/_index.md -->
+    {{ .Content }}
+    <div class="col-12 pb-2 pt-2 mb-2 bg-light rounded">
+      <h4>Index</h4>
+      <div class="col-12 row">
+      {{ range (sort $.Site.Data.projects.projects "title" "asc") }}
+        <div class="col-6 col-md-3">
+          <a href="{{ .RelPermalink }}#{{ .title }}">{{ .title }}</a>
+        </div>
+      {{ end }}
+      </div>
+    </div>
+    <div class="col-12">
+      {{ range $.Site.Data.projects.projects }}
+      <div class="row" id="{{ .title }}">
+        <h2>
+          {{ .title }}
+          <a href="https://github.com/{{ .gh_user }}/{{ .gh_repo }}">
+            <i class="bx bxl-github"></i
+            ></a>
+        </h2>
+        {{ if eq .layout 1 }}
+        {{ partial "project1.html" . }}
+        {{ else if eq .layout 2 }}
+        {{ partial "project2.html" . }}
+        {{ else if eq .layout 3 }}
+        {{ partial "project3.html" . }}
+        {{ else if eq .layout 4 }}
+        {{ partial "project4.html" . }}
+        {{ else }}
+        <h1>Unknown Project layout {{ .layout }} for {{ .title }}</h1>
+        </p>
+        {{ end }}
+        <h2 class="text-center"><i class='bx bx-dots-horizontal-rounded'></i></h2>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</main>
+{{ end }}

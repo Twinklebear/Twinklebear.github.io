@@ -1,0 +1,28 @@
+baseURL: https://www.willusher.io/
+languageCode: en-us
+title: Will Usher
+params:
+  name: Will Usher
+
+sitemap:
+  changeFreq: ''
+  disable: false
+  filename: sitemap.xml
+  priority: -1
+
+outputs:
+  home:
+  - html
+  - rss
+  section:
+  - html
+  - rss
+
+markup:
+  tableOfContents:
+    startLevel: 1
+    endLevel: 2
+  goldmark:
+    renderer:
+      unsafe: true
+

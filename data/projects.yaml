@@ -1,0 +1,428 @@
+projects:
+- title: ChameleonRT
+  layout: 1
+  gh_user: Twinklebear
+  gh_repo: ChameleonRT
+  thumb: https://cdn.willusher.io/img/EGZPkkV.webp
+  description: >
+    ChameleonRT is an example interactive path tracer which runs on multiple
+    CPU and GPU ray tracing backends: Embree, DXR, OptiX, Vulkan, and Metal. Each backend uses an
+    identical path tracer that supports a subset of the Disney BSDF material model to provide the same
+    rendered result in each backend. Supports loading OBJ and glTF files. Binaries are built
+    automatically through Github Actions and preserved for download via [tagged releases](https://github.com/Twinklebear/ChameleonRT/releases).
+  images:
+  - url: https://cdn.willusher.io/img/KA2dqKn.webp
+  - url: https://cdn.willusher.io/img/MJ8FRZ1.webp
+  - url: https://cdn.willusher.io/img/pV4OFlL.webp
+
+- title: ispc-rs
+  layout: 2
+  gh_user: Twinklebear
+  gh_repo: ispc-rs
+  thumb: https://cdn.willusher.io/img/sbZCnq6.webp
+  image: https://cdn.willusher.io/img/ACzYqAm.webp
+  description: >
+    ispc-rs is a small Rust library meant to be used as a compile time dependency
+    for Rust projects to allow them to build and link with code written in
+    [ISPC](https://ispc.github.io/). ISPC is a language that makes it possible to take advantage
+    the CPU's vector units without needing hand-written intrinsics. Through this library it's easy
+    to write very fast vector code in ISPC and link it with (still quick!) higher-level code
+    in Rust to get a good balance of high performance and ease of use.
+    The images shown above are from the
+    [rt example](https://github.com/Twinklebear/ispc-rs/tree/master/examples/rt) (top row)
+    which demonstrates a simple fast and parallel path tracer
+    and the [ddvol example](https://github.com/Twinklebear/ispc-rs/tree/master/examples/ddvol)
+    (bottom row) which is a scientific visualization volume
+    renderer. Both use higher level Rust code to read in a scene file and setup
+    the objects in the scene and then call into ISPC to render in parallel, making
+    good use of the CPU's SIMD units.
+
+- title: tray_rust
+  layout: 3
+  gh_user: Twinklebear
+  gh_repo: tray_rust
+  thumb: https://cdn.willusher.io/img/SHCFQ5C.webp
+  youtube: https://www.youtube.com/embed/5XY8ua4ysvM
+  description: >
+    tray_rust is a toy physically based ray tracer built off of the techniques discussed
+    in [Physically Based Rendering](http://pbrt.org/). It began life as a port of
+    [tray](https://github.com/Twinklebear/tray) to [Rust](http://www.rust-lang.org)
+    to check out the language.
+    The renderer is currently capable of path tracing, supports triangle meshes (MTL support coming soon),
+    and various physically based material models (including measured data from the
+    [MERL BRDF Database](http://www.merl.com/brdf/)) along with rigid body animation
+    and image-parallel distributed rendering. More
+    details on rendering performance and other features can be found in the readme
+    [README](https://github.com/Twinklebear/tray_rust/blob/master/README.md).
+
+
+    tray_rust can also render animations, and is the renderer I've used for the University of Utah's
+    [teapot rendering competition](http://graphics.cs.utah.edu/trc/) after the first year.
+    The video is my submission from 2016. To simplify making scenes
+    for tray_rust I also wrote a [Blender plugin](https://github.com/Twinklebear/tray_rust_blender)
+    which I used to make the animation
+    shown, and is the easiest way to create scenes for the renderer though some features
+    are still needed.
+  images:
+  - url: https://cdn.willusher.io/img/ywNdfGD.webp
+  - url: https://cdn.willusher.io/img/yiH8xsI.webp
+  - url: https://cdn.willusher.io/img/iOU7Xys.webp
+  - url: https://cdn.willusher.io/img/Dzg3Fxr.webp
+
+- title: WebGPU Volume Path Tracer
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgpu-volume-pathtracer
+  thumb: https://cdn.willusher.io/img/wgpu-path-tracer-bonsai-3x2.webp
+  description: >
+    A volume path tracer implemented in WebGPU. The renderer uses
+    Woodcock sampling to traverse and
+    sample the volume and scientific visualization-style coloring to provide
+    interactive physically-based visualization of 3D grid volumes. Try it out
+    [online](https://www.willusher.io/webgpu-volume-pathtracer/)!
+  images:
+  - url: https://cdn.willusher.io/img/wgpu-path-tracer-bonsai.webp
+  - url: https://cdn.willusher.io/img/wgpu-path-tracer-foot.webp
+  - url: https://cdn.willusher.io/img/wgpu-path-tracer-teapot.webp
+
+- title: WebGPU glTF Renderer
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgpu-gltf
+  thumb: https://cdn.willusher.io/img/webgpu-gltf-rungholt-thumb.webp
+  description: >
+    A glTF WebGPU renderer and loader written from scratch.
+    Supports uploading glTF binary files to render them with a basic
+    material color model.
+    GLTF primitives are rendered as WebGPU render bundles, with shaders
+    generated for materials/attributes and cached using a shader caching
+    system. Try it out [online](https://www.willusher.io/webgpu-gltf/)!
+  images:
+  - url: https://cdn.willusher.io/img/webgpu-gltf-helmet.webp
+  - url: https://cdn.willusher.io/img/webgpu-gltf-sponza.webp
+  - url: https://cdn.willusher.io/img/webgpu-gltf-rungholt.webp
+
+- title: tray
+  layout: 1
+  gh_user: Twinklebear
+  gh_repo: tray
+  thumb: https://cdn.willusher.io/img/rF58b9c.webp
+  description: >
+    tray is a toy physically based ray tracer built off of the techniques discussed in
+    [Physically Based Rendering](http://pbrt.org/). It currently has support for path tracing,
+    bidirectional path tracing and photon mapping. tray also supports physically materials such as
+    microfacet models like Torrance-Sparrow and measured data from the
+    [MERL BRDF Database](http://www.merl.com/brdf/).
+    This is the project tray_rust is based on and as such may not see much more development since most
+    of my ray tracing work is now going on there.
+  images:
+  - url: https://cdn.willusher.io/img/MALPsD8.webp
+  - url: https://cdn.willusher.io/img/Ns3ZYsE.webp
+  - url: https://cdn.willusher.io/img/ApHMuex.webp
+
+- title: WebGPU Block-Compressed Marching Cubes
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgpu-bcmc
+  description: >
+    WebGPU Block-Compressed Marching Cubes is an algorithm for interactive isosurface extraction
+    on massive compressed data sets that runs entirely on the GPU in the browser using WebGPU. The technique
+    works on block-compressed volumes using ZFP's fixed-rate compression algorithm. To compute an isosurface
+    the required blocks of the data are decompressed and cached on the fly using a GPU-driven LRU cache.
+    This enables interactive visualization of large volumes entirely in the browser.
+    This work was published at LDAV in 2020, you can learn more [in the paper](/publications/teraweb),
+    [get the code on Github](https://github.com/Twinklebear/webgpu-bcmc),
+    or try it out [online](https://www.willusher.io/webgpu-bcmc/webgpu_bcmc.html)!
+  images:
+  - url: https://cdn.willusher.io/img/bcmc-plasma.webp
+  - url: https://cdn.willusher.io/img/bcmc-chameleon.webp
+  - url: https://cdn.willusher.io/img/bcmc-kingsnake.webp
+  - url: https://cdn.willusher.io/img/bcmc-miranda.webp
+
+- title: WebGPU Marching Cubes
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgpu-marching-cubes
+  description: >
+    A GPU parallel implementation of the classic [Marching Cubes](https://en.wikipedia.org/wiki/Marching_cubes)
+    algorithm using WebGPU. Work is parallelized over the dual grid to find active voxels,
+    active voxel IDs are compacted down via exclusive scans and compactions,
+    vertices are output to a single buffer for rendering by computing vertex offsets via
+    an exclusive scan and then writing vertices to the offsets for each voxel in parallel.
+    Try it out [online](https://www.willusher.io/webgpu-marching-cubes/)!
+  images:
+  - url: https://cdn.willusher.io/img/webgpu-marching-cubes-bonsai.webp
+  - url: https://cdn.willusher.io/img/webgpu-marching-cubes-foot.webp
+  - url: https://cdn.willusher.io/img/webgpu-marching-cubes-skull.webp
+
+- title: topo-vol
+  layout: 2
+  gh_user: Twinklebear
+  gh_repo: topo-vol
+  description: >
+    topo-vol is a topology guided volume exploration and analysis tool, written for
+    the final project in
+    [Bei Wang's Computational Topology Course](http://www.sci.utah.edu/~beiwang/teaching/cs6170-spring-2017/schedule.html).
+    It is built on top of the [Topology ToolKit](https://topology-tool-kit.github.io/) and
+    [VTK](http://www.vtk.org/) for computation, and uses [ImGui](https://github.com/ocornut/imgui)
+    and a custom rendering system for the UI and volume rendering. By computing relevant topological
+    structures (e.g. the contour tree) and classifying segments of data corresponding to the
+    branches in this tree we can avoid occlusion issues with global transfer functions and
+    create more useful, detailed renderings.
+    See the [report](https://github.com/Twinklebear/topo-vol/blob/master/report.pdf) for more details.
+  image: https://cdn.willusher.io/img/0geW8ma.webp
+
+- title: WebGL Volume Raycaster
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgl-volume-raycaster
+  description: >
+    A scientific visualization style volume raycaster written
+    using WebGL2 and Javascript. The renderer uses an arcball camera which supports
+    mouse or touch input, and dynamically adjusts the sampling rate
+    to maintain a smooth framerate, even on mobile devices. The volumes
+    are downloaded via XMLHttpRequest from Dropbox when selected. I've also written
+    a [post](https://www.willusher.io/webgl/2019/01/13/volume-rendering-with-webgl)
+    about volume rendering for scientific visualization, and how I've implemented
+    in WebGL to write this renderer.
+    [Try it out online!](https://www.willusher.io/webgl-volume-raycaster/)
+  images:
+  - url: https://cdn.willusher.io/img/yLa27hG.webp
+  - url: https://cdn.willusher.io/img/FOUKtV1.webp
+  - url: https://cdn.willusher.io/img/Vv98vJZ.webp
+
+- title: μPacket
+  layout: 2
+  gh_user: Twinklebear
+  gh_repo: micro-packet
+  description: >
+    μPacket is an extremely simple packet based ray tracer that uses the AVX/AVX2 instruction
+    set to trace eight rays at once through the scene. Currently it only supports spheres and planes
+    with Lambertian BRDFs illuminated by a single point light. Illumination is computed with Whitted ray
+    tracing, although recursion only goes as far as computing shadows since there are no reflective
+    or transmissive materials at the moment.
+
+
+    Ray packets were first introduced by [Wald et al., 2001](http://www.sci.utah.edu/~wald/Publications/2001/CRT/CRT.pdf)
+    and are now widely used in high performance ray tracers like [Embree](http://embree.github.io/) due to
+    the performance gain achieved with good packet (and now stream) tracing techniques.
+    Current plans for this project are to switch to trace ray streams and add support for a path tracing
+    integrator for higher quality images.
+  image: https://cdn.willusher.io/img/WcM6Rcl.webp
+
+- title: DXR Ambient Occlusion Baking
+  layout: 2
+  gh_user: Twinklebear
+  gh_repo: dxr-ao-bake
+  description: >
+    A demo of ambient occlusion map baking using DXR inline ray tracing.
+    Uses [xatlas](https://github.com/jpcy/xatlas) to unwrap the mesh.
+    The mesh is rasterized into the atlas image by using the UV
+    coordinates as the output vertex positions, and the AO factor
+    computed by using inline ray tracing in the fragment shader. The image
+    shows the computed AO map on Sponza.
+  image: https://cdn.willusher.io/img/O3BSRJ9.webp
+
+- title: WebGL EWA Surface Splatter
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgl-ewa-splatter
+  description: >
+    An elliptical weighted average (EWA) surface splatter renderer, implemented in WebGL,
+    which also supports painting on the surfaces.
+    [Try it out online!](https://www.willusher.io/webgl-ewa-splatter/)
+    This implements the papers: *Object Space EWA Surface Splatting: A Hardware
+    Accelerated Approach to High Quality Point Rendering* by Ren, Pfister and Zwicker,
+    and *High-Quality Point-Based Rendering on Modern GPUs* by Botsch and Kobbelt, with a few shortcuts.
+    It also uses the deferred shading for splatting approach described
+    in *High-quality surface splatting on today's GPUs*
+    by Botsch, Hornung, Zwicker and Kobbelt.
+
+
+    The renderer uses an arcball camera which supports mouse or touch input,
+    and downloads datasets via XMLHttpRequest from Dropbox when selected.
+
+
+    Built on top of [webgl-util](https://github.com/Twinklebear/webgl-util) for some WebGL utilities,
+    [glMatrix](http://glmatrix.net/) for matrix/vector operations, and
+    [FileSaver.js](https://github.com/eligrey/FileSaver.js/) for saving models.
+
+  images:
+  - url: https://cdn.willusher.io/img/yqCfPZz.webp
+  - url: https://cdn.willusher.io/img/c6Cj6xa.webp
+  - url: https://cdn.willusher.io/img/UBjFKRa.webp
+
+- title: WebGPU Implicit Isosurface Raycaster
+  layout: 2
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgpu-isosurface-raycaster
+  description: >
+    An implicit isosurface raycaster using WebGPU.
+    Ray-isosurface intersections are computed using the technique described by Marmitt et al.
+    'Fast and Accurate Ray-Voxel Intersection Techniques for Iso-Surface Ray Tracing', 2004.
+    Try it out [online](https://www.willusher.io/webgpu-isosurface-raycaster/#Skull)!
+  image: https://cdn.willusher.io/img/wgpu-implicit-iso-skull.webp
+
+- title: WebGL Volume Animation Player
+  layout: 2
+  gh_user: Twinklebear
+  gh_repo: webgl-volume-animation
+  description: >
+    A WebGL tool for playing back time-series volumetric data captures in the browser.
+    Scientists can upload a series of Zipped WebP image stacks which are uploaded to the GPU
+    and volume rendered. The set of image stacks is played back as an animation to view the
+    time-dependent behavior of the data set.
+    Data sets and time series can be specified as URL parameters to enable scientists to quickly
+    share data visualizations with colleagues.
+    Try it out [online](https://www.willusher.io/webgl-volume-animation/#url=https://lab.wushernet.com/data/urllist.txt)!
+  image: https://cdn.willusher.io/img/webgpu-vol-animation-frame.webp
+
+- title: WebGL Marching Cubes
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgl-marching-cubes
+  description: >
+    A WebGL + WebASM implementation of the classic [Marching Cubes](https://en.wikipedia.org/wiki/Marching_cubes)
+    algorithm for extracting [isosurfaces](https://en.wikipedia.org/wiki/Isosurface) from 3D volume data.
+    An isosurface is a surface which represents points in the 3D data which all have the same value (e.g., pressure, temperature).
+    The isosurface extraction code
+    is implemented in Rust and compiled to WebAssembly to accelerate extraction of the surface. Depending on your browser, the
+    WebASM version is 10-50x faster than the pure Javascript one!
+    The surface is rendered as a triangle mesh and combined with the
+    volume during the volume raycasting step, in a manner roughly similar to shadow mapping.
+    [Try it out online!](https://www.willusher.io/webgl-marching-cubes/).
+  images:
+  - url: https://cdn.willusher.io/img/JW9UZYP.webp
+  - url: https://cdn.willusher.io/img/aRJzV7x.webp
+  - url: https://cdn.willusher.io/img/kW5sr9a.webp
+
+- title: WebGPU Experiments
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgpu-experiments
+  description: >
+    A series of examples written while learning about [WebGPU](https://gpuweb.github.io/gpuweb/):
+    a glTF viewer, a web-based LiDAR viewer, and a data-parallel Marching Cubes implementation using compute shaders.
+    The glTF viewer uses a custom glb importer to load data efficiently into WebGPU and supports
+    the basic glTF features. The LiDAR viewer uses
+    [LAStools.js](https://github.com/Twinklebear/LAStools.js),
+    a version of [libLAS](https://github.com/LAStools/LAStools)
+    compiled to Web Assembly, to load las and laz files directly in the browser.
+    The Marching Cubes example is a data-parallel implementation of marching cubes
+    written using compute shaders to leverage GPU compute for interactive isosurface
+    extraction.
+  images:
+  - url: https://cdn.willusher.io/img/GQBJC92.webp
+  - url: https://cdn.willusher.io/img/j21k9Z9.webp
+  - url: https://cdn.willusher.io/img/3XMumHL.webp
+
+- title: WebGL Neuron Visualizer
+  layout: 1
+  webtoy: 1
+  gh_user: Twinklebear
+  gh_repo: webgl-neuron
+  description: >
+    A neuron visualization system using WebGL2. The
+    renderer uses my WebGL2 volume renderer to display the RAW volume or imported TIFF
+    stack and renders the imported neuron traces as lines within the volume.
+    It can import single-channel 8bit and 16bit TIFF image stacks, and can
+    import neuron traces in the SWC file format. TIFF files are loaded using a build
+    of [libtiff compiled to WebAssembly](https://github.com/Twinklebear/tiff.js).
+    The neurons are composited within the volume by rendering out the depth buffer
+    and using this to terminate rays early in the volume when they hit the geometry,
+    roughly similar to shadow mapping.
+    A default demo dataset is included which renders a stitched version of the
+    DIADEM NC Layer 1 Axons from the [DIADEM Challenge](http://diademchallenge.org/).
+    [Try it out online!](https://www.willusher.io/webgl-neuron/)
+  images:
+  - url: https://cdn.willusher.io/img/9vVRCLE.webp
+  - url: https://cdn.willusher.io/img/lwlbLCw.webp
+  - url: https://cdn.willusher.io/img/bXMjno0.webp
+
+- title: Charm++ Experiments
+  layout: 2
+  gh_user: Twinklebear
+  gh_repo: Charm-experiments
+  description: >
+    A set of different test applications to learn and try
+    out [Charm++](http://charmplusplus.org/) for distributed rendering applications. The image
+    shown is from the [pathtracing](https://github.com/Twinklebear/Charm-experiments/tree/master/pathtracer)
+    test application, which renders distributed data with global illumination
+    by routing rays around the network. There's also a basic image-parallel
+    and data-parallel scientific visualization [volume renderer](https://github.com/Twinklebear/Charm-experiments/tree/master/scivis).
+  image: https://cdn.willusher.io/img/V47bIPs.webp
+
+- title: bspline
+  layout: 2
+  gh_user: Twinklebear
+  gh_repo: bspline
+  description: >
+    A Rust library for computing B-spline interpolating curves on generic control points.
+    bspline can be used to evaluate B-splines of varying orders on any type that can be linearly
+    interpolated, ranging from floats, positions, RGB colors to transformation matrices and so on.
+    The bspline logo (above) was generated using this library with a cubic B-spline in 2D for the
+    positioning of the curve and a quadratic B-spline in RGB space to color it.
+  image: https://cdn.willusher.io/img/JvVlYKf.webp
+
+- title: Rust Spline Viewer
+  layout: 4
+  gh_user: Twinklebear
+  gh_repo: spline-viewer
+  description: >
+    A viewer for B-spline curves and surfaces, initially written for a course on
+    computer aided geometric design. You can edit and create 2D B-splines
+    and tweak some properties of loaded 3D curves and surfaces. Useful for learning
+    about and playing with B-splines.
+  image: https://cdn.willusher.io/img/EzAQZyM.webp
+
+- title: tobj
+  layout: 2
+  gh_user: Twinklebear
+  gh_repo: tobj
+  description: >
+    tobj is a tiny OBJ loader in Rust that draws inspiration for its API and design from
+    Syoyo's excellent library,
+    [tinyobjloader](https://github.com/syoyo/tinyobjloader).
+    The crate aims to be a simple, fast and
+    lightweight option for loading OBJ and MTL files for easy integration with realtime and offline
+    renderers, or really any other project where you need to load OBJ files!\n\n
+    The image shown is from a demo viewer written to test tobj named
+    [tobj_viewer](https://github.com/Twinklebear/tobj_viewer) displaying the
+    [Rungholt](http://graphics.cs.williams.edu/data/meshes.xml) model. The model can be found on
+    Morgan McGuire's meshes page and was originally built by kescha.
+  image: https://cdn.willusher.io/img/wImyNG4.webp
+
+- title: ssao
+  layout: 1
+  gh_user: Twinklebear
+  gh_repo: ssao
+  description: >
+    This is sort of an implementation of
+    [Scalable Ambient Obscurance by McGuire et al.](http://graphics.cs.williams.edu/papers/SAOHPG12/)
+    however I make a few simplifying shortcuts in my implementation and don't achieve as good performance
+    or quality. I was also unable to get their new recommended estimator to behave so this implementation
+    still uses the Alchemy AO estimator initially recommended in the paper.
+    The image shows just the ambient occlusion value for a view of the Crytek Sponza scene.
+  images:
+  - url: https://cdn.willusher.io/img/byM8iNh.webp
+  - url: https://cdn.willusher.io/img/v7wWg9O.webp
+
+- title: lfwatch
+  layout: 1
+  gh_user: Twinklebear
+  gh_repo: lfwatch
+  description: >
+    lfwatch is a lightweight file watcher for Windows, Linux and OS X. It monitors some
+    desired directories for file changes and calls the callback set for the directory with information
+    about the file change event. This was written to do hot reloading of GLSL shaders but could be
+    useful for some other applications.
+

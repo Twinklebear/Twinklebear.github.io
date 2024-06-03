@@ -1,0 +1,93 @@
+{{ define "main" }}
+<main aria-role="main">
+  <div class="homepage-content row mt-4">
+    <div class="offset-2 col-8 float-sm-left col-lg-4 offset-lg-2">
+      <img class="rounded-circle img-fluid" src="/img/will-usher.webp" />
+    </div>
+    <div class="col-12 col-lg-5 text-left">
+      <h1 class="display-1">Will Usher</h1>
+      <h3>Scientific Visualization Engineer</h3>
+      <p>
+        <i class="bx bx-map"></i>
+        <a href="https://www.luminarycloud.com/">Luminary Cloud</a>
+        <br />
+        <i class='bx bxl-github' ></i>
+        <a href="https://github.com/Twinklebear"
+          >Twinklebear</a
+        >
+        <br />
+        <i class="bx bxl-mastodon"></i>
+        <a rel="me" href="https://mastodon.social/@willgfx"
+          >willgfx@mastodon.social</a
+        >
+        <br />
+        <i class="bx bxl-twitter"></i>
+        <a href="https://twitter.com/_wusher"
+          >_wusher</a
+        >
+        <br />
+          <i class="bx bx-envelope"></i>
+        <a id="envelope">
+          <span id="envelope-text"></span>
+        </a>
+        <br />
+        <i class="bx bxs-graduation"></i>
+        <a href="https://scholar.google.com/citations?user=yQI5iyAAAAAJ">
+           Google Scholar profile</a
+        >
+        <br />
+        <i class="bx bxl-linkedin-square"></i>
+          <a href="https://www.linkedin.com/in/will-usher/"
+             >LinkedIn</a
+         >
+        <br />
+        <i class="bx bx-rss"></i>
+        {{ with .OutputFormats.Get "rss" -}}
+        <a href="{{ .Permalink }}">RSS</a>
+        {{ end }}
+        {{ with .OutputFormats.Get "rss" -}}
+        {{ printf `<link rel=%q type=%q href=%q title=%q>` .Rel .MediaType.Type .Permalink site.Title | safeHTML }}
+        {{ end }}
+      </p>
+    </div>
+    <div class="col-12 mb-4 mt-4">
+      <h2>Bio</h2>
+      I'm a Scientific Visualization Engineer at
+      <a href="https://www.luminarycloud.com/">Luminary Cloud</a>, where I work
+      on a mix of challenging problems in computer graphics, spatial data
+      processing, parallel computing, and rendering large data sets in the
+      browser. Previously, I was a Ray Tracing Software Engineer at Intel
+      working on the
+      <a
+        href="https://software.intel.com/content/www/us/en/develop/tools/oneapi/rendering-toolkit.html"
+      >
+        oneAPI Rendering Toolkit</a
+      >
+      focusing on XPU ray tracing, distributed rendering, and scientific
+      visualization within <a href="https://www.ospray.org/">OSPRay</a>. In my
+      spare time, I work on XPU ray tracing, GPU/WebGPU scientific visualization
+      and rendering, and other projects involving massive scientific data
+      visualization across computing platforms from HPC clusters to the web
+      browser. I completed my Ph.D. in Computer Science at the
+      <a href="https://sci.utah.edu/"
+        >Scientific Computing and Imaging Institute</a
+      >
+      at the <a href="https://www.cs.utah.edu/">University of Utah</a>, advised
+      by <a href="http://www.pascucci.org/">Valerio Pascucci</a>. Before joining
+      the Ph.D. program at Utah I obtained a B.S. in physics with a minor in
+      computer science at the
+      <a href="https://www.ucr.edu/">University of California, Riverside</a>. My
+      research interests cover a range of areas in scientific visualization and
+      computer graphics including: distributed rendering, virtual reality, in
+      situ visualization and ray tracing.
+    </div>
+    <div class="col-12 mb-4">
+      <h2>Selected Publications</h2>
+      {{ $allpubs := where .Site.RegularPages "Section" "publications" }} {{
+      range (where $allpubs "Params.selected" true) }} {{ .Render
+      "publication_listing" }} {{ end }}
+    </div>
+  </div>
+</main>
+<script src="/homepage.js"></script>
+{{ end }}

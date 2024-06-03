@@ -1,0 +1,31 @@
+pre,
+pre code {
+  display: block;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  border-radius: var(--bs-border-radius) !important;
+}
+pre.diagram {
+  color: black;
+}
+/* Don't set code formatted links to black */
+a code {
+  color: rgba(var(--bs-link-color-rgb), 1);
+  text-decoration: underline;
+}
+code {
+  padding: 0px 0px;
+  color: var(--bs-cody-color);
+  background-color: transparent;
+  border: none;
+}
+blockquote {
+  padding-top: 0.75em;
+  padding-bottom: 0.5em;
+  border-left: 4px solid lightgray;
+  margin-left: 1em;
+  padding-left: 0.5em;
+  font-style: italic;
+}

@@ -1,2 +1,9 @@
+_site/
 *.swp
+*.vim
+_theme_packages/
+.jekyll-cache/
+_output/
 .DS_Store
+.hugo_build.lock
+public/

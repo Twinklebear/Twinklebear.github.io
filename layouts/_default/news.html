@@ -1,0 +1,20 @@
+{{ define "main" }}
+<main aria-role="main">
+  <header class="homepage-header">
+    <h1 class="display-4">{{- .Title -}}</h1>
+    {{ with .Params.subtitle }}
+    <span class="subtitle">{{ . }}</span>
+    {{ end }}
+  </header>
+  <div class="homepage-content row">
+    <!-- Note that the content for index.html, as a sort of list page, will pull from content/_index.md -->
+    {{ .Content }}
+    <div class="col-10 offset-1">
+      {{ range (sort $.Site.Data.news "date" "desc") }}
+      <p><h5 id="date">{{ time.Format "Mon Jan 2, 2006" .date }}</h5>
+      {{- .text | markdownify -}}
+      </p>
+      {{ end }}
+  </div>
+</main>
+{{ end }}

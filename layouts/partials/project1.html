@@ -1,0 +1,24 @@
+<!-- Layout with a row of images along the bottom (if images specified) -->
+<div class="col-12 col-lg-8">
+  <p>{{- .description | markdownify -}}</p>
+</div>
+
+<div class="col-12 col-lg-4">
+  <a href="https://github.com/{{ .gh_user }}/{{ .gh_repo }}">
+    <img
+      class="img-fluid"
+      style="display: inline"
+      src="/img/gh-cards/{{ .gh_user }}/{{ .gh_repo }}.svg"
+    />
+  </a>
+</div>
+{{ if .images }}
+<div class="col-12 row mt-4 mx-auto">
+  {{ $len := .images | len }}
+  {{ range .images }}
+  <div class="col-{{ div 12 $len }}">
+    <img class="img-fluid rounded" src="{{ .url }}" />
+  </div>
+  {{ end }}
+</div>
+{{ end }}

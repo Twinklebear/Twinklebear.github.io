@@ -1,0 +1,14 @@
+<div class="text-center">
+<figure>
+    {{ if .Get "width" }}
+    <img class="img-fluid" width="{{ .Get "width" }}" src="{{ .Get "src" }}" alt="{{ .Get "alt" }}"/>
+    {{ else }}
+    <img class="img-fluid" src="{{ .Get "src" }}" alt="{{ .Get "alt" }}"/>
+    {{ end }}
+    {{ .Page.Scratch.Add "numbered_fig_count" 1 }}
+    <figcaption class="text-start">
+        <i><b>Figure {{ .Page.Scratch.Get "numbered_fig_count" }}:</b>
+            {{ .Get "caption" | markdownify }}</i>
+    </figcaption>
+</figure>
+</div>
