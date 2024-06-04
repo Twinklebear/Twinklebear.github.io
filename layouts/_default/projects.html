@@ -13,7 +13,7 @@
       <h4>Index</h4>
       <div class="col-12 row">
       {{ range (sort $.Site.Data.projects.projects "title" "asc") }}
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3 mb-1">
           <a href="{{ .RelPermalink }}#{{ .title }}">{{ .title }}</a>
         </div>
       {{ end }}

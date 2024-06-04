@@ -15,6 +15,7 @@
     {{ range (.Paginate $allitems).Pages }}
     <div class="col-12 mb-4">
     <a href="{{ .RelPermalink }}"><h3>{{ .Title }}</h3></a> 
+    <p id="date">{{ .Date.Format "Mon Jan 2, 2006" }}</p>
     <p>{{ .Summary }}</p>
     <a href="{{ .RelPermalink }}">Continue <i class="bx bxs-chevron-right"></i></a>
     </div>
