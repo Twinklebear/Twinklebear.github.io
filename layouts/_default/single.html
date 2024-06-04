@@ -8,14 +8,14 @@
         <div class="col-xl-10 col-12 order-xl-0 order-1">
           <article id="content">{{ .Content }}</article>
         </div>
+        {{ if in .TableOfContents "li" }}
         <div class="col-xl-2 col-12 order-xl-1 order-0">
           <div class="sticky-xl-top">
           <h4>Index</h4>
-          <p>
           {{ .TableOfContents }}
-          </p>
           </div>
         </div>
+        {{ end }}
       </div>
     </div>
   </div>
