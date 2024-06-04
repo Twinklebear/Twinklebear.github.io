@@ -909,6 +909,6 @@ Finally after all that work, we’ve got our Avocado on the screen! I’ve embed
 Feel free to ask any questions or post comments about the post on the [GitHub discussion board](https://github.com/Twinklebear/webgpu-0-to-gltf/discussions/2).
 
 <div class="ratio ratio-4x3">
-<iframe src="https://www.willusher.io/webgpu-0-to-gltf-demos/3-first-mesh/index.html"></iframe>
+<iframe src="https://www.willusher.io/webgpu-0-to-gltf/3-first-mesh/"></iframe>
 </div>
 

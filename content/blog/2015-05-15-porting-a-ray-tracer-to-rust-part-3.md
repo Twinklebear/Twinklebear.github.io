@@ -23,8 +23,7 @@ coincidence, since Rust 1.0.0 is being released [today](http://blog.rust-lang.or
 
 <!--more-->
 
-Path Tracing
----
+# Path Tracing
 [Path tracing](http://en.wikipedia.org/wiki/Path_tracing), introduced by Kajiya in 1986 in [The Rendering Equation](http://dl.acm.org/citation.cfm?id=15902),
 is a standard and surprisingly simple method for computing photo-realistic images in computer graphics.
 This simplicity and quality does come at a cost and path traced images typically require thousands of samples
@@ -121,8 +120,7 @@ A massive increase in render time of three orders of magnitude!
 </div>
 </div>
 
-Bounding Volume Hierarchy
----
+# Bounding Volume Hierarchy
 If we wanted to render a scene with millions (or billions!) of triangles the process of finding the first intersection
 along a ray can become incredibly expensive, eg. using a naive loop over the triangles would probably have us waiting days or even weeks for our render.
 To avoid this issue we use some form of spatial partitioning data structure that will let us ignore objects that the ray has no chance of hitting.
@@ -203,7 +201,7 @@ pub fn intersect(&self, ray: &mut Ray) -> Option<Intersection> {
 }
 ```
 
-### Lifetime Errors can be Challenging to Decipher
+## Lifetime Errors can be Challenging to Decipher
 The hardest problems I encountered when writing the traversal were lifetime errors encountered in the course of trying
 to return a reference to an object in the BVH from the closure, eg. in the Intersection or DifferentialGeometry structures we return
 a reference to the hit Instance or Geometry respectively. Since the
@@ -221,8 +219,7 @@ more advanced lifetime handling and error reporting are areas that both could be
 and ownership are key features in Rust but can be difficult to reason about and errors related to them can sometimes be
 hard to interpret.
 
-Triangle Meshes
----
+# Triangle Meshes
 Because we've implemented our BVH to be generic on the type it stores it's simple for us to also write a
 triangle mesh that uses a BVH internally to accelerate intersection testing against its triangles. The triangles
 share Arcs to Vecs containing the position, normal and texture coordinate information and the index of each of
@@ -252,7 +249,7 @@ impl Geometry for Mesh {
 }
 ```
 
-### Publishing Crates on Cargo
+# Publishing Crates on Cargo
 Now that we can quickly intersect rays against triangle meshes lets load up some models and render them! The
 [Wavefront OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) format is relatively simple to load (at least if
 you're only doing triangles/triangle strips) and is widely supported in modeling software like Blender,
@@ -274,8 +271,7 @@ For some extra fun I used the Travis-CI integration discussed in Huon's "Travis 
 to run tests and even build and upload [rustdoc](http://www.willusher.io/tobj/tobj/) for tobj, which is really
 convenient. I've started using this for tray\_rust as well.
 
-Measured Material Data
----
+# Measured Material Data
 The final thing we need to make some really nice images are accurate material models, ie. ones that can closely approximate
 the reflectance properties of various types of materials. There are
 a wide range of analytic models that we can choose from that attempt to accurately model various
@@ -302,8 +298,7 @@ The byteorder crate extends methods on types that implement [Read](http://doc.ru
 existing types really clean, and if I had some struct that implemented Read using ReadBytesExt would make those same functions available
 on my type!
 
-Results
----
+# Results
 The result of this work is some really gorgeous eye-candy! To celebrate Rust's 1.0 release I've rendered a Rust logo model made by 
 [Nylithius on BlenderArtists](http://blenderartists.org/forum/showthread.php?362836-Rust-language-3D-logo) with a few different materials
 and with some friends from the computer graphics community: the Buddha and Dragon from the
@@ -353,8 +348,7 @@ Render times are formatted as hh:mm:ss along with the total time in milliseconds
 is using gold metallic paint and the Stanford Dragon is using blue acrylic. Render time: 01:13:52.13 (4432127ms)</p>
 </div>
 
-Final Thoughts
----
+# Final Thoughts
 There are still a few things left on my todo list for tray\_rust. I need to fix my BVH construction so it doesn't give some
 poor quality splits, add support for area lights and make some kind of scene file format so that changing the scene doesn't require
 re-compiling. I'd also like to implement some more material models, I have a few nice microfacet based analytic models in tray

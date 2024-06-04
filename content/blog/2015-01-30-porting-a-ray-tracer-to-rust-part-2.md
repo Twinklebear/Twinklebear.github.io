@@ -25,8 +25,7 @@ fast approaching.
 
 <!--more-->
 
-The Material System
----
+# The Material System
 The material system used in [PBRT](http://pbrt.org/) makes heavy use of memory arenas to avoid making lots of small allocations of
 the various BxDFs that the [BSDF](http://en.wikipedia.org/wiki/Bidirectional_scattering_distribution_function) for the surface is
 composed of during rendering. Instead large blocks of memory are allocated up front
@@ -44,7 +43,7 @@ their BxDFs when they're created and then return BSDFs that just refer to these 
 on the stack each time and return it (via moving) when getting the surface properties for an object but this isn't too
 expensive.
 
-#### Working with BxDFs using Iterators
+## Working with BxDFs using Iterators
 
 Since a surface's properties can be defined through a combination of BxDFs we need to consider contributions from all of them
 to determine the color of the surface when shading some intersection. Additionally we need to filter them
@@ -114,8 +113,7 @@ returning an iterator that traverses the BVH and iterates over all potentially i
 objects. The caller can then perform whatever operations it likes over the objects returned by the iterator, be it intersection testing on
 Geometry or Instances or anything really.
 
-Parallelism
----
+# Parallelism
 While ray tracing is an extremely easy problem to parallelize there's still room for some interesting implementations, and I think
 the one I've gone with is pretty neat and leaves the door open for even more fun. It's possible to
 write a ray tracer that doesn't do any synchronization by assigning threads their work up front and having them only write to disjoint regions
@@ -171,7 +169,7 @@ It looks to currently be an open issue, [#544](https://github.com/rust-lang/carg
 [#1137](https://github.com/rust-lang/cargo/issues/1137), if it is possible now please do let me know.
 I'd expect at least some performance gain with the use of auto-vectorization and SSE/AVX instructions.
 
-#### Sharing Immutable Data Between Threads
+## Sharing Immutable Data Between Threads
 In a ray tracer we also need to share some immutable data between threads so that they all know what scene they're rendering.
 In Rust this is done with atomic reference counted pointers using the [Arc](http://doc.rust-lang.org/std/sync/struct.Arc.html)
 struct. This works pretty nicely although I ran into some minor annoyances. Currently if you want to put a trait in an Arc
@@ -193,8 +191,7 @@ As for sharing Arcs vs. immutable borrows (what I did in the C++ version) I thin
 methods should be valid to write in the language eventually. Note that we don't have any overhead from updating the reference
 count during rendering since we can immutably borrow within the thread to refer to hit geometry and instances.
 
-Managing Dependencies with Cargo
----
+# Managing Dependencies with Cargo
 In addition to helping build your project, its docs, and run tests [Cargo](https://crates.io/) is also a powerful dependency
 management tool. During some of the updates to Rust the more experimental and niche modules such as EnumSet got moved
 out into [collect-rs](https://github.com/Gankro/collect-rs), getting this crate and linking my project was really easy to do
@@ -208,15 +205,14 @@ Windows which is always a bit of a hassle when trying to manage C or C++ depende
 ecosystem is very small compared to C and C++ so the comparison isn't really fair but I'm hopeful that Cargo will
 keep dependency management painless even as the ecosystem grows.
 
-Final Thoughts
----
+# Final Thoughts
 After working with Rust for longer I'm pretty happy with how the language is shaping up. To name a few features I
 had fun with over the past month, match expressions and the powerful iterator module are really nice to work with.
 The community is also very friendly and helpful, the Rust IRC and subreddit have been great resources over
 the past month and [This Week in Rust](http://this-week-in-rust.org/) is invaluable when keeping up with
 changes in the nightlies or just finding cool Rust related write-ups and discussion.
 
-#### Until Next Time
+## Until Next Time
 For part 3 I'll work on getting a proper path tracing implementation running and fix some lingering bugs in the current
 code that I've worked around to render the scene for this post. I'll also take a look at the performance of giving
 each thread its own channel vs. a shared mpsc and possibilities for rendering across multiple machines.

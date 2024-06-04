@@ -479,6 +479,6 @@ See you next time!
 
 
 <div class="ratio ratio-4x3">
-<iframe src="https://www.willusher.io/webgpu-0-to-gltf-demos/4-full-scene/index.html"></iframe>
+<iframe src="https://www.willusher.io/webgpu-0-to-gltf/4-full-scene/"></iframe>
 </div>
 

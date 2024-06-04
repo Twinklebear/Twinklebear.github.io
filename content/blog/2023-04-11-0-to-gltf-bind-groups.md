@@ -163,7 +163,7 @@ var layout = device.createPipelineLayout({
 });
 ```
 
-## Creating a Uniform Buffer and Bind Group
+# Creating a Uniform Buffer and Bind Group
 
 We'll create a uniform buffer to store our view transform, which will be used
 as a uniform buffer (in our bind group), and a copy destination buffer.
@@ -196,7 +196,7 @@ var viewParamBG = device.createBindGroup({
 });
 ```
 
-## Integrating an Arcball Camera
+# Integrating an Arcball Camera
 
 Next, we need a camera controller to update the view transform
 based on the user's input. I'll be using my implementation of
@@ -244,7 +244,7 @@ controller.wheel = function (amt) {
 controller.registerForCanvas(canvas);
 ```
 
-## Updating the View Transform During Rendering
+# Updating the View Transform During Rendering
 
 With everything set up, all that's left to do each frame is upload
 the new view transform, set our bind group, and render!
@@ -304,31 +304,16 @@ var frame = function () {
 requestAnimationFrame(frame);
 ```
 
-<div class="col-12 row">
-    <div class="col-12 d-flex justify-content-center">
-        <canvas id="webgpu-canvas" width="640" height="480"></canvas>
-    </div>
-    <div class="col-12 alert alert-danger" id="no-webgpu" style="display:none;">
-        <h4>Error: Your browser does not support WebGPU</h4>
-    </div>
-    <div class="col-12">
-        <figcaption><b>Figure 2:</b>
-        <i>Our triangle, rendered with WebGPU. Controls: left-click to drag, right-click to
-        pan, scroll to zoom.
-        </i></figcaption>
-    </div>
+<div class="ratio ratio-4x3">
+<iframe src="https://www.willusher.io/webgpu-0-to-gltf/2-bind-groups/"></iframe>
 </div>
 
-<script src="/gl-matrix-min.js"></script>
-<script src="/webgl-util.min.js"></script>
-<script src="/webgpu/triangle-bind-groups-updated-apr-11.js"></script>
-
-## Wrapping Up
+# Wrapping Up
 
 Now that we've learned about bind groups, we'll be able to use them to pass view and
 object transform matrices, material parameters, and textures, to our shaders. In the
 next post, we'll take a look at the glTF Binary format to load and render our
 first real triangle mesh.
 If you run into issues getting the example to work,
-[check out the code](/webgpu/triangle-bind-groups-updated-apr-11.js) for rendering the triangle in Figure 3,
+[check out the code](https://github.com/Twinklebear/webgpu-0-to-gltf) for rendering the triangle in Figure 3,
 or get in touch via [Twitter](https://twitter.com/_wusher) or email.

@@ -34,7 +34,7 @@ which lets us skip creating an occlusion hit group entirely.
 
 The three typical options for implementing shadow rays on opaque geometry I'll compare are:
 
-### Occlusion Group with Any Hit (OGAH)
+## Occlusion Group with Any Hit (OGAH)
 A standard approach is to use an occlusion hit group with an any hit shader, which just accepts the hit and terminates
 the ray when it's called. In DXR our any hit shader would just call `AcceptHitAndEndSearch`, in OptiX `optixTerminateRay` and in
 Vulkan `terminateRayNV`. We can then call trace with any hit shaders forced to be run,
@@ -44,7 +44,7 @@ RTX hardware encounters to test with the any hit shader will be reported as the 
 and the ray will terminate. The closest hit shader is then run, which can update
 the ray data payload to mark the ray as occluded, after which control returns back to the original trace call.
 
-### Occlusion Group with Closest Hit (OGCH)
+## Occlusion Group with Closest Hit (OGCH)
 Another option, the one I had been using previously, is to create an occlusion hit group with
 only a closest hit shader. We then set both the force opaque (disable any hit in OptiX) and
 accept first hit (terminate on first hit in Vulkan/OptiX) flags when tracing the ray. As a result,
@@ -55,7 +55,7 @@ The small improvement of **OGCH** over **OGAH** is that the hardware can accept 
 encountered and terminate the ray without having to call an any hit shader. However,
 this method would not work if we wanted to run the any hit shader to support alpha cut-out textures.
 
-### Ray Flags Only (RFO)
+## Ray Flags Only (RFO)
 The final option, which I'm using now, is to use the ray flags passed to trace ray to skip
 the any hit shader and terminate on first hit as in **OGCH**, but to also skip executing the
 closest hit shader. The result is that the hardware traverses until it either misses, and calls the
@@ -99,7 +99,7 @@ void ShadowMiss(inout OcclusionHitInfo occlusion : SV_RayPayload) {
 
 ```
 
-### Benchmarks
+# Benchmarks
 
 <div class="col-12 row">
     <div class="col-12 col-md-6">
@@ -170,7 +170,7 @@ result in the first valid hit returned by the any hit shader (which doesn't nece
 to be skipped. When I add support for alpha cut-out textures I'll test this idea out to see how well it works.
 This would be the same as **OGAH** where we additionally specify the skip closest hit flag.
 
-### Update 9/7
+# Update 9/7
 
 I've added an unshaded primary + shadow ray only benchmark, thanks
 [Jacco Bikker](https://twitter.com/j_bikker/status/1170322992267780096) for the suggestion!

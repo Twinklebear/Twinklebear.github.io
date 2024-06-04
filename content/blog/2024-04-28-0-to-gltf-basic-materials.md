@@ -502,7 +502,7 @@ function loadMeshes(
 }
 ```
 
-## Updating GLTFPrimitive buildRenderPipeline
+# Updating GLTFPrimitive buildRenderPipeline
 
 Our [GLTFPrimitive](https://github.com/Twinklebear/webgpu-0-to-gltf/blob/main/5-textures-ts/src/gltf_primitive.ts) gets two additions in `buildRenderPipeline` :
 

@@ -24,7 +24,7 @@ sphere and save the image.
 
 <!--more-->
 
-## The Linear Algebra Module
+# The Linear Algebra Module
 
 I started by porting the linear algebra module used by tray over, since almost everything else
 we do in the ray tracer will need basic linear algebra operations. This was pretty straightforward
@@ -33,7 +33,7 @@ but I did run into a few minor annoyances with things in the current state of Ru
 , default parameters and operator overloading for both left and right multiplication.
 
 
-#### Function Overloading
+## Function Overloading
 This is a feature I used extensively throughout the C++ version of the ray tracer which helps
 make things a bit more ergonomic. I first ran into this when implementing my vector type. In
 tray I have overloads for the constructor so that it can be constructed with x, y and z all set
@@ -60,13 +60,13 @@ pub fn broadcast(x: f32) -> Vector {
 I'd really prefer to just have an overload of `new(x: f32) -> Vector` which performed the same
 construction that `broadcast` does currently, although this is a relatively minor annoyance.
 
-#### Default Parameters
+## Default Parameters
 This relates closely to function overloading in that it also simplifies commonly written calls, eg. my
 C++ vector constructors also default to set the values to 0, so constructing a vector of all 0
 values is simply `Vector{}`. This doesn't seem to be currently in Rust, but is another (somewhat minor)
 feature that would be nice to have.
 
-#### Overloading Left and Right Multiply
+## Overloading Left and Right Multiply
 While it was very easy to overload the vector \* scalar operator, writing the same overload
 for scalar \* vector doesn't seem to be possible (please let me know if this has changed!). On the
 topic of operator overloading, I do really like Rust's decision to make them traits
@@ -187,7 +187,7 @@ copy constructor and copy-assign operators in C++ and your
 type should not be copied. For most types that should be copyable that I've worked with so far
 it's simple enough to just use a compiler generated implementation via `#[deriving(Copy)]`.
 
-## Rust's Module System
+# Rust's Module System
 In tray I chose to split up the various components of the ray tracer into their own libraries
 which are then statically linked into the main executable.
 This design is also possible in Rust by splitting functionality up into
@@ -229,7 +229,7 @@ dealing with fiddly link order requirements. Circular dependencies
 aren't a problem at all, which is nice coming from C++ where they can be a bit annoying, requiring
 forward declarations and such.
 
-#### Re-exporting From Modules
+## Re-exporting From Modules
 I initially struggled with the sheer amount of typing required for some of the nested modules. Since my
 `Vector` struct is in the `vector` module within the `linalg` module to access it I would have to type
 `linalg::vector::Vector`, which is a mouthful. While important to avoid naming conflicts I thought this
@@ -244,7 +244,7 @@ pub use self::vector::Vector;
 pub mod vector;
 ```
 
-## Working With Traits
+# Working With Traits
 In my C++ ray tracer geometry is defined by an interface that provides methods such as `intersect` which
 tests a ray for intersection with some piece of geometry, making it very easy to add new geometry types
 to the ray tracer by implementing the interface. Additionally we separate the definition of some
@@ -285,7 +285,7 @@ hit. In Rust this is expressed much cleaner, if there's a hit we return `Some(Di
 otherwise we simply return `None`. The DifferentialGeometry also needs to send back information about
 the instance and geometry that was hit, leading to the next topic: lifetimes in Rust.
 
-## Lifetimes in Rust
+# Lifetimes in Rust
 The concept and enforcement of [ownership](http://doc.rust-lang.org/guide-ownership.html) in Rust
 was one of the features that initially got me interested in the language. For the most part lifetimes
 are implicit in the language, however sometimes the compiler needs some assistance deducing lifetimes
@@ -302,7 +302,7 @@ pub struct DifferentialGeometry<'a> {
 }
 ```
 
-#### Error: Explicit Lifetime Bound Required
+## Error: Explicit Lifetime Bound Required
 Writing the above `geom` member resulted in the most difficult error message I encountered
 so far in Rust. Attempting to compile the above results in:
 
@@ -337,7 +337,7 @@ answers I've changed the geom member's type to `&'a (Geometry + 'static)` to req
 implementing the trait that we're referring to be a struct, since we won't be implementing Geometry
 for reference types.
 
-#### A Poor Design Choice
+## A Poor Design Choice
 The DifferentialGeometry struct also contains a design decision that I'm not very happy with.
 The differential geometry is initially created within the geometry that was hit, since it doesn't know
 about the instance that is using it that was hit it's not able to set the instance member. This
@@ -401,13 +401,13 @@ cleanest solution I can think of even though it's really just a band-aid. If any
 or suggestions, please leave a comment or get in touch on [Twitter](https://twitter.com/_wusher)
 or IRC (I'm Twinklebear on freenode and moznet).
 
-## Testing
+# Testing
 Rust also has built in support for specifying [tests and benchmarks](http://doc.rust-lang.org/guide-testing.html) by placing `#[test]` or `#[bench]` attributes respectively. These are then run using
 [Cargo](https://crates.io/) with `cargo test` or `cargo bench`. This built in support makes it very 
 easy to write and run unit and integration tests for your code and is really convenient coming from
 C++ where testing is done through third party libraries.
 
-## Rustdoc
+# Rustdoc
 Rust comes with a built in [documentation generation tool](http://doc.rust-lang.org/rustdoc.html)
 that makes it really easy to have nice documentation for both the language and user libraries by
 just running `cargo doc` on your crate. Since the generated doc site is all static pages it's simple
@@ -417,7 +417,7 @@ Good documentation is critical for any library or decent sized project and havin
 and built into the
 language like this will hopefully improve the overall quality of documentation for user libraries.
 
-## Putting it all Together
+# Putting it all Together
 Now that we've got modules to handle [linear algebra](https://github.com/Twinklebear/tray_rust/tree/master/src/linalg), [geometry](https://github.com/Twinklebear/tray_rust/tree/master/src/geometry) and [camera/image operations](https://github.com/Twinklebear/tray_rust/tree/master/src/film) we have everything
 we need to render a sphere! In `main.rs` we create our render
 target, camera and sphere then attach the sphere to an instance and loop over the pixels in the image,
@@ -461,8 +461,7 @@ physically based ray tracer.
 
 <img src="https://cdn.willusher.io/img/fO5GVbt.webp" class="img-fluid">
 
-Final Thoughts
----
+# Final Thoughts
 While I did encounter some minor annoyances with Rust I'm really happy with how the language
 is shaping up as it nears 1.0 and look forward to the 1.0 release. One other difference compared
 to C++ I didn't mention is that variables in Rust are immutable by default and must be explicitly
@@ -471,7 +470,7 @@ I think Rust's decision of immutable by default is great, most of the time I fin
 need a few mutable variables in my programs while everything else is constant or locally constant
 and used to compute other constant results or operate on the few mutable variables.
 
-#### Until Next Time
+## Until Next Time
 In the next post I'll discuss the process of making tray\_rust multithreaded and adding support
 for some simple materials and lights which we'll then render using Whitted recursive ray tracing.
 While this ray tracing method doesn't account for global illumination like path tracing or photon

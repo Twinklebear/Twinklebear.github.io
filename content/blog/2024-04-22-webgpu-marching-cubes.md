@@ -269,7 +269,7 @@ In both methods I ran a sweep up the isovalue from 30 to 110, covering isosurfac
 
 Having access to a modern low-overhead GPU API in the browser is really exciting, and opens up a ton of new possibilities for games, content creation tools, scientific applications and more to run in the browser with near native performance. Currently this application will only run in Chrome, but Safari and Firefox are working hard on WebGPU development. I’m looking forward to the day that WebGPU support is widespread across vendors!
 
-## Live Demo and Code
+# Live Demo and Code
 
 The code for the WebGPU marching cubes implementation is available on [Github](https://github.com/Twinklebear/webgpu-marching-cubes), and should be runnable below in Chrome. Firefox Nightly and Safari Tech Preview aren’t quite yet able to run it at the time of writing this post. You can also try it out here: [https://www.willusher.io/webgpu-marching-cubes/](https://www.willusher.io/webgpu-marching-cubes/)
 

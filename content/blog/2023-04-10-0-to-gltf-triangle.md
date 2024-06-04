@@ -472,28 +472,17 @@ requestAnimationFrame(frame);
 ```
 
 
-<div class="col-12 row">
-    <div class="col-12 d-flex justify-content-center">
-        <canvas id="webgpu-canvas" width="640" height="480"></canvas>
-    </div>
-    <div class="col-12 alert alert-danger" id="no-webgpu" style="display:none;">
-        <h4>Error: Your browser does not support WebGPU</h4>
-    </div>
-    <div class="col-12">
-        <figcaption><b>Figure 2:</b>
-        <i>Our triangle, rendered with WebGPU.
-        </i></figcaption>
-    </div>
+<div class="ratio ratio-4x3">
+<iframe src="https://www.willusher.io/webgpu-0-to-gltf/1-first-triangle/"></iframe>
 </div>
-<script src="/webgpu/triangle-updated-apr-11.js"></script>
 
-## Wrapping Up
+# Wrapping Up
 
 With our first triangle on screen, we're well on our way to getting a basic
 glTF model viewer together. In the next post, we'll look at how
 to pass additional data to our shaders (e.g., uniform buffers), using
 bind groups. If you run into issues getting the example to work,
-[check out the code](/webgpu/triangle-updated-apr-11.js) for rendering the triangle in Figure 3,
+[check out the code](https://github.com/Twinklebear/webgpu-0-to-gltf) for rendering the triangle in Figure 3,
 or get in touch via [Twitter](https://twitter.com/_wusher) or email.
 
 Although WebGPU is in its early stages, here are a few useful resources
