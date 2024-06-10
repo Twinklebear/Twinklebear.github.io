@@ -5,10 +5,12 @@
     {{ else }}
     <img class="img-fluid" src="{{ .Get "src" }}" alt="{{ .Get "alt" }}"/>
     {{ end }}
+    {{ if .Get "caption" }}
     {{ .Page.Scratch.Add "numbered_fig_count" 1 }}
     <figcaption class="text-start">
         <i><b>Figure {{ .Page.Scratch.Get "numbered_fig_count" }}:</b>
             {{ .Get "caption" | markdownify }}</i>
     </figcaption>
+    {{ end }}
 </figure>
 </div>
