@@ -1,0 +1,21 @@
+<div class="text-center">
+<figure>
+    {{ if .Get "width" }}
+    <video controls class="img-fluid" width="{{ .Get "width" }}">
+      <source src="{{ .Get "src" }}" />
+    </video>
+    {{ else }}
+    <video controls class="img-fluid">
+      <source src="{{ .Get "src" }}" />
+    </video>
+    {{ end }}
+    {{ if .Get "caption" }}
+    {{ .Page.Scratch.Add "numbered_fig_count" 1 }}
+    <figcaption class="text-start">
+        <i><b>Figure {{ .Page.Scratch.Get "numbered_fig_count" }}:</b>
+            {{ .Get "caption" | markdownify }}</i>
+    </figcaption>
+    {{ end }}
+</figure>
+</div>
+
