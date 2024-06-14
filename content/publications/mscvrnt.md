@@ -11,6 +11,7 @@ params:
   year: 2021
   short_title: mscvrnt
   selected: true
+  arxiv: 2009.01891 
   doi: 10.1109/TVCG.2020.3030363
   bibtex: >
     @article{mcdonald_mscvrnt_2021,

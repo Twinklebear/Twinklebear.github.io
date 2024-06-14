@@ -12,6 +12,7 @@ params:
   short_title: exabrick
   selected: true
   doi: 10.1109/TVCG.2020.3030470
+  arxiv: 2009.03076 
   bibtex: >
     @article{wald_exabrick_2021,
       author={Wald, Ingo and Zellmann, Stefan and Usher, Will and Morrical, Nate

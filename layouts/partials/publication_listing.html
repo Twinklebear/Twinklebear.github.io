@@ -19,15 +19,15 @@
       {{ .Params.Authors }}. <i>{{ .Params.Venue }}</i>, {{ .Params.Year }}.
     </p>
     <p>
-      <a class="mr-2" href="{{ .RelPermalink }}"
+      <a class="ms-2" href="{{ .RelPermalink }}"
         ><i class="bx bx-file"></i> Project Page</a
       >
-      <a class="mr-2" href="{{ .Params.Paper_Pdf }}"
+      <a class="ms-2" href="{{ .Params.Paper_Pdf }}"
         ><i class="bx bxs-file-pdf"></i> PDF</a
       >
       {{ if .Params.Bibtex }}
       <a
-        class="bib mr-2"
+        class="bib ms-2"
         href="javascript:void(0);"
         data-clipboard-text="{{ .Params.Bibtex }}"
         data-bs-toggle="popover"
@@ -35,10 +35,17 @@
         tabindex="0"
         ><i class="bx bxs-quote-left"></i>Copy BibTeX</a
       >
-      {{ end }} {{ if .Params.Doi }}
-      <a class="mr-2" href="https://dx.doi.org/{{ .Params.Doi }}">
+      {{ end }}
+      {{ if .Params.Doi }}
+      <a href="https://dx.doi.org/{{ .Params.Doi }}">
         <i class="bx bx-link-external"></i> Publisher's Version</a
       >
+      {{ end }}
+
+      {{ if .Params.Arxiv }}
+      <a class="ms-2" href="https://arxiv.org/abs/{{ .Params.Arxiv }}">
+        <img src="/img/arxiv-logo.svg" height="22px" />
+        </a>
       {{ end }}
     </p>
     {{ if .Params.Award }}

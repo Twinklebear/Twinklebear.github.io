@@ -11,6 +11,7 @@ params:
   year: 2019
   short_title: dfb
   doi: 10.1111/cgf.13702
+  arxiv: 2305.07083
   selected: true
   bibtex: >
     @article{usher_scalable_2019,

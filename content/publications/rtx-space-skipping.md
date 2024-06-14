@@ -11,6 +11,7 @@ params:
   year: 2019
   short_title: rtx-space-skipping
   doi: 10.1109/VISUAL.2019.8933539
+  arxiv: 1908.01906 
   selected: true
   bibtex: >
     @inproceedings{morrical_skipping_2019,

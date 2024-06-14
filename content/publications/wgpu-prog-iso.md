@@ -13,6 +13,7 @@ params:
   selected: true
   award: Best Paper
   doi: 10.1109/LDAV60332.2023.00007
+  arxiv: 2309.10212
   bibtex: >
     @inproceedings{usher_speculative_2023,
         booktitle = {13th IEEE Symposium on Large Data Analysis and Visualization},

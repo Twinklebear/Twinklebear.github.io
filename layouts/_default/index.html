@@ -83,9 +83,10 @@
     </div>
     <div class="col-12 mb-4">
       <h2>Selected Publications</h2>
-      {{ $allpubs := where .Site.RegularPages "Section" "publications" }} {{
-      range (where $allpubs "Params.selected" true) }} {{ .Render
-      "publication_listing" }} {{ end }}
+      {{ $allpubs := where .Site.RegularPages "Section" "publications" }}
+      {{ range (where $allpubs "Params.selected" true) }}
+      {{ partial "publication_listing.html" . }}
+      {{ end }}
     </div>
   </div>
 </main>

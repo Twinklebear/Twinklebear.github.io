@@ -55,6 +55,21 @@
       </div>
       {{ end }}
       <!-- -->
+      {{ if .Params.Arxiv }}
+      <div class="col-md-2 col-6 mb-2 mb-md-0">
+        <div class="card pubLink">
+          <a href="https://arxiv.org/abs/{{ .Params.Arxiv }}">
+            <img src="/img/arxiv-logomark-small.svg" width="80%" class="p-2" />
+            <div class="card-body">
+              <h5 class="card-title">
+               arXiv
+              </h5>
+            </div>
+          </a>
+        </div>
+      </div>
+      {{ end }}
+      <!-- -->
       {{ range .Params.Extra_links }}
       <div class="col-md-2 col-6 mb-2 mb-md-0">
         <div class="card pubLink">
@@ -77,7 +92,7 @@
   <div class="col-12 mt-2">
     <h2>BibTeX
       <a
-          class="bib mr-2"
+          class="bib ms-2"
           href="javascript:void(0);"
           data-clipboard-text="{{ .Params.Bibtex }}"
           data-bs-toggle="popover"

@@ -11,6 +11,7 @@ params:
   year: 2020
   short_title: ospdisplaywall
   doi: 10.1109/VIS47514.2020.00009
+  arxiv: 2009.03368
   bibtex: >
     @inproceedings{han_displaywall_2020,
       author={Han, Mengjiao and Wald, Ingo and Usher, Will and Morrical, Nate and Knoll, Aaron

@@ -13,6 +13,7 @@ params:
   short_title: teraweb
   award: Honorable Mention
   doi: 10.1109/LDAV51489.2020.00010
+  arxiv: 2009.03254
   selected: true
   bibtex: >
     @inproceedings{usher_teraweb_2020,

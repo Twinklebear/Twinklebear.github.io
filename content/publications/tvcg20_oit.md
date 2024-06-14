@@ -11,6 +11,7 @@ params:
   year: 2020
   short_title: tvcg20_oit
   doi: 10.1109/TVCG.2020.2975795
+  arxiv: 1912.08485 
   bibtex: >
     @article{kern_comparison_20,
     journal = {IEEE Transactions on Visualization and Computer Graphics},

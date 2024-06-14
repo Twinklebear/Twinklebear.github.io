@@ -5,7 +5,8 @@
       <h1 class="display-4">{{- .Title -}}</h1>
       {{ $allpubs := where .Site.RegularPages "Section" "publications" }}
       {{ range $allpubs }}
-      {{ .Render "publication_listing" }} {{ end }}
+      {{ partial "publication_listing.html" . }}
+      {{ end }}
     </div>
   </header>
 </main>
