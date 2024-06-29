@@ -327,5 +327,3 @@ inspect local variables, etc. as before.
   ]
 }
 ```
-
-<script src="/populate_email.js"></script>

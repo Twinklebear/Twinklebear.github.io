@@ -483,5 +483,3 @@ You can find the full code discussed in this post on Github: [github.com/Twinkle
 As I mentioned at the start, I don’t know of that many apps using WASM in this way, or blogs/talks discussing techniques and performance considerations for such an app. So if you’re solving exciting problems working on an app with this structure I’d love to hear from you to learn about what you’re doing! You can get in touch with me by 
 email (<a id="email-link"><span id="email-text"></span></a>),
 [Twitter](https://twitter.com/_wusher), [Mastodon](https://mastodon.social/@willgfx), or [Linkedin](https://www.linkedin.com/in/will-usher/).
-
-<script src="/populate_email.js"></script>
