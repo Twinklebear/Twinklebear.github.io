@@ -5,7 +5,7 @@
     <h4>{{ .Params.Authors }}</h4>
     <p>In <i>{{ .Params.Venue }}</i>, {{ .Params.Year }}.
     {{ if .Params.Award }}
-    <b><i class='bx bx-award' ></i><i>{{ .Params.Award }}</i></b>
+    <b><i class="bi bi-award"></i><i>{{ .Params.Award }}</i></b>
     {{ end }}
     </p>
     <!-- -->
@@ -29,7 +29,7 @@
     <div class="container row justify-content-center text-center">
       <div class="col-md-2 col-6 mb-2 mb-md-0">
         <a href="{{ .Params.Paper_Pdf }}">
-          <div class="card pubLink">
+          <div class="card pubLink p-2">
             <img src="/img/pdf.svg" width="100%" />
             <div class="card-body">
               <h5 class="card-title">
@@ -42,7 +42,7 @@
 
       {{ if .Params.Doi }}
       <div class="col-md-2 col-6 mb-2 mb-md-0">
-        <div class="card pubLink">
+        <div class="card pubLink p-2">
           <a href="https://dx.doi.org/{{ .Params.Doi }}">
             <img src="/img/link-external.svg" width="100%" />
             <div class="card-body">
@@ -57,7 +57,7 @@
       <!-- -->
       {{ if .Params.Arxiv }}
       <div class="col-md-2 col-6 mb-2 mb-md-0">
-        <div class="card pubLink">
+        <div class="card pubLink p-2">
           <a href="https://arxiv.org/abs/{{ .Params.Arxiv }}">
             <img src="/img/arxiv-logomark-small.svg" width="80%" class="p-2" />
             <div class="card-body">
@@ -72,7 +72,7 @@
       <!-- -->
       {{ range .Params.Extra_links }}
       <div class="col-md-2 col-6 mb-2 mb-md-0">
-        <div class="card pubLink">
+        <div class="card pubLink p-2">
           <a href="{{ .link }}">
             <img src="{{ .image }}" width="100%" />
             <div class="card-body">
@@ -98,7 +98,9 @@
           data-bs-toggle="popover"
           data-bs-content="Copied!"
           tabindex="0"
-          ><i class="bx bx-clipboard"></i></a>
+          >
+          <i class="bi bi-clipboard2-plus"></i>
+          </a>
     </h2>
     <pre>
       {{ highlight .Params.Bibtex "bib" }}
