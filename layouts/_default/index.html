@@ -12,19 +12,15 @@
         <a href="https://www.luminarycloud.com/">Luminary Cloud</a>
         <br />
         <i class="b bi-github"></i>
-        <a href="https://github.com/Twinklebear"
-          >Twinklebear</a
-        >
+        <a href="https://github.com/Twinklebear">Twinklebear</a>
         <br />
         <i class="bi bi-mastodon"></i>
         <a rel="me" href="https://mastodon.social/@willgfx"
           >willgfx@mastodon.social</a
         >
         <br />
-        <i class="bi bi-twitter"></i>
-        <a href="https://twitter.com/_wusher"
-          >_wusher</a
-        >
+        <i class="bi bi-at"></i>
+        <a href="https://bsky.app/profile/willgfx.bsky.social">willgfx.bsky.social</a>
         <br />
         <i class="bi bi-envelope-at"></i>
         <a id="email-link">
@@ -33,21 +29,21 @@
         <br />
         <i class="bi bi-mortarboard"></i>
         <a href="https://scholar.google.com/citations?user=yQI5iyAAAAAJ">
-           Google Scholar profile</a
+          Google Scholar profile</a
         >
         <br />
         <i class="bi bi-linkedin"></i>
-          <a href="https://www.linkedin.com/in/will-usher/"
-             >LinkedIn</a
-         >
+        <a href="https://www.linkedin.com/in/will-usher/">LinkedIn</a>
         <br />
         <i class="bi bi-rss"></i>
         {{ with .OutputFormats.Get "rss" -}}
         <a href="{{ .Permalink }}">RSS</a>
-        {{ end }}
-        {{ with .OutputFormats.Get "rss" -}}
-        {{ printf `<link rel=%q type=%q href=%q title=%q>` .Rel .MediaType.Type .Permalink site.Title | safeHTML }}
-        {{ end }}
+        {{ end }} {{ with .OutputFormats.Get "rss" -}} {{ printf `<link
+          rel="%q"
+          type="%q"
+          href="%q"
+          title="%q"
+        />` .Rel .MediaType.Type .Permalink site.Title | safeHTML }} {{ end }}
       </p>
     </div>
     <div class="col-12 mb-4 mt-4">
@@ -83,10 +79,9 @@
     </div>
     <div class="col-12 mb-4">
       <h2>Selected Publications</h2>
-      {{ $allpubs := where .Site.RegularPages "Section" "publications" }}
-      {{ range (where $allpubs "Params.selected" true) }}
-      {{ partial "publication_listing.html" . }}
-      {{ end }}
+      {{ $allpubs := where .Site.RegularPages "Section" "publications" }} {{
+      range (where $allpubs "Params.selected" true) }} {{ partial
+      "publication_listing.html" . }} {{ end }}
     </div>
   </div>
 </main>
