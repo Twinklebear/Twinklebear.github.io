@@ -11,7 +11,7 @@
     {{ .Content }}
     <div class="col-10 offset-1">
       {{ range (sort $.Site.Data.news "date" "desc") }}
-      <p><h5 id="date">{{ time.Format "Mon Jan 2, 2006" .date }}</h5>
+      <p><h5 id="date">{{ time.Format "Jan 2, 2006" .date }}</h5>
       {{- .text | markdownify -}}
       </p>
       {{ end }}
