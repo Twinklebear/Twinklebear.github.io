@@ -1,3 +1,19 @@
+- date: 2025-04-19
+  text: >
+    The recording of my talk on Large Scale Scientific Visualization with WebGL, WebGPU & WebAssembly at
+    the 3D on the Web meetup during GDC is now [online](https://youtu.be/HzcFzCkt5aU?si=6pLmPO9JEPBfMQB1).
+
+- date: 2025-04-18
+  text: >
+    Valerio Pascucci will present our work on [Approximate Puzzlepiece Compositing]({{< ref "/publications/apc-pvis25" >}})
+    at [Pacific Vis 2025](https://pacificvis2025.github.io/pages/index.html)!
+
+- date: 2025-04-18
+  text: >
+    Landon Dyken will present our work on [Enabling Fast and Accurate Crowdsourced Annotation for
+    Elevation-Aware Flood Extent Mapping]({{< ref "/publications/flood-annotation-pvis25" >}})
+    at [Pacific Vis 2025](https://pacificvis2025.github.io/pages/index.html)!
+
 - date: 2024-03-11
   text: >
     Jeffrey M. Perkel published an [interesting article in Nature](https://www.nature.com/articles/d41586-024-00725-1)
