@@ -1,3 +1,9 @@
+- date: 2025-04-24
+  text: >
+    Our paper, [Enabling Fast and Accurate Crowdsourced Annotation for
+    Elevation-Aware Flood Extent Mapping]({{< ref "/publications/flood-annotation-pvis25" >}})
+    received an honorable mention at Pacific Vis 2025!
+
 - date: 2025-04-19
   text: >
     The recording of my talk on Large Scale Scientific Visualization with WebGL, WebGPU & WebAssembly at

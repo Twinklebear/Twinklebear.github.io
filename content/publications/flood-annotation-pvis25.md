@@ -9,6 +9,7 @@ params:
   thumb: https://cdn.willusher.io/img/flood_ann_pvis25_thumb.jpg
   teaser: https://cdn.willusher.io/img/flood_ann_pvis25_teaser.jpg
   year: 2025
+  award: Honorable Mention
   short_title: flood-annotation-pvis25
   selected: true
   bibtex: >
