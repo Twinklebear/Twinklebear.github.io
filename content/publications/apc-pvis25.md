@@ -4,7 +4,8 @@ layout: publication
 date: 2025-01-26
 params:
   authors: Xuan Huang, Will Usher, Valerio Pascucci
-  venue: IEEE Transactions on Visualization and Computer Graphics (To Appear)
+  venue: IEEE Transactions on Visualization and Computer Graphics
+  doi: "10.1109/TVCG.2025.3567124"
   paper_pdf: https://drive.google.com/file/d/1OBXEBP2uIR8DL-dImEkHnllAzAfKaur2/view?usp=sharing
   thumb: https://cdn.willusher.io/img/apc-pvis25-thumb.jpg
   teaser: https://cdn.willusher.io/img/apc-pvis25-teaser.jpg
@@ -15,9 +16,10 @@ params:
   bibtex: >
     @article{huang_apc,
       author={Huang, Xuan and Usher, Will and Pascucci, Valerio},
-      journal={IEEE Transactions on Visualization and Computer Graphics}, 
+      journal={IEEE Transactions on Visualization and Computer Graphics},
       title={Approximate Puzzlepiece Compositing},
       year={2025},
+      doi={10.1109/TVCG.2025.3567124},
       }
   abstract: >
     The increasing demand for larger and higher fidelity simulations has made Adaptive Mesh Refinement (AMR) and

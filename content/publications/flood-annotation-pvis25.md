@@ -4,7 +4,8 @@ layout: publication
 date: 2025-01-26
 params:
   authors: Landon Dyken, Saugat Adhikari, Pravin Poudel, Steve Petruzza, Da Yan, Will Usher, Sidharth Kumar
-  venue: IEEE Pacific Visualization Conference (To Appear)
+  venue: IEEE Pacific Visualization Conference
+  doi: "10.1109/PacificVis64226.2025.00025"
   paper_pdf: https://drive.google.com/file/d/1b9UmVqa7Pop6HoWim6IFrlu9U_wpjKl2/view?usp=sharing
   thumb: https://cdn.willusher.io/img/flood_ann_pvis25_thumb.jpg
   teaser: https://cdn.willusher.io/img/flood_ann_pvis25_teaser.jpg
@@ -12,12 +13,14 @@ params:
   award: Honorable Mention
   short_title: flood-annotation-pvis25
   selected: true
+  arxiv: "2408.05350"
   bibtex: >
     @inproceedings{dyken_flood_ann25,
       author={Dyken, Landon and Adhikari, Saugat and Poudel, Pravin and Petruzza, Steve and Yan, Da and Usher, Will and Kumar, Sidharth},
-      booktitle={IEEE Pacific Visualization Conference (To Appear)},
+      booktitle={IEEE Pacific Visualization Conference},
       title={Enabling Fast and Accurate Crowdsourced Annotation for Elevation-Aware Flood Extent Mapping},
       year={2025},
+      doi={10.1109/PacificVis64226.2025.00025},
       }
   abstract: >
     Mapping the extent of flood events is a necessary and important aspect

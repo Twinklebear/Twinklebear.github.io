@@ -1,3 +1,9 @@
+- date: 2026-02-14
+  text: >
+    Our paper [Volume Encoding Gaussians: Transfer Function-Agnostic 3D
+    Gaussians for Volume Rendering]({{< ref "/publications/veg_pvis26" >}})
+    has been accepted to Pacific Vis 2026!
+
 - date: 2025-04-24
   text: >
     Our paper, [Enabling Fast and Accurate Crowdsourced Annotation for
