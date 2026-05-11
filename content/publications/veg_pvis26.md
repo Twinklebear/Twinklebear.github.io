@@ -4,7 +4,7 @@ layout: publication
 date: 2026-02-14
 params:
   authors: Landon Dyken, Andres Sewell, Will Usher, Nathan Debardeleben, Steve Petruzza, Sidharth Kumar
-  venue: IEEE Pacific Visualization Conference (To Appear)
+  venue: IEEE Pacific Visualization Conference
   paper_pdf: https://drive.google.com/file/d/1AMutGC_FD6psEo_4xRNExv6MkpLXjgmE/view?usp=sharing
   thumb: https://cdn.willusher.io/img/veg-pvis26-thumb.jpg
   teaser: https://cdn.willusher.io/img/veg-pvis26-teaser.jpg
